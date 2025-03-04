@@ -21,7 +21,7 @@ internal extension PerLevelPolygonStyle {
 
 internal extension PolygonStyles {
     convenience init(payload: Dictionary<String, Any>) {
-        let styles = Array<PerLevelPolygonStyle>()
+        var styles = Array<PerLevelPolygonStyle>()
         styles.append(PerLevelPolygonStyle(payload: payload))
         styles.append(
             contentsOf: asArray(payload["otherStyle"] ?? [], caster: asDict).map {
@@ -29,6 +29,23 @@ internal extension PolygonStyles {
             }
         )
         self.init(
+            styles: styles
+        )
+    }
+}
+
+
+internal extension PolygonStyleSet {
+    convenience init(payload: Dictionary<String, Any>) {
+        let styleId = castSafty(payload["styleId"], caster: asString) ?? UUID().uuidString
+        let styles = castSafty(payload["styles"], caster:
+            asArray($0, caster: {
+                PolygonStyles(payload: $0)
+            })
+        ) ?? []
+
+        self.init(
+            styleSetID: styleId,
             styles: styles
         )
     }
@@ -66,6 +83,26 @@ internal extension PolylineStyles {
         )
         self.init(
             styles: styles
+        )
+    }
+}
+
+
+internal extension PolyglineStyleSet {
+    convenience init(payload: Dictionary<String, Any>) {
+        let styleId = castSafty(payload["styleId"], caster: asString) ?? UUID().uuidString
+        let styles = castSafty(payload["styles"], caster:
+            asArray($0, caster: {
+                PolylineStyles(payload: $0)
+            })
+        ) ?? []
+        let capType = castSafty(payload["polylineCap"], caster: {
+            PolylineCapType(rawValue: asInt($0))
+        }) ?? PolylineCapType.square
+        self.init(
+            styleSetID: styleId,
+            styles: styles,
+            capType: capType
         )
     }
 }
