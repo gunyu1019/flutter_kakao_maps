@@ -19,6 +19,22 @@ internal extension PerLevelPolygonStyle {
 }
 
 
+internal extension PolygonStyles {
+    convenience init(payload: Dictionary<String, Any>) {
+        let styles = Array<PerLevelPolygonStyle>()
+        styles.append(PerLevelPolygonStyle(payload: payload))
+        styles.append(
+            contentsOf: asArray(payload["otherStyle"] ?? [], caster: asDict).map {
+                PerLevelPolygonStyle(payload: $0)
+            }
+        )
+        self.init(
+            styles: styles
+        )
+    }
+}
+
+
 internal extension PerLevelPolylineStyle {
     convenience init(payload: Dictionary<String, Any>) {
         if (payload["strokeSize"] == nil || payload["strokeColor"] == nil) {
@@ -34,6 +50,22 @@ internal extension PerLevelPolylineStyle {
             strokeWidth: asUInt(payload["strokeSize"]!),
             strokeColor: UIColor(value: asUInt(payload["strokeColor"]!)),
             level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
+        )
+    }
+}
+
+
+internal extension PolylineStyles {
+    convenience init(payload: Dictionary<String, Any>) {
+        let styles = Array<PerLevelPolylineStyle>()
+        styles.append(PerLevelPolylineStyle(payload: payload))
+        styles.append(
+            contentsOf: asArray(payload["otherStyle"] ?? [], caster: asDict).map {
+                PerLevelPolylineStyle(payload: $0)
+            }
+        )
+        self.init(
+            styles: styles
         )
     }
 }
