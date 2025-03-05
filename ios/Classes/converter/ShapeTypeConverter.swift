@@ -106,3 +106,41 @@ internal extension PolyglineStyleSet {
         )
     }
 }
+
+
+internal func asDotPoints(payload: Dictionary<String, Any>) -> Array<CGPoint>? {
+    let basePoint = castSafty(payload["basePoint"], caster: MapPoint(payload: asDictTyped($0, caster=asDouble)))
+    switch asInt(payload["dotType"]) {
+    case 0:
+        let radius = asDouble(payload["radius"]!)
+        let clockwise = castSafty(payload["closewise"], caster=asBool) ?? true
+        if (basePoint != nil) {
+            return Primitives.getCirclePoints(radius: radius, cw: clockwise, center: basePoint)
+        }
+        return Primitives.getCirclePoints(radius: radius, cw: clockwise)
+    case 1:
+        let width = asDouble(payload["width"]!)
+        let height = asDouble(payload["height"]!)
+        let clockwise = castSafty(payload["closewise"], caster=asBool) ?? true
+        if (basePoint != nil) {
+            return Primitives.getRectanglePoints(width: width, height: height, cw: clockwise, center: basePoint)
+        }
+        return Primitives.getRectanglePoints(width: width, height: height, cw: clockwise)
+    default:
+        return nil
+    }
+}
+
+
+internal extension MapPolygonShapeOptions {
+    convenience init(payload: Dictionary<String, Any>) {
+        let styleId = asString(payload["styleId"]!)
+        let polygonId = castSafty(payload["id"], caster: asString)
+        let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10001
+        if (polygonId == nil) {
+            self.init(styleID: styleId, zOrder: zOrder)
+        } else {
+            self.init(shapeID: polygonId, styleID: styleId, zOrder: zOrder)
+        }
+    }
+}
