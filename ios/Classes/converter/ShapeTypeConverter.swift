@@ -132,6 +132,33 @@ internal func asDotPoints(payload: Dictionary<String, Any>) -> Array<CGPoint>? {
 }
 
 
+internal extension PolygonShapeOptions {
+    convenience init(payload: Dictionary<String, Any>) {
+        let styleId = asString(payload["styleId"]!)
+        let polygonId = castSafty(payload["id"], caster: asString)
+        let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10001
+        if (polygonId == nil) {
+            self.init(styleID: styleId, zOrder: zOrder)
+        } else {
+            self.init(shapeID: polygonId, styleID: styleId, zOrder: zOrder)
+        }
+
+        let position = asDict(payload["position"])
+        let points = asDotPoints(position["points"]!)
+        let holes = castSafty(position["holes"], caster={
+            asArray($0, caster=asDotPoints)
+        })
+        self.polygons = [
+            MapPolygon(
+                exteriorRing: points, 
+                holes: holes, 
+                styleIndex: 0
+            )
+        ]
+    }
+}
+
+
 internal extension MapPolygonShapeOptions {
     convenience init(payload: Dictionary<String, Any>) {
         let styleId = asString(payload["styleId"]!)
@@ -142,5 +169,22 @@ internal extension MapPolygonShapeOptions {
         } else {
             self.init(shapeID: polygonId, styleID: styleId, zOrder: zOrder)
         }
+
+        let position = asDict(payload["position"])
+        let points = asArray(position["points"]!, caster={ MapPoint(payload: asDict($0)) })
+        let holes = castSafty(position["holes"], caster={
+            asArray($0, caster={
+                asArray($0, caster=asDict).map {
+                    MapPoint(payload: $0)
+                }
+            })
+        })
+        self.polygons = [
+            Polygon(
+                exteriorRing: points, 
+                holes: holes, 
+                styleIndex: 0
+            )
+        ]
     }
 }
