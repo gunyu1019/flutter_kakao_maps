@@ -145,6 +145,7 @@ object ShapeTypeConverter {
             } else {
                 position.asDotPoints().let{ Arrays.asList(it) }.let(::setDotPoints)
             }
+            rawPayload["zOrder"]?.asInt()?.let(::setZOrder)
             setStylesSet(style)
         }
     }
@@ -160,6 +161,7 @@ object ShapeTypeConverter {
             } else {
                 position.asDotPoints().let{ Arrays.asList(it) }.let(::setDotPoints)
             }
+            rawPayload["zOrder"]?.asInt()?.let(::setZOrder)
             setStylesSet(style)
         }
     }
