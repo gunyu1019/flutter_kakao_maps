@@ -143,7 +143,7 @@ internal extension PolygonShapeOptions {
             self.init(shapeID: polygonId, styleID: styleId, zOrder: zOrder)
         }
 
-        let position = asDict(payload["position"])
+        let position = asDict(payload["position"]!)
         let points = asDotPoints(position["points"]!)
         let holes = castSafty(position["holes"], caster={
             asArray($0, caster=asDotPoints)
@@ -170,7 +170,7 @@ internal extension MapPolygonShapeOptions {
             self.init(shapeID: polygonId, styleID: styleId, zOrder: zOrder)
         }
 
-        let position = asDict(payload["position"])
+        let position = asDict(payload["position"]!)
         let points = asArray(position["points"]!, caster={ MapPoint(payload: asDict($0)) })
         let holes = castSafty(position["holes"], caster={
             asArray($0, caster={
@@ -183,6 +183,53 @@ internal extension MapPolygonShapeOptions {
             Polygon(
                 exteriorRing: points, 
                 holes: holes, 
+                styleIndex: 0
+            )
+        ]
+    }
+}
+
+
+internal extension PolylineShapeOptions {
+    convenience init(payload: Dictionary<String, Any>) {
+        let styleId = asString(payload["styleId"]!)
+        let polylineId = castSafty(payload["id"], caster: asString)
+        let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10001
+        if (polylineId == nil) {
+            self.init(styleID: styleId, zOrder: zOrder)
+        } else {
+            self.init(shapeID: polylineId, styleID: styleId, zOrder: zOrder)
+        }
+
+        let position = asDict(payload["position"]!)
+        let points = asDotPoints(position["points"]!)
+        
+        self.polylines = [
+            Polyline(
+                line: points, 
+                styleIndex: 0
+            )
+        ]
+    }
+}
+
+
+internal extension MapPolylineShapeOptions {
+    convenience init(payload: Dictionary<String, Any>) {
+        let styleId = asString(payload["styleId"]!)
+        let polylineId = castSafty(payload["id"], caster: asString)
+        let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10001
+        if (polylineId == nil) {
+            self.init(styleID: styleId, zOrder: zOrder)
+        } else {
+            self.init(shapeID: polylineId, styleID: styleId, zOrder: zOrder)
+        }
+
+        let position = asDict(payload["position"]!)
+        let points = asArray(position["points"]!, caster={ MapPoint(payload: asDict($0)) })
+        self.polylines = [
+            MapPolyline(
+                line: points,
                 styleIndex: 0
             )
         ]
