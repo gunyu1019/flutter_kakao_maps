@@ -1,3 +1,9 @@
+## 0.2.0-dev.4
+* Add zOrder attribute at PolygonShape and PolylineShape.
+* Support some feature Polyline Shape and Polygon Shape in iOS Platform.
+  * Add Polyline Shape / Polygon Shape
+  * Implement Shape Converter(DotPoints, PolylineStyle, PolygonStyle)
+
 ## 0.2.0-dev.3
 * Support all feature related Poi in iOS Platform.
   * Add and remove LodPoi or LodLabelLayer
