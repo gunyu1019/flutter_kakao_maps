@@ -115,7 +115,7 @@ internal func asDotPoints(payload: Dictionary<String, Any>) -> [CGPoint]? {
     case 0:
         let radius = asDouble(payload["radius"]!)
         let clockwise = castSafty(payload["closewise"], caster: asBool) ?? true
-        return Primitives.getCirclePoints(radius: radius, numPoints: 0, cw: clockwise)
+        return Primitives.getCirclePoints(radius: radius, numPoints: 720, cw: clockwise)
     case 1:
         let width = asDouble(payload["width"]!)
         let height = asDouble(payload["height"]!)
@@ -139,7 +139,7 @@ internal extension PolygonShapeOptions {
         }
 
         let position = asDict(payload["position"]!)
-        let points = asDotPoints(payload: asDict(position["points"]!))
+        let points = asDotPoints(payload: position)
         let holes = castSafty(position["holes"], caster: {
             asArray($0, caster: {
                 asDotPoints(payload: asDict($0))!
@@ -200,7 +200,7 @@ internal extension PolylineShapeOptions {
             self.init(shapeID: polylineId!, styleID: styleId, zOrder: zOrder)
         }
         let position = asDict(payload["position"]!)
-        let points = asDotPoints(payload: asDict(position["points"]!))
+        let points = asDotPoints(payload: position)
 
         self.basePosition = MapPoint(payload: asDict(position["basePoint"]!))
         self.polylines = [
