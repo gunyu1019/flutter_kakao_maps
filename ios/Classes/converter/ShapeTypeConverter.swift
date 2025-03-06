@@ -111,9 +111,6 @@ internal extension PolylineStyleSet {
 
 
 internal func asDotPoints(payload: Dictionary<String, Any>) -> [CGPoint]? {
-    let basePoint = castSafty(payload["basePoint"], caster: {
-        MapPoint(payload: asDictTyped($0, caster: asDouble))
-    })
     switch asInt(payload["dotType"]!) {
     case 0:
         let radius = asDouble(payload["radius"]!)
@@ -148,6 +145,8 @@ internal extension PolygonShapeOptions {
                 asDotPoints(payload: asDict($0))!
             })
         })
+
+        self.basePosition = MapPoint(payload: asDict(position["basePoint"]!))
         self.polygons = [
             Polygon(
                 exteriorRing: points!,
@@ -201,16 +200,6 @@ internal extension PolylineShapeOptions {
             self.init(shapeID: polylineId!, styleID: styleId, zOrder: zOrder)
         }
 
-        let position = asDict(payload["position"]!)
-        let points = asDotPoints(payload: asDict(position["points"]!))
-        
-        self.polylines = [
-            Polyline(
-                line: points!,
-                styleIndex: 0
-            )
-        ]
-    }
 }
 
 
@@ -225,7 +214,18 @@ internal extension MapPolylineShapeOptions {
             self.init(shapeID: polylineId!, styleID: styleId, zOrder: zOrder)
         }
 
+        let position = asDict(payload["posi
         let position = asDict(payload["position"]!)
+        let points = asDotPoints(payload: asDict(position["points"]!))
+
+        self.basePosition = MapPoint(payload: asDict(position["basePoint"]))
+        self.polylines = [
+            Polyline(
+                line: points!,
+                styleIndex: 0
+            )
+        ]
+    }tion"]!)
         let points = asArray(position["points"]!, caster: { MapPoint(payload: asDict($0)) })
         self.polylines = [
             MapPolyline(
