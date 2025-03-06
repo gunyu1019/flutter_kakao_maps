@@ -4,22 +4,23 @@ import KakaoMapsSDK
 internal extension PerLevelPolygonStyle {
     convenience init(payload: Dictionary<String, Any>) {
         if (payload["strokeSize"] == nil || payload["strokeColor"] == nil) {
-            return self.init(
+            self.init(
                 color: UIColor(value: asUInt(payload["color"]!)),
                 level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
             )
+        } else {
+            self.init(
+                color: UIColor(value: asUInt(payload["color"]!)),
+                strokeWidth: asUInt(payload["strokeSize"]!),
+                strokeColor: UIColor(value: asUInt(payload["strokeColor"]!)),
+                level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
+            )
         }
-        self.init(
-            color: UIColor(value: asUInt(payload["color"]!)),
-            strokeWidth: asUInt(payload["strokeSize"]!),
-            strokeColor: UIColor(value: asUInt(payload["strokeColor"]!)),
-            level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
-        )
     }
 }
 
 
-internal extension PolygonStyles {
+internal extension PolygonStyle {
     convenience init(payload: Dictionary<String, Any>) {
         var styles = Array<PerLevelPolygonStyle>()
         styles.append(PerLevelPolygonStyle(payload: payload))
@@ -38,11 +39,11 @@ internal extension PolygonStyles {
 internal extension PolygonStyleSet {
     convenience init(payload: Dictionary<String, Any>) {
         let styleId = castSafty(payload["styleId"], caster: asString) ?? UUID().uuidString
-        let styles = castSafty(payload["styles"], caster:
+        let styles = castSafty(payload["styles"], caster: {
             asArray($0, caster: {
-                PolygonStyles(payload: $0)
+                PolygonStyle(payload: asDict($0))
             })
-        ) ?? []
+        }) ?? []
 
         self.init(
             styleSetID: styleId,
@@ -55,26 +56,27 @@ internal extension PolygonStyleSet {
 internal extension PerLevelPolylineStyle {
     convenience init(payload: Dictionary<String, Any>) {
         if (payload["strokeSize"] == nil || payload["strokeColor"] == nil) {
-            return self.init(
+            self.init(
                 bodyColor: UIColor(value: asUInt(payload["color"]!)),
                 bodyWidth: asUInt(payload["lineWidth"]!),
                 level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
             )
+        } else {
+            self.init(
+                bodyColor: UIColor(value: asUInt(payload["color"]!)),
+                bodyWidth: asUInt(payload["lineWidth"]!),
+                strokeColor: UIColor(value: asUInt(payload["strokeColor"]!)),
+                strokeWidth: asUInt(payload["strokeSize"]!),
+                level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
+            )
         }
-        self.init(
-            bodyColor: UIColor(value: asUInt(payload["color"]!)),
-            bodyWidth: asUInt(payload["lineWidth"]!),
-            strokeWidth: asUInt(payload["strokeSize"]!),
-            strokeColor: UIColor(value: asUInt(payload["strokeColor"]!)),
-            level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
-        )
     }
 }
 
 
-internal extension PolylineStyles {
+internal extension PolylineStyle {
     convenience init(payload: Dictionary<String, Any>) {
-        let styles = Array<PerLevelPolylineStyle>()
+        var styles = Array<PerLevelPolylineStyle>()
         styles.append(PerLevelPolylineStyle(payload: payload))
         styles.append(
             contentsOf: asArray(payload["otherStyle"] ?? [], caster: asDict).map {
@@ -88,43 +90,39 @@ internal extension PolylineStyles {
 }
 
 
-internal extension PolyglineStyleSet {
+internal extension PolylineStyleSet {
     convenience init(payload: Dictionary<String, Any>) {
         let styleId = castSafty(payload["styleId"], caster: asString) ?? UUID().uuidString
-        let styles = castSafty(payload["styles"], caster:
+        let styles = castSafty(payload["styles"], caster: {
             asArray($0, caster: {
-                PolylineStyles(payload: $0)
+                PolylineStyle(payload: asDict($0))
             })
-        ) ?? []
+        }) ?? []
         let capType = castSafty(payload["polylineCap"], caster: {
             PolylineCapType(rawValue: asInt($0))
-        }) ?? PolylineCapType.square
+        })
         self.init(
             styleSetID: styleId,
             styles: styles,
-            capType: capType
+            capType: (capType ?? PolylineCapType.square)
         )
     }
 }
 
 
-internal func asDotPoints(payload: Dictionary<String, Any>) -> Array<CGPoint>? {
-    let basePoint = castSafty(payload["basePoint"], caster: MapPoint(payload: asDictTyped($0, caster=asDouble)))
-    switch asInt(payload["dotType"]) {
+internal func asDotPoints(payload: Dictionary<String, Any>) -> [CGPoint]? {
+    let basePoint = castSafty(payload["basePoint"], caster: {
+        MapPoint(payload: asDictTyped($0, caster: asDouble))
+    })
+    switch asInt(payload["dotType"]!) {
     case 0:
         let radius = asDouble(payload["radius"]!)
-        let clockwise = castSafty(payload["closewise"], caster=asBool) ?? true
-        if (basePoint != nil) {
-            return Primitives.getCirclePoints(radius: radius, cw: clockwise, center: basePoint)
-        }
-        return Primitives.getCirclePoints(radius: radius, cw: clockwise)
+        let clockwise = castSafty(payload["closewise"], caster: asBool) ?? true
+        return Primitives.getCirclePoints(radius: radius, numPoints: 0, cw: clockwise)
     case 1:
         let width = asDouble(payload["width"]!)
         let height = asDouble(payload["height"]!)
-        let clockwise = castSafty(payload["closewise"], caster=asBool) ?? true
-        if (basePoint != nil) {
-            return Primitives.getRectanglePoints(width: width, height: height, cw: clockwise, center: basePoint)
-        }
+        let clockwise = castSafty(payload["closewise"], caster: asBool) ?? true
         return Primitives.getRectanglePoints(width: width, height: height, cw: clockwise)
     default:
         return nil
@@ -140,18 +138,20 @@ internal extension PolygonShapeOptions {
         if (polygonId == nil) {
             self.init(styleID: styleId, zOrder: zOrder)
         } else {
-            self.init(shapeID: polygonId, styleID: styleId, zOrder: zOrder)
+            self.init(shapeID: polygonId!, styleID: styleId, zOrder: zOrder)
         }
 
         let position = asDict(payload["position"]!)
-        let points = asDotPoints(position["points"]!)
-        let holes = castSafty(position["holes"], caster={
-            asArray($0, caster=asDotPoints)
+        let points = asDotPoints(payload: asDict(position["points"]!))
+        let holes = castSafty(position["holes"], caster: {
+            asArray($0, caster: {
+                asDotPoints(payload: asDict($0))!
+            })
         })
         self.polygons = [
-            MapPolygon(
-                exteriorRing: points, 
-                holes: holes, 
+            Polygon(
+                exteriorRing: points!,
+                holes: holes,
                 styleIndex: 0
             )
         ]
@@ -167,22 +167,22 @@ internal extension MapPolygonShapeOptions {
         if (polygonId == nil) {
             self.init(styleID: styleId, zOrder: zOrder)
         } else {
-            self.init(shapeID: polygonId, styleID: styleId, zOrder: zOrder)
+            self.init(shapeID: polygonId!, styleID: styleId, zOrder: zOrder)
         }
 
         let position = asDict(payload["position"]!)
-        let points = asArray(position["points"]!, caster={ MapPoint(payload: asDict($0)) })
-        let holes = castSafty(position["holes"], caster={
-            asArray($0, caster={
-                asArray($0, caster=asDict).map {
+        let points = asArray(position["points"]!, caster: { MapPoint(payload: asDict($0)) })
+        let holes = castSafty(position["holes"], caster: {
+            asArray($0, caster: {
+                asArray($0, caster: asDict).map {
                     MapPoint(payload: $0)
                 }
             })
         })
         self.polygons = [
-            Polygon(
-                exteriorRing: points, 
-                holes: holes, 
+            MapPolygon(
+                exteriorRing: points,
+                holes: holes,
                 styleIndex: 0
             )
         ]
@@ -198,15 +198,15 @@ internal extension PolylineShapeOptions {
         if (polylineId == nil) {
             self.init(styleID: styleId, zOrder: zOrder)
         } else {
-            self.init(shapeID: polylineId, styleID: styleId, zOrder: zOrder)
+            self.init(shapeID: polylineId!, styleID: styleId, zOrder: zOrder)
         }
 
         let position = asDict(payload["position"]!)
-        let points = asDotPoints(position["points"]!)
+        let points = asDotPoints(payload: asDict(position["points"]!))
         
         self.polylines = [
             Polyline(
-                line: points, 
+                line: points!,
                 styleIndex: 0
             )
         ]
@@ -222,11 +222,11 @@ internal extension MapPolylineShapeOptions {
         if (polylineId == nil) {
             self.init(styleID: styleId, zOrder: zOrder)
         } else {
-            self.init(shapeID: polylineId, styleID: styleId, zOrder: zOrder)
+            self.init(shapeID: polylineId!, styleID: styleId, zOrder: zOrder)
         }
 
         let position = asDict(payload["position"]!)
-        let points = asArray(position["points"]!, caster={ MapPoint(payload: asDict($0)) })
+        let points = asArray(position["points"]!, caster: { MapPoint(payload: asDict($0)) })
         self.polylines = [
             MapPolyline(
                 line: points,
