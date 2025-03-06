@@ -162,7 +162,6 @@ class _MyAppState extends State<MyApp> {
                   strokeColor: Colors.white)
             ]));
     // .then((poi) => poi.changeText("KAKAO MAP LABEL"));
-    return;
 
     /// 카카오 판교캠퍼스 주변에 "휘어지는 글씨 테스트"를 그린다.
     controller.labelLayer.addPolylineText(
@@ -183,6 +182,7 @@ class _MyAppState extends State<MyApp> {
     controller.shapeLayer.addPolygonShape(
         CirclePoint(200, const LatLng(37.39375894087694, 127.10964757834647)),
         PolygonStyle(Colors.green));
+    return;
 
     /// 경부고속도로를 따라 경로선을 그린다.
     controller.routeLayer.addRoute(const [
