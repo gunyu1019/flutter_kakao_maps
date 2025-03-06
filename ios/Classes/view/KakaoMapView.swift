@@ -1,36 +1,34 @@
 import Flutter
 import KakaoMapsSDK
 
-
-internal class KakaoMapView: NSObject, FlutterPlatformView {  // UIApplicationDelegate
-    private let KMView: KMViewContainer;
-    private let kakaoMap: KMController;
+class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
+    private let KMView: KMViewContainer
+    private let kakaoMap: KMController
     private var eventDelegate: KakaoMapDelegate!
-    
+
     private let controller: KakaoMapController
-    
+
     init(
-        frame: CGRect,
+        frame _: CGRect,
         channel: FlutterMethodChannel,
         overlayChannel: FlutterMethodChannel,
         option: MapviewInfo
     ) {
-        self.KMView = KMViewContainer()
-        self.kakaoMap = KMController(viewContainer: KMView)
-        self.controller = KakaoMapController(
+        KMView = KMViewContainer()
+        kakaoMap = KMController(viewContainer: KMView)
+        controller = KakaoMapController(
             channel: channel,
             overlayChannel: overlayChannel
         )
         super.init()
-        
+
         eventDelegate = KakaoMapDelegate(
-            controller: self.kakaoMap,
+            controller: kakaoMap,
             sender: controller,
             option: option
         )
-        self.kakaoMap.delegate = eventDelegate
-        
-        
+        kakaoMap.delegate = eventDelegate
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(onViewPaused),
@@ -43,20 +41,20 @@ internal class KakaoMapView: NSObject, FlutterPlatformView {  // UIApplicationDe
             name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
-        self.kakaoMap.prepareEngine()
+        kakaoMap.prepareEngine()
     }
-    
+
     func view() -> UIView {
-        self.kakaoMap.activateEngine()
+        kakaoMap.activateEngine()
         return KMView
     }
 
     @objc func onViewPaused() {
-        self.kakaoMap.pauseEngine()
+        kakaoMap.pauseEngine()
     }
 
     @objc func onViewResume() {
-        self.kakaoMap.activateEngine()
+        kakaoMap.activateEngine()
     }
 
     deinit {
@@ -65,4 +63,3 @@ internal class KakaoMapView: NSObject, FlutterPlatformView {  // UIApplicationDe
         self.kakaoMap.resetEngine()
     }
 }
-

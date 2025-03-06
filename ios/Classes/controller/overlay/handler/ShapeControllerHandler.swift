@@ -1,9 +1,9 @@
-import KakaoMapsSDK
 import Flutter
+import KakaoMapsSDK
 
-internal protocol ShapeControllerHandler {
-    var shapeManager: ShapeManager { get };
-    
+protocol ShapeControllerHandler {
+    var shapeManager: ShapeManager { get }
+
     func createShapeLayer(layerId: String, zOrder: Int, passType: ShapeLayerPassType, onSuccess: (Any?) -> Void)
 
     func removeShapeLayer(layerId: String, onSuccess: (Any?) -> Void)
@@ -21,7 +21,7 @@ internal protocol ShapeControllerHandler {
     func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void)
 }
 
-internal extension ShapeControllerHandler {
+extension ShapeControllerHandler {
     func shapeHandle(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = castSafty(call.arguments, caster: asDict)
         let layerId: String? = castSafty(arguments?["layerId"], caster: asString)
@@ -60,10 +60,10 @@ internal extension ShapeControllerHandler {
             let position = asDict(polyline["position"]!)
             let positionType = asInt(position["type"]!)
             let visible = asBool(arguments!["visible"] ?? true)
-            if (positionType == 0) {
+            if positionType == 0 {
                 let option = MapPolylineShapeOptions(payload: polyline)
                 addMapPolylineShape(layer: layer!, option: option, visible: visible, onSuccess: result)
-            } else if (positionType == 1) {
+            } else if positionType == 1 {
                 let option = PolylineShapeOptions(payload: polyline)
                 addPolylineShape(layer: layer!, option: option, visible: visible, onSuccess: result)
             } else {
@@ -74,10 +74,10 @@ internal extension ShapeControllerHandler {
             let position = asDict(polygon["position"]!)
             let positionType = asInt(position["type"]!)
             let visible = asBool(arguments!["visible"] ?? true)
-            if (positionType == 0) {
+            if positionType == 0 {
                 let option = MapPolygonShapeOptions(payload: polygon)
                 addMapPolygonShape(layer: layer!, option: option, visible: visible, onSuccess: result)
-            } else if (positionType == 1) {
+            } else if positionType == 1 {
                 let option = PolygonShapeOptions(payload: polygon)
                 addPolygonShape(layer: layer!, option: option, visible: visible, onSuccess: result)
             } else {

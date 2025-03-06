@@ -1,27 +1,26 @@
-import KakaoMapsSDK
 import Flutter
+import KakaoMapsSDK
 
-
-internal class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler {
+class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler {
     private let channel: FlutterMethodChannel
     private let kakaoMap: KakaoMap
 
     let labelManager: LabelManager
     let shapeManager: ShapeManager
 
-    init (channel: FlutterMethodChannel, kakaoMap: KakaoMap) {
+    init(channel: FlutterMethodChannel, kakaoMap: KakaoMap) {
         self.channel = channel
         self.kakaoMap = kakaoMap
-        
-        self.labelManager = kakaoMap.getLabelManager()
-        self.shapeManager = kakaoMap.getShapeManager()
+
+        labelManager = kakaoMap.getLabelManager()
+        shapeManager = kakaoMap.getShapeManager()
 
         setupInitLayer()
         channel.setMethodCallHandler(handle)
     }
 
     func setupInitLayer() {
-        self.labelManager.addLabelLayer(
+        labelManager.addLabelLayer(
             option: LabelLayerOptions(
                 layerID: "label_default_layer",
                 competitionType: .none,
@@ -30,7 +29,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
                 zOrder: 10001
             )
         )
-        self.labelManager.addLodLabelLayer(
+        labelManager.addLodLabelLayer(
             option: LodLabelLayerOptions(
                 layerID: "lodLabel_default_layer",
                 competitionType: .none,
@@ -40,9 +39,9 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
                 radius: 20.0
             )
         )
-        self.shapeManager.addShapeLayer(
+        shapeManager.addShapeLayer(
             layerID: "vector_layer_0",
-            zOrder: 10001 
+            zOrder: 10001
         )
     }
 
@@ -58,23 +57,23 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
     }
 
     func createLabelLayer(option: LabelLayerOptions, onSuccess: (Any?) -> Void) {
-        self.labelManager.addLabelLayer(option: option)
+        labelManager.addLabelLayer(option: option)
         onSuccess(nil)
     }
 
     func removeLabelLayer(layerId: String, onSuccess: (Any?) -> Void) {
-        self.labelManager.removeLabelLayer(layerID: layerId)
+        labelManager.removeLabelLayer(layerID: layerId)
         onSuccess(nil)
     }
 
     func addPoiStyle(style: PoiStyle, onSuccess: (String) -> Void) {
-        self.labelManager.addPoiStyle(style)
+        labelManager.addPoiStyle(style)
         onSuccess(style.styleID)
     }
 
     func addPoi(layer: LabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String) -> Void) {
         let poiInstance = layer.addPoi(option: poi, at: position)
-        if (visible && !(poiInstance?.isShow ?? false)) {
+        if visible && !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
         onSuccess(poiInstance!.itemID)
@@ -87,7 +86,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
 
     func addPolylineText(layer: LabelLayer, label: WaveTextOptions, visible: Bool, onSuccess: (String) -> Void) {
         let waveTextInstance = layer.addWaveText(label)
-        if (visible && !(waveTextInstance?.isShow ?? false)) {
+        if visible && !(waveTextInstance?.isShow ?? false) {
             waveTextInstance?.show()
         }
         onSuccess(waveTextInstance!.itemID)
@@ -98,16 +97,15 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
         onSuccess(nil)
     }
 
-
     func changePoiPixelOffset(poi: Poi, offset: CGPoint, onSuccess: (Any?) -> Void) {
         poi.pixelOffset = offset
         onSuccess(nil)
     }
 
     func changePoiVisible(poi: Poi, visible: Bool, autoMove: Bool, onSuccess: (Any?) -> Void) {
-        if (visible && autoMove) {
+        if visible && autoMove {
             poi.showWithAutoMove()
-        } else if (visible) {
+        } else if visible {
             poi.show()
         } else {
             poi.hide()
@@ -122,7 +120,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
 
     func changePoiText(poi: Poi, styleId: String, text: String, transition: Bool, onSuccess: (Any?) -> Void) {
         let poiText = asString(text).components(separatedBy: "\n").enumerated().map {
-            (index, element) in PoiText(text: element, styleIndex: UInt(index))
+            index, element in PoiText(text: element, styleIndex: UInt(index))
         }
         poi.changeTextAndStyle(texts: poiText, styleID: styleId, enableTransition: transition)
         onSuccess(nil)
@@ -136,14 +134,14 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
         onSuccess: (Any?) -> Void
     ) {
         let poiText = asString(text).components(separatedBy: "\n").enumerated().map {
-            (index, element) in PoiText(text: element, styleIndex: UInt(index))
+            index, element in PoiText(text: element, styleIndex: UInt(index))
         }
         poi.changeTextAndStyle(texts: poiText, styleID: styleId, enableTransition: transition)
         onSuccess(nil)
     }
-    
+
     func movePoi(poi: Poi, position: MapPoint, duration: UInt?, onSuccess: (Any?) -> Void) {
-        if (duration == nil || duration is NSNull) {
+        if duration == nil || duration is NSNull {
             poi.position = position
         } else {
             poi.moveAt(position, duration: duration!)
@@ -152,7 +150,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
     }
 
     func rotatePoi(poi: Poi, angle: Double, duration: UInt?, onSuccess: (Any?) -> Void) {
-        if (duration == nil || duration is NSNull) {
+        if duration == nil || duration is NSNull {
             poi.orientation = angle
         } else {
             poi.rotateAt(angle, duration: duration!)
@@ -166,57 +164,57 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
     }
 
     func createLodLabelLayer(option: LodLabelLayerOptions, onSuccess: (Any?) -> Void) {
-        self.labelManager.addLodLabelLayer(option: option)
+        labelManager.addLodLabelLayer(option: option)
         onSuccess(nil)
     }
-    
+
     func removeLodLabelLayer(layerId: String, onSuccess: (Any?) -> Void) {
-        self.labelManager.removeLodLabelLayer(layerID: layerId)
+        labelManager.removeLodLabelLayer(layerID: layerId)
         onSuccess(nil)
     }
-    
+
     func addLodPoi(layer: LodLabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String) -> Void) {
         let poiInstance = layer.addLodPoi(option: poi, at: position)
-        if (visible && !(poiInstance?.isShow ?? false)) {
+        if visible && !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
         onSuccess(poiInstance!.itemID)
     }
-    
+
     func removeLodPoi(layer: LodLabelLayer, poiId: String, onSuccess: (Any?) -> Void) {
         layer.removeLodPoi(poiID: poiId)
         onSuccess(nil)
     }
-    
+
     func changeLodPoiVisible(poi: LodPoi, visible: Bool, autoMove: Bool, onSuccess: (Any?) -> Void) {
-        if (visible && autoMove) {
+        if visible && autoMove {
             poi.showWithAutoMove()
-        } else if (visible) {
+        } else if visible {
             poi.show()
         } else {
             poi.hide()
         }
         onSuccess(nil)
     }
-    
+
     func changeLodPoiStyle(poi: LodPoi, styleId: String, transition: Bool, onSuccess: (Any?) -> Void) {
         poi.changeStyle(styleID: styleId, enableTransition: transition)
         onSuccess(nil)
     }
-    
+
     func changeLodPoiText(poi: LodPoi, styleId: String, text: String, transition: Bool, onSuccess: (Any?) -> Void) {
         let poiText = asString(text).components(separatedBy: "\n").enumerated().map {
-            (index, element) in PoiText(text: element, styleIndex: UInt(index))
+            index, element in PoiText(text: element, styleIndex: UInt(index))
         }
         poi.changeTextAndStyle(texts: poiText, styleID: styleId, enableTransition: transition)
         onSuccess(nil)
     }
-    
+
     func rankLodPoi(poi: LodPoi, rank: Int, onSuccess: (Any?) -> Void) {
         poi.rank = rank
         onSuccess(nil)
     }
-    
+
     func createShapeLayer(layerId: String, zOrder: Int, passType: ShapeLayerPassType, onSuccess: (Any?) -> Void) {
         shapeManager.addShapeLayer(layerID: layerId, zOrder: zOrder, passType: passType)
         onSuccess(nil)
@@ -239,7 +237,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
 
     func addMapPolygonShape(layer: ShapeLayer, option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
         let shapeInstance = layer.addMapPolygonShape(option)
-        if (visible && !(shapeInstance?.isShow ?? false)) {
+        if visible && !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
         onSuccess(shapeInstance!.shapeID)
@@ -247,7 +245,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
 
     func addMapPolylineShape(layer: ShapeLayer, option: MapPolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
         let shapeInstance = layer.addMapPolylineShape(option)
-        if (visible && !(shapeInstance?.isShow ?? false)) {
+        if visible && !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
         onSuccess(shapeInstance!.shapeID)
@@ -255,7 +253,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
 
     func addPolygonShape(layer: ShapeLayer, option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
         let shapeInstance = layer.addPolygonShape(option)
-        if (visible && !(shapeInstance?.isShow ?? false)) {
+        if visible && !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
         onSuccess(shapeInstance!.shapeID)
@@ -263,10 +261,9 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
 
     func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
         let shapeInstance = layer.addPolylineShape(option)
-        if (visible && !(shapeInstance?.isShow ?? false)) {
+        if visible && !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
         onSuccess(shapeInstance!.shapeID)
     }
-
 }

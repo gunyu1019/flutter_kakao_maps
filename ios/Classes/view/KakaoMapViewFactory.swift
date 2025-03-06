@@ -7,7 +7,7 @@ class KakaoMapViewFactory: NSObject, FlutterPlatformViewFactory {
     init(messenger: FlutterBinaryMessenger) {
         self.messenger = messenger
         super.init()
-        
+
         URLSession.shared.configuration.httpMaximumConnectionsPerHost = 8
     }
 

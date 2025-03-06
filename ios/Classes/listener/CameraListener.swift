@@ -1,16 +1,16 @@
 import Flutter
 import KakaoMapsSDK
 
-internal class CameraListener {
+class CameraListener {
     private let channel: FlutterMethodChannel
 
-    init (channel: FlutterMethodChannel) {
+    init(channel: FlutterMethodChannel) {
         self.channel = channel
     }
 
     func onCameraWillMovedEvent(_ param: CameraActionEventParam) {
         channel.invokeMethod("onCameraMoveStart", arguments: [
-            "gesture": param.by.rawValue
+            "gesture": param.by.rawValue,
         ])
     }
 
@@ -20,7 +20,7 @@ internal class CameraListener {
 
         channel.invokeMethod("onCameraMoveEnd", arguments: [
             "gesture": param.by.rawValue,
-            "position": position.toMessageable()
+            "position": position.toMessageable(),
         ])
     }
 }

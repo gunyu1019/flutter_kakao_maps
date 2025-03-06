@@ -1,6 +1,6 @@
 import KakaoMapsSDK
 
-internal protocol KakaoMapControllerSender {
+protocol KakaoMapControllerSender {
     func onMapReady(kakaoMap: KakaoMap)
 
     func onMapDestroy()

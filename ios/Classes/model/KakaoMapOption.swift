@@ -1,9 +1,8 @@
 import KakaoMapsSDK
 
-
-internal extension MapviewInfo {
-    convenience init (
-        payload: Dictionary<String, Any>,
+extension MapviewInfo {
+    convenience init(
+        payload: [String: Any],
         viewId: Int64
     ) {
         self.init(

@@ -1,8 +1,8 @@
-import KakaoMapsSDK
 import Flutter
+import KakaoMapsSDK
 
-internal protocol LabelControllerHandler {
-    var labelManager: LabelManager { get };
+protocol LabelControllerHandler {
+    var labelManager: LabelManager { get }
 
     func createLabelLayer(option: LabelLayerOptions, onSuccess: (Any?) -> Void)
 
@@ -33,7 +33,7 @@ internal protocol LabelControllerHandler {
         transition: Bool,
         onSuccess: (Any?) -> Void
     )
-    
+
     func movePoi(poi: Poi, position: MapPoint, duration: UInt?, onSuccess: (Any?) -> Void)
 
     func rotatePoi(poi: Poi, angle: Double, duration: UInt?, onSuccess: (Any?) -> Void)
@@ -41,7 +41,7 @@ internal protocol LabelControllerHandler {
     func rankPoi(poi: Poi, rank: Int, onSuccess: (Any?) -> Void)
 }
 
-internal extension LabelControllerHandler {
+extension LabelControllerHandler {
     func labelHandle(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = castSafty(call.arguments, caster: asDict)
         let layerId: String? = castSafty(arguments?["layerId"], caster: asString)
@@ -80,7 +80,7 @@ internal extension LabelControllerHandler {
         case "removePolylineText": removePolylineText(layer: layer!, labelId: poiId!, onSuccess: result)
         // poi Handler
         case "changePoiPixelOffset":
-            let rawPayload: Dictionary<String, Double> = ["x": asDouble(arguments!["x"]!), "y": asDouble(arguments!["y"]!)]
+            let rawPayload: [String: Double] = ["x": asDouble(arguments!["x"]!), "y": asDouble(arguments!["y"]!)]
             let offset = CGPoint(payload: rawPayload)
             changePoiPixelOffset(poi: poi!, offset: offset, onSuccess: result)
         case "changePoiVisible":

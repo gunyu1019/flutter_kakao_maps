@@ -1,9 +1,8 @@
 import KakaoMapsSDK
 
-
-internal extension PerLevelPolygonStyle {
-    convenience init(payload: Dictionary<String, Any>) {
-        if (payload["strokeSize"] == nil || payload["strokeColor"] == nil) {
+extension PerLevelPolygonStyle {
+    convenience init(payload: [String: Any]) {
+        if payload["strokeSize"] == nil || payload["strokeColor"] == nil {
             self.init(
                 color: UIColor(value: asUInt(payload["color"]!)),
                 level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
@@ -19,10 +18,9 @@ internal extension PerLevelPolygonStyle {
     }
 }
 
-
-internal extension PolygonStyle {
-    convenience init(payload: Dictionary<String, Any>) {
-        var styles = Array<PerLevelPolygonStyle>()
+extension PolygonStyle {
+    convenience init(payload: [String: Any]) {
+        var styles = [PerLevelPolygonStyle]()
         styles.append(PerLevelPolygonStyle(payload: payload))
         styles.append(
             contentsOf: asArray(payload["otherStyle"] ?? [], caster: asDict).map {
@@ -35,9 +33,8 @@ internal extension PolygonStyle {
     }
 }
 
-
-internal extension PolygonStyleSet {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PolygonStyleSet {
+    convenience init(payload: [String: Any]) {
         let styleId = castSafty(payload["styleId"], caster: asString) ?? UUID().uuidString
         let styles = castSafty(payload["styles"], caster: {
             asArray($0, caster: {
@@ -52,10 +49,9 @@ internal extension PolygonStyleSet {
     }
 }
 
-
-internal extension PerLevelPolylineStyle {
-    convenience init(payload: Dictionary<String, Any>) {
-        if (payload["strokeSize"] == nil || payload["strokeColor"] == nil) {
+extension PerLevelPolylineStyle {
+    convenience init(payload: [String: Any]) {
+        if payload["strokeSize"] == nil || payload["strokeColor"] == nil {
             self.init(
                 bodyColor: UIColor(value: asUInt(payload["color"]!)),
                 bodyWidth: asUInt(payload["lineWidth"]!),
@@ -73,10 +69,9 @@ internal extension PerLevelPolylineStyle {
     }
 }
 
-
-internal extension PolylineStyle {
-    convenience init(payload: Dictionary<String, Any>) {
-        var styles = Array<PerLevelPolylineStyle>()
+extension PolylineStyle {
+    convenience init(payload: [String: Any]) {
+        var styles = [PerLevelPolylineStyle]()
         styles.append(PerLevelPolylineStyle(payload: payload))
         styles.append(
             contentsOf: asArray(payload["otherStyle"] ?? [], caster: asDict).map {
@@ -89,9 +84,8 @@ internal extension PolylineStyle {
     }
 }
 
-
-internal extension PolylineStyleSet {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PolylineStyleSet {
+    convenience init(payload: [String: Any]) {
         let styleId = castSafty(payload["styleId"], caster: asString) ?? UUID().uuidString
         let styles = castSafty(payload["styles"], caster: {
             asArray($0, caster: {
@@ -104,13 +98,12 @@ internal extension PolylineStyleSet {
         self.init(
             styleSetID: styleId,
             styles: styles,
-            capType: (capType ?? .square)
+            capType: capType ?? .square
         )
     }
 }
 
-
-internal func asDotPoints(payload: Dictionary<String, Any>) -> [CGPoint]? {
+func asDotPoints(payload: [String: Any]) -> [CGPoint]? {
     switch asInt(payload["dotType"]!) {
     case 0:
         let radius = asDouble(payload["radius"]!)
@@ -126,13 +119,12 @@ internal func asDotPoints(payload: Dictionary<String, Any>) -> [CGPoint]? {
     }
 }
 
-
-internal extension PolygonShapeOptions {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PolygonShapeOptions {
+    convenience init(payload: [String: Any]) {
         let styleId = asString(payload["styleId"]!)
         let polygonId = castSafty(payload["id"], caster: asString)
         let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10001
-        if (polygonId == nil) {
+        if polygonId == nil {
             self.init(styleID: styleId, zOrder: zOrder)
         } else {
             self.init(shapeID: polygonId!, styleID: styleId, zOrder: zOrder)
@@ -146,24 +138,23 @@ internal extension PolygonShapeOptions {
             })
         })
 
-        self.basePosition = MapPoint(payload: asDict(position["basePoint"]!))
-        self.polygons = [
+        basePosition = MapPoint(payload: asDict(position["basePoint"]!))
+        polygons = [
             Polygon(
                 exteriorRing: points!,
                 holes: holes,
                 styleIndex: 0
-            )
+            ),
         ]
     }
 }
 
-
-internal extension MapPolygonShapeOptions {
-    convenience init(payload: Dictionary<String, Any>) {
+extension MapPolygonShapeOptions {
+    convenience init(payload: [String: Any]) {
         let styleId = asString(payload["styleId"]!)
         let polygonId = castSafty(payload["id"], caster: asString)
         let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10001
-        if (polygonId == nil) {
+        if polygonId == nil {
             self.init(styleID: styleId, zOrder: zOrder)
         } else {
             self.init(shapeID: polygonId!, styleID: styleId, zOrder: zOrder)
@@ -178,23 +169,22 @@ internal extension MapPolygonShapeOptions {
                 }
             })
         })
-        self.polygons = [
+        polygons = [
             MapPolygon(
                 exteriorRing: points,
                 holes: holes,
                 styleIndex: 0
-            )
+            ),
         ]
     }
 }
 
-
-internal extension PolylineShapeOptions {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PolylineShapeOptions {
+    convenience init(payload: [String: Any]) {
         let styleId = asString(payload["styleId"]!)
         let polylineId = castSafty(payload["id"], caster: asString)
         let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10001
-        if (polylineId == nil) {
+        if polylineId == nil {
             self.init(styleID: styleId, zOrder: zOrder)
         } else {
             self.init(shapeID: polylineId!, styleID: styleId, zOrder: zOrder)
@@ -202,23 +192,22 @@ internal extension PolylineShapeOptions {
         let position = asDict(payload["position"]!)
         let points = asDotPoints(payload: position)
 
-        self.basePosition = MapPoint(payload: asDict(position["basePoint"]!))
-        self.polylines = [
+        basePosition = MapPoint(payload: asDict(position["basePoint"]!))
+        polylines = [
             Polyline(
                 line: points!,
                 styleIndex: 0
-            )
+            ),
         ]
     }
 }
 
-
-internal extension MapPolylineShapeOptions {
-    convenience init(payload: Dictionary<String, Any>) {
+extension MapPolylineShapeOptions {
+    convenience init(payload: [String: Any]) {
         let styleId = asString(payload["styleId"]!)
         let polylineId = castSafty(payload["id"], caster: asString)
         let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10001
-        if (polylineId == nil) {
+        if polylineId == nil {
             self.init(styleID: styleId, zOrder: zOrder)
         } else {
             self.init(shapeID: polylineId!, styleID: styleId, zOrder: zOrder)
@@ -226,11 +215,11 @@ internal extension MapPolylineShapeOptions {
 
         let position = asDict(payload["position"]!)
         let points = asArray(position["points"]!, caster: { MapPoint(payload: asDict($0)) })
-        self.polylines = [
+        polylines = [
             MapPolyline(
                 line: points,
                 styleIndex: 0
-            )
+            ),
         ]
     }
 }

@@ -1,25 +1,23 @@
-import KakaoMapsSDK
 import Flutter
+import KakaoMapsSDK
 
-
-internal extension UIColor {
-     convenience init(value: UInt) {
-        self.init(red: CGFloat((value & 0x00FF0000) >> 16) / 255.0,
-                  green: CGFloat((value & 0x0000FF00) >> 8) / 255.0,
-                  blue: CGFloat(value & 0x000000FF) / 255.0,
-                  alpha: CGFloat(value & 0xFF000000) / 1.0)
+extension UIColor {
+    convenience init(value: UInt) {
+        self.init(red: CGFloat((value & 0x00FF_0000) >> 16) / 255.0,
+                  green: CGFloat((value & 0x0000_FF00) >> 8) / 255.0,
+                  blue: CGFloat(value & 0x0000_00FF) / 255.0,
+                  alpha: CGFloat(value & 0xFF00_0000) / 1.0)
     }
 }
 
-
-internal extension UIImage {
+extension UIImage {
     func resize(size: CGSize) -> UIImage {
         let renderer = UIGraphicsImageRenderer(
             size: size
         )
         let resizedImage = renderer.image { _ in
             self.draw(in: CGRect(
-                origin: .zero, 
+                origin: .zero,
                 size: size
             ))
         }
@@ -27,8 +25,7 @@ internal extension UIImage {
     }
 }
 
-
-internal func asImage(payload: Dictionary<String, Any>) -> UIImage? {
+func asImage(payload: [String: Any]) -> UIImage? {
     let width = asInt(payload["width"]!)
     let height = asInt(payload["height"]!)
     let size = CGSize(width: width, height: height)
@@ -41,26 +38,24 @@ internal func asImage(payload: Dictionary<String, Any>) -> UIImage? {
     case 2:
         let data = payload["data"] as! FlutterStandardTypedData
         return UIImage(data: data.data)?.resize(size: size)
-    default:  // type 1
+    default: // type 1
         let path = asString(payload["path"]!)
         return UIImage(contentsOfFile: path)?.resize(size: size)
     }
 }
 
-
-internal extension CGPoint {
-    init(payload: Dictionary<String, Double>) {
+extension CGPoint {
+    init(payload: [String: Double]) {
         self.init(x: payload["x"]!, y: payload["y"]!)
     }
 
-    init(payload: Dictionary<String, Int>) {
+    init(payload: [String: Int]) {
         self.init(x: payload["x"]!, y: payload["y"]!)
     }
 }
 
-
-internal extension TextStyle {
-    convenience init(payload: Dictionary<String, Any>) {
+extension TextStyle {
+    convenience init(payload: [String: Any]) {
         self.init(
             fontSize: payload["size"] as! UInt,
             fontColor: UIColor(value: payload["color"] as! UInt),

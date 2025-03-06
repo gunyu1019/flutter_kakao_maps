@@ -1,8 +1,7 @@
 import KakaoMapsSDK
 
-
-internal func asPoiTransition(payload: Dictionary<String, Any>?) -> PoiTransition {
-    if (payload == nil) {
+func asPoiTransition(payload: [String: Any]?) -> PoiTransition {
+    if payload == nil {
         return PoiTransition(entrance: .none, exit: .none)
     }
     return PoiTransition(
@@ -11,8 +10,8 @@ internal func asPoiTransition(payload: Dictionary<String, Any>?) -> PoiTransitio
     )
 }
 
-internal extension PoiTextStyle {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PoiTextStyle {
+    convenience init(payload: [String: Any]) {
         let transition = asPoiTransition(payload: castSafty(payload["iconTransition"], caster: asDict))
         let textStyle = castSafty(payload["textStyle"], caster: {
             asArray($0, caster: {
@@ -26,19 +25,19 @@ internal extension PoiTextStyle {
             textLineStyles: textStyle
         )
 
-        if (payload["textGravity"] != nil) {
+        if payload["textGravity"] != nil {
             let gravity = asInt(payload["textGravity"]!)
             switch gravity {
             case 1:
-                self.textLayouts = [PoiTextLayout.left]
+                textLayouts = [PoiTextLayout.left]
             case 2:
-                self.textLayouts = [PoiTextLayout.right]
+                textLayouts = [PoiTextLayout.right]
             case 4:
-                self.textLayouts = [PoiTextLayout.top]
+                textLayouts = [PoiTextLayout.top]
             case 8:
-                self.textLayouts = [PoiTextLayout.bottom]
+                textLayouts = [PoiTextLayout.bottom]
             case 16:
-                self.textLayouts = [PoiTextLayout.center]
+                textLayouts = [PoiTextLayout.center]
             default:
                 break
             }
@@ -46,12 +45,11 @@ internal extension PoiTextStyle {
     }
 }
 
-
-internal extension PoiIconStyle {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PoiIconStyle {
+    convenience init(payload: [String: Any]) {
         let transition = asPoiTransition(payload: castSafty(payload["iconTransition"], caster: asDict))
         let symbol = payload["icon"].flatMap(asDict).flatMap(asImage)
-        
+
         self.init(
             symbol: symbol,
             anchorPoint: castSafty(payload["anchor"], caster: { CGPoint(payload: asDictTyped($0, caster: asDouble)) }) ?? CGPoint(x: 0.5, y: 0.5),
@@ -63,9 +61,8 @@ internal extension PoiIconStyle {
     }
 }
 
-
-internal extension PerLevelPoiStyle {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PerLevelPoiStyle {
+    convenience init(payload: [String: Any]) {
         self.init(
             iconStyle: PoiIconStyle(payload: payload),
             textStyle: PoiTextStyle(payload: payload),
@@ -75,12 +72,11 @@ internal extension PerLevelPoiStyle {
     }
 }
 
-
-internal extension PoiStyle {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PoiStyle {
+    convenience init(payload: [String: Any]) {
         let styleId = castSafty(payload["styleId"], caster: asString) ?? UUID().uuidString
         let rawStyles = asDict(payload["styles"])
-        var styles = Array<PerLevelPoiStyle>()
+        var styles = [PerLevelPoiStyle]()
         styles.append(PerLevelPoiStyle(payload: rawStyles))
         styles.append(
             contentsOf: asArray(rawStyles["otherStyle"] ?? [], caster: asDict).map {
@@ -94,38 +90,36 @@ internal extension PoiStyle {
     }
 }
 
-
-internal extension PoiOptions {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PoiOptions {
+    convenience init(payload: [String: Any]) {
         self.init(styleID: asString(payload["styleId"]!))
         if let rank = payload["rank"] {
-            if (!(rank is NSNull)) {
+            if !(rank is NSNull) {
                 self.rank = asInt(rank)
             }
         }
         if let clickable = payload["clickable"] {
-            if (!(clickable is NSNull)) {
+            if !(clickable is NSNull) {
                 self.clickable = asBool(clickable)
             }
         }
         if let transformMethod = payload["transformMethod"] {
-            if (!(transformMethod is NSNull)) {
-                self.transformType = PoiTransformType(rawValue: asInt(transformMethod)) ?? PoiTransformType.default
+            if !(transformMethod is NSNull) {
+                transformType = PoiTransformType(rawValue: asInt(transformMethod)) ?? PoiTransformType.default
             }
         }
         if let text = payload["text"] {
-            if (!(text is NSNull)) {
+            if !(text is NSNull) {
                 asString(text).components(separatedBy: "\n").enumerated().map {
-                    (index, element) in PoiText(text: element, styleIndex: UInt(index))
-                }.map(self.addText)
+                    index, element in PoiText(text: element, styleIndex: UInt(index))
+                }.map(addText)
             }
         }
     }
 }
 
-
-internal extension LabelLayerOptions {
-    convenience init(payload: Dictionary<String, Any>) {
+extension LabelLayerOptions {
+    convenience init(payload: [String: Any]) {
         self.init(
             layerID: asString(payload["layerId"]!),
             competitionType: castSafty(payload["competitionType"], caster: { CompetitionType(rawValue: asInt($0))! }) ?? CompetitionType.none,
@@ -136,9 +130,8 @@ internal extension LabelLayerOptions {
     }
 }
 
-
-internal extension LodLabelLayerOptions {
-    convenience init(payload: Dictionary<String, Any>) {
+extension LodLabelLayerOptions {
+    convenience init(payload: [String: Any]) {
         self.init(
             layerID: asString(payload["layerId"]!),
             competitionType: castSafty(payload["competitionType"], caster: { CompetitionType(rawValue: asInt($0))! }) ?? CompetitionType.none,
@@ -150,9 +143,8 @@ internal extension LodLabelLayerOptions {
     }
 }
 
-
-internal extension PerLevelWaveTextStyle {
-    convenience init(payload: Dictionary<String, Any>) {
+extension PerLevelWaveTextStyle {
+    convenience init(payload: [String: Any]) {
         self.init(
             textStyle: TextStyle(payload: payload),
             level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
@@ -160,11 +152,10 @@ internal extension PerLevelWaveTextStyle {
     }
 }
 
-
-internal extension WaveTextStyle {
-    convenience init(payload: Dictionary<String, Any>) {
+extension WaveTextStyle {
+    convenience init(payload: [String: Any]) {
         let styleId = castSafty(payload["styleId"], caster: asString) ?? UUID().uuidString
-        var styles = Array<PerLevelWaveTextStyle>()
+        var styles = [PerLevelWaveTextStyle]()
         styles.append(PerLevelWaveTextStyle(payload: payload))
         styles.append(
             contentsOf: asArray(payload["otherStyle"] ?? [], caster: asDict).map {
@@ -178,8 +169,8 @@ internal extension WaveTextStyle {
     }
 }
 
-internal extension WaveTextOptions {
-    convenience init(payload: Dictionary<String, Any>,  styleId: String) {
+extension WaveTextOptions {
+    convenience init(payload: [String: Any], styleId: String) {
         if !(payload["id"] == nil || payload["id"] is NSNull) {
             self.init(styleID: styleId, waveTextID: asString(payload["id"]!))
         } else {
@@ -187,17 +178,17 @@ internal extension WaveTextOptions {
         }
 
         if let rank = payload["rank"] {
-            if (!(rank is NSNull)) {
+            if !(rank is NSNull) {
                 self.rank = asUInt(rank)
             }
         }
         if let text = payload["text"] {
-            if (!(text is NSNull)) {
+            if !(text is NSNull) {
                 self.text = asString(text)
             }
         }
         if let points = payload["position"] {
-            if (!(points is NSNull)) {
+            if !(points is NSNull) {
                 self.points = asArray(points, caster: { MapPoint(payload: asDict($0)) })
             }
         }

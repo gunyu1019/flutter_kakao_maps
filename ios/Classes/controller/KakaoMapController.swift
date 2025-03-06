@@ -1,46 +1,46 @@
 import Flutter
 import KakaoMapsSDK
 
-internal class KakaoMapController : KakaoMapControllerSender, KakaoMapControllerHandler {
+class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     private let channel: FlutterMethodChannel
     private let overlayChannel: FlutterMethodChannel
-    
+
     private var lateinitKakaoMap: KakaoMap? = nil
-    internal var kakaoMap: KakaoMap {
+    var kakaoMap: KakaoMap {
         get {
-            return self.lateinitKakaoMap!
+            return lateinitKakaoMap!
         }
         set(value) {
-            self.lateinitKakaoMap = value
+            lateinitKakaoMap = value
         }
     }
+
     private var overlayController: OverlayController? = nil
 
     private let cameraListener: CameraListener
 
-    init (
+    init(
         channel: FlutterMethodChannel,
         overlayChannel: FlutterMethodChannel
     ) {
         self.channel = channel
         self.overlayChannel = overlayChannel
-        
-        self.cameraListener = CameraListener(channel: self.channel)
-        
+
+        cameraListener = CameraListener(channel: self.channel)
+
         channel.setMethodCallHandler(handle)
     }
 
-    func getCameraPosition(onSuccess: @escaping (_ cameraPosition: Dictionary<String, Any>) -> Void) {
+    func getCameraPosition(onSuccess: @escaping (_ cameraPosition: [String: Any]) -> Void) {
         let position = kakaoMap.getPosition(CGPoint(x: 0.5, y: 0.5))
-        var payload: Dictionary<String, Any> = [
+        var payload: [String: Any] = [
             "zoomLevel": kakaoMap.zoomLevel,
             "tiltAngle": kakaoMap.tiltAngle,
             "rotationAngle": kakaoMap.rotationAngle,
-            "height": kakaoMap.cameraHeight
+            "height": kakaoMap.cameraHeight,
         ]
         payload.merge(position.toMessageable()) { current, _ in current }
         onSuccess(payload)
-        return
     }
 
     func moveCamera(
@@ -48,22 +48,21 @@ internal class KakaoMapController : KakaoMapControllerSender, KakaoMapController
         cameraAnimation: CameraAnimationOptions?,
         onSuccess: (Any?) -> Void
     ) {
-        if (cameraAnimation == nil) {
+        if cameraAnimation == nil {
             kakaoMap.moveCamera(cameraUpdate)
             onSuccess(nil)
             return
         }
         kakaoMap.animateCamera(cameraUpdate: cameraUpdate, options: cameraAnimation!)
         onSuccess(nil)
-        return
     }
 
     func setEventHandler(event: UInt8) {
-        if (KakaoMapEvent.CameraMoveStart.compare(value: event)) {
-            kakaoMap.addCameraWillMovedEventHandler(target: self.cameraListener, handler: CameraListener.onCameraWillMovedEvent)
+        if KakaoMapEvent.CameraMoveStart.compare(value: event) {
+            kakaoMap.addCameraWillMovedEventHandler(target: cameraListener, handler: CameraListener.onCameraWillMovedEvent)
         }
-        if (KakaoMapEvent.CameraMoveEnd.compare(value: event)) {
-            kakaoMap.addCameraStoppedEventHandler(target: self.cameraListener, handler: CameraListener.onCameraStoppedEvent)
+        if KakaoMapEvent.CameraMoveEnd.compare(value: event) {
+            kakaoMap.addCameraStoppedEventHandler(target: cameraListener, handler: CameraListener.onCameraStoppedEvent)
         }
     }
 
@@ -71,19 +70,19 @@ internal class KakaoMapController : KakaoMapControllerSender, KakaoMapController
         kakaoMap.setGestureEnable(type: gestureType, enable: enable)
         onSuccess(nil)
     }
-    
+
     func getBuildingHeightScale(onSuccess: (Float) -> Void) {
-        onSuccess(self.kakaoMap.buildingScale)
+        onSuccess(kakaoMap.buildingScale)
     }
-    
+
     func setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Void) {
-        self.kakaoMap.buildingScale = scale
+        kakaoMap.buildingScale = scale
         onSuccess(nil)
     }
 
     func onMapReady(kakaoMap: KakaoMap) {
         self.kakaoMap = kakaoMap
-        self.overlayController = OverlayController(channel: self.overlayChannel, kakaoMap: kakaoMap)
+        overlayController = OverlayController(channel: overlayChannel, kakaoMap: kakaoMap)
         channel.invokeMethod("onMapReady", arguments: nil)
     }
 
@@ -104,12 +103,12 @@ internal class KakaoMapController : KakaoMapControllerSender, KakaoMapController
             channel.invokeMethod("onMapError", arguments: [
                 "className": "\(error.self)",
                 "message": (error as! BaseError).errorCode,
-                "errorCode": (error as! BaseError).message
+                "errorCode": (error as! BaseError).message,
             ])
             return
         }
         channel.invokeMethod("onMapError", arguments: [
-            "className": "\(error.self)"
+            "className": "\(error.self)",
         ])
     }
 }

@@ -1,8 +1,8 @@
-import KakaoMapsSDK
 import Flutter
+import KakaoMapsSDK
 
-internal protocol LodLabelControllerHandler {
-    var labelManager: LabelManager { get };
+protocol LodLabelControllerHandler {
+    var labelManager: LabelManager { get }
 
     func createLodLabelLayer(option: LodLabelLayerOptions, onSuccess: (Any?) -> Void)
 
@@ -11,7 +11,7 @@ internal protocol LodLabelControllerHandler {
     func addLodPoi(layer: LodLabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String) -> Void)
 
     func removeLodPoi(layer: LodLabelLayer, poiId: String, onSuccess: (Any?) -> Void)
-    
+
     func changeLodPoiVisible(poi: LodPoi, visible: Bool, autoMove: Bool, onSuccess: (Any?) -> Void)
 
     func changeLodPoiStyle(poi: LodPoi, styleId: String, transition: Bool, onSuccess: (Any?) -> Void)
@@ -21,7 +21,7 @@ internal protocol LodLabelControllerHandler {
     func rankLodPoi(poi: LodPoi, rank: Int, onSuccess: (Any?) -> Void)
 }
 
-internal extension LodLabelControllerHandler {
+extension LodLabelControllerHandler {
     func lodLabelHandle(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = castSafty(call.arguments, caster: asDict)
         let layerId: String? = castSafty(arguments?["layerId"], caster: asString)

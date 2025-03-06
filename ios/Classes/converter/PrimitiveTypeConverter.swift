@@ -1,50 +1,50 @@
-internal func asBool(_ v: Any) -> Bool {
+func asBool(_ v: Any) -> Bool {
     v as! Bool
 }
 
-internal func asFloat(_ v: Any) -> Float {
+func asFloat(_ v: Any) -> Float {
     v as! Float
 }
 
-internal func asDouble(_ v: Any) -> Double {
+func asDouble(_ v: Any) -> Double {
     v as! Double
 }
 
-internal func asInt(_ v: Any) -> Int {
+func asInt(_ v: Any) -> Int {
     v as! Int
 }
 
-internal func asUInt(_ v: Any) -> UInt {
+func asUInt(_ v: Any) -> UInt {
     v as! UInt
 }
 
-internal func asString(_ v: Any) -> String {
+func asString(_ v: Any) -> String {
     v as! String
 }
 
-internal func asDict(_ v: Any) -> Dictionary<String, Any> {
-    v as! Dictionary<String, Any>
+func asDict(_ v: Any) -> [String: Any] {
+    v as! [String: Any]
 }
 
-internal func asDictTyped<T>(_ v: Any, caster: (Any) throws -> T) -> Dictionary<String, T> {
+func asDictTyped<T>(_ v: Any, caster: (Any) throws -> T) -> [String: T] {
     let dict = asDict(v)
-    var newDict: Dictionary<String, T> = [:]
+    var newDict: [String: T] = [:]
     for (k, v) in dict {
         newDict[k] = try! caster(v)
     }
     return newDict
 }
 
-internal func asArray(_ v: Any) -> Array<Any> {
-    return v as! Array<Any>
+func asArray(_ v: Any) -> [Any] {
+    return v as! [Any]
 }
 
-internal func asArray<T>(_ v: Any, caster: (Any) throws -> T) -> Array<T> {
+func asArray<T>(_ v: Any, caster: (Any) throws -> T) -> [T] {
     let list = asArray(v)
     return try! list.map(caster)
 }
 
-internal func castSafty<T>(_ v: Any?, caster: (Any) throws -> T) -> T? {
+func castSafty<T>(_ v: Any?, caster: (Any) throws -> T) -> T? {
     if v == nil || v is NSNull {
         return nil
     } else {

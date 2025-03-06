@@ -1,10 +1,10 @@
-import KakaoMapsSDK
 import Flutter
+import KakaoMapsSDK
 
-internal protocol KakaoMapControllerHandler {
+protocol KakaoMapControllerHandler {
     var kakaoMap: KakaoMap { get }
 
-    func getCameraPosition(onSuccess: @escaping (_ cameraPosition: Dictionary<String, Any>) -> Void)
+    func getCameraPosition(onSuccess: @escaping (_ cameraPosition: [String: Any]) -> Void)
 
     func moveCamera(
         cameraUpdate: CameraUpdate,
@@ -15,19 +15,19 @@ internal protocol KakaoMapControllerHandler {
     func setEventHandler(event: UInt8)
 
     func setGestureEnable(gestureType: GestureType, enable: Bool, onSuccess: (Any?) -> Void)
-    
+
     func getBuildingHeightScale(onSuccess: (Float) -> Void)
-    
+
     func setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Void)
 }
 
-internal extension KakaoMapControllerHandler {
+extension KakaoMapControllerHandler {
     func handle(call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "getCameraPosition": getCameraPosition(onSuccess: result)
         case "moveCamera":
             let arguments = asDict(call.arguments!)
-            let cameraUpdate = asCameraUpdate(kakaoMap: self.kakaoMap, payload: asDict(arguments["cameraUpdate"]!))
+            let cameraUpdate = asCameraUpdate(kakaoMap: kakaoMap, payload: asDict(arguments["cameraUpdate"]!))
             let rawCameraAnimation = castSafty(arguments["cameraAnimation"], caster: asDict)
             let cameraAnimation = rawCameraAnimation != nil ? CameraAnimationOptions(payload: rawCameraAnimation!) : nil
             moveCamera(cameraUpdate: cameraUpdate, cameraAnimation: cameraAnimation, onSuccess: result)
