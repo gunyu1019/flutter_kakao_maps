@@ -2,17 +2,19 @@ import KakaoMapsSDK
 import Flutter
 
 
-internal class OverlayController: LabelControllerHandler, LodLabelControllerHandler {
+internal class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler {
     private let channel: FlutterMethodChannel
     private let kakaoMap: KakaoMap
 
     let labelManager: LabelManager
+    let shapeManager: ShapeManager
 
     init (channel: FlutterMethodChannel, kakaoMap: KakaoMap) {
         self.channel = channel
         self.kakaoMap = kakaoMap
         
         self.labelManager = kakaoMap.getLabelManager()
+        self.shapeManager = kakaoMap.getShapeManager()
 
         setupInitLayer()
         channel.setMethodCallHandler(handle)
@@ -37,6 +39,10 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
                 zOrder: 10001,
                 radius: 20.0
             )
+        )
+        self.shapemanager.addShapeLayer(
+            layerID: "vector_layer_0", 
+            zOrder: 10001 
         )
     }
 
@@ -209,4 +215,57 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
         poi.rank = rank
         onSuccess(nil)
     }
+    
+    func createShapeLayer(layerId: String, zOrder: Int, passType: ShapeLayerPassType, onSuccess: (Any?) -> Void) {
+        shapeManager.addShapeLayer(layerID: layerId, zOrder: zOrder, passType: passType)
+        onSuccess(nil)
+    }
+
+    func removeShapeLayer(layerId: String, onSuccess: (Any?) -> Void) {
+        shapeManager.removeShapeLayer(layerID: layerId)
+        onSuccess(nil)
+    }
+
+    func addPolygonShapeStyle(style: PolygonStyleSet, onSuccess: (String) -> Void) {
+        shapeManager.addPolygonStyleSets(style)
+        onSuccess(style.styleSetID)
+    }
+
+    func addPolylineShapeStyle(style: PolylineStyleSet, onSuccess: (String) -> Void) {
+        shapeManager.addPolylineStyleSets(style)
+        onSuccess(style.styleSetID)
+    }
+
+    func addMapPolygonShape(layer: ShapeLayer, option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+        let shapeInstance = layer.addMapPolygonShape(option: option)
+        if (visible && !(shapeInstance?.isShow ?? false)) {
+            shapeInstance?.show()
+        }
+        onSuccess(shapeInstance!.shapeID)
+    }
+
+    func addMapPolylineShape(layer: ShapeLayer, option: MapPolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+        let shapeInstance = layer.addMapPolylineShape(option: option)
+        if (visible && !(shapeInstance?.isShow ?? false)) {
+            shapeInstance?.show()
+        }
+        onSuccess(shapeInstance!.shapeID)
+    }
+
+    func addPolygonShape(layer: ShapeLayer, option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+        let shapeInstance = layer.addPolygonShape(option: option)
+        if (visible && !(shapeInstance?.isShow ?? false)) {
+            shapeInstance?.show()
+        }
+        onSuccess(shapeInstance!.shapeID)
+    }
+
+    func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+        let shapeInstance = layer.addPolylineShape(option: option)
+        if (visible && !(shapeInstance?.isShow ?? false)) {
+            shapeInstance?.show()
+        }
+        onSuccess(shapeInstance!.shapeID)
+    }
+
 }
