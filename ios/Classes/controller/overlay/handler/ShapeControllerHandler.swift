@@ -12,13 +12,13 @@ internal protocol ShapeControllerHandler {
 
     func addPolylineShapeStyle(style: PolylineStyleSet, onSuccess: (String) -> Void)
 
-    func addMapPolygonShape(option: MapPolygonShapeOptions, onSuccess: (String) -> Void)
+    func addMapPolygonShape(layer: ShapeLayer, option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void)
 
-    func addMapPolylineShape(option: MapPolylineShapeOptions, onSuccess: (String) -> Void)
+    func addMapPolylineShape(layer: ShapeLayer, option: MapPolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void)
 
-    func addPolygonShape(option: PolygonShapeOptions, onSuccess: (String) -> Void)
+    func addPolygonShape(layer: ShapeLayer, option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void)
 
-    func addPolylineShape(option: PolylineShapeOptions, onSuccess: (String) -> Void)
+    func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void)
 }
 
 internal extension ShapeControllerHandler {
@@ -59,24 +59,26 @@ internal extension ShapeControllerHandler {
             let polyline = asDict(payload["polyline"]!)
             let position = asDict(polyline["position"]!)
             let positionType = asInt(position["type"]!)
+            let visible = asBool(arguments!["visible"] ?? true)
             if (positionType == 0) {
                 let option = MapPolylineShapeOptions(payload: polyline)
-                addMapPolylineShape(option: option, onSuccess: result)
+                addMapPolylineShape(layer: layer, option: option, visible: visible, onSuccess: result)
             } else if (positionType == 1) {
                 let option = PolylineShapeOptions(payload: polyline)
-                addPolylineShape(option: option, onSuccess: result)
+                addPolylineShape(layer: layer, option: option, visible: visible, onSuccess: result)
             } else 
                 result(FlutterMethodNotImplemented)
         case "addPolygonShape":
             let polygon = asDict(payload["polygon"]!)
             let position = asDict(polygon["position"]!)
             let positionType = asInt(position["type"]!)
+            let visible = asBool(arguments!["visible"] ?? true)
             if (positionType == 0) {
                 let option = MapPolygonShapeOptions(payload: polyline)
-                addMapPolygonShape(option: option, onSuccess: result)
+                addMapPolygonShape(layer: layer, option: option, visible: visible, onSuccess: result)
             } else if (positionType == 1) {
                 let option = PolygonShapeOptions(payload: polyline)
-                addPolygonShape(option: option, onSuccess: result)
+                addPolygonShape(layer: layer, option: option, visible: visible, onSuccess: result)
             } else 
                 result(FlutterMethodNotImplemented)
         default: result(FlutterMethodNotImplemented)
