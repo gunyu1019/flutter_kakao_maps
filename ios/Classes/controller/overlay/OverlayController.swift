@@ -52,6 +52,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
         switch overlayType {
         case .label: labelHandle(call: call, result: result)
         case .lodLabel: lodLabelHandle(call: call, result: result)
+        case .shape: shapeHandle(call: call, result: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
