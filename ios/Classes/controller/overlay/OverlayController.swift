@@ -40,8 +40,8 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
                 radius: 20.0
             )
         )
-        self.shapemanager.addShapeLayer(
-            layerID: "vector_layer_0", 
+        self.shapeManager.addShapeLayer(
+            layerID: "vector_layer_0",
             zOrder: 10001 
         )
     }
@@ -227,17 +227,17 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
     }
 
     func addPolygonShapeStyle(style: PolygonStyleSet, onSuccess: (String) -> Void) {
-        shapeManager.addPolygonStyleSets(style)
+        shapeManager.addPolygonStyleSet(style)
         onSuccess(style.styleSetID)
     }
 
     func addPolylineShapeStyle(style: PolylineStyleSet, onSuccess: (String) -> Void) {
-        shapeManager.addPolylineStyleSets(style)
+        shapeManager.addPolylineStyleSet(style)
         onSuccess(style.styleSetID)
     }
 
     func addMapPolygonShape(layer: ShapeLayer, option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
-        let shapeInstance = layer.addMapPolygonShape(option: option)
+        let shapeInstance = layer.addMapPolygonShape(option)
         if (visible && !(shapeInstance?.isShow ?? false)) {
             shapeInstance?.show()
         }
@@ -245,7 +245,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
     }
 
     func addMapPolylineShape(layer: ShapeLayer, option: MapPolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
-        let shapeInstance = layer.addMapPolylineShape(option: option)
+        let shapeInstance = layer.addMapPolylineShape(option)
         if (visible && !(shapeInstance?.isShow ?? false)) {
             shapeInstance?.show()
         }
@@ -253,7 +253,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
     }
 
     func addPolygonShape(layer: ShapeLayer, option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
-        let shapeInstance = layer.addPolygonShape(option: option)
+        let shapeInstance = layer.addPolygonShape(option)
         if (visible && !(shapeInstance?.isShow ?? false)) {
             shapeInstance?.show()
         }
@@ -261,7 +261,7 @@ internal class OverlayController: LabelControllerHandler, LodLabelControllerHand
     }
 
     func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
-        let shapeInstance = layer.addPolylineShape(option: option)
+        let shapeInstance = layer.addPolylineShape(option)
         if (visible && !(shapeInstance?.isShow ?? false)) {
             shapeInstance?.show()
         }
