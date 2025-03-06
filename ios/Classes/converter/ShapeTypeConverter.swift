@@ -99,12 +99,12 @@ internal extension PolylineStyleSet {
             })
         }) ?? []
         let capType = castSafty(payload["polylineCap"], caster: {
-            PolylineCapType(rawValue: asInt($0))
+            PolylineCapType(rawValue: asInt($0))!
         })
         self.init(
             styleSetID: styleId,
             styles: styles,
-            capType: (capType ?? PolylineCapType.square)
+            capType: (capType ?? .square)
         )
     }
 }
@@ -199,7 +199,17 @@ internal extension PolylineShapeOptions {
         } else {
             self.init(shapeID: polylineId!, styleID: styleId, zOrder: zOrder)
         }
+        let position = asDict(payload["position"]!)
+        let points = asDotPoints(payload: asDict(position["points"]!))
 
+        self.basePosition = MapPoint(payload: asDict(position["basePoint"]!))
+        self.polylines = [
+            Polyline(
+                line: points!,
+                styleIndex: 0
+            )
+        ]
+    }
 }
 
 
@@ -214,18 +224,7 @@ internal extension MapPolylineShapeOptions {
             self.init(shapeID: polylineId!, styleID: styleId, zOrder: zOrder)
         }
 
-        let position = asDict(payload["posi
         let position = asDict(payload["position"]!)
-        let points = asDotPoints(payload: asDict(position["points"]!))
-
-        self.basePosition = MapPoint(payload: asDict(position["basePoint"]))
-        self.polylines = [
-            Polyline(
-                line: points!,
-                styleIndex: 0
-            )
-        ]
-    }tion"]!)
         let points = asArray(position["points"]!, caster: { MapPoint(payload: asDict($0)) })
         self.polylines = [
             MapPolyline(
