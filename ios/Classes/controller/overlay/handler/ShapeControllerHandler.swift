@@ -49,38 +49,40 @@ internal extension ShapeControllerHandler {
 
         switch call.method {
         case "createShapeLayer":
-            let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10001
-            let passType = castSafty(payload["passType"], caster: { ShapeLayerPassType(rawValue: asInt($0))! }) ?? ShapeLayerPassType.default
-            createShapeLayer(layerId: layerId, zOrder: zOrder, passType: passType, onSuccess: result)
-        case "removeShapeLayer": removeShapeLayer(layerId: layerId, onSuccess: result)
-        case "addPolylineShapeStyle": addPolylineShapeStyle(PolylineStyleSet(payload: payload), onSuccess: result)
-        case "addPolygonShapeStyle": addPolygonShapeStyle(PolygonStyleSet(payload: payload), onSuccess: result)
+            let zOrder = castSafty(arguments?["zOrder"], caster: asInt) ?? 10001
+            let passType = castSafty(arguments?["passType"], caster: { ShapeLayerPassType(rawValue: asInt($0))! }) ?? .default
+            createShapeLayer(layerId: layerId!, zOrder: zOrder, passType: passType, onSuccess: result)
+        case "removeShapeLayer": removeShapeLayer(layerId: layerId!, onSuccess: result)
+        case "addPolylineShapeStyle": addPolylineShapeStyle(style: PolylineStyleSet(payload: arguments!), onSuccess: result)
+        case "addPolygonShapeStyle": addPolygonShapeStyle(style: PolygonStyleSet(payload: arguments!), onSuccess: result)
         case "addPolylineShape":
-            let polyline = asDict(payload["polyline"]!)
+            let polyline = asDict(arguments!["polyline"]!)
             let position = asDict(polyline["position"]!)
             let positionType = asInt(position["type"]!)
             let visible = asBool(arguments!["visible"] ?? true)
             if (positionType == 0) {
                 let option = MapPolylineShapeOptions(payload: polyline)
-                addMapPolylineShape(layer: layer, option: option, visible: visible, onSuccess: result)
+                addMapPolylineShape(layer: layer!, option: option, visible: visible, onSuccess: result)
             } else if (positionType == 1) {
                 let option = PolylineShapeOptions(payload: polyline)
-                addPolylineShape(layer: layer, option: option, visible: visible, onSuccess: result)
-            } else 
+                addPolylineShape(layer: layer!, option: option, visible: visible, onSuccess: result)
+            } else {
                 result(FlutterMethodNotImplemented)
+            }
         case "addPolygonShape":
-            let polygon = asDict(payload["polygon"]!)
+            let polygon = asDict(arguments!["polygon"]!)
             let position = asDict(polygon["position"]!)
             let positionType = asInt(position["type"]!)
             let visible = asBool(arguments!["visible"] ?? true)
             if (positionType == 0) {
-                let option = MapPolygonShapeOptions(payload: polyline)
-                addMapPolygonShape(layer: layer, option: option, visible: visible, onSuccess: result)
+                let option = MapPolygonShapeOptions(payload: polygon)
+                addMapPolygonShape(layer: layer!, option: option, visible: visible, onSuccess: result)
             } else if (positionType == 1) {
-                let option = PolygonShapeOptions(payload: polyline)
-                addPolygonShape(layer: layer, option: option, visible: visible, onSuccess: result)
-            } else 
+                let option = PolygonShapeOptions(payload: polygon)
+                addPolygonShape(layer: layer!, option: option, visible: visible, onSuccess: result)
+            } else {
                 result(FlutterMethodNotImplemented)
+            }
         default: result(FlutterMethodNotImplemented)
         }
     }
