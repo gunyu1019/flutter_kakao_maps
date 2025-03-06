@@ -56,8 +56,6 @@ jobs:
       - name: Install Flutter SDK
         run: |
           /usr/bin/git clone https://github.com/flutter/flutter.git .flutter -b stable 
-      - name: Reformatting with `dart format`
-        run: .flutter/bin/dart format .
       - name: Install dependencies
         run: .flutter/bin/flutter pub get
       - name: Publish - dry run
