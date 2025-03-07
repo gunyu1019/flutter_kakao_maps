@@ -266,4 +266,24 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         }
         onSuccess(shapeInstance!.shapeID)
     }
+    
+    func removeMapPolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void) {
+        layer.removeMapPolygonShape(shapeId)
+        onSuccess(nil)
+    }
+
+    func removeMapPolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void) {
+        layer.removeMapPolylineShape(shapeId)
+        onSuccess(nil)
+    }
+
+    func removePolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void) {
+        layer.removePolygonShape(shapeId)
+        onSuccess(nil)
+    }
+
+    func removePolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void) {
+        layer.removePolylineShape(shapeId)
+        onSuccess(nil)
+    }
 }
