@@ -286,4 +286,13 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         layer.removePolylineShape(shapeId)
         onSuccess(nil)
     }
+
+    func changeShapeVisible(shape: Shape, visible: Bool, onSuccess: (Any?) -> Void) {
+         if visible {
+            shape.show()
+        } else {
+            shape.hide()
+        }
+        onSuccess(nil)
+    }
 }
