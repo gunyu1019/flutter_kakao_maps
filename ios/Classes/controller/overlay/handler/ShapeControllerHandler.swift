@@ -19,6 +19,14 @@ protocol ShapeControllerHandler {
     func addPolygonShape(layer: ShapeLayer, option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void)
 
     func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void)
+
+    func removeMapPolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void)
+
+    func removeMapPolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void)
+
+    func removePolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void)
+
+    func removePolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void)
 }
 
 extension ShapeControllerHandler {
@@ -46,6 +54,7 @@ extension ShapeControllerHandler {
             layer!.getPolygonShape(shapeID: key)
         }
         let shape = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
+        
 
         switch call.method {
         case "createShapeLayer":
@@ -82,6 +91,18 @@ extension ShapeControllerHandler {
                 addPolygonShape(layer: layer!, option: option, visible: visible, onSuccess: result)
             } else {
                 result(FlutterMethodNotImplemented)
+            }
+        case "removePolylineShape":
+            if (polylineShape == nil) {
+                removePolylineShape(shapeId: polylineId, onSuccess: result)
+            } else {
+                removeMapPolylineShape(shapeId: polylineId, onSuccess: result)
+            }
+        case "removePolygonShape":
+            if (polygonShape == nil) {
+                removePolygonShape(shapeId: polygonId, onSuccess: result)
+            } else {
+                removeMapPolygonShape(shapeId: polygonId, onSuccess: result)
             }
         default: result(FlutterMethodNotImplemented)
         }
