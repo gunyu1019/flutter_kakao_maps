@@ -20,13 +20,15 @@ protocol ShapeControllerHandler {
 
     func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void)
 
-    func removeMapPolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void)
+    func removeMapPolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void)
 
-    func removeMapPolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void)
+    func removeMapPolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void)
 
-    func removePolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void)
+    func removePolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void)
 
-    func removePolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void)
+    func removePolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void)
+
+    func changeShapeVisible(shape: Shape, visible: Bool, onSuccess: (Any?) -> Void)
 }
 
 extension ShapeControllerHandler {
@@ -104,6 +106,12 @@ extension ShapeControllerHandler {
             } else {
                 removeMapPolygonShape(shapeId: polygonId, onSuccess: result)
             }
+        case "changePolylineVisible":
+            let visible = asBool(arguments!["visible"])
+            changeShapeVisible(shape: shape, visible: visible)
+        case "changePolygonVisible":
+            let visible = asBool(arguments!["visible"])
+            changeShapeVisible(shape: shape, visible: visible)
         default: result(FlutterMethodNotImplemented)
         }
     }
