@@ -267,23 +267,23 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(shapeInstance!.shapeID)
     }
     
-    func removeMapPolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void) {
-        layer.removeMapPolygonShape(shapeId)
+    func removeMapPolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void) {
+        layer.removeMapPolygonShape(shapeID: shapeId)
         onSuccess(nil)
     }
 
-    func removeMapPolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void) {
-        layer.removeMapPolylineShape(shapeId)
+    func removeMapPolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void) {
+        layer.removeMapPolylineShape(shapeID: shapeId)
         onSuccess(nil)
     }
 
-    func removePolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void) {
-        layer.removePolygonShape(shapeId)
+    func removePolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void) {
+        layer.removePolygonShape(shapeID: shapeId)
         onSuccess(nil)
     }
 
-    func removePolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (String) -> Void) {
-        layer.removePolylineShape(shapeId)
+    func removePolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void) {
+        layer.removePolylineShape(shapeID: shapeId)
         onSuccess(nil)
     }
 
@@ -297,22 +297,22 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     }
 
     func changeMapPolygonShape(shape: MapPolygonShape, styleId: String, position: [MapPolygon], onSuccess: (Any?) -> Void) {
-        shape.changeStyleAndData(styleId, position)
+        shape.changeStyleAndData(styleID: styleId, polygons: position)
         onSuccess(nil)
     }
 
     func changeMapPolylineShape(shape: MapPolylineShape, styleId: String, position: [MapPolyline], onSuccess: (Any?) -> Void) {
-        shape.changeStyleAndData(styleId, position)
+        shape.changeStyleAndData(styleID: styleId, lines: position)
         onSuccess(nil)
     }
 
     func changePolygonShape(shape: PolygonShape, styleId: String, position: [Polygon], onSuccess: (Any?) -> Void) {
-        shape.changeStyleAndData(styleId, position)
+        shape.changeStyleAndData(styleID: styleId, polygons: position)
         onSuccess(nil)
     }
 
     func changePolylineShape(shape: PolylineShape, styleId: String, position: [Polyline], onSuccess: (Any?) -> Void) {
-        shape.changeStyleAndData(styleId, position)
+        shape.changeStyleAndData(styleID: styleId, lines: position)
         onSuccess(nil)
     }
 }
