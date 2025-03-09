@@ -295,4 +295,24 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         }
         onSuccess(nil)
     }
+
+    func changeMapPolygonShape(shape: MapPolygonShape, styleId: String, position: [MapPolygon], onSuccess: (Any?) -> Void) {
+        shape.changeStyleAndData(styleId, position)
+        onSuccess(nil)
+    }
+
+    func changeMapPolylineShape(shape: MapPolylineShape, styleId: String, position: [MapPolyline], onSuccess: (Any?) -> Void) {
+        shape.changeStyleAndData(styleId, position)
+        onSuccess(nil)
+    }
+
+    func changePolygonShape(shape: PolygonShape, styleId: String, position: [Polygon], onSuccess: (Any?) -> Void) {
+        shape.changeStyleAndData(styleId, position)
+        onSuccess(nil)
+    }
+
+    func changePolylineShape(shape: PolylineShape, styleId: String, position: [Polyline], onSuccess: (Any?) -> Void) {
+        shape.changeStyleAndData(styleId, position)
+        onSuccess(nil)
+    }
 }
