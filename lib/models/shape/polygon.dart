@@ -23,12 +23,12 @@ class Polygon<T extends BasePoint> {
   Future<void> changeStyle(PolygonStyle style) async {
     final styleId =
         style.id ?? await _controller.manager.addPolygonShapeStyle(style);
-    await _controller._changePolygonStyle(id, styleId);
+    await _controller._changePolygon(id, _position, styleId);
     _style = style;
   }
 
   Future<void> changePosition(T position) async {
-    await _controller._changePolygonPosition(id, position);
+    await _controller._changePolygon(id, position, style.id!);
     _position = position;
   }
 

@@ -31,12 +31,12 @@ class Polyline<T extends BasePoint> {
     _polylineCap = polylineCap ?? _polylineCap;
     final styleId = style.id ??
         await _controller.manager.addPolylineShapeStyle(style, _polylineCap);
-    await _controller._changePolylineStyle(id, styleId);
+    await _controller._changePolyline(id, _position, styleId);
     _style = style;
   }
 
   Future<void> changePosition(T position) async {
-    await _controller._changePolylinePosition(id, position);
+    await _controller._changePolyline(id, position, style.id!);
     _position = position;
   }
 
