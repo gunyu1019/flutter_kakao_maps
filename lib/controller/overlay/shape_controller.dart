@@ -31,18 +31,18 @@ class ShapeController extends OverlayController {
 
   Future<void> _changePolylineVisible(String shapeId, bool visible) async {
     await _invokeMethod(
-        "changePolylineVisible", {"shapeId": shapeId, "visible": visible});
+        "changePolylineVisible", {"polylineId": shapeId, "visible": visible});
   }
 
   Future<void> _changePolygonVisible(String shapeId, bool visible) async {
     await _invokeMethod(
-        "changePolygonVisible", {"shapeId": shapeId, "visible": visible});
+        "changePolygonVisible", {"polygonId": shapeId, "visible": visible});
   }
 
   Future<void> _changePolyline<T extends BasePoint>(
       String shapeId, T position, String styleId) async {
     await _invokeMethod("changePolyline", {
-      "shapeId": shapeId,
+      "polylineId": shapeId,
       "styleId": styleId,
       "position": position.toMessageable()
     });
@@ -51,7 +51,7 @@ class ShapeController extends OverlayController {
   Future<void> _changePolygon<T extends BasePoint>(
       String shapeId, T position, String styleId) async {
     await _invokeMethod("changePolygon", {
-      "shapeId": shapeId,
+      "polygonId": shapeId,
       "styleId": styleId,
       "position": position.toMessageable()
     });
