@@ -24,6 +24,8 @@ import com.kakao.vectormap.shape.PolylineOptions
 import com.kakao.vectormap.shape.PolygonOptions
 import com.kakao.vectormap.shape.Polyline
 import com.kakao.vectormap.shape.Polygon
+import com.kakao.vectormap.shape.DotPoints
+import com.kakao.vectormap.shape.MapPoints
 import com.kakao.vectormap.route.RouteLineLayer
 import com.kakao.vectormap.route.RouteLineStylesSet
 import com.kakao.vectormap.route.RouteLineOptions
@@ -267,19 +269,31 @@ class OverlayController(
         }
         onSuccess.invoke(null)
     }
-    
-    override fun changePolylineStyle(shape: Polyline, styleId: String, onSuccess: (Any?) -> Unit) {
-        val style = shapeManager!!.getPolylineStyles(styleId)
-        shape.changeStylesSet(style)
+
+    override fun changePolylineFromMapPoints(shape: Polyline, styleId: String, position: List<MapPoints>, onSuccess: (Any?) -> Unit) {
+        val style = shapeManager!!.getPolylineStyles(styleId)   
+        shape.changeStylesAndMapPoints(style, position)
         onSuccess.invoke(null)
     }
     
-    override fun changePolygonStyle(shape: Polygon, styleId: String, onSuccess: (Any?) -> Unit) {
-        val style = shapeManager!!.getPolygonStyles(styleId)
-        shape.changeStylesSet(style)
+    override fun changePolygonFromMapPoints(shape: Polygon, styleId: String, position: List<MapPoints>, onSuccess: (Any?) -> Unit) {
+        val style = shapeManager!!.getPolygonStyles(styleId)   
+        shape.changeStylesAndMapPoints(style, position)
         onSuccess.invoke(null)
     }
     
+    override fun changePolylineFromDotPoints(shape: Polyline, styleId: String, position: List<DotPoints>, onSuccess: (Any?) -> Unit) {
+        val style = shapeManager!!.getPolylineStyles(styleId)   
+        shape.changeStylesAndDotPoints(style, position)
+        onSuccess.invoke(null)
+    }
+    
+    override fun changePolygonFromDotPoints(shape: Polygon, styleId: String, position: List<DotPoints>, onSuccess: (Any?) -> Unit) {
+        val style = shapeManager!!.getPolygonStyles(styleId)   
+        shape.changeStylesAndDotPoints(style, position)
+        onSuccess.invoke(null)
+    }
+
     override fun createRouteLayer(layerId: String, zOrder: Int?, onSuccess: (Any?) -> Unit) {
         (zOrder?.let{ routeManager!!.addLayer(layerId, it) }) ?: routeManager!!.addLayer(layerId)
         onSuccess.invoke(null)
