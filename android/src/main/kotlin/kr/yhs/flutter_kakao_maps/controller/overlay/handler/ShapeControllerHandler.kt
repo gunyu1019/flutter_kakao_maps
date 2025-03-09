@@ -6,11 +6,16 @@ import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asBoolean
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asLong
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asString
+import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asInt
 import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asShapeLayerOption
 import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asPolygonOption
 import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asPolylineOption
 import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asPolygonStylesSet
 import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asPolylineStylesSet
+import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asDotPoints
+import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asMapPoints
+import com.kakao.vectormap.shape.MapPoints
+import com.kakao.vectormap.shape.DotPoints
 import com.kakao.vectormap.shape.ShapeManager
 import com.kakao.vectormap.shape.ShapeLayer
 import com.kakao.vectormap.shape.ShapeLayerOptions
@@ -21,6 +26,7 @@ import com.kakao.vectormap.shape.PolylineStylesSet
 import com.kakao.vectormap.shape.Polyline
 import com.kakao.vectormap.shape.Polygon
 import com.kakao.vectormap.label.PolylineLabelStyles
+import java.util.Arrays
 
 interface ShapeControllerHandler {
     val shapeManager: ShapeManager?
@@ -64,19 +70,27 @@ interface ShapeControllerHandler {
                 val visible = arguments["visible"]?.asBoolean()!!
                 changePolygonVisible(polygonShape!!, visible, result::success)
             }
-            "changePolylineStyle" -> {
+            "changePolyline" -> {
+                val styleId: String? = arguments["styleId"]?.asString()
+                val position = arguments["position"]!!.asMap<Any?>()
+                if (position["type"]!!.asInt() == 0) {
+                    val mapPosition = position.asMapPoints().let { Arrays.asList(it) }
+                    changePolylineFromMapPoints(polylineShape!!, styleId!!, mapPosition, result::success)
+                } else {
+                    val dotPosition: List<DotPoints> = position.asDotPoints().let { Arrays.asList(it) }
+                    changePolylineFromDotPoints(polylineShape!!, styleId!!, dotPosition, result::success)
+                }
+            }
+            "changePolygon" -> {
                 val styleId = arguments["styleId"]?.asString()
-                changePolylineStyle(polylineShape!!, styleId!!, result::success)
-            }
-            "changePolygonStyle" -> {
-                val styleId = arguments["styleId"]?.asString()
-                changePolygonStyle(polygonShape!!, styleId!!, result::success)
-            }
-            "changePolylinePosition" -> {
-                // TODO (Thinking logic...)
-            }
-            "changePolygonPosition" -> {
-                // TODO (Thinking logic...)
+                val position = arguments["position"]!!.asMap<Any?>()
+                if (position["type"]!!.asInt() == 0) {
+                    val mapPosition = position.asMapPoints().let { Arrays.asList(it) }
+                    changePolygonFromMapPoints(polygonShape!!, styleId!!, mapPosition, result::success)
+                } else {
+                    val dotPosition: List<DotPoints> = position.asDotPoints().let { Arrays.asList(it) }
+                    changePolygonFromDotPoints(polygonShape!!, styleId!!, dotPosition, result::success)
+                }
             }
             else -> result.notImplemented()
         }
@@ -102,11 +116,11 @@ interface ShapeControllerHandler {
 
     fun changePolygonVisible(shape: Polygon, visible: Boolean, onSuccess: (Any?) -> Unit);
 
-    fun changePolylineStyle(shape: Polyline, styleId: String, onSuccess: (Any?) -> Unit);
+    fun changePolylineFromMapPoints(shape: Polyline, styleId: String, position: List<MapPoints>, onSuccess: (Any?) -> Unit);
 
-    fun changePolygonStyle(shape: Polygon, styleId: String, onSuccess: (Any?) -> Unit);
+    fun changePolygonFromMapPoints(shape: Polygon, styleId: String, position: List<MapPoints>, onSuccess: (Any?) -> Unit);
 
-    // fun changePolylinePosition(shape: Polyline, style: PolygonStylesSet, onSuccess: (Any?) -> Unit);
+    fun changePolylineFromDotPoints(shape: Polyline, styleId: String, position: List<DotPoints>, onSuccess: (Any?) -> Unit);
 
-    // fun changePolygonPosition(shape: Polygon, style: PolygonStylesSet, onSuccess: (Any?) -> Unit);
+    fun changePolygonFromDotPoints(shape: Polygon, styleId: String, position: List<DotPoints>, onSuccess: (Any?) -> Unit);
 }
