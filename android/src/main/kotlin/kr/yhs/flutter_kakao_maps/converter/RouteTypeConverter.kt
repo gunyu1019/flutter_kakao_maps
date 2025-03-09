@@ -42,6 +42,7 @@ object RouteTypeConverter {
             rawPayload["strokeColor"]?.asInt() ?: 0,
         ).apply { 
             rawPayload["pattern"]?.asRouteLinePattern()?.let(::setPattern)
+            rawPayload["zoomLevel"]?.asInt()?.let(::setZoomLevel)
          }
     }
 
