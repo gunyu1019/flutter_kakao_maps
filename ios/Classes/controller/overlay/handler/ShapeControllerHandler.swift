@@ -63,7 +63,7 @@ extension ShapeControllerHandler {
         let polygonShape: PolygonShape? = polygonId.flatMap { key in
             layer!.getPolygonShape(shapeID: key)
         }
-        let shape = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
+        let shape: Shape? = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
         
 
         switch call.method {
@@ -104,45 +104,61 @@ extension ShapeControllerHandler {
             }
         case "removePolylineShape":
             if (polylineShape == nil) {
-                removePolylineShape(shapeId: polylineId, onSuccess: result)
+                removePolylineShape(layer: layer!, shapeId: polylineId!, onSuccess: result)
             } else {
-                removeMapPolylineShape(shapeId: polylineId, onSuccess: result)
+                removeMapPolylineShape(layer: layer!, shapeId: polylineId!, onSuccess: result)
             }
         case "removePolygonShape":
             if (polygonShape == nil) {
-                removePolygonShape(shapeId: polygonId, onSuccess: result)
+                removePolygonShape(layer: layer!, shapeId: polygonId!, onSuccess: result)
             } else {
-                removeMapPolygonShape(shapeId: polygonId, onSuccess: result)
+                removeMapPolygonShape(layer: layer!, shapeId: polygonId!, onSuccess: result)
             }
         case "changePolylineVisible":
-            let visible = asBool(arguments!["visible"])
-            changeShapeVisible(shape: shape, visible: visible)
+            let visible = asBool(arguments!["visible"]!)
+            changeShapeVisible(shape: shape!, visible: visible, onSuccess: result)
         case "changePolygonVisible":
-            let visible = asBool(arguments!["visible"])
-            changeShapeVisible(shape: shape, visible: visible)
+            let visible = asBool(arguments!["visible"]!)
+            changeShapeVisible(shape: shape!, visible: visible, onSuccess: result)
         case "changePolyline":
-            let styleId = asString(arguments!["styleId"])
-            let position = asDict(arguments!["position"])
-            let positionType = asInt(position["type"]!)
+            let styleId = asString(arguments!["styleId"]!)
+            let rawPosition = asDict(arguments!["position"]!)
+            let positionType = asInt(rawPosition["type"]!)
             if positionType == 0 {
-                let option = MapPolylineShapeOptions(payload: polygon)
-                changeMapPolyline(shape: mapPolylineShape, styleId: styleId, position: position, onSuccess: result)
+                let points = asArray(rawPosition["points"]!, caster: { MapPoint(payload: asDict($0)) })
+                let position = MapPolyline(line: points, styleIndex: 0)
+                changeMapPolylineShape(shape: mapPolylineShape!, styleId: styleId, position: [position], onSuccess: result)
             } else if positionType == 1 {
-                let option = PolylineShapeOptions(payload: polygon)
-                changePolyline(shape: polylineShape, styleId: styleId, position: position, onSuccess: result)
+                let points = asDotPoints(payload: rawPosition)
+                let position = Polyline(line: points!, styleIndex: 0)
+                changePolylineShape(shape: polylineShape!, styleId: styleId, position: [position], onSuccess: result)
             } else {
                 result(FlutterMethodNotImplemented)
             }
         case "changePolygon":
-            let styleId = asString(arguments!["styleId"])
-            let position = asDict(arguments!["position"])
-            let positionType = asInt(position["type"]!)
+            let styleId = asString(arguments!["styleId"]!)
+            let rawPosition = asDict(arguments!["position"]!)
+            let positionType = asInt(rawPosition["type"]!)
             if positionType == 0 {
-                let option = MapPolygonShapeOptions(payload: polygon)
-                changeMapPolygon(shape: mapPolygonShape, styleId: styleId, position: position, onSuccess: result)
+                let points = asArray(rawPosition["points"]!, caster: { MapPoint(payload: asDict($0)) })
+                let holes = castSafty(rawPosition["holes"], caster: {
+                    asArray($0, caster: {
+                        asArray($0, caster: asDict).map {
+                            MapPoint(payload: $0)
+                        }
+                    })
+                })
+                let position = MapPolygon(exteriorRing: points, holes: holes, styleIndex: 0)
+                changeMapPolygonShape(shape: mapPolygonShape!, styleId: styleId, position: [position], onSuccess: result)
             } else if positionType == 1 {
-                let option = PolygonShapeOptions(payload: polygon)
-                changePolygon(shape: polygonShape, styleId: styleId, position: position, onSuccess: result)
+                let points = asDotPoints(payload: rawPosition)
+                let holes = castSafty(rawPosition["holes"], caster: {
+                    asArray($0, caster: {
+                        asDotPoints(payload: asDict($0))!
+                    })
+                })
+                let position = Polygon(exteriorRing: points!, holes: holes, styleIndex: 0)
+                changePolygonShape(shape: polygonShape!, styleId: styleId, position: [position], onSuccess: result)
             } else {
                 result(FlutterMethodNotImplemented)
             }
