@@ -29,6 +29,14 @@ protocol ShapeControllerHandler {
     func removePolylineShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void)
 
     func changeShapeVisible(shape: Shape, visible: Bool, onSuccess: (Any?) -> Void)
+
+    func changeMapPolygonShape(shape: MapPolygonShape, styleId: String, position: [MapPolygon], onSuccess: (Any?) -> Void)
+
+    func changeMapPolylineShape(shape: MapPolylineShape, styleId: String, position: [MapPolyline], onSuccess: (Any?) -> Void)
+
+    func changePolygonShape(shape: PolygonShape, styleId: String, position: [Polygon], onSuccess: (Any?) -> Void)
+
+    func changePolylineShape(shape: PolylineShape, styleId: String, position: [Polyline], onSuccess: (Any?) -> Void)
 }
 
 extension ShapeControllerHandler {
@@ -112,6 +120,32 @@ extension ShapeControllerHandler {
         case "changePolygonVisible":
             let visible = asBool(arguments!["visible"])
             changeShapeVisible(shape: shape, visible: visible)
+        case "changePolyline":
+            let styleId = asString(arguments!["styleId"])
+            let position = asDict(arguments!["position"])
+            let positionType = asInt(position["type"]!)
+            if positionType == 0 {
+                let option = MapPolylineShapeOptions(payload: polygon)
+                changeMapPolyline(shape: mapPolylineShape, styleId: styleId, position: position, onSuccess: result)
+            } else if positionType == 1 {
+                let option = PolylineShapeOptions(payload: polygon)
+                changePolyline(shape: polylineShape, styleId: styleId, position: position, onSuccess: result)
+            } else {
+                result(FlutterMethodNotImplemented)
+            }
+        case "changePolygon":
+            let styleId = asString(arguments!["styleId"])
+            let position = asDict(arguments!["position"])
+            let positionType = asInt(position["type"]!)
+            if positionType == 0 {
+                let option = MapPolygonShapeOptions(payload: polygon)
+                changeMapPolygon(shape: mapPolygonShape, styleId: styleId, position: position, onSuccess: result)
+            } else if positionType == 1 {
+                let option = PolygonShapeOptions(payload: polygon)
+                changePolygon(shape: polygonShape, styleId: styleId, position: position, onSuccess: result)
+            } else {
+                result(FlutterMethodNotImplemented)
+            }
         default: result(FlutterMethodNotImplemented)
         }
     }
