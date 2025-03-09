@@ -168,7 +168,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
       "styleId": id,
       "styles": style.map((e) => e.toMessageable()).toList()
     });
-    style.map((e) => e._setStyleId(styleId));
+    for (PolygonStyle element in style) {
+      element._setStyleId(styleId);
+    }
     _polygonStyle[styleId] = style;
     return styleId;
   }
@@ -182,7 +184,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
       "styles": style.map((e) => e.toMessageable()).toList(),
       "polylineCap": polylineCap.value
     });
-    style.map((e) => e._setStyleId(styleId));
+    for (PolylineStyle element in style) {
+      element._setStyleId(styleId);
+    }
     _polylineStyle[styleId] = style;
     return styleId;
   }
