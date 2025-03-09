@@ -141,8 +141,8 @@ object LabelTypeConverter {
     }
 
     fun Any.asPolylineTextStyles(): PolylineLabelStyles = asMap<Any?>().let { rawPayload: Map<String, Any?> -> 
-        val rawStyle = rawPayload?.asMap<Any?>()
-        val style: MutableList<PolylineLabelStyle> = mutableListOf(rawStyle!!.asPolylineTextStyle())
+        val rawStyle = rawPayload.asMap<Any?>()
+        val style: MutableList<PolylineLabelStyle> = mutableListOf(rawStyle.asPolylineTextStyle())
         rawStyle["otherStyle"]?.asList<Map<String, Any?>>()?.map { e -> style.add(e.asPolylineTextStyle()) }
         return (rawPayload["styleId"]?.asString()?.let {
             PolylineLabelStyles.from(it, style.toList())
