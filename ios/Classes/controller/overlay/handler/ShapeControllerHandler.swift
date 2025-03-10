@@ -64,7 +64,6 @@ extension ShapeControllerHandler {
             layer!.getPolygonShape(shapeID: key)
         }
         let shape: Shape? = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
-        
 
         switch call.method {
         case "createShapeLayer":
@@ -103,13 +102,13 @@ extension ShapeControllerHandler {
                 result(FlutterMethodNotImplemented)
             }
         case "removePolylineShape":
-            if (polylineShape == nil) {
+            if polylineShape == nil {
                 removePolylineShape(layer: layer!, shapeId: polylineId!, onSuccess: result)
             } else {
                 removeMapPolylineShape(layer: layer!, shapeId: polylineId!, onSuccess: result)
             }
         case "removePolygonShape":
-            if (polygonShape == nil) {
+            if polygonShape == nil {
                 removePolygonShape(layer: layer!, shapeId: polygonId!, onSuccess: result)
             } else {
                 removeMapPolygonShape(layer: layer!, shapeId: polygonId!, onSuccess: result)

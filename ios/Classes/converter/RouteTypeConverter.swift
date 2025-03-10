@@ -1,6 +1,5 @@
 import KakaoMapsSDK
 
-
 extension RoutePattern {
     convenience init(payload: [String: Any]) {
         self.init(
@@ -19,7 +18,7 @@ extension PerLevelRouteStyle {
     convenience init(payload: [String: Any], patternIndex: Int = -1) {
         if payload["strokeSize"] == nil || payload["strokeColor"] == nil {
             self.init(
-                width: asUInt(payload["lineWidth"]!), 
+                width: asUInt(payload["lineWidth"]!),
                 color: UIColor(value: asUInt(payload["color"]!)),
                 strokeWidth: asUInt(payload["strokeSize"]!),
                 strokeColor: UIColor(value: asUInt(payload["strokeColor"]!)),
@@ -28,7 +27,7 @@ extension PerLevelRouteStyle {
             )
         } else {
             self.init(
-                width: asUInt(payload["lineWidth"]!), 
+                width: asUInt(payload["lineWidth"]!),
                 color: UIColor(value: asUInt(payload["color"]!)),
                 level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0,
                 patternIndex: patternIndex
@@ -36,7 +35,6 @@ extension PerLevelRouteStyle {
         }
     }
 }
-
 
 extension RouteStyleSet {
     convenience init(payload: [String: Any]) {
@@ -46,7 +44,7 @@ extension RouteStyleSet {
             asArray($0, caster: { (styleSetElement: Any) -> RouteStyle in
                 let rawStyles = asDict(styleSetElement)
                 var patternIndex = -1
-                if rawStyles["pattern"] != nil && rawStyles["pattern"] is NSNull {
+                if rawStyles["pattern"] != nil, rawStyles["pattern"] is NSNull {
                     patterns.append(
                         RoutePattern(payload: asDict(rawStyles["pattern"]!))
                     )
@@ -55,9 +53,9 @@ extension RouteStyleSet {
                 var styles = [PerLevelRouteStyle]()
                 styles.append(PerLevelRouteStyle(payload: rawStyles, patternIndex: patternIndex))
                 styles.append(
-                    contentsOf: asArray(rawStyles["otherStyle"] ?? [], caster: asDict).map { (styleElement) -> PerLevelRouteStyle in
+                    contentsOf: asArray(rawStyles["otherStyle"] ?? [], caster: asDict).map { styleElement -> PerLevelRouteStyle in
                         patternIndex = -1
-                        if rawStyles["pattern"] != nil && rawStyles["pattern"] is NSNull {
+                        if rawStyles["pattern"] != nil, rawStyles["pattern"] is NSNull {
                             patterns.append(
                                 RoutePattern(payload: asDict(rawStyles["pattern"]!))
                             )
@@ -75,8 +73,8 @@ extension RouteStyleSet {
             styleID: styleId,
             styles: styleSets
         )
-        patterns.forEach {
-            self.addPattern($0)
+        for pattern in patterns {
+            addPattern(pattern)
         }
     }
 }
