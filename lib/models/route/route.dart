@@ -19,16 +19,21 @@ class Route {
   bool _visible;
   bool get visible => _visible;
 
+  int _zOrder;
+  int get zOrder => _zOrder;
+
   Route._(this._controller, this.id,
       {required List<LatLng> points,
       required RouteStyle style,
-      required CurveType curveType})
+      required CurveType curveType,
+      required int zOrder})
       : _points = points,
         _style = style,
         _curveType = curveType,
         _isMultiple = false,
         _visible = true,
-        parents = null;
+        parents = null,
+        _zOrder = zOrder;
 
   Route._fromMultiple(this._controller, this.id, this.parents,
       {required List<LatLng> points,
@@ -38,7 +43,8 @@ class Route {
         _style = style,
         _curveType = curveType,
         _visible = true,
-        _isMultiple = true;
+        _isMultiple = true,
+        _zOrder = parents!._zOrder;
 
   Future<void> show() async {
     if (_isMultiple) return;
