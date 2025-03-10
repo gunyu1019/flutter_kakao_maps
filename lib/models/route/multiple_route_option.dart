@@ -2,6 +2,7 @@ part of '../../kakao_map_sdk.dart';
 
 class MultipleRouteOption with KMessageable {
   final String? id;
+  final int zOrder;
 
   final List<CurveType> _curveType;
   final List<List<LatLng>> _points;
@@ -12,6 +13,7 @@ class MultipleRouteOption with KMessageable {
     List<RouteStyle>? styles, {
     List<LatLng>? point,
     CurveType curveType = CurveType.none,
+    this.zOrder = 10000,
     this.id,
   })  : _points = [],
         _styles = styles ?? [],
@@ -47,6 +49,7 @@ class MultipleRouteOption with KMessageable {
   Map<String, dynamic> toMessageable() {
     return <String, dynamic>{
       "id": id,
+      "zOrder": zOrder,
       "routes": _points.mapIndexed((index, points) => {
             <String, dynamic>{
               "points": points,

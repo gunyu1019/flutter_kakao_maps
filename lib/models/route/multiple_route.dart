@@ -12,16 +12,21 @@ class MultipleRoute {
   bool _visible;
   bool get visible => _visible;
 
+  int _zOrder;
+  int get zOrder => _zOrder;
+
   MultipleRoute._(this._controller, this.id,
       {required List<List<LatLng>> points,
       required List<RouteStyle> style,
       required List<CurveType> curveType,
-      required List<int> styleIndex})
+      required List<int> styleIndex,
+      required int zOrder})
       : _points = points,
         _styles = style,
         _curveType = curveType,
         _styleIndex = styleIndex,
-        _visible = true;
+        _visible = true,
+        _zOrder = zOrder;
 
   Route getRoute(int index) => Route._fromMultiple(_controller, id, this,
       points: _points[index],
