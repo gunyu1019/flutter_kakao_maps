@@ -82,17 +82,21 @@ object RouteTypeConverter {
     
     fun Any.asRouteOption(routeManager: RouteLineManager): RouteLineOptions = asMap<Any?>().let { rawPayload: Map<String, Any?> ->
         val segment = rawPayload.asRouteSegment(routeManager, 0)
-        return (rawPayload["id"]?.asString()?.let {
+        return ((rawPayload["id"]?.asString()?.let {
             RouteLineOptions.from(it, segment)
-        }) ?: RouteLineOptions.from(segment)
+        }) ?: RouteLineOptions.from(segment)).apply {
+            rawPayload["zOrder"]?.asInt()?.let(::setZOrder)
+        }
     }
     
     fun Any.asRouteMultipleOption(routeManager: RouteLineManager): RouteLineOptions = asMap<Any?>().let { rawPayload: Map<String, Any?> ->
         val segment = rawPayload["routes"]!!.asList<Any>().map { payload -> 
             payload.asRouteSegment(routeManager)
         }
-        return (rawPayload["id"]?.asString()?.let {
+        return ((rawPayload["id"]?.asString()?.let {
             RouteLineOptions.from(it, segment)
-        }) ?: RouteLineOptions.from(segment)
+        }) ?: RouteLineOptions.from(segment)).apply {
+            rawPayload["zOrder"]?.asInt()?.let(::setZOrder)
+        }
     }
 }
