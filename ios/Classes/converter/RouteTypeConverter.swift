@@ -78,3 +78,52 @@ extension RouteStyleSet {
         }
     }
 }
+
+extension RouteSegment {
+    convenience init (payload: [String: Any], index: UInt = 0) {
+        self.init(
+            points: asArray(payload["points"], caster: {
+                MapPoint(payload: asDict($0))
+            }), 
+            styleIndex: index
+        )
+    }
+}
+
+func asRouteOption(payload: [String: Any]) -> RouteOptions {
+    let routeId = castSafty(payload["id"], caster: asString)
+    let styleId = asString(payload["styleId"])
+    let zOrder = castSafty(payload["zOrder"], caster: asUInt) ?? 10000
+
+    if (routeId == nil) {
+        let option = RouteOptions(
+            routeID: routeId, styleID: styleId, zOrder: zOrder
+        )
+    } else {
+        let option = RouteOptions(
+            styleID: styleId, zOrder: zOrder
+        )
+    }
+    option.segments = [
+        RouteSegment(payload: payload, index: 0)
+    ]
+}
+
+func asRouteMultipleOption(payload: [String: Any]) -> RouteOptions {
+    let routeId = castSafty(payload["id"], caster: asString)
+    let styleId = asString(payload["styleId"])
+    let zOrder = castSafty(payload["zOrder"], caster: asUInt) ?? 10000
+
+    if (routeId == nil) {
+        let option = RouteOptions(
+            routeID: routeId, styleID: styleId, zOrder: zOrder
+        )
+    } else {
+        let option = RouteOptions(
+            styleID: styleId, zOrder: zOrder
+        )
+    }
+    option.segments = asArray(payload["routes"], caster: {
+        RouteSegment(payload: asDict($0))
+    })
+}
