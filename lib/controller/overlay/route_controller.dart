@@ -63,19 +63,20 @@ class RouteController extends OverlayController {
   }
 
   Future<Route> addRoute(List<LatLng> points, RouteStyle style,
-      {String? id, CurveType curveType = CurveType.none}) async {
+      {String? id, CurveType curveType = CurveType.none, int zOrder = 10000}) async {
     final styleId = style.id ?? await manager.addRouteStyle(style);
     Map<String, dynamic> payload = {
       "route": <String, dynamic>{
         "id": id,
         "points": points.map((e) => e.toMessageable()).toList(),
         "styleId": styleId,
-        "curveType": curveType.value
+        "curveType": curveType.value,
+        "zOrder": zOrder
       }
     };
     String routeId = await _invokeMethod("addRoute", payload);
     final route = Route._(this, routeId,
-        points: points, style: style, curveType: curveType);
+        points: points, style: style, curveType: curveType, zOrder: zOrder);
     _route[routeId] = route;
     return route;
   }
@@ -90,7 +91,8 @@ class RouteController extends OverlayController {
         points: option._points,
         style: option._styles,
         curveType: option._curveType,
-        styleIndex: option._styleIndex);
+        styleIndex: option._styleIndex, 
+        zOrder: option.zOrder);
     _multipleRoute[routeId] = route;
     return route;
   }
