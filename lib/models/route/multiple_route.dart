@@ -55,12 +55,12 @@ class MultipleRoute {
 
   Future<void> changePoint(int index, List<LatLng> points) async {
     _points[index] = points;
-    await _controller._changePoints(id, _points);
+    await _controller._changeRoute(id, _styles[0].id!, _curveType, _points);
   }
 
   Future<void> changeCurveType(int index, CurveType curveType) async {
     _curveType[index] = curveType;
-    await _controller._changeCurveType(id, _curveType);
+    await _controller._changeRoute(id, _styles[0].id!, _curveType, _points);
   }
 
   Future<void> changeStyle(List<RouteStyle> styles) async {
@@ -69,7 +69,7 @@ class MultipleRoute {
     }
     final styleId =
         styles[0].id ?? await _controller.manager.addMultipleRouteStyle(styles);
-    await _controller._changeStyle(id, styleId);
+    await _controller._changeRoute(id, styleId, _curveType, _points);
     _styles = styles;
   }
 }
