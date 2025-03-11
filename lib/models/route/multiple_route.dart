@@ -72,4 +72,9 @@ class MultipleRoute {
     await _controller._changeRoute(id, styleId, _curveType, _points);
     _styles = styles;
   }
+
+  Future<void> setZOrder(int zOrder) async {
+    await _controller._changeRouteZOrder(id, zOrder);
+    _zOrder = zOrder;
+  }
 }
