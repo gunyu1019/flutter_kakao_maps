@@ -57,6 +57,7 @@ interface RouteControllerHandler {
                 changeRoute(routeLine!!, styleId, curveType, points, result::success)
             }
             "changeRouteVisible" -> changeRouteVisible(routeLine!!, arguments["visible"]!!.asBoolean(), result::success)
+            "changeRouteZOrder" -> changeRouteZOrder(routeLine!!, arguments["zOrder"]!!.asInt(), result::success)
             else -> result.notImplemented()
         }
     }
@@ -74,4 +75,6 @@ interface RouteControllerHandler {
     fun changeRoute(route: RouteLine, styleId: String, curveType: List<CurveType>, points: List<List<LatLng>>, onSuccess: (Any?) -> Unit);
 
     fun changeRouteVisible(route: RouteLine, visible: Boolean, onSuccess: (Any?) -> Unit);
+
+    fun changeRouteZOrder(route: RouteLine, zOrder: Int, onSuccess: (Any?) -> Unit);
 }

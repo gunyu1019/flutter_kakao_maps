@@ -339,4 +339,9 @@ class OverlayController(
         }
         onSuccess.invoke(null)
     }
+
+    override fun changeRouteZOrder(route: RouteLine, zOrder: Int, onSuccess: (Any?) -> Unit) {
+        route.setZOrder(zOrder)
+        onSuccess.invoke(null)
+    }
 }

@@ -39,7 +39,7 @@ class RouteController extends OverlayController {
   }
 
   Future<void> _changeRouteZOrder(String routeId, int zOrder) async {
-    await _invokeMethod("changeRoutePoint", {
+    await _invokeMethod("changeRouteZOrder", {
       "routeId": routeId,
       "zOrder": zOrder
     });
