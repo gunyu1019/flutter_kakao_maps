@@ -81,10 +81,17 @@ extension RouteStyleSet {
 
 extension RouteSegment {
     convenience init (payload: [String: Any], index: UInt = 0) {
+        var points = asArray(payload["points"], caster: {
+            MapPoint(payload: asDict($0))
+        })
+        let curveType = castSafty(payload["curveType"], caster: asInt) ?? 0
+        if curveType == 1  {
+            points = Primitives.getCurvePoints(startPoint: points[0], endPoint: points[points.count - 1], isLeft: true)
+        } else if curveType == 2 {
+            points = Primitives.getCurvePoints(startPoint: points[0], endPoint: points[points.count - 1], isLeft: false)
+        }
         self.init(
-            points: asArray(payload["points"], caster: {
-                MapPoint(payload: asDict($0))
-            }), 
+            points: points, 
             styleIndex: index
         )
     }
