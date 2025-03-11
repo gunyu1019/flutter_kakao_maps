@@ -321,27 +321,14 @@ class OverlayController(
         onSuccess.invoke(null)
     }
 
-    override fun changeRouteStyle(route: RouteLine, styleId: String, onSuccess: (Any?) -> Unit) {
-        // val styleSets = routeManager.getStylesSet(rawPayload["styleId"]!!.asString())
-        //
-        // Temporary Actions 
-        // https://devtalk.kakao.com/t/bug-android-kakaomap-sdk-routemanager-getstylesset/142232
+    override fun changeRoute(route: RouteLine, styleId: String, curveType: List<CurveType>, points: List<List<LatLng>>, onSuccess: (Any?) -> Unit) {
+        points.mapIndexed { index, element -> RouteLineSegment.from(element).apply {
+            curveType[index].let(::setCurveType)
+        }}.let(route::changeSegments)
         routeManager!!.addStylesSet(
             RouteLineStylesSet.from(styleId, listOf())
         ).let(route::changeStyle)
         onSuccess.invoke(null)
-    }
-
-    override fun changeRouteCurveType(route: RouteLine, curveType: List<CurveType>, onSuccess: (Any?) -> Unit) {
-        curveType.mapIndexed { index, element -> route.segments[index].apply {
-            element.let(::setCurveType)
-        }}.let(route::changeSegments)
-    }
-
-    override fun changeRoutePoint(route: RouteLine, points: List<List<LatLng>>, onSuccess: (Any?) -> Unit) {
-        points.mapIndexed { index, element -> RouteLineSegment.from(element).apply {
-            route.segments[index].curveType.let(CurveType::getEnum).let(::setCurveType)
-        }}.let(route::changeSegments)
     }
 
     override fun changeRouteVisible(route: RouteLine, visible: Boolean, onSuccess: (Any?) -> Unit) {
