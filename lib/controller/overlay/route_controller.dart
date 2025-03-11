@@ -38,6 +38,13 @@ class RouteController extends OverlayController {
     });
   }
 
+  Future<void> _changeRouteZOrder(String routeId, int zOrder) async {
+    await _invokeMethod("changeRoutePoint", {
+      "routeId": routeId,
+      "zOrder": zOrder
+    });
+  }
+
   Future<void> _changeRouteVisible(String routeId, bool visible) async {
     await _invokeMethod(
         "changeRouteVisible", {"routeId": routeId, "visible": visible});
