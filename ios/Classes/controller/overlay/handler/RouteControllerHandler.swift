@@ -42,6 +42,19 @@ extension RouteControllerHandler {
         case "addRouteStyle": addRouteStyle(style: RouteStyleSet(payload: arguments!), onSuccess: result)
         case "addRoute": addRoute(layer: layer!, route: asRouteOption(arguments!), onSuccess: result)
         case "addMultipleRoute": addRoute(layer: layer!, route: asRouteMultipleOption(arguments!), onSuccess: result)
+        case "remvoeRoute": removeRoute(layer: layer!, routeId: routeId!, onSuccess: result)
+        case "changeRoute":
+            let styleId = asString(arguments!["styleId"]!)
+            let points = asArray(payload["points"], caster: { (rawElement: Any) -> RouteSegment in
+                return RouteSegment(payload: asDict(rawElement))
+            })
+            changeRoute(route: route!, styleId: styleId, points: points, onSuccess: result)
+        case "changeRouteVisible":
+            let visible = asBool(arguments!["visible"]!)
+            changeRouteVisible(route: route!, visible: visible, onSuccess: result)
+        case "changeRouteZOrder": 
+            let zOrder = asInt(arguments!["zOrder"]!)
+            changeRouteZOrder(route: route!, zOrder: zOrder, onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
