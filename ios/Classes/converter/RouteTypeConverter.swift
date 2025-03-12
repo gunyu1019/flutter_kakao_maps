@@ -16,7 +16,7 @@ extension RoutePattern {
 
 extension PerLevelRouteStyle {
     convenience init(payload: [String: Any], patternIndex: Int = -1) {
-        if payload["strokeSize"] == nil || payload["strokeColor"] == nil {
+        if payload["strokeSize"] != nil, payload["strokeColor"] != nil {
             self.init(
                 width: asUInt(payload["lineWidth"]!),
                 color: UIColor(value: asUInt(payload["color"]!)),
@@ -44,7 +44,7 @@ extension RouteStyleSet {
             asArray($0, caster: { (styleSetElement: Any) -> RouteStyle in
                 let rawStyles = asDict(styleSetElement)
                 var patternIndex = -1
-                if rawStyles["pattern"] != nil, rawStyles["pattern"] is NSNull {
+                if rawStyles["pattern"] != nil, !(rawStyles["pattern"] is NSNull) {
                     patterns.append(
                         RoutePattern(payload: asDict(rawStyles["pattern"]!))
                     )
@@ -80,18 +80,18 @@ extension RouteStyleSet {
 }
 
 extension RouteSegment {
-    convenience init (payload: [String: Any], index: UInt = 0) {
-        var points = asArray(payload["points"], caster: {
+    convenience init(payload: [String: Any], index: UInt = 0) {
+        var points = asArray(payload["points"]!, caster: {
             MapPoint(payload: asDict($0))
         })
         let curveType = castSafty(payload["curveType"], caster: asInt) ?? 0
-        if curveType == 1  {
+        if curveType == 1 {
             points = Primitives.getCurvePoints(startPoint: points[0], endPoint: points[points.count - 1], isLeft: true)
         } else if curveType == 2 {
             points = Primitives.getCurvePoints(startPoint: points[0], endPoint: points[points.count - 1], isLeft: false)
         }
         self.init(
-            points: points, 
+            points: points,
             styleIndex: index
         )
     }
@@ -99,43 +99,37 @@ extension RouteSegment {
 
 func asRouteOption(payload: [String: Any]) -> RouteOptions {
     let routeId = castSafty(payload["id"], caster: asString)
-    let styleId = asString(payload["styleId"])
-    let zOrder = castSafty(payload["zOrder"], caster: asUInt) ?? 10000
+    let styleId = asString(payload["styleId"]!)
+    let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10000
 
-    if (routeId == nil) {
-        let option = RouteOptions(
-            routeID: routeId, styleID: styleId, zOrder: zOrder
-        )
-    } else {
-        let option = RouteOptions(
-            styleID: styleId, zOrder: zOrder
-        )
-    }
+    let option = routeId != nil ? RouteOptions(
+        routeID: routeId!, styleID: styleId, zOrder: zOrder
+    ) : RouteOptions(
+        styleID: styleId, zOrder: zOrder
+    )
     option.segments = [
-        RouteSegment(payload: payload, index: 0)
+        RouteSegment(payload: payload, index: 0),
     ]
+    return option
 }
 
 func asRouteMultipleOption(payload: [String: Any]) -> RouteOptions {
-    var styleId = nil
+    var styleId: String? = nil
     let routeId = castSafty(payload["id"], caster: asString)
-    let zOrder = castSafty(payload["zOrder"], caster: asUInt) ?? 10000
-    let segments = asArray(payload["routes"], caster: { (rawElement: Any) -> RouteSegment in
+    let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10000
+    let segments = asArray(payload["routes"]!, caster: { (rawElement: Any) -> RouteSegment in
         let element = asDict(rawElement)
-        if element["styleId"] != nil && styleId != nil {
-            styleId = element["styleId"]
+        if element["styleId"] != nil, styleId != nil {
+            styleId = asString(element["styleId"]!)
         }
         return RouteSegment(payload: element)
     })
 
-    if (routeId == nil) {
-        let option = RouteOptions(
-            routeID: routeId, styleID: styleId!, zOrder: zOrder
-        )
-    } else {
-        let option = RouteOptions(
-            styleID: styleId!, zOrder: zOrder
-        )
-    }
+    let option = routeId != nil ? RouteOptions(
+        routeID: routeId!, styleID: styleId!, zOrder: zOrder
+    ) : RouteOptions(
+        styleID: styleId!, zOrder: zOrder
+    )
     option.segments = segments
+    return option
 }
