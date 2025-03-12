@@ -32,7 +32,7 @@ abstract class BaseLabelController extends OverlayController {
   }
 
   Future<void> setZOrder(int zOrder) async {
-    await _invokeMethod("setLayerClickable", {"zOrder": zOrder});
+    await _invokeMethod("setLayerZOrder", {"zOrder": zOrder});
     _zOrder = zOrder;
   }
 
