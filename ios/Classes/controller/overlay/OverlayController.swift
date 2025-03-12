@@ -1,7 +1,7 @@
 import Flutter
 import KakaoMapsSDK
 
-class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler {
+class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler, RouteControllerHandler {
     private let channel: FlutterMethodChannel
     private let kakaoMap: KakaoMap
 
@@ -14,6 +14,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
         labelManager = kakaoMap.getLabelManager()
         shapeManager = kakaoMap.getShapeManager()
+        routeManager = kakaoMap.getRouteManager()
 
         setupInitLayer()
         channel.setMethodCallHandler(handle)
@@ -52,6 +53,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         case .label: labelHandle(call: call, result: result)
         case .lodLabel: lodLabelHandle(call: call, result: result)
         case .shape: shapeHandle(call: call, result: result)
+        case .route: routeHandle(call: call, result: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
@@ -313,6 +315,50 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func changePolylineShape(shape: PolylineShape, styleId: String, position: [Polyline], onSuccess: (Any?) -> Void) {
         shape.changeStyleAndData(styleID: styleId, lines: position)
+        onSuccess(nil)
+    }
+    
+    func createShapeLayer(layerId: String, zOrder: Int, onSuccess: (Any?) -> Void) {
+        routeManager.addRouteLayer(layerID: layerId, zOrder: zOrder)
+        onSuccess(nil)
+    }
+
+    func removeShapeLayer(layerId: String, onSuccess: (Any?) -> Void) {
+        routeManager.removeRouteLayer(layerID: layerId)
+        onSuccess(nil)
+    }
+
+    func addRouteStyle(style: RouteStyleSet, onSuccess: (String) -> Void) {
+        routeManager.addRouteStyleSet(style)
+        onSuccess(style.styleSetID)
+    }
+
+    func addRoute(layer: RouteLayer, route: RouteOptions, onSuccess: (String) -> Void) {
+        let route = layer.addRoute(option: route)
+        onSuccess(route.routeID)
+    }
+
+    func removeRoute(layer: RouteLayer, routeId: String, onSuccess: (Any?) -> Void) {
+        layer.removeRoute(routeID: routeId)
+        onSuccess(nil)
+    }
+
+    func changeRoute(route: Route, styleId: String, points: List<RouteSegment>, onSuccess: (Any?) -> Void) {
+        route.changeStyleAndData(styleID: styleId, segments: points)
+        onSuccess(nil)
+    }
+
+    func changeRouteVisible(route: Route, visible: Bool, onSuccess: (Any?) -> Void) {
+        if visible {
+            route.show()
+        } else {
+            route.hide()
+        }
+        onSuccess(nil)
+    }
+
+    func changeRouteZOrder(route: Route, zOrder: Int, onSuccess: (Any?) -> Void) {
+        route.zOrder = zOrder
         onSuccess(nil)
     }
 }
