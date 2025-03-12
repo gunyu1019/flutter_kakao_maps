@@ -121,7 +121,7 @@ func asRouteMultipleOption(payload: [String: Any]) -> RouteOptions {
     let routeId = castSafty(payload["id"], caster: asString)
     let zOrder = castSafty(payload["zOrder"], caster: asUInt) ?? 10000
     let segments = asArray(payload["routes"], caster: { (rawElement: Any) -> RouteSegment in
-        let element = asDict($0)
+        let element = asDict(rawElement)
         if element["styleId"] != nil && styleId != nil {
             styleId = element["styleId"]
         }
