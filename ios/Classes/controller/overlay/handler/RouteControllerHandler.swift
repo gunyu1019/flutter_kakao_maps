@@ -35,6 +35,13 @@ extension RouteControllerHandler {
         }
 
         switch call.method {
+        case "createRouteLayer": 
+            let zOrder = castSafty(arguments?["zOrder"], caster: asInt) ?? 10000
+            createRouteLayer(layerId: layerId!, zOrder: zOrder, onSuccess: result) 
+        case "removeRouteLayer": removeRouteLayer(layerId: layerId!, onSuccess: result)
+        case "addRouteStyle": addRouteStyle(style: RouteStyleSet(payload: arguments!), onSuccess: result)
+        case "addRoute": addRoute(layer: layer!, route: asRouteOption(arguments!), onSuccess: result)
+        case "addMultipleRoute": addRoute(layer: layer!, route: asRouteMultipleOption(arguments!), onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
