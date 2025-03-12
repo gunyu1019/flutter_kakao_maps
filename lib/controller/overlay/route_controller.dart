@@ -28,7 +28,7 @@ class RouteController extends OverlayController {
   }
 
   Future<void> _changeRoute(String routeId, String styleId, List<CurveType> curveType, List<List<LatLng>> points) async {
-    await _invokeMethod("changeRoutePoint", {
+    await _invokeMethod("changeRoute", {
       "routeId": routeId,
       "points": points
           .map((e1) => e1.map((e2) => e2.toMessageable()).toList())
