@@ -204,7 +204,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
       "styleId": id,
       "styles": styles.map((e) => e.toMessageable()).toList()
     });
-    styles.map((e) => e._setStyleId(styleId));
+    for (RouteStyle element in styles) {
+      element._setStyleId(styleId);
+    }
     _routeStyle[styleId] = styles;
     return styleId;
   }
