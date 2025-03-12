@@ -7,6 +7,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     let labelManager: LabelManager
     let shapeManager: ShapeManager
+    let routeManager: RouteManager
 
     init(channel: FlutterMethodChannel, kakaoMap: KakaoMap) {
         self.channel = channel
@@ -43,6 +44,10 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         shapeManager.addShapeLayer(
             layerID: "vector_layer_0",
             zOrder: 10001
+        )
+        routeManager.addRouteLayer(
+            layerID: "route_layer_0",
+            zOrder: 10000
         )
     }
 
@@ -317,13 +322,13 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         shape.changeStyleAndData(styleID: styleId, lines: position)
         onSuccess(nil)
     }
-    
-    func createShapeLayer(layerId: String, zOrder: Int, onSuccess: (Any?) -> Void) {
+
+    func createRouteLayer(layerId: String, zOrder: Int, onSuccess: (Any?) -> Void) {
         routeManager.addRouteLayer(layerID: layerId, zOrder: zOrder)
         onSuccess(nil)
     }
 
-    func removeShapeLayer(layerId: String, onSuccess: (Any?) -> Void) {
+    func removeRouteLayer(layerId: String, onSuccess: (Any?) -> Void) {
         routeManager.removeRouteLayer(layerID: layerId)
         onSuccess(nil)
     }
@@ -334,8 +339,8 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     }
 
     func addRoute(layer: RouteLayer, route: RouteOptions, onSuccess: (String) -> Void) {
-        let route = layer.addRoute(option: route)
-        onSuccess(route.routeID)
+        let routeInstance = layer.addRoute(option: route)
+        onSuccess(routeInstance!.routeID)
     }
 
     func removeRoute(layer: RouteLayer, routeId: String, onSuccess: (Any?) -> Void) {
@@ -343,7 +348,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func changeRoute(route: Route, styleId: String, points: List<RouteSegment>, onSuccess: (Any?) -> Void) {
+    func changeRoute(route: Route, styleId: String, points: [RouteSegment], onSuccess: (Any?) -> Void) {
         route.changeStyleAndData(styleID: styleId, segments: points)
         onSuccess(nil)
     }
