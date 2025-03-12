@@ -4,9 +4,9 @@ import KakaoMapsSDK
 protocol RouteControllerHandler {
     var routeManager: RouteManager { get }
 
-    func createShapeLayer(layerId: String, zOrder: Int, onSuccess: (Any?) -> Void)
+    func createRouteLayer(layerId: String, zOrder: Int, onSuccess: (Any?) -> Void)
 
-    func removeShapeLayer(layerId: String, onSuccess: (Any?) -> Void)
+    func removeRouteLayer(layerId: String, onSuccess: (Any?) -> Void)
 
     func addRouteStyle(style: RouteStyleSet, onSuccess: (String) -> Void)
 
@@ -14,7 +14,7 @@ protocol RouteControllerHandler {
 
     func removeRoute(layer: RouteLayer, routeId: String, onSuccess: (Any?) -> Void)
 
-    func changeRoute(route: Route, styleId: String, points: List<RouteSegment>, onSuccess: (Any?) -> Void)
+    func changeRoute(route: Route, styleId: String, points: [RouteSegment], onSuccess: (Any?) -> Void)
 
     func changeRouteVisible(route: Route, visible: Bool, onSuccess: (Any?) -> Void)
 
@@ -30,29 +30,34 @@ extension RouteControllerHandler {
         }
 
         let routeId = castSafty(arguments?["routeId"], caster: asString)
-        let route: Route? = poiId.flatMap { key in
-            layer!.getRouteLayer(routeID: key)
+        let route: Route? = routeId.flatMap { key in
+            layer!.getRoute(routeID: key)
         }
 
         switch call.method {
-        case "createRouteLayer": 
+        case "createRouteLayer":
             let zOrder = castSafty(arguments?["zOrder"], caster: asInt) ?? 10000
-            createRouteLayer(layerId: layerId!, zOrder: zOrder, onSuccess: result) 
+            createRouteLayer(layerId: layerId!, zOrder: zOrder, onSuccess: result)
         case "removeRouteLayer": removeRouteLayer(layerId: layerId!, onSuccess: result)
         case "addRouteStyle": addRouteStyle(style: RouteStyleSet(payload: arguments!), onSuccess: result)
-        case "addRoute": addRoute(layer: layer!, route: asRouteOption(arguments!), onSuccess: result)
-        case "addMultipleRoute": addRoute(layer: layer!, route: asRouteMultipleOption(arguments!), onSuccess: result)
+        case "addRoute": addRoute(layer: layer!, route: asRouteOption(payload: asDict(arguments!["route"]!)), onSuccess: result)
+        case "addMultipleRoute": addRoute(layer: layer!, route: asRouteMultipleOption(payload: arguments!), onSuccess: result)
         case "remvoeRoute": removeRoute(layer: layer!, routeId: routeId!, onSuccess: result)
         case "changeRoute":
             let styleId = asString(arguments!["styleId"]!)
-            let points = asArray(payload["points"], caster: { (rawElement: Any) -> RouteSegment in
-                return RouteSegment(payload: asDict(rawElement))
-            })
-            changeRoute(route: route!, styleId: styleId, points: points, onSuccess: result)
+            let curveType = asArray(arguments!["curveType"]!, caster: asInt)
+            let points = asArray(arguments!["points"]!, caster: { asArray($0, caster: asDict) })
+            let segments = points.enumerated().map { index, payload -> RouteSegment in
+                return RouteSegment(payload: [
+                    "curveType": curveType[index],
+                    "points": payload,
+                ])
+            }
+            changeRoute(route: route!, styleId: styleId, points: segments, onSuccess: result)
         case "changeRouteVisible":
             let visible = asBool(arguments!["visible"]!)
             changeRouteVisible(route: route!, visible: visible, onSuccess: result)
-        case "changeRouteZOrder": 
+        case "changeRouteZOrder":
             let zOrder = asInt(arguments!["zOrder"]!)
             changeRouteZOrder(route: route!, zOrder: zOrder, onSuccess: result)
         default: result(FlutterMethodNotImplemented)
