@@ -3,16 +3,27 @@ part of '../../kakao_map_sdk.dart';
 /// [Route] 또는 [MultipleRoute]의 스타일을 정의하는 객체입니다.
 class RouteStyle with KMessageable {
   String? _id;
+
+  /// Route Style에 사용되는 고유한 ID 입니다.
   String? get id => _id;
 
+  /// Route Style에 [RoutePattern] 객체의 패턴을 정의합니다.
   RoutePattern? pattern;
 
+  /// [Route] 선형의 색상입니다.
   final Color color;
+
+  /// [Route] 선형의 굵기입니다.
   final double lineWidth;
 
+  /// [Route] 외곽선의 색상입니다.
   final Color strokeColor;
-  final double strokeWidth;
 
+  /// [Route] 외곽선의 굵기입니다.
+  final double strokeWidth;
+  
+  /// [RouteStyle]이 나타날 [zoomLevel]을 설정합니다.
+  /// [RouteStyle.zoomLevel]값이 카메라의 [CameraPosition.zoomLevel] 값보다 작으면 해당되는 [RouteStyle]이 적용됩니다.
   int zoomLevel;
 
   final List<RouteStyle> _styles = [];
@@ -53,6 +64,10 @@ class RouteStyle with KMessageable {
     }
   }
 
+  /// [zoomLevel]에 따라 [Route]에 표시될 다른 스타일을 정의합니다.
+  /// 메소드에서 사용된 [zoomLevel] 매개변수가 [CameraPosition.zoomLevel] 값보다 작으면
+  /// [RouteStyle.addStyle] 메소드로 정의한 새로운 스타일이 적용됩니다.
+  /// 같은 [RouteStyle] 객체에서 다른 스타일을 정의할 때, [zoomLevel] 매개변수의 값이 중복되서는 안됩니다.
   void addStyle(
     int zoomLevel,
     Color? color,
@@ -71,11 +86,13 @@ class RouteStyle with KMessageable {
     _styles.add(otherStyle);
   }
 
+  /// [RouteStyle.addStyle]로 정의된 다른 스타일을 [zoomLevel] 통해 불러옵니다.
   RouteStyle? getStyle(int zoomLevel) {
     if (_isSecondaryStyle) return null;
     return _styles.where((e) => e.zoomLevel == zoomLevel).firstOrNull;
   }
 
+  /// [RouteStyle.addStyle]로 정의된 다른 스타일을 [zoomLevel]에 충족한다면 삭제합니다.
   void removeStyle(int zoomLevel) {
     if (_isSecondaryStyle) return;
     _styles.removeWhere((e) => e.zoomLevel == zoomLevel);
