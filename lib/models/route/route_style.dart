@@ -1,5 +1,6 @@
 part of '../../kakao_map_sdk.dart';
 
+/// [Route] 또는 [MultipleRoute]의 스타일을 정의하는 객체입니다.
 class RouteStyle with KMessageable {
   String? _id;
   String? get id => _id;
