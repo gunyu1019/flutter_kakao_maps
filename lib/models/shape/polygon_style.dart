@@ -1,12 +1,23 @@
 part of '../../kakao_map_sdk.dart';
 
+/// [Polygon]의 스타일을 정의하는 객체입니다.
 class PolygonStyle with KMessageable {
   String? _id;
+
+  /// Polygon Style에 사용되는 고유한 ID 입니다.
   String? get id => _id;
 
+  /// [Polygon]을 채우는 색상입니다.
   Color color;
+
+  /// [Polygon]의 외곽선 굵기입니다.
   final double strokeWidth;
+
+  /// [Polygon]의 외곽선 색상입니다.
   final Color strokeColor;
+
+  /// [PolygonStyle]이 나타날 [zoomLevel]을 설정합니다.
+  /// [PolygonStyle.zoomLevel]값이 카메라의 [CameraPosition.zoomLevel] 값보다 작으면 해당되는 [PolygonStyle]이 적용됩니다.
   int zoomLevel;
 
   final List<PolygonStyle> _styles = [];
@@ -39,6 +50,10 @@ class PolygonStyle with KMessageable {
   })  : _id = id,
         _isSecondaryStyle = true;
 
+  /// [zoomLevel]에 따라 [Polygon]에 표시될 다른 스타일을 정의합니다.
+  /// 메소드에서 사용된 [zoomLevel] 매개변수가 [CameraPosition.zoomLevel] 값보다 작으면
+  /// [PolygonStyle.addStyle] 메소드로 정의한 새로운 스타일이 적용됩니다.
+  /// 같은 [PolygonStyle] 객체에서 다른 스타일을 정의할 때, [zoomLevel] 매개변수의 값이 중복되서는 안됩니다.
   void addStyle(int zoomLevel, Color? color,
       {double? strokeWidth, Color? strokeColor}) {
     if (_isSecondaryStyle) return;
@@ -49,11 +64,13 @@ class PolygonStyle with KMessageable {
     _styles.add(otherStyle);
   }
 
+  /// [PolygonStyle.addStyle]로 정의된 다른 스타일을 [zoomLevel] 통해 불러옵니다.
   PolygonStyle? getStyle(int zoomLevel) {
     if (_isSecondaryStyle) return null;
     return _styles.where((e) => e.zoomLevel == zoomLevel).firstOrNull;
   }
 
+  /// [PolygonStyle.addStyle]로 정의된 다른 스타일을 [zoomLevel]에 충족한다면 삭제합니다.
   void removeStyle(int zoomLevel) {
     if (_isSecondaryStyle) return;
     _styles.removeWhere((e) => e.zoomLevel == zoomLevel);
