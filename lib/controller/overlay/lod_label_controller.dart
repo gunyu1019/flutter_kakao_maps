@@ -1,5 +1,6 @@
 part of '../../kakao_map_sdk.dart';
 
+/// 지도에 [LodPoi]를 생성하거나 삭제하는 등의 개체 관리를 할 수 있는 컨트롤러입니다.
 class LodLabelController extends BaseLabelController {
   @override
   MethodChannel channel;
@@ -13,6 +14,8 @@ class LodLabelController extends BaseLabelController {
   @override
   final String id;
 
+  /// LOD(Level of Detail) 작업을 위해 반경을 설정합니다.
+  /// [LodLabelController.radius]에 따라 지도에서 [LodPoi]를 미리 연산하여 표시합니다.
   final double radius;
 
   final Map<String, LodPoi> _poi = {};
@@ -73,6 +76,8 @@ class LodLabelController extends BaseLabelController {
     await _invokeMethod("rankPoi", {"poiId": poiId, "rank": rank});
   }
 
+  /// 지도에 새로운 [LodPoi]를 그립니다.
+  /// [LodPoi]를 그리기 위해서는 위치([position])와 스타일([style])이 필수로 입력되어야 합니다.
   Future<LodPoi> addLodPoi(
     LatLng position, {
     required PoiStyle style,
@@ -108,10 +113,12 @@ class LodLabelController extends BaseLabelController {
     return poi;
   }
 
+  /// 입력된 [id]에 따라 지도에 그려진 [LodPoi]를 불러옵니다.
   LodPoi? getLodPoi(String id) {
     return _poi[id];
   }
 
+  /// 입력된 [poi]에 따라 지도에 그려진 [LodPoi]를 삭제합니다.
   Future<void> removeLodPoi(LodPoi poi) async {
     await _invokeMethod("removeLodPoi", {
       "poiId": poi.id,
@@ -119,14 +126,17 @@ class LodLabelController extends BaseLabelController {
     _poi.remove(poi.id);
   }
 
+  /// 컨트롤러에 속한 모든 [LodPoi]가 지도에서 보여지도록 합니다.
   Future<void> showAllLodPoi() async {
     await _invokeMethod("changeVisibleAllLodPoi", {"visible": true});
   }
 
+  /// 컨트롤러에 속한 모든 [LodPoi]가 지도에서 숨겨지도록 합니다.
   Future<void> hideAllLodPoi() async {
     await _invokeMethod("changeVisibleAllLodPoi", {"visible": false});
   }
 
+  /// 컨트롤러에 의해 그려진 [LodPoi]의 개수를 불러옵니다.
   int get poiCount => _poi.length;
 
   static const String defaultId = "lodLabel_default_layer";
