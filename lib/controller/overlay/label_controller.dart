@@ -1,5 +1,6 @@
 part of '../../kakao_map_sdk.dart';
 
+/// 지도에 [Poi]과 [PolylineText]를 생성하거나 삭제하는 등의 개체 관리를 할 수 있는 컨트롤러입닌다.
 class LabelController extends BaseLabelController {
   @override
   MethodChannel channel;
@@ -115,6 +116,8 @@ class LabelController extends BaseLabelController {
         "changePolylineTextVisible", {"labelId": labelId, "visible": visible});
   }
 
+  /// 지도에 새로운 [Poi]를 그립니다.
+  /// [Poi]를 그리기 위해서는 위치([position])와 스타일([style])이 필수로 입력되어야 합니다.
   Future<Poi> addPoi(
     LatLng position, {
     required PoiStyle style,
@@ -150,10 +153,12 @@ class LabelController extends BaseLabelController {
     return poi;
   }
 
+  /// 입력된 [id]에 따라 지도에 그려진 [Poi]를 불러옵니다.
   Poi? getPoi(String id) {
     return _poi[id];
   }
 
+  /// 입력된 [poi]에 따라 지도에 그려진 [Poi]를 삭제합니다.
   Future<void> removePoi(Poi poi) async {
     await _invokeMethod("removePoi", {
       "poiId": poi.id,
@@ -161,14 +166,20 @@ class LabelController extends BaseLabelController {
     _poi.remove(poi.id);
   }
 
+  /// 컨트롤러에 속한 모든 [Poi]가 지도에서 보여지도록 합니다.
   Future<void> showAllPoi() async {
     await _invokeMethod("changeVisibleAllPoi", {"visible": true});
   }
 
+  /// 컨트롤러에 속한 모든 [Poi]가 지도에서 숨겨지도록 합니다.
   Future<void> hideAllPoi() async {
     await _invokeMethod("changeVisibleAllPoi", {"visible": false});
   }
 
+  /// 지도에 새로운 [PolylineText]를 그립니다.
+  /// [PolylineText]를 지도에 그리기 위해서는 지도에 표현하기 위한 글씨([text])와 
+  /// 구부러진 지도를 표시할 위치([position]),
+  /// 글씨의 스타일([style])이 필수로 입력되어야 합니다.
   Future<PolylineText> addPolylineText(
     String text,
     List<LatLng> position, {
@@ -192,10 +203,12 @@ class LabelController extends BaseLabelController {
     return label;
   }
 
+  /// 입력된 [id]에 따라 지도에 그려진 [PolylineText]를 불러옵니다.
   PolylineText? getPolylineText(String id) {
     return _polylineText[id];
   }
 
+  /// 입력된 [label]에 따라 지도에 그려진 [PolylineText]를 삭제합니다.
   Future<void> removePolylineText(PolylineText label) async {
     await _invokeMethod("removePolylineText", {
       "labelId": label.id,
@@ -203,15 +216,20 @@ class LabelController extends BaseLabelController {
     _polylineText.remove(label.id);
   }
 
+  /// 컨트롤러에 속한 모든 [PolylineText]가 지도에서 보여지도록 합니다.
   Future<void> showAllPolylineText() async {
     await _invokeMethod("changeVisibleAllPolylineText", {"visible": true});
   }
 
+  /// 컨트롤러에 속한 모든 [PolylineText]가 지도에서 숨겨지도록 합니다.
   Future<void> hideAllPolylineText() async {
     await _invokeMethod("changeVisibleAllPolylineText", {"visible": false});
   }
 
+  /// 컨트롤러에 의해 그려진 [Poi]의 개수를 불러옵니다.
   int get poiCount => _poi.length;
+
+  /// 컨트롤러에 의해 그려진 [PolylineText]의 개수를 불러옵니다.
   int get polylineCount => _polylineText.length;
 
   static const String defaultId = "label_default_layer";
