@@ -58,6 +58,10 @@ interface RouteControllerHandler {
             }
             "changeRouteVisible" -> changeRouteVisible(routeLine!!, arguments["visible"]!!.asBoolean(), result::success)
             "changeRouteZOrder" -> changeRouteZOrder(routeLine!!, arguments["zOrder"]!!.asInt(), result::success)
+            "changeVisibleAllRoute" -> {
+                val visible = arguments["visible"]?.asBoolean()!!
+                changeRouteLayerVisible(layer!!, visible, result::success)
+            }
             else -> result.notImplemented()
         }
     }
@@ -77,4 +81,6 @@ interface RouteControllerHandler {
     fun changeRouteVisible(route: RouteLine, visible: Boolean, onSuccess: (Any?) -> Unit);
 
     fun changeRouteZOrder(route: RouteLine, zOrder: Int, onSuccess: (Any?) -> Unit);
+
+    fun changeRouteLayerVisible(layer: RouteLineLayer, visible: Boolean, onSuccess: (Any?) -> Unit);
 }
