@@ -132,6 +132,26 @@ class ShapeController extends OverlayController {
     _polygonShape.remove(shape.id);
   }
 
+  /// 컨트롤러에 속한 모든 [Polyline]가 지도에서 보여지도록 합니다.
+  Future<void> showAllPolyline() async {
+    await _invokeMethod("changeVisibleAllPolyline", {"visible": true});
+  }
+
+  /// 컨트롤러에 속한 모든 [Polyline]가 지도에서 보여지도록 합니다.
+  Future<void> hideAllPolyline() async {
+    await _invokeMethod("changeVisibleAllPolyline", {"visible": false});
+  }
+
+  /// 컨트롤러에 속한 모든 [Polygon]가 지도에서 보여지도록 합니다.
+  Future<void> showAllPolygon() async {
+    await _invokeMethod("changeVisibleAllPolygon", {"visible": true});
+  }
+
+  /// 컨트롤러에 속한 모든 [Polygon]가 지도에서 보여지도록 합니다.
+  Future<void> hideAllPolygon() async {
+    await _invokeMethod("changeVisibleAllPolygon", {"visible": false});
+  }
+
   static const String defaultId = "vector_layer_0";
   static const int defaultZOrder = 10000;
   static const ShapeLayerPass defaultShapeLayerPass =
