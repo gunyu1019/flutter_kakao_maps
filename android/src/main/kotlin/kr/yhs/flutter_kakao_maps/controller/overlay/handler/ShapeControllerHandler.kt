@@ -92,6 +92,14 @@ interface ShapeControllerHandler {
                     changePolygonFromDotPoints(polygonShape!!, styleId!!, dotPosition, result::success)
                 }
             }
+            "changeVisibleAllPolyline" -> {
+                val visible = arguments["visible"]?.asBoolean()!!
+                changePolylineAllVisible(layer!!, visible, result::success)
+            }
+            "changeVisibleAllPolygon" -> {
+                val visible = arguments["visible"]?.asBoolean()!!
+                changePolygonAllVisible(layer!!, visible, result::success)
+            }
             else -> result.notImplemented()
         }
     }
@@ -123,4 +131,8 @@ interface ShapeControllerHandler {
     fun changePolylineFromDotPoints(shape: Polyline, styleId: String, position: List<DotPoints>, onSuccess: (Any?) -> Unit);
 
     fun changePolygonFromDotPoints(shape: Polygon, styleId: String, position: List<DotPoints>, onSuccess: (Any?) -> Unit);
+
+    fun changePolylineAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Unit)
+
+    fun changePolygonAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Unit)
 }
