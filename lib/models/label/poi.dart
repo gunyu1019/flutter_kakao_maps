@@ -1,6 +1,7 @@
 part of '../../kakao_map_sdk.dart';
 
 /// 지도에 [Poi]를 나타내는 객체입니다.
+/// [Poi]는 특정 텍스트 또는 이미지를 지도에 표현하는 오버레이입니다.
 class Poi {
   final LabelController _controller;
 

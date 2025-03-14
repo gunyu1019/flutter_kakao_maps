@@ -1,6 +1,7 @@
 part of '../../kakao_map_sdk.dart';
 
 /// 지도에 다중 선형([MultipleRoute])를 나타내는 객체입니다.
+/// [MultipleRoute]는 지도에 선형의 경로(길찾기 라인)를 다양하게 표현합니다.
 class MultipleRoute {
   final RouteController _controller;
 

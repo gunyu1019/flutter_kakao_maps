@@ -1,6 +1,7 @@
 part of '../../kakao_map_sdk.dart';
 
 /// 지도에 선형([Route])를 나타내는 객체입니다.
+/// [Route]는 선형의 경로(길찾기 라인)를 지도에 나타냅니다.
 class Route {
   final RouteController _controller;
 

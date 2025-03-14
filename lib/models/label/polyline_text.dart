@@ -1,6 +1,7 @@
 part of '../../kakao_map_sdk.dart';
 
 /// 지도에 [PolylineText]를 나타내는 객체입니다.
+/// [PolylineText]는 구부러진 글씨 또는 호르는 글씨를 지도에 표현하는 오버레이입니다.
 class PolylineText {
   final LabelController _controller;
 
