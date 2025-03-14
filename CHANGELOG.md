@@ -1,3 +1,19 @@
+## 0.2.0-dev.5
+* Support all feature related Shape in iOS and Android Platform.
+  * Support point based position.
+  * Modifiy Polyline Shape
+  * Modifiy Polygon Shape
+  * Setup visible of shape layer
+* Support all feature related Route in iOS and Android Platform.
+  * Add Route
+  * Modify Route
+  * Implement Route Converter
+  * Setup visible of route layer
+* Implement modify label layer and lod label layer in Android Platform
+* [Fix] Missing filled polyline shape style ID, polygon shape style ID, and route style ID.
+* Integrate modify logic of polyline shape and polygon shape
+* Integrate modify logic of route line
+
 ## 0.2.0-dev.4
 * Add zOrder attribute at PolygonShape and PolylineShape.
 * Support some feature Polyline Shape and Polygon Shape in iOS Platform.
