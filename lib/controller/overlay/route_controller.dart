@@ -118,6 +118,16 @@ class RouteController extends OverlayController {
     _multipleRoute.remove(route.id);
   }
 
+  /// 컨트롤러에 속한 모든 [Route]와 [MultipleRoute]가 지도에서 보여지도록 합니다.
+  Future<void> showAllRoute() async {
+    await _invokeMethod("changeVisibleAllRoute", {"visible": true});
+  }
+
+  /// 컨트롤러에 속한 모든 [Route]와 [MultipleRoute]가 지도에서 보여지도록 합니다.
+  Future<void> hideAllRoute() async {
+    await _invokeMethod("changeVisibleAllRoute", {"visible": false});
+  }
+
   static const String defaultId = "route_layer_0";
   static const int defaultZOrder = 10000;
 }
