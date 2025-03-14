@@ -60,6 +60,7 @@ part 'models/shape/polygon_style.dart';
 part 'models/shape/polyline_style.dart';
 part 'models/shape/rectangle_point.dart';
 
+part 'models/route/base_route.dart';
 part 'models/route/multiple_route.dart';
 part 'models/route/multiple_route_option.dart';
 part 'models/route/route.dart';
