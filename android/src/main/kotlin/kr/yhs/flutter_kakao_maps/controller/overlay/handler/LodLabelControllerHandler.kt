@@ -11,6 +11,7 @@ import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelLayerOption
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelOptions
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asBoolean
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asLong
+import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asInt
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asString
 
@@ -60,6 +61,19 @@ interface LodLabelControllerHandler {
                 val rank = arguments["x"]?.asLong()!!
                 rankLodPoi(poi!!, rank, result::success)
             }
+            // label layer handler
+            "changeVisibleAllLodPoi" -> {
+                val visible = arguments["visible"]?.asBoolean()!!
+                changeLodPoiAllVisible(layer!!, visible, result::success)
+            }
+            "setLayerClickable" -> {
+                val clickable = arguments["clickable"]?.asBoolean()!!
+                changeLabelLayerClickable(layer!!, clickable, result::success)
+            }
+            "setLayerZOrder" -> {
+                val zOrder = arguments["zOrder"]?.asInt()!!
+                changeLabelLayerZOrder(layer!!, zOrder, result::success)
+            }
             else -> result.notImplemented()
         }
     }
@@ -80,4 +94,11 @@ interface LodLabelControllerHandler {
     fun changeLodPoiText(poi: LodLabel, text: String, transition: Boolean, onSuccess: (Any?) -> Unit)
 
     fun rankLodPoi(poi: LodLabel, rank: Long, onSuccess: (Any?) -> Unit)
+
+    // Label Controller
+    fun changeLodPoiAllVisible(layer: LodLabelLayer, visible: Boolean, onSuccess: (Any?) -> Unit)
+
+    fun changeLabelLayerClickable(layer: LodLabelLayer, clickable: Boolean, onSuccess: (Any?) -> Unit)
+
+    fun changeLabelLayerZOrder(layer: LodLabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit)
 }
