@@ -177,7 +177,7 @@ class LabelController extends BaseLabelController {
   }
 
   /// 지도에 새로운 [PolylineText]를 그립니다.
-  /// [PolylineText]를 지도에 그리기 위해서는 지도에 표현하기 위한 글씨([text])와 
+  /// [PolylineText]를 지도에 그리기 위해서는 지도에 표현하기 위한 글씨([text])와
   /// 구부러진 지도를 표시할 위치([position]),
   /// 글씨의 스타일([style])이 필수로 입력되어야 합니다.
   Future<PolylineText> addPolylineText(

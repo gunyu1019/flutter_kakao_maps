@@ -174,19 +174,24 @@ class _MyAppState extends State<MyApp> {
         style: PolylineTextStyle(28, Colors.blue));
 
     /// 카카오 판교캠퍼스 주변에 원형과 사각형을 그린다.
-    controller.shapeLayer.addPolylineShape(
-        RectanglePoint(
-            100, 100, const LatLng(37.396289088551704, 127.1129315279461)),
-        PolylineStyle(Colors.green, 10.0),
-        PolylineCap.round).then((shape) {
-          shape.changePosition(RectanglePoint(
-            100, 300, const LatLng(37.396289088551704, 127.1129315279461)));
-        });
-    controller.shapeLayer.addPolygonShape(
-        CirclePoint(200, const LatLng(37.39375894087694, 127.10964757834647)),
-        PolygonStyle(Colors.green)).then((shape) {
-          shape.changeStyle(PolygonStyle(Colors.red));
-        });
+    controller.shapeLayer
+        .addPolylineShape(
+            RectanglePoint(
+                100, 100, const LatLng(37.396289088551704, 127.1129315279461)),
+            PolylineStyle(Colors.green, 10.0),
+            PolylineCap.round)
+        .then((shape) {
+      shape.changePosition(RectanglePoint(
+          100, 300, const LatLng(37.396289088551704, 127.1129315279461)));
+    });
+    controller.shapeLayer
+        .addPolygonShape(
+            CirclePoint(
+                200, const LatLng(37.39375894087694, 127.10964757834647)),
+            PolygonStyle(Colors.green))
+        .then((shape) {
+      shape.changeStyle(PolygonStyle(Colors.red));
+    });
     return;
 
     /// 경부고속도로를 따라 경로선을 그린다.

@@ -33,7 +33,7 @@ enum GestureType {
   oneFingerZoom(value: 11),
 
   /// 정의되지 않은 제스처 유형입니다.
-  /// [KakaoMapController.moveCamera] 등의 자동으로 카메라가 이동한 경우 
+  /// [KakaoMapController.moveCamera] 등의 자동으로 카메라가 이동한 경우
   /// [GestureType.unknown]이 적용됩니다.
   unknown(value: 17);
 

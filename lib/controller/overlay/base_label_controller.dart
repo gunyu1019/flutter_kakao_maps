@@ -22,11 +22,13 @@ abstract class BaseLabelController extends OverlayController {
   final bool visible;
 
   bool _clickable;
+
   /// [LabelController], [LodLabelController]에 소속되어 있는 [Poi], [LodPoi], [PolylineText] 가
   /// 클릭할 수 있는지 나타냅니다.
   bool get clickable => _clickable;
 
   int _zOrder;
+
   /// 렌더링의 우선순위를 정의합니다.
   int get zOrder => _zOrder;
 

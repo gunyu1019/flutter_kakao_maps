@@ -31,7 +31,8 @@ class RouteController extends OverlayController {
     await _invokeMethod("removeRouteLayer", {});
   }
 
-  Future<void> _changeRoute(String routeId, String styleId, List<CurveType> curveType, List<List<LatLng>> points) async {
+  Future<void> _changeRoute(String routeId, String styleId,
+      List<CurveType> curveType, List<List<LatLng>> points) async {
     await _invokeMethod("changeRoute", {
       "routeId": routeId,
       "points": points
@@ -43,10 +44,8 @@ class RouteController extends OverlayController {
   }
 
   Future<void> _changeRouteZOrder(String routeId, int zOrder) async {
-    await _invokeMethod("changeRouteZOrder", {
-      "routeId": routeId,
-      "zOrder": zOrder
-    });
+    await _invokeMethod(
+        "changeRouteZOrder", {"routeId": routeId, "zOrder": zOrder});
   }
 
   Future<void> _changeRouteVisible(String routeId, bool visible) async {
@@ -64,7 +63,9 @@ class RouteController extends OverlayController {
   /// [Route]를 그리기 위해서는 지점([points])과 스타일([style])이 필수로 입력되어야 합니다.
   /// Route에서 사용되는 [id]는 이미 등록된 [MultipleRoute.id]와 중복될 수 없습니다.
   Future<Route> addRoute(List<LatLng> points, RouteStyle style,
-      {String? id, CurveType curveType = CurveType.none, int zOrder = 10000}) async {
+      {String? id,
+      CurveType curveType = CurveType.none,
+      int zOrder = 10000}) async {
     final styleId = style.id ?? await manager.addRouteStyle(style);
     Map<String, dynamic> payload = {
       "route": <String, dynamic>{
@@ -94,7 +95,7 @@ class RouteController extends OverlayController {
         points: option._points,
         style: option._styles,
         curveType: option._curveType,
-        styleIndex: option._styleIndex, 
+        styleIndex: option._styleIndex,
         zOrder: option.zOrder);
     _multipleRoute[routeId] = route;
     return route;

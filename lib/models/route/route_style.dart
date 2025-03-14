@@ -21,7 +21,7 @@ class RouteStyle with KMessageable {
 
   /// [Route] 외곽선의 굵기입니다.
   final double strokeWidth;
-  
+
   /// [RouteStyle]이 나타날 [zoomLevel]을 설정합니다.
   /// [RouteStyle.zoomLevel]값이 카메라의 [CameraPosition.zoomLevel] 값보다 작으면 해당되는 [RouteStyle]이 적용됩니다.
   int zoomLevel;

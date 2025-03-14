@@ -30,7 +30,7 @@ class MultipleRouteOption with KMessageable {
   }
 
   /// [MultipleRoute]에 구현할 선형을 추가합니다.
-  /// [point] 매개변수에는 새롭게 추가할 선형의 지점과, 
+  /// [point] 매개변수에는 새롭게 추가할 선형의 지점과,
   /// [style] 매개변수에는 새롭게 구현할 선형의 스타일을 입력받습니다.
   void addRouteWithStyle(List<LatLng> point, RouteStyle style,
       [CurveType curveType = CurveType.none]) {

@@ -6,10 +6,10 @@ class CirclePoint extends _BaseDotPoint {
   final double radius;
 
   /// 도형을 구성할 때, 시계 방향으로 설정할 지 정의합니다.
-  /// [addHole] 함수로 구멍을 구성할 때는 반시계 방향으로 정의해야하며, 
+  /// [addHole] 함수로 구멍을 구성할 때는 반시계 방향으로 정의해야하며,
   /// [clockwise]의 값을 false로 정의해야 합니다.
   final bool clockwise;
-  
+
   final int? vertexCount;
 
   CirclePoint(this.radius, super.basePoint,

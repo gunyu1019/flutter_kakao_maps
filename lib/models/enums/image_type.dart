@@ -4,7 +4,7 @@ part of '../../kakao_map_sdk.dart';
 enum ImageType {
   /// 에셋(Assets)으로 구성된 이미지입니다.
   assets(value: 0),
-  
+
   /// 정적 파일 주소로 구성된 이미지입니다.
   file(value: 1),
 

@@ -25,7 +25,7 @@ class Route {
 
   final bool _isMultiple;
 
-  /// [MultipleRoute.getRoute]으로 단일 선형을 불러온 경우, 
+  /// [MultipleRoute.getRoute]으로 단일 선형을 불러온 경우,
   /// 단일 선형이 속해있는 다중 선형을 불러옵니다.
   /// 만약 다중 선형으로 정의된 객체가 아닌 경우 null을 반환합니다.
   final MultipleRoute? parents;
