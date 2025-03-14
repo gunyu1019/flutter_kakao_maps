@@ -121,6 +121,23 @@ interface LabelControllerHandler {
                 val visible = arguments["visible"]?.asBoolean()!!
                 changePolylineTextVisible(polylineText!!, visible, result::success)
             }
+            // label layer handler
+            "changeVisibleAllPoi" -> {
+                val visible = arguments["visible"]?.asBoolean()!!
+                changePoiAllVisible(layer!!, visible, result::success)
+            }
+            "changeVisibleAllPolylineText" -> {
+                val visible = arguments["visible"]?.asBoolean()!!
+                changePolylineTextAllVisible(layer!!, visible, result::success)
+            }
+            "setLayerClickable" -> {
+                val clickable = arguments["clickable"]?.asBoolean()!!
+                changeLabelLayerClickable(layer!!, clickable, result::success)
+            }
+            "setLayerZOrder" -> {
+                val zOrder = arguments["visible"]?.asInt()!!
+                changeLabelLayerZOrder(layer!!, zOrder, result::success)
+            }
             else -> result.notImplemented()
         }
     }
@@ -179,4 +196,13 @@ interface LabelControllerHandler {
     )
 
     fun changePolylineTextVisible(label: PolylineLabel, visible: Boolean, onSuccess: (Any?) -> Unit)
+
+    // Label Controller
+    fun changePoiAllVisible(layer: LabelLayer, visible: Boolean, onSuccess: (Any?) -> Unit)
+
+    fun changePolylineTextAllVisible(layer: LabelLayer, visible: Boolean, onSuccess: (Any?) -> Unit)
+
+    fun changeLabelLayerClickable(layer: LabelLayer, clickable: Boolean, onSuccess: (Any?) -> Unit)
+
+    fun changeLabelLayerZOrder(layer: LabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit)
 }
