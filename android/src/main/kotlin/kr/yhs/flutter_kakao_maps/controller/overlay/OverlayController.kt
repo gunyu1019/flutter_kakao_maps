@@ -344,4 +344,72 @@ class OverlayController(
         route.setZOrder(zOrder)
         onSuccess.invoke(null)
     }
+
+    override fun changePoiAllVisible(layer: LabelLayer, visible: Boolean, onSuccess: (Any?) -> Unit) {
+        if (visible) {
+            layer.showAllLabels()
+        } else {
+            layer.hideAllLabels()
+        }
+        onSuccess.invoke(null)
+    }
+
+    override fun changePolylineTextAllVisible(layer: LabelLayer, visible: Boolean, onSuccess: (Any?) -> Unit) {
+        if (visible) {
+            layer.showAllPolylineLabels()
+        } else {
+            layer.hideAllPolylineLabels()
+        }
+        onSuccess.invoke(null)
+    }
+
+    override fun changeLabelLayerClickable(layer: LabelLayer, clickable: Boolean, onSuccess: (Any?) -> Unit) {
+        layer.setClickable(clickable)
+    }
+
+    override fun changeLabelLayerZOrder(layer: LabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit) {
+        layer.setZOrder(zOrder)
+    }
+
+    override fun changeLodPoiAllVisible(layer: LodLabelLayer, visible: Boolean, onSuccess: (Any?) -> Unit) {
+        if (visible) {
+            layer.showAllLodLabels()
+        } else {
+            layer.hideAllLodLabels()
+        }
+        onSuccess.invoke(null)
+    }
+
+    override fun changeLabelLayerClickable(layer: LodLabelLayer, clickable: Boolean, onSuccess: (Any?) -> Unit) {
+        layer.setClickable(clickable)
+        onSuccess.invoke(null)
+    }
+
+    override fun changeLabelLayerZOrder(layer: LodLabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit) {
+        layer.setZOrder(zOrder)
+        onSuccess.invoke(null)
+    }
+    
+    override fun changePolylineAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Unit) {
+        if (visible) {
+            layer.showAllPolyline()
+        } else {
+            layer.hideAllPolyline()
+        }  
+        onSuccess.invoke(null)
+    }
+
+    override fun changePolygonAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Unit) {
+        if (visible) {
+            layer.showAllPolygon()
+        } else {
+            layer.hideAllPolygon()
+        }  
+        onSuccess.invoke(null)
+    }
+
+    override fun changeRouteLayerVisible(layer: RouteLineLayer, visible: Boolean, onSuccess: (Any?) -> Unit) {
+        layer.setVisible(visible)
+        onSuccess.invoke(null)
+    }
 }
