@@ -366,4 +366,74 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         route.zOrder = zOrder
         onSuccess(nil)
     }
+
+    func changePoiAllVisible(layer: LabelLayer, visible: Bool, onSuccess: (Any?) -> Void) {
+        if visible {
+            layer.showAllPois()
+        } else {
+            layer.hideAllPois()
+        }
+        onSuccess(nil)
+    }
+
+    func changePolylineTextAllVisible(layer: LabelLayer, visible: Bool, onSuccess: (Any?) -> Void) {
+        if visible {
+            layer.showPolylineShapes()
+        } else {
+            layer.hidePolylineShapes()
+        }
+        onSuccess(nil)
+    }
+
+    func changeLabelLayerClickable(layer: LabelLayer, clickable: Bool, onSuccess: (Any?) -> Void) {
+        layer.setClickable(clickable)
+        onSuccess(nil)
+    }
+
+    func changeLabelLayerZOrder(layer: LabelLayer, zOrder: Int, onSuccess: (Any?) -> Void) {
+        layer.zOrder = zOrder
+        onSuccess(nil)
+    }
+
+    func changeLodPoiAllVisible(layer: LodLabelLayer, visible: Bool, onSuccess: (Any?) -> Void) {
+        if visible {
+            layer.showAllLodPois()
+        } else {
+            layer.hideAllLodPois()
+        }       
+        onSuccess(nil)
+    }
+
+    func changeLodLabelLayerClickable(layer: LodLabelLayer, clickable: Bool, onSuccess: (Any?) -> Void) {
+        layer.setClickable(clickable)
+        onSuccess(nil)
+    }
+
+    func changeLodLabelLayerZOrder(layer: LodLabelLayer, zOrder: Int, onSuccess: (Any?) -> Void) {
+        layer.zOrder = zOrder
+        onSuccess(nil)
+    }
+
+    func changePolylineAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Void) {
+        if visible {
+            layer.showAllPolylineShapes()
+        } else {
+            layer.hideAllPolylineShapes()
+        }  
+        onSuccess(nil)
+    }
+
+    func changePolygonAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Void) {
+        if visible {
+            layer.showAllPolygonShapes()
+        } else {
+            layer.hideAllPolygonShapes()
+        }  
+        onSuccess(nil)
+    }
+
+    func changeRouteLayerVisible(layer: RouteLayer, visible: Bool, onSuccess: (Any?) -> Void) {
+        layer.visible = visible 
+        onSuccess(nil)
+    }
 }
