@@ -19,6 +19,12 @@ protocol LodLabelControllerHandler {
     func changeLodPoiText(poi: LodPoi, styleId: String, text: String, transition: Bool, onSuccess: (Any?) -> Void)
 
     func rankLodPoi(poi: LodPoi, rank: Int, onSuccess: (Any?) -> Void)
+    
+    func changeLodPoiAllVisible(layer: LodLabelLayer, visible: Bool, onSuccess: (Any?) -> Void)
+
+    func changeLodLabelLayerClickable(layer: LodLabelLayer, clickable: Bool, onSuccess: (Any?) -> Void)
+
+    func changeLodLabelLayerZOrder(layer: LodLabelLayer, zOrder: Int, onSuccess: (Any?) -> Void)
 }
 
 extension LodLabelControllerHandler {
