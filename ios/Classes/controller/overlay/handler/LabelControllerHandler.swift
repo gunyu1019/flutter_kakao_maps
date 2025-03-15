@@ -39,6 +39,14 @@ protocol LabelControllerHandler {
     func rotatePoi(poi: Poi, angle: Double, duration: UInt?, onSuccess: (Any?) -> Void)
 
     func rankPoi(poi: Poi, rank: Int, onSuccess: (Any?) -> Void)
+
+    func changePoiAllVisible(layer: LabelLayer, visible: Bool, onSuccess: (Any?) -> Void)
+
+    func changePolylineTextAllVisible(layer: LabelLayer, visible: Bool, onSuccess: (Any?) -> Void)
+
+    func changeLabelLayerClickable(layer: LabelLayer, clickable: Bool, onSuccess: (Any?) -> Void)
+
+    func changeLabelLayerZOrder(layer: LabelLayer, zOrder: Int, onSuccess: (Any?) -> Void)
 }
 
 extension LabelControllerHandler {
