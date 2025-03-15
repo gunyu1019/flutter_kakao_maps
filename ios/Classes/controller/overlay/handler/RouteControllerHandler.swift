@@ -19,6 +19,8 @@ protocol RouteControllerHandler {
     func changeRouteVisible(route: Route, visible: Bool, onSuccess: (Any?) -> Void)
 
     func changeRouteZOrder(route: Route, zOrder: Int, onSuccess: (Any?) -> Void)
+
+    func changeRouteLayerVisible(layer: RouteLayer, visible: Bool, onSuccess: (Any?) -> Void)
 }
 
 extension RouteControllerHandler {
