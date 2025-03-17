@@ -17,8 +17,7 @@ class RouteController extends OverlayController {
   /// 렌더링의 우선순위를 정의합니다.
   final int zOrder;
 
-  final Map<String, Route> _route = {};
-  final Map<String, MultipleRoute> _multipleRoute = {};
+  final Map<String, BaseRoute> _route = {};
 
   RouteController._(this.channel, this.manager, this.id,
       {this.zOrder = defaultZOrder});
@@ -97,26 +96,17 @@ class RouteController extends OverlayController {
         curveType: option._curveType,
         styleIndex: option._styleIndex,
         zOrder: option.zOrder);
-    _multipleRoute[routeId] = route;
+    _route[routeId] = route;
     return route;
   }
 
-  /// 입력된 [id]에 따라 지도에 그려진 [Route]를 불러옵니다.
-  Route? getRoute(String id) => _route[id];
+  /// 입력된 [id]에 따라 지도에 그려진 선형을 불러옵니다.
+  T? getRoute<T extends BaseRoute>(String id) => _route[id] as T;
 
-  /// 입력된 [id]에 따라 지도에 그려진 [MultipleRoute]를 불러옵니다.
-  MultipleRoute? getMultipleRoute(String id) => _multipleRoute[id];
-
-  /// 입력된 [route]에 따라 지도에 그려진 [Route]를 삭제합니다.
-  Future<void> removeRoute(Route route) async {
+  /// 입력된 [route]에 따라 지도에 그려진 선형을 삭제합니다.
+  Future<void> removeRoute(BaseRoute route) async {
     await _invokeMethod("removeRoute", {"routeId": route.id});
     _route.remove(route.id);
-  }
-
-  /// 입력된 [route]에 따라 지도에 그려진 [MultipleRoute]를 삭제합니다.
-  Future<void> removeMultipleRoute(MultipleRoute route) async {
-    await _invokeMethod("removeRoute", {"routeId": route.id});
-    _multipleRoute.remove(route.id);
   }
 
   /// 컨트롤러에 속한 모든 [Route]와 [MultipleRoute]가 지도에서 보여지도록 합니다.
