@@ -1,7 +1,7 @@
 part of '../kakao_map_sdk.dart';
 
 /// 카카오 인증에 실패하면 호출되는 예외 객체입니다.
-class KakaoAuthException implements Exception {
+class KakaoAuthError implements Error {
   /// 인증 실패하면 발생하는 오류 코드입니다.
   /// 서버 통신 과정에서 필수 정보가 누락되어 발생하는 일반적인 오류 상황에서는 400 코드를 반환합니다.
   /// 인증 자격 증명을 실패했다면 401 코드를 반환합니다.
@@ -13,11 +13,15 @@ class KakaoAuthException implements Exception {
   /// 인증 실패의 원인이 담긴 메시지입니다.
   final String? message;
 
-  KakaoAuthException(this.code, this.message);
+  KakaoAuthError(this.code, this.message);
 
-  factory KakaoAuthException.fromMessageable(dynamic payload) =>
-      KakaoAuthException(payload['errorCode']!, payload['message']);
+  factory KakaoAuthError.fromMessageable(dynamic payload) =>
+      KakaoAuthError(payload['errorCode']!, payload['message']);
 
   @override
-  String toString() => "KakaoAuthException(code: $code, message: $message)";
+  String toString() => "KakaoAuthError(code: $code, message: $message)";
+  
+  @override
+  // TODO: implement stackTrace
+  StackTrace? get stackTrace => throw UnimplementedError();
 }
