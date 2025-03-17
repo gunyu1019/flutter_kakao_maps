@@ -2,11 +2,18 @@ part of '../../kakao_map_sdk.dart';
 
 /// 지도에 선형([Route])를 나타내는 객체입니다.
 /// [Route]는 선형의 경로(길찾기 라인)를 지도에 나타냅니다.
-class Route {
+class Route extends BaseRoute {
+  @override
   final RouteController _controller;
 
-  /// [Route]의 고유 ID입니다.
+  @override
   final String id;
+  
+  @override
+  bool _visible;
+
+  @override
+  int _zOrder;
 
   List<LatLng> _points;
 
@@ -29,16 +36,6 @@ class Route {
   /// 단일 선형이 속해있는 다중 선형을 불러옵니다.
   /// 만약 다중 선형으로 정의된 객체가 아닌 경우 null을 반환합니다.
   final MultipleRoute? parents;
-
-  bool _visible;
-
-  /// [Route]가 현재 지도에 그려지는지 여부를 나타냅니다.
-  bool get visible => _visible;
-
-  int _zOrder;
-
-  /// [Route]의 렌더링 우선순위입니다.
-  int get zOrder => _zOrder;
 
   Route._(this._controller, this.id,
       {required List<LatLng> points,
@@ -64,26 +61,6 @@ class Route {
         _isMultiple = true,
         _zOrder = parents!._zOrder;
 
-  /// [Route]를 지도에서 보이도록 합니다.
-  Future<void> show() async {
-    if (_isMultiple) return;
-    await _controller._changeRouteVisible(id, true);
-    _visible = true;
-  }
-
-  /// [Route]를 지도에서 노출되지 않도록 합니다.
-  Future<void> hide() async {
-    if (_isMultiple) return;
-    await _controller._changeRouteVisible(id, false);
-    _visible = false;
-  }
-
-  /// [Route] 개체를 삭제합니다.
-  Future<void> remove() async {
-    if (_isMultiple) return;
-    await _controller.removeRoute(this);
-  }
-
   /// 선형([Route]) 정의된 스타일([RouteStyle])을 다시 정의합니다.
   Future<void> changeStyle(RouteStyle style) async {
     if (_isMultiple) return;
@@ -104,12 +81,5 @@ class Route {
     if (_isMultiple) return;
     await _controller._changeRoute(id, style.id!, [_curveType], [points]);
     _points = points;
-  }
-
-  /// 선형([Route])의 렌더링 우선순위를 다시 정의합니다.
-  Future<void> setZOrder(int zOrder) async {
-    if (_isMultiple) return;
-    await _controller._changeRouteZOrder(id, zOrder);
-    _zOrder = zOrder;
   }
 }
