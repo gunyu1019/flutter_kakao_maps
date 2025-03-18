@@ -128,6 +128,9 @@ class LabelController extends BaseLabelController {
     void Function()? onClick,
     bool visible = true,
   }) async {
+    if (id != null && _poi.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     final styleId = style.id ?? await manager.addPoiStyle(style);
     Map<String, dynamic> payload = {
       "poi": <String, dynamic>{
@@ -187,6 +190,9 @@ class LabelController extends BaseLabelController {
     String? id,
     bool visible = true,
   }) async {
+    if (id != null && _polylineText.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     Map<String, dynamic> payload = {
       "label": <String, dynamic>{
         "position": position.map((e) => e.toMessageable()).toList(),
