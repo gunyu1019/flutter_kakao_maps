@@ -25,7 +25,9 @@ part 'controller/overlay/route_controller.dart';
 part 'controller/overlay/shape_controller.dart';
 
 /* exception */
-part 'exception/kakao_auth_exception.dart';
+part 'exception/duplicated_overlay_exception.dart';
+part 'exception/kakao_auth_error.dart';
+part 'exception/kakao_map_error.dart';
 
 /* initalizer */
 part 'initializer/sdk_initalizer.dart';
