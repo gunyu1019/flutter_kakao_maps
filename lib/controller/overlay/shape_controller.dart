@@ -77,6 +77,9 @@ class ShapeController extends OverlayController {
       {String? id, int zOrder = 10001}) async {
     final styleId =
         style._id ?? await manager.addPolylineShapeStyle(style, polylineCap);
+    if (id != null && _polygonShape.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     final payload = <String, dynamic>{
       "polyline": <String, dynamic>{
         "id": id,
@@ -98,6 +101,9 @@ class ShapeController extends OverlayController {
   Future<Polygon> addPolygonShape<T extends BasePoint>(
       T position, PolygonStyle style,
       {String? id, int zOrder = 10001}) async {
+    if (id != null && _polygonShape.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     final styleId = style._id ?? await manager.addPolygonShapeStyle(style);
     final payload = <String, dynamic>{
       "polygon": <String, dynamic>{
