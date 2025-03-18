@@ -65,6 +65,9 @@ class RouteController extends OverlayController {
       {String? id,
       CurveType curveType = CurveType.none,
       int zOrder = 10000}) async {
+    if (id != null && _route.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     final styleId = style.id ?? await manager.addRouteStyle(style);
     Map<String, dynamic> payload = {
       "route": <String, dynamic>{
@@ -85,6 +88,9 @@ class RouteController extends OverlayController {
   /// 지도에 새로운 다중 선형([MultipleRoute])을 그립니다.
   /// [MultipleRouteOption.id]는 이미 등록된 [Route]의 ID와 중복될 수 없습니다.
   Future<MultipleRoute> addMultipleRoute(MultipleRouteOption option) async {
+    if (option.id != null && _route.containsKey(option.id)) {
+      throw DuplicatedOverlayException(option.id!);
+    }
     if (!option._isStyleAdded()) {
       await manager.addMultipleRouteStyle(option._styles);
     }
