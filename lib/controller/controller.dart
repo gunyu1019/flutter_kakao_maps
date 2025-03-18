@@ -140,6 +140,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
 
   @override
   Future<String> addPoiStyle(PoiStyle style) async {
+    if (style.id != null && _routeStyle.containsKey(style.id)) {
+      throw DuplicatedOverlayException(style.id!);
+    }
     String styleId = await labelLayer._invokeMethod(
         "addPoiStyle", {"styleId": style.id, "styles": style.toMessageable()});
     style._setStyleId(styleId);
@@ -149,6 +152,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
 
   @override
   Future<String> addPolygonShapeStyle(PolygonStyle style) async {
+    if (style.id != null && _routeStyle.containsKey(style.id)) {
+      throw DuplicatedOverlayException(style.id!);
+    }
     final styleIds = await addMultiplePolygonShapeStyle([style], style.id);
     return styleIds;
   }
@@ -164,6 +170,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
   @override
   Future<String> addMultiplePolygonShapeStyle(List<PolygonStyle> style,
       [String? id]) async {
+    if (id != null && _routeStyle.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     String styleId = await shapeLayer._invokeMethod("addPolygonShapeStyle", {
       "styleId": id,
       "styles": style.map((e) => e.toMessageable()).toList()
@@ -179,6 +188,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
   Future<String> addMultiplePolylineShapeStyle(
       List<PolylineStyle> style, PolylineCap polylineCap,
       [String? id]) async {
+    if (id != null && _routeStyle.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     String styleId = await shapeLayer._invokeMethod("addPolylineShapeStyle", {
       "styleId": id,
       "styles": style.map((e) => e.toMessageable()).toList(),
@@ -200,6 +212,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
   @override
   Future<String> addMultipleRouteStyle(List<RouteStyle> styles,
       [String? id]) async {
+    if (id != null && _routeStyle.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     String styleId = await routeLayer._invokeMethod("addRouteStyle", {
       "styleId": id,
       "styles": styles.map((e) => e.toMessageable()).toList()
@@ -242,6 +257,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
           BaseLabelController.defaultCompetitionUnit,
       OrderingType orderingType = BaseLabelController.defaultOrderingType,
       int zOrder = BaseLabelController.defaultZOrder}) async {
+    if (_labelController.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     final labelLayer = LabelController._(
       overlayChannel,
       this,
@@ -265,6 +283,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
       OrderingType orderingType = BaseLabelController.defaultOrderingType,
       double radius = LodLabelController.defaultRadius,
       int zOrder = BaseLabelController.defaultZOrder}) async {
+    if (_lodLabelController.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     final labelLayer = LodLabelController._(
       overlayChannel,
       this,
@@ -284,6 +305,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
   Future<ShapeController> addShapeLayer(String id,
       {ShapeLayerPass passType = ShapeController.defaultShapeLayerPass,
       int zOrder = ShapeController.defaultZOrder}) async {
+    if (_shapeController.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     final shapeLayer = ShapeController._(overlayChannel, this, id,
         passType: passType, zOrder: zOrder);
     await shapeLayer._createShapeLayer();
@@ -294,6 +318,9 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
   @override
   Future<RouteController> addRouteLayer(String id,
       {int zOrder = ShapeController.defaultZOrder}) async {
+    if (_routeController.containsKey(id)) {
+      throw DuplicatedOverlayException(id);
+    }
     final routeLayer =
         RouteController._(overlayChannel, this, id, zOrder: zOrder);
     await routeLayer._createRouteLayer();
