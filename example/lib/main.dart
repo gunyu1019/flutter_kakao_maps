@@ -207,7 +207,7 @@ class _MyAppState extends State<MyApp> {
     controller.scaleBar.show();
   }
 
-  void onMapError(Exception exception) {
+  void onMapError(Error exception) {
     MyApp.logBucket.add(LogEvent(
       level: LogLevel.fatal,
       message: "KakaoMap.onMapError caused!",
