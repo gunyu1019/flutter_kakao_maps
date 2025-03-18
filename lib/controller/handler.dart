@@ -20,11 +20,11 @@ mixin KakaoMapControllerHandler {
         final String className = method.arguments['className'];
         switch (className) {
           case 'MapAuthException':
-            onMapError(KakaoAuthException.fromMessageable(method.arguments));
+            onMapError(KakaoAuthError.fromMessageable(method.arguments));
             break;
           default:
-            onMapError(Exception(
-                "${method.arguments['className']}(${method.arguments['message']})"));
+            onMapError(KakaoMapError(
+                method.arguments['className'], method.arguments['message']));
             break;
         }
         break;
@@ -81,7 +81,7 @@ mixin KakaoMapControllerHandler {
 
   void onMapPaused();
 
-  void onMapError(Exception exception);
+  void onMapError(Error error);
 
   void onCameraMoveStart(GestureType gestureType);
 

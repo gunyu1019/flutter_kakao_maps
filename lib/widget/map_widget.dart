@@ -13,8 +13,8 @@ class KakaoMap extends StatefulWidget {
   final KakaoMapLifecycle? onMapLifecycle;
 
   /// 지도에서 예상치 못한 에러가 발생했을 때, 호출되는 함수입니다.
-  /// 대표적으로 네이티브 키 인증 실패했을 때, [KakaoAuthException]가 [exception]에 입력되어 호출됩니다.
-  final void Function(Exception exception)? onMapError;
+  /// 대표적으로 네이티브 키 인증 실패했을 때, [KakaoAuthError]가 [exception]에 입력되어 호출됩니다.
+  final void Function(Error error)? onMapError;
 
   /// 사용자 또는 소스코드에 의해 카메라가 이동을 시작했을 때, 호출되는 함수입니다.
   /// 사용자가 아닌 소스코드(프로그램)에 의해 이동되었다면, [GestureType.unknown]가 [gestureType]으로 입력됩니다.
@@ -143,8 +143,8 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
   }
 
   @override
-  void onMapError(Exception exception) {
-    widget.onMapError?.call(exception);
+  void onMapError(Error error) {
+    widget.onMapError?.call(error);
   }
 
   @override
