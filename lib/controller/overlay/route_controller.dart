@@ -30,15 +30,23 @@ class RouteController extends OverlayController {
     await _invokeMethod("removeRouteLayer", {});
   }
 
-  Future<void> _changeRoute(String routeId, String styleId,
-      List<CurveType> curveType, List<List<LatLng>> points) async {
+  Future<void> _changeMultipleRoute(String routeId, String styleId,
+      List<RouteSegment> segments) async {
     await _invokeMethod("changeRoute", {
       "routeId": routeId,
-      "points": points
-          .map((e1) => e1.map((e2) => e2.toMessageable()).toList())
-          .toList(),
+      "points": segments.map((e1) => e1.points.map((e2) => e2.toMessageable()).toList()).toList(),
       "styleId": styleId,
-      "curveType": curveType.map((e) => e.value).toList(),
+      "curveType": segments.map((e1) => e1.curveType.value).toList(),
+    });
+  }
+
+  Future<void> _changeRoute(String routeId, String styleId,
+      CurveType curveType, List<LatLng> points) async {
+    await _invokeMethod("changeRoute", {
+      "routeId": routeId,
+      "points": [points.map((e) => e.toMessageable()).toList()],
+      "styleId": styleId,
+      "curveType": [curveType]
     });
   }
 
@@ -92,15 +100,13 @@ class RouteController extends OverlayController {
       throw DuplicatedOverlayException(option.id!);
     }
     if (!option._isStyleAdded()) {
-      await manager.addMultipleRouteStyle(option._styles);
+      await manager.addMultipleRouteStyle(option.styles);
     }
     Map<String, dynamic> payload = {"route": option.toMessageable()};
     String routeId = await _invokeMethod("addMultipleRoute", payload);
     final route = MultipleRoute._(this, routeId,
-        points: option._points,
-        style: option._styles,
-        curveType: option._curveType,
-        styleIndex: option._styleIndex,
+        segments: option.segments,
+        styles: option.styles,
         zOrder: option.zOrder);
     _route[routeId] = route;
     return route;
