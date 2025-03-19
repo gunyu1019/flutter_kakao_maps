@@ -63,11 +63,13 @@ part 'models/shape/polyline_style.dart';
 part 'models/shape/rectangle_point.dart';
 
 part 'models/route/base_route.dart';
+part 'models/route/base_multiple_route.dart';
 part 'models/route/multiple_route.dart';
 part 'models/route/multiple_route_option.dart';
 part 'models/route/route.dart';
 part 'models/route/route_pattern.dart';
 part 'models/route/route_style.dart';
+part 'models/route/route_segment.dart';
 
 part 'models/gui/default_gui.dart';
 part 'models/gui/compass.dart';
