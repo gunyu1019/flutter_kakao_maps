@@ -2,7 +2,7 @@ part of '../../kakao_map_sdk.dart';
 
 /// 오버레이(Poi, 도형, 경로선 등)을 관리할 때 사용하는 객체입니다.
 mixin OverlayManager {
-  late MethodChannel overlayChannel;
+  MethodChannel get overlayChannel;
 
   // Controller
   final Map<String, LabelController> _labelController = {};
