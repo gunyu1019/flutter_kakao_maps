@@ -52,6 +52,13 @@ extension CGPoint {
     init(payload: [String: Int]) {
         self.init(x: payload["x"]!, y: payload["y"]!)
     }
+
+    func toMessageable() -> [String: Double] {
+        [
+            "x": self.x,
+            "y": self.y,
+        ]
+    }
 }
 
 extension TextStyle {
