@@ -18,6 +18,8 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     private var overlayController: OverlayController? = nil
 
     private let cameraListener: CameraListener
+    private let mapClickListener: MapClickListener
+    private let poiClickListener: PoiClickListener
 
     init(
         channel: FlutterMethodChannel,
@@ -27,6 +29,8 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         self.overlayChannel = overlayChannel
 
         cameraListener = CameraListener(channel: self.channel)
+        mapClickListener = MapClickListener(channel: self.channel)
+        poiClickListener = PoiClickListener(channel: self.channel)
 
         channel.setMethodCallHandler(handle)
     }
@@ -63,6 +67,21 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         }
         if KakaoMapEvent.CameraMoveEnd.compare(value: event) {
             kakaoMap.addCameraStoppedEventHandler(target: cameraListener, handler: CameraListener.onCameraStoppedEvent)
+        }
+        if KakaoMapEvent.CompassClick.compare(value: event) {
+            kakaoMap.addCameraStoppedEventHandler(target: mapClickListener, handler: MapClickListener.onCompassTappedEvent)
+        }
+        if KakaoMapEvent.MapClick.compare(value: event) {
+            kakaoMap.addMapTappedEventHandler(target: mapClickListener, handler: MapClickListener.onViewInteractionEvent)
+        }
+        if KakaoMapEvent.TerrainClick.compare(value: event) {
+            kakaoMap.addTerrainTappedEventHandler(target: mapClickListener, handler: MapClickListener.onTerrainTappedEvent)
+        }
+        if KakaoMapEvent.TerrainLongClick.compare(value: event) {
+            kakaoMap.addTerrainLongPressedEventHandler(target: mapClickListener, handler: MapClickListener.onTerrainLongPressedEvent)
+        }
+        if KakaoMapEvent.PoiClick.compare(value: event) || KakaoMapEvent.LodPoiClick.compare(value: event) {
+            kakaoMap.addPoisTappedEventHandler(target: poiClickListener, handler: PoiClickListener.onPoisInteractionEvent)
         }
     }
 
