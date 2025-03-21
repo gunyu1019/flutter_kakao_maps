@@ -22,12 +22,18 @@ class RouteSegment with KMessageable {
 
   RouteController? _controller;
 
-  RouteSegment._(this.points, this.styleIndex, this.curveType, this.parent, [RouteController? controller, this.id]) : _controller = controller;
+  RouteSegment._(this.points, this.styleIndex, this.curveType, this.parent);
 
   /// [RouteSegment]를 구성하는 스타일을 반환합니다.
   RouteStyle get style => parent.styles[styleIndex];
 
-  bool _isAdded() => _controller != null;
+  bool _isAdded() => _controller != null && id != null;
+  
+  void _setParent(MultipleRoute route) {
+    parent = route;
+    _controller = route._controller;
+    id = route.id;
+  }
   
   @override
   Map<String, dynamic> toMessageable() {

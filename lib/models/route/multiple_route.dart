@@ -33,9 +33,7 @@ class MultipleRoute extends BaseRoute with BaseMultipleRoute {
         _visible = true,
         _zOrder = zOrder {
           for(RouteSegment segment in _segments) {
-            segment.id = id;
-            segment.parent = this;
-            segment._controller = _controller;
+            segment._setParent(this);
           }
         }
     
