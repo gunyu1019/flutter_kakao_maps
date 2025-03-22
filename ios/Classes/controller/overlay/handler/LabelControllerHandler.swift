@@ -3,6 +3,7 @@ import KakaoMapsSDK
 
 protocol LabelControllerHandler {
     var labelManager: LabelManager { get }
+    var labelListener: PoiClickListener { get }
 
     func createLabelLayer(option: LabelLayerOptions, onSuccess: (Any?) -> Void)
 

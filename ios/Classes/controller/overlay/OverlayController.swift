@@ -9,9 +9,12 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     let shapeManager: ShapeManager
     let routeManager: RouteManager
 
-    init(channel: FlutterMethodChannel, kakaoMap: KakaoMap) {
+    let labelListener: PoiClickListener
+
+    init(channel: FlutterMethodChannel, kakaoMap: KakaoMap, labelListener: PoiClickListener) {
         self.channel = channel
         self.kakaoMap = kakaoMap
+        self.labelListener = labelListener
 
         labelManager = kakaoMap.getLabelManager()
         shapeManager = kakaoMap.getShapeManager()
@@ -83,6 +86,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         if visible && !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
+        poiInstance?.addPoiTappedEventHandler(labelListener, PoiClickListener.onPoiInteractionEvent)
         onSuccess(poiInstance!.itemID)
     }
 
@@ -185,6 +189,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         if visible && !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
+        poiInstance?.addPoiTappedEventHandler(labelListener, PoiClickListener.onLodPoiInteractionEvent)
         onSuccess(poiInstance!.itemID)
     }
 
