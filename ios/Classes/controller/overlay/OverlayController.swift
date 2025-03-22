@@ -86,7 +86,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         if visible && !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
-        poiInstance?.addPoiTappedEventHandler(labelListener, PoiClickListener.onPoiInteractionEvent)
+        poiInstance?.addPoiTappedEventHandler(target: labelListener, handler: PoiClickListener.onPoiInteractionEvent)
         onSuccess(poiInstance!.itemID)
     }
 
@@ -189,7 +189,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         if visible && !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
-        poiInstance?.addPoiTappedEventHandler(labelListener, PoiClickListener.onLodPoiInteractionEvent)
+        poiInstance?.addPoiTappedEventHandler(target: labelListener, handler: PoiClickListener.onLodPoiInteractionEvent)
         onSuccess(poiInstance!.itemID)
     }
 
