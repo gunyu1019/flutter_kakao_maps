@@ -55,8 +55,8 @@ extension CGPoint {
 
     func toMessageable() -> [String: Double] {
         [
-            "x": self.x,
-            "y": self.y,
+            "x": x,
+            "y": y,
         ]
     }
 }

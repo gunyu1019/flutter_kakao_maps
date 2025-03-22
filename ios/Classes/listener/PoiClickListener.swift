@@ -7,22 +7,22 @@ class PoiClickListener {
 
     init(channel: FlutterMethodChannel) {
         self.channel = channel
-        self.enable = false
+        enable = false
     }
 
     func onPoiInteractionEvent(_ param: PoiInteractionEventParam) {
         if enable return
-        channel.invokeMethod("onPoiClick", arguments: [
-            "layerId": param.poiItem.layerID,
-            "poiId": param.poiItem.itemID,
-        ])
+            channel.invokeMethod("onPoiClick", arguments: [
+                "layerId": param.poiItem.layerID,
+                "poiId": param.poiItem.itemID,
+            ])
     }
 
     func onLodPoiInteractionEvent(_ param: PoiInteractionEventParam) {
         if enable return
-        channel.invokeMethod("onLodPoiClick", arguments: [
-            "layerId": param.poiItem.layerID,
-            "poiId": param.poiItem.itemID,
-        ])
+            channel.invokeMethod("onLodPoiClick", arguments: [
+                "layerId": param.poiItem.layerID,
+                "poiId": param.poiItem.itemID,
+            ])
     }
 }

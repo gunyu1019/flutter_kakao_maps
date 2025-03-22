@@ -405,7 +405,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
             layer.showAllLodPois()
         } else {
             layer.hideAllLodPois()
-        }       
+        }
         onSuccess(nil)
     }
 
@@ -424,7 +424,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
             layer.showAllPolylineShapes()
         } else {
             layer.hideAllPolylineShapes()
-        }  
+        }
         onSuccess(nil)
     }
 
@@ -433,12 +433,12 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
             layer.showAllPolygonShapes()
         } else {
             layer.hideAllPolygonShapes()
-        }  
+        }
         onSuccess(nil)
     }
 
     func changeRouteLayerVisible(layer: RouteLayer, visible: Bool, onSuccess: (Any?) -> Void) {
-        layer.visible = visible 
+        layer.visible = visible
         onSuccess(nil)
     }
 }
