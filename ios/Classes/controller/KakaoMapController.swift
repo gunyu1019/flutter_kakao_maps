@@ -81,7 +81,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
             kakaoMap.addTerrainLongPressedEventHandler(target: mapClickListener, handler: MapClickListener.onTerrainLongPressedEvent)
         }
         if KakaoMapEvent.PoiClick.compare(value: event) || KakaoMapEvent.LodPoiClick.compare(value: event) {
-            kakaoMap.addPoisTappedEventHandler(target: poiClickListener, handler: PoiClickListener.onPoisInteractionEvent)
+            poiClickListener.enable = true
         }
     }
 
@@ -101,7 +101,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
 
     func onMapReady(kakaoMap: KakaoMap) {
         self.kakaoMap = kakaoMap
-        overlayController = OverlayController(channel: overlayChannel, kakaoMap: kakaoMap)
+        overlayController = OverlayController(channel: overlayChannel, kakaoMap: kakaoMap, labelListener: poiClickListener)
         channel.invokeMethod("onMapReady", arguments: nil)
     }
 
