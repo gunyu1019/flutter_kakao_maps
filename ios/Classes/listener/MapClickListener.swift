@@ -18,22 +18,22 @@ class MapClickListener {
         ])
     }
 
-    func onCompassTappedEvent(_) {
+    func onCompassTappedEvent() {
         channel.invokeMethod("onCompassClick", arguments: nil)
     }
 
-    func onTerrainTappedEvent(_, param: TerrainInteractionEventParam) {
-        let mapView = param.view as! KakaoMap
+    func onTerrainTappedEvent(_ param: TerrainInteractionEventParam) {
+        let mapView = param.kakaoMap
         let position = mapView.getPosition(CGPoint(x: 0.5, y: 0.5))
 
         channel.invokeMethod("onTerrainClick", arguments: [
-            "point": param.point.toMessageable(),
+            "point": param.position.toMessageable(),
             "position": position.toMessageable(),
         ])
     }
 
-    func onTerrainLongPressedEvent(_, param: TerrainInteractionEventParam) {
-        let mapView = param.view as! KakaoMap
+    func onTerrainLongPressedEvent(_ param: TerrainInteractionEventParam) {
+        let mapView = param.kakaoMap
         let position = mapView.getPosition(CGPoint(x: 0.5, y: 0.5))
 
         channel.invokeMethod("onTerrainLongClick", arguments: [

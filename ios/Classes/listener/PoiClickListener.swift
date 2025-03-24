@@ -11,18 +11,20 @@ class PoiClickListener {
     }
 
     func onPoiInteractionEvent(_ param: PoiInteractionEventParam) {
-        if enable return
+        if enable {
             channel.invokeMethod("onPoiClick", arguments: [
                 "layerId": param.poiItem.layerID,
                 "poiId": param.poiItem.itemID,
             ])
+        }
     }
 
     func onLodPoiInteractionEvent(_ param: PoiInteractionEventParam) {
-        if enable return
+        if enable {
             channel.invokeMethod("onLodPoiClick", arguments: [
                 "layerId": param.poiItem.layerID,
                 "poiId": param.poiItem.itemID,
             ])
+        }
     }
 }
