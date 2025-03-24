@@ -84,6 +84,16 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
             poiClickListener.enable = true
         }
     }
+    
+    func fromScreenPoint(point: CGPoint, onSuccess: ([String:Double]) -> Void) {
+        let position = kakaoMap.getPosition(point)
+        onSuccess(position.toMessageable())
+    }
+
+    func toScreenPoint(position: MapPoint, onSuccess: ([String:Double]) -> Void) {
+        let point = convertMapPointToPoint(kakaoMap: kakaoMap, position: position)
+        onSuccess(point.toMessageable())
+    }
 
     func setGestureEnable(gestureType: GestureType, enable: Bool, onSuccess: (Any?) -> Void) {
         kakaoMap.setGestureEnable(type: gestureType, enable: enable)
