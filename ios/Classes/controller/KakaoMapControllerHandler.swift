@@ -47,6 +47,12 @@ extension KakaoMapControllerHandler {
         case "setBuildingHeightScale":
             let arguments = asDict(call.arguments!)
             setBuildingHeightScale(scale: asFloat(arguments["scale"]!), onSuccess: result)
+        case "fromScreenPoint":s
+            let arguments = asDict(call.arguments!)
+            fromScreenPoint(point: CGPoint(payload: arguments), onSuccess: result)
+        case "toScreenPoint":
+            let arguments = asDict(call.arguments!)
+            toScreenPoint(position: MapPoint(payload: arguments), onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
