@@ -383,9 +383,9 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func changePolylineTextAllVisible(layer: LabelLayer, visible: Bool, onSuccess: (Any?) -> Void) {
         if visible {
-            layer.showPolylineShapes()
+            layer.showAllWaveTexts()
         } else {
-            layer.hidePolylineShapes()
+            layer.hideAllWaveTexts()
         }
         onSuccess(nil)
     }
@@ -419,7 +419,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func changePolylineAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Void) {
+    func changePolylineAllVisible(layer: ShapeLayer, visible: Bool, onSuccess: (Any?) -> Void) {
         if visible {
             layer.showAllPolylineShapes()
         } else {
@@ -428,7 +428,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func changePolygonAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Void) {
+    func changePolygonAllVisible(layer: ShapeLayer, visible: Bool, onSuccess: (Any?) -> Void) {
         if visible {
             layer.showAllPolygonShapes()
         } else {

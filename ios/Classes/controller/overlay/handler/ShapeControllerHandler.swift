@@ -38,9 +38,9 @@ protocol ShapeControllerHandler {
 
     func changePolylineShape(shape: PolylineShape, styleId: String, position: [Polyline], onSuccess: (Any?) -> Void)
 
-    func changePolylineAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Void)
+    func changePolylineAllVisible(layer: ShapeLayer, visible: Bool, onSuccess: (Any?) -> Void)
 
-    func changePolygonAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Void)
+    func changePolygonAllVisible(layer: ShapeLayer, visible: Bool, onSuccess: (Any?) -> Void)
 }
 
 extension ShapeControllerHandler {
