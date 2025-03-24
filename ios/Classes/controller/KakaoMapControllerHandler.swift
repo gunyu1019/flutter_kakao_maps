@@ -19,6 +19,10 @@ protocol KakaoMapControllerHandler {
     func getBuildingHeightScale(onSuccess: (Float) -> Void)
 
     func setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Void)
+
+    func fromScreenPoint(point: CGPoint, onSuccess: ([String:Double]) -> Void)
+
+    func toScreenPoint(position: MapPoint, onSuccess: ([String:Double]) -> Void)
 }
 
 extension KakaoMapControllerHandler {
