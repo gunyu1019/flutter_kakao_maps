@@ -8,7 +8,7 @@ extension MapviewInfo {
         self.init(
             viewName: castSafty(payload["viewName"], caster: asString) ?? "map_\(viewId)",
             appName: "openmap",
-            viewInfoName: asString(payload["mapType"] ?? "openmap"),
+            viewInfoName: asString(payload["mapType"] ?? "map"),
             defaultPosition: MapPoint(payload: payload),
             defaultLevel: asInt(payload["zoomLevel"] ?? 15),
             enabled: asBool(payload["visible"] ?? true)
