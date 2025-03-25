@@ -18,7 +18,8 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
         kakaoMap = KMController(viewContainer: KMView)
         controller = KakaoMapController(
             channel: channel,
-            overlayChannel: overlayChannel
+            overlayChannel: overlayChannel,
+            mapController: kakaoMap
         )
         super.init()
 
