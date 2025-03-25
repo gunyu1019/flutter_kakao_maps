@@ -4,6 +4,7 @@ import KakaoMapsSDK
 class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     private let channel: FlutterMethodChannel
     private let overlayChannel: FlutterMethodChannel
+    private let mapController: KMController
 
     private var lateinitKakaoMap: KakaoMap? = nil
     var kakaoMap: KakaoMap {
@@ -23,10 +24,12 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
 
     init(
         channel: FlutterMethodChannel,
-        overlayChannel: FlutterMethodChannel
+        overlayChannel: FlutterMethodChannel,
+        mapController: KMController
     ) {
         self.channel = channel
         self.overlayChannel = overlayChannel
+        self.mapController = mapController
 
         cameraListener = CameraListener(channel: self.channel)
         mapClickListener = MapClickListener(channel: self.channel)
@@ -106,6 +109,44 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
 
     func setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Void) {
         kakaoMap.buildingScale = scale
+        onSuccess(nil)
+    }
+    
+    func clearCache(onSuccess: (Any?) -> Void) {
+        mapController.clearMemoryCache()
+        mapController.clearViewInfoCaches()
+        onSuccess(nil)
+    }
+
+    func clearDiskCache(onSuccess: (Any?) -> Void) {
+        mapController.clearDiskCache()
+        onSuccess(nil)
+    }
+
+    func canPositionVisible(zoomLevel: Int, position: MapPoint[], onSuccess: (Bool) -> Void) {
+        let visible = kakaoMap.canShow(mapPoints: position, level: zoomLevel)
+        onSuccess(visible)
+    }
+
+    func changeMapType(mapType: String, onSuccess: (Any?) -> Void) {
+        kakaoMap.changeViewInfo(appName: "openmap", viewInfoName: mapType)
+    }
+
+    func getBuildingHeightScale(onSuccess: (Float) -> Void) {
+        onSuccess(kakaoMap.buildingScale)
+    }
+
+    func setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Void) {
+        kakaoMap.buildingScale = scale
+        onSuccess(nil)
+    }
+
+    func overlayVisible(overlayType: String, visible: Bool, onSuccess: (Any?) -> Void) {
+        if visible {
+            kakaoMap.showOverlay(overlayType)
+        } else {
+            kakaoMap.hideOverlay(overlayType)
+        }
         onSuccess(nil)
     }
 
