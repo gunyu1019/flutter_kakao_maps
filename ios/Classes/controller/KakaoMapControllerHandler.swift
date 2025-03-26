@@ -60,6 +60,12 @@ extension KakaoMapControllerHandler {
         case "setBuildingHeightScale": setBuildingHeightScale(scale: asFloat(arguments!["scale"]!), onSuccess: result)
         case "fromScreenPoint": fromScreenPoint(point: CGPoint(payload: arguments!), onSuccess: result)
         case "toScreenPoint": toScreenPoint(position: MapPoint(payload: arguments!), onSuccess: result)
+        case "clearCache": clearCache(onSuccess: result)
+        case "clearDiskCache": clearDiskCache(onSuccess: result)
+        case "canPositionVisible": 
+            let zoomLevel = asInt(arguments!["zoomLevel"]!)
+            let position = asArray(arguments!["position"]!, caster: MapPoint(payload: $0))
+            canPositionVisible(zoomLevel: zoomLevel, position: position, onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
