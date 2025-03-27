@@ -37,7 +37,7 @@ protocol KakaoMapControllerHandler {
 
 extension KakaoMapControllerHandler {
     func handle(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let arguments = castSafty(call.arguments, caster: asDict)
+        let arguments = call.arguments as? [String: Any]
         switch call.method {
         case "getCameraPosition": getCameraPosition(onSuccess: result)
         case "moveCamera":
