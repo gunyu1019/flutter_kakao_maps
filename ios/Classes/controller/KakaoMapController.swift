@@ -72,7 +72,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
             kakaoMap.addCameraStoppedEventHandler(target: cameraListener, handler: CameraListener.onCameraStoppedEvent)
         }
         if KakaoMapEvent.CompassClick.compare(value: event) {
-            kakaoMap.addCameraStoppedEventHandler(target: mapClickListener, handler: MapClickListener.onCompassTappedEvent)
+            kakaoMap.addCompassTappedEventHandler(target: mapClickListener, handler: MapClickListener.onCompassTappedEvent)
         }
         if KakaoMapEvent.MapClick.compare(value: event) {
             kakaoMap.addMapTappedEventHandler(target: mapClickListener, handler: MapClickListener.onViewInteractionEvent)
@@ -113,7 +113,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     }
     
     func clearCache(onSuccess: (Any?) -> Void) {
-        mapController.clearMemoryCache()
+        mapController.clearMemoryCache(kakaoMap.viewName())
         mapController.clearViewInfoCaches()
         onSuccess(nil)
     }
@@ -123,24 +123,15 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         onSuccess(nil)
     }
 
-    func canPositionVisible(zoomLevel: Int, position: MapPoint[], onSuccess: (Bool) -> Void) {
-        let visible = kakaoMap.canShow(mapPoints: position, level: zoomLevel)
+    func canPositionVisible(zoomLevel: Int, position: [MapPoint], onSuccess: (Bool) -> Void) {
+        let visible = kakaoMap.canShow(mapPoints: position, atLevel: zoomLevel)
         onSuccess(visible)
     }
 
     func changeMapType(mapType: String, onSuccess: (Any?) -> Void) {
         kakaoMap.changeViewInfo(appName: "openmap", viewInfoName: mapType)
     }
-
-    func getBuildingHeightScale(onSuccess: (Float) -> Void) {
-        onSuccess(kakaoMap.buildingScale)
-    }
-
-    func setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Void) {
-        kakaoMap.buildingScale = scale
-        onSuccess(nil)
-    }
-
+    
     func overlayVisible(overlayType: String, visible: Bool, onSuccess: (Any?) -> Void) {
         if visible {
             kakaoMap.showOverlay(overlayType)
