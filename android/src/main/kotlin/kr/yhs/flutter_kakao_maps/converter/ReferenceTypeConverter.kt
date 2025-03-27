@@ -5,6 +5,7 @@ import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asString
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asDouble
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asInt
 import kr.yhs.flutter_kakao_maps.FlutterKakaoMapsPlugin
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PointF
@@ -14,8 +15,8 @@ import java.io.ByteArrayInputStream
 
 object ReferenceTypeConverter {
     fun Any.asBitmap(): Bitmap = asMap<Any?>().let { rawPayload: Map<String, Any?> ->
-        val width = rawPayload["width"]!!.asInt()
-        val height = rawPayload["height"]!!.asInt()
+        val width = (rawPayload["width"]!!.asInt() * Resources.getSystem().displayMetrics.density).toInt()
+        val height = (rawPayload["height"]!!.asInt() * Resources.getSystem().displayMetrics.density).toInt()
         if (rawPayload["type"] == 2) {
             val inputStream = ByteArrayInputStream(rawPayload["data"] as ByteArray)
             Bitmap.createScaledBitmap(
