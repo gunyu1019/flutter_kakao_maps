@@ -18,7 +18,7 @@ class MapClickListener {
         ])
     }
 
-    func onCompassTappedEvent() {
+    func onCompassTappedEvent(_: KakaoMap) {
         channel.invokeMethod("onCompassClick", arguments: nil)
     }
 
