@@ -28,13 +28,9 @@ protocol KakaoMapControllerHandler {
 
     func clearDiskCache(onSuccess: (Any?) -> Void)
 
-    func canPositionVisible(zoomLevel: Int, position: MapPoint[], onSuccess: (Bool) -> Void)
+    func canPositionVisible(zoomLevel: Int, position: [MapPoint], onSuccess: (Bool) -> Void)
 
     func changeMapType(mapType: String, onSuccess: (Any?) -> Void)
-
-    func getBuildingHeightScale(onSuccess: (Float) -> Void)
-
-    func setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Void)
 
     func overlayVisible(overlayType: String, visible: Bool, onSuccess: (Any?) -> Void)
 }
@@ -58,13 +54,15 @@ extension KakaoMapControllerHandler {
             )
         case "getBuildingHeightScale": getBuildingHeightScale(onSuccess: result)
         case "setBuildingHeightScale": setBuildingHeightScale(scale: asFloat(arguments!["scale"]!), onSuccess: result)
-        case "fromScreenPoint": fromScreenPoint(point: CGPoint(payload: arguments!), onSuccess: result)
+        case "fromScreenPoint":
+            let pointPayload = asDictTyped(call.arguments!, caster: asDouble)
+            fromScreenPoint(point: CGPoint(payload: pointPayload), onSuccess: result)
         case "toScreenPoint": toScreenPoint(position: MapPoint(payload: arguments!), onSuccess: result)
         case "clearCache": clearCache(onSuccess: result)
         case "clearDiskCache": clearDiskCache(onSuccess: result)
         case "canPositionVisible": 
             let zoomLevel = asInt(arguments!["zoomLevel"]!)
-            let position = asArray(arguments!["position"]!, caster: MapPoint(payload: $0))
+            let position = asArray(arguments!["position"]!, caster: { MapPoint(payload: asDict($0)) })
             canPositionVisible(zoomLevel: zoomLevel, position: position, onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
