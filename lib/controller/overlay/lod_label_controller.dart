@@ -96,6 +96,7 @@ class LodLabelController extends BaseLabelController {
       "poi": <String, dynamic>{
         "id": id,
         "text": text,
+        "clickable": true,
         "rank": rank,
         "styleId": styleId,
         "transform": transform?.value,

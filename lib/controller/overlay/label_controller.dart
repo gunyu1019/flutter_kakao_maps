@@ -135,6 +135,7 @@ class LabelController extends BaseLabelController {
     Map<String, dynamic> payload = {
       "poi": <String, dynamic>{
         "id": id,
+        "clickable": true,
         "text": text,
         "rank": rank,
         "styleId": styleId,
