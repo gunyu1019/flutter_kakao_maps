@@ -17,10 +17,17 @@ class CameraListener {
     func onCameraStoppedEvent(_ param: CameraActionEventParam) {
         let mapView = param.view as! KakaoMap
         let position = mapView.getPosition(CGPoint(x: 0.5, y: 0.5))
-
+        var payload: [String: Any] = [
+            "zoomLevel": mapView.zoomLevel,
+            "tiltAngle": mapView.tiltAngle,
+            "rotationAngle": mapView.rotationAngle,
+            "height": mapView.cameraHeight,
+        ]
+        payload.merge(position.toMessageable()) { current, _ in current }
+        
         channel.invokeMethod("onCameraMoveEnd", arguments: [
             "gesture": param.by.rawValue,
-            "position": position.toMessageable(),
+            "position":payload
         ])
     }
 }
