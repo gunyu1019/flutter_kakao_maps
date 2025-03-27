@@ -362,17 +362,17 @@ class KakaoMapController extends KakaoMapControllerSender with OverlayManager {
 
   @override
   LabelController get labelLayer =>
-      _labelController[OverlayManager._defaultKey]!;
+      _labelController[LabelController.defaultId]!;
 
   @override
   LodLabelController get lodLabelLayer =>
-      _lodLabelController[OverlayManager._defaultKey]!;
+      _lodLabelController[LodLabelController.defaultId]!;
 
   @override
   ShapeController get shapeLayer =>
-      _shapeController[OverlayManager._defaultKey]!;
+      _shapeController[ShapeController.defaultId]!;
 
   @override
   RouteController get routeLayer =>
-      _routeController[OverlayManager._defaultKey]!;
+      _routeController[RouteController.defaultId]!;
 }

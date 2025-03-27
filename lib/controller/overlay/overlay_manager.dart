@@ -79,13 +79,13 @@ mixin OverlayManager {
   List<RouteStyle>? getMultipleRotueStyle(String id);
 
   void _initalizeOverlayController() {
-    _labelController[_defaultKey] =
+    _labelController[LabelController.defaultId] =
         LabelController._(overlayChannel, this, LabelController.defaultId);
-    _lodLabelController[_defaultKey] = LodLabelController._(
+    _lodLabelController[LodLabelController.defaultId] = LodLabelController._(
         overlayChannel, this, LodLabelController.defaultId);
-    _shapeController[_defaultKey] =
+    _shapeController[ShapeController.defaultId] =
         ShapeController._(overlayChannel, this, ShapeController.defaultId);
-    _routeController[_defaultKey] =
+    _routeController[RouteController.defaultId] =
         RouteController._(overlayChannel, this, RouteController.defaultId);
   }
 
@@ -160,6 +160,4 @@ mixin OverlayManager {
 
   /// 기본으로 생성된 RouteLayer([RouteController])를 가져옵니다.
   RouteController get routeLayer;
-
-  static const String _defaultKey = 'default';
 }
