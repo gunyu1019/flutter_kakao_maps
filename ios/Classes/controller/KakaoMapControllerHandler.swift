@@ -33,6 +33,14 @@ protocol KakaoMapControllerHandler {
     func changeMapType(mapType: String, onSuccess: (Any?) -> Void)
 
     func overlayVisible(overlayType: String, visible: Bool, onSuccess: (Any?) -> Void)
+
+    func defaultGUIvisible(type: DefaultGUIType, visible: Bool, onSuccess: (Any?) -> Void)
+
+    func defaultGUIposition(type: DefaultGUIType, gravity: Int, x: Float, y: Float, onSuccess: (Any?) -> Void)
+
+    func scaleAutohide(autohide: Bool, onSuccess: (Any?) -> Void)
+
+    func scaleAnimationTime(fadeIn: Int, fadeOut: Int, retention: Int, onSuccess: (Any?) -> Void)
 }
 
 extension KakaoMapControllerHandler {
@@ -64,6 +72,13 @@ extension KakaoMapControllerHandler {
             let zoomLevel = asInt(arguments!["zoomLevel"]!)
             let position = asArray(arguments!["position"]!, caster: { MapPoint(payload: asDict($0)) })
             canPositionVisible(zoomLevel: zoomLevel, position: position, onSuccess: result)
+        case "changeMapType": changeMapType(mapType: asString(arguments!["mapType"]!), onSuccess: result)
+        case "overlayVisible": 
+            overlayVisible(
+                overlayType: asString(arguments!["overlayType"]!), 
+                visible: asBool(arguments!["visible"]!), 
+                onSuccess: result
+            )
         default: result(FlutterMethodNotImplemented)
         }
     }
