@@ -141,6 +141,45 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         onSuccess(nil)
     }
 
+    func defaultGUIvisible(type: DefaultGUIType, visible: Bool, onSuccess: (Any?) -> Void) {
+        switch type {
+            case .compass: 
+                if (visible) {
+                    kakaoMap.showCompass()
+                } else {
+                    kakaoMap.hideCompass()
+                }
+            case .scale:
+                if (visible) {
+                    kakaoMap.showScaleBar()
+                } else {
+                    kakaoMap.hideScaleBar()
+                }
+            case .logo: 
+                break
+        }
+    }
+
+    func defaultGUIposition(type: DefaultGUIType, gravity: Int, x: Float, y: Float, onSuccess: (Any?) -> Void) {
+
+    }
+
+    func scaleAutohide(autohide: Bool, onSuccess: (Any?) -> Void) {
+        kakaoMap.setScaleBarAutoDisappear(autohide)
+        onSuccess(nil)
+    }
+
+    func scaleAnimationTime(fadeIn: Int, fadeOut: Int, retention: Int, onSuccess: (Any?) -> Void) {
+        kakaoMap.setScaleBarFadeInOutOption(
+            FadeInOutOptions(
+                fadeInTime: fadeIn,
+                fadeOutTime: fadeOut,
+                retentionTime: retention
+            )
+        )
+        onSuccess(nil)
+    }
+
     func onMapReady(kakaoMap: KakaoMap) {
         self.kakaoMap = kakaoMap
         overlayController = OverlayController(channel: overlayChannel, kakaoMap: kakaoMap, labelListener: poiClickListener)
