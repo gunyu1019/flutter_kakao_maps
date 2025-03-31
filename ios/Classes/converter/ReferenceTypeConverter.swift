@@ -75,3 +75,11 @@ extension TextStyle {
         )
     }
 }
+
+
+func asGuiAlignment(payload: Int) -> GuiAlignment {
+    return GuiAlignment(
+        vAlign: VerticalAlign(rawValue: payload % 3),
+        hAlign: HorizontalAlign(rawValue: payload / 3)
+    )
+}
