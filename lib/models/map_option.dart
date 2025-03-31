@@ -1,4 +1,4 @@
-clpart of '../kakao_map_sdk.dart';
+part of '../kakao_map_sdk.dart';
 
 /// 지도를 시작될 때, 지도의 기본 정보를 정의하는 객체입니다.
 class KakaoMapOption {
