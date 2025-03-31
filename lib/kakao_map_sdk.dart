@@ -36,6 +36,7 @@ part 'initializer/sdk_initiializer_implement.dart';
 /* models */
 part 'models/map_option.dart';
 part 'models/map_lifecycle.dart';
+part 'models/map_gravity.dart';
 part 'models/base/point.dart';
 part 'models/base/image.dart';
 part 'models/base/messageable.dart';
@@ -81,11 +82,12 @@ part 'models/enums/default_gui_type.dart';
 part 'models/enums/event_type.dart';
 part 'models/enums/map_overlay.dart';
 part 'models/enums/map_type.dart';
-part 'models/enums/map_gravity.dart';
 part 'models/enums/camera_update_type.dart';
 part 'models/enums/gesture_type.dart';
 part 'models/enums/image_type.dart';
 part 'models/enums/overlay_type.dart';
+part 'models/enums/horizontal_align.dart';
+part 'models/enums/vertical_align.dart';
 
 part 'models/enums/label/competition_type.dart';
 part 'models/enums/label/competition_unit.dart';
