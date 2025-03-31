@@ -8,7 +8,7 @@ class Route extends BaseRoute {
 
   @override
   final String id;
-  
+
   @override
   bool _visible;
 

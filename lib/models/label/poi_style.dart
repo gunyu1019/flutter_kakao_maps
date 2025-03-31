@@ -46,7 +46,8 @@ class PoiStyle with KMessageable {
       this.padding = 0.0,
       this.icon,
       this.iconTransition = const PoiTransition(),
-      this.textGravity = MapGravity.bottom,
+      this.textGravity =
+          const MapGravity(HorizontalAlign.center, VerticalAlign.bottom),
       this.textStyle = const [],
       this.textTransition = const PoiTransition(),
       this.zoomLevel = 0})
@@ -60,7 +61,8 @@ class PoiStyle with KMessageable {
       this.padding = 0.0,
       this.icon,
       this.iconTransition = const PoiTransition(),
-      this.textGravity = MapGravity.bottom,
+      this.textGravity =
+          const MapGravity(HorizontalAlign.center, VerticalAlign.bottom),
       this.textStyle = const [],
       this.textTransition = const PoiTransition(),
       this.zoomLevel = 0})

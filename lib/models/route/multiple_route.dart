@@ -11,7 +11,7 @@ class MultipleRoute extends BaseRoute with BaseMultipleRoute {
 
   @override
   final String id;
-  
+
   @override
   bool _visible;
 
@@ -27,16 +27,16 @@ class MultipleRoute extends BaseRoute with BaseMultipleRoute {
   MultipleRoute._(this._controller, this.id,
       {required List<RouteStyle> styles,
       required List<RouteSegment> segments,
-      required int zOrder}) :
-        _segments = segments,
+      required int zOrder})
+      : _segments = segments,
         _styles = styles,
         _visible = true,
         _zOrder = zOrder {
-          for(RouteSegment segment in _segments) {
-            segment._setParent(this);
-          }
-        }
-    
+    for (RouteSegment segment in _segments) {
+      segment._setParent(this);
+    }
+  }
+
   /// [MultipleRoute]에서 사용하는 스타일([RouteStyle])을 다시 정의합니다.
   Future<void> changeStyle(List<RouteStyle> styles) async {
     if (styles.isEmpty) {

@@ -20,7 +20,7 @@ class KakaoAuthError implements Error {
 
   @override
   String toString() => "KakaoAuthError(code: $code, message: $message)";
-  
+
   @override
   StackTrace? get stackTrace => StackTrace.empty;
 }

@@ -30,18 +30,20 @@ class RouteController extends OverlayController {
     await _invokeMethod("removeRouteLayer", {});
   }
 
-  Future<void> _changeMultipleRoute(String routeId, String styleId,
-      List<RouteSegment> segments) async {
+  Future<void> _changeMultipleRoute(
+      String routeId, String styleId, List<RouteSegment> segments) async {
     await _invokeMethod("changeRoute", {
       "routeId": routeId,
-      "points": segments.map((e1) => e1.points.map((e2) => e2.toMessageable()).toList()).toList(),
+      "points": segments
+          .map((e1) => e1.points.map((e2) => e2.toMessageable()).toList())
+          .toList(),
       "styleId": styleId,
       "curveType": segments.map((e1) => e1.curveType.value).toList(),
     });
   }
 
-  Future<void> _changeRoute(String routeId, String styleId,
-      CurveType curveType, List<LatLng> points) async {
+  Future<void> _changeRoute(String routeId, String styleId, CurveType curveType,
+      List<LatLng> points) async {
     await _invokeMethod("changeRoute", {
       "routeId": routeId,
       "points": [points.map((e) => e.toMessageable()).toList()],

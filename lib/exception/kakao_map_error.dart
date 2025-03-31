@@ -11,8 +11,9 @@ class KakaoMapError implements Error {
   KakaoMapError(this.className, this.message);
 
   @override
-  String toString() => "KakaoMapError(className: $className, message: $message)";
-  
+  String toString() =>
+      "KakaoMapError(className: $className, message: $message)";
+
   @override
   StackTrace? get stackTrace => StackTrace.empty;
 }
