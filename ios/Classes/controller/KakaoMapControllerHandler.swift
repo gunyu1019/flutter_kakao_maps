@@ -79,6 +79,23 @@ extension KakaoMapControllerHandler {
                 visible: asBool(arguments!["visible"]!), 
                 onSuccess: result
             )
+        case "defaultGUIvisible":
+            let guiType = DefaultGUIType(rawValue: asInt(arguments!["type"]!))
+            let visible = asBool(arguments!["visible"]!)
+            defaultGUIvisible(type: guiType, visible: visible, onSuccess: result)
+        case "defaultGUIposition":
+            let guiType = DefaultGUIType(rawValue: asInt(arguments!["type"]!))
+            let position = CGPoint(x: asDouble(arguments!["x"]!), y: asDouble(arguments!["y"]!))
+            let gravity = asGuiAlignment(asInt(arguments!["gravity"]!))
+            defaultGUIposition(type: guiType, gravity: gravity, position: position, onSuccess: result)
+        case "scaleAutohide":
+            let autohide = asBool(arguments!["autohide"]!)
+            scaleAutohide(autohide: autohide, onSuccess: result)
+        case "scaleAnimationTime":
+            let fadeIn = asInt(arguments!["fadeIn"]!)
+            let fadeOut = asInt(arguments!["fadeIn"]!)
+            let retention = asInt(arguments!["fadeIn"]!)
+            scaleAnimationTime(fadeIn: fadeIn, fadeOut: fadeOut, retention: retention, onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
