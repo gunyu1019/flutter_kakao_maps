@@ -36,7 +36,7 @@ protocol KakaoMapControllerHandler {
 
     func defaultGUIvisible(type: DefaultGUIType, visible: Bool, onSuccess: (Any?) -> Void)
 
-    func defaultGUIposition(type: DefaultGUIType, gravity: Int, x: Float, y: Float, onSuccess: (Any?) -> Void)
+    func defaultGUIposition(type: DefaultGUIType, gravity: GuiAlignment, position: CGPoint, onSuccess: (Any?) -> Void)
 
     func scaleAutohide(autohide: Bool, onSuccess: (Any?) -> Void)
 
