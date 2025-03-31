@@ -158,10 +158,16 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
             case .logo: 
                 break
         }
+        onSuccess(nil)
     }
 
-    func defaultGUIposition(type: DefaultGUIType, gravity: Int, x: Float, y: Float, onSuccess: (Any?) -> Void) {
-
+    func defaultGUIposition(type: DefaultGUIType, gravity: GuiAlignment, position: CGPoint, onSuccess: (Any?) -> Void) {
+        switch type {
+            case .compass: kakaoMap.setCompassPosition(origin: gravity, position: position)
+            case .scale: kakaoMap.setScaleBarPosition(origin: gravity, position: position)
+            case .logo: kakaoMap.setLogoPosition(origin: gravity, position: position)
+        }
+        onSuccess(nil)
     }
 
     func scaleAutohide(autohide: Bool, onSuccess: (Any?) -> Void) {
