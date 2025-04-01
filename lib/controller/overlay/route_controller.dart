@@ -48,7 +48,7 @@ class RouteController extends OverlayController {
       "routeId": routeId,
       "points": [points.map((e) => e.toMessageable()).toList()],
       "styleId": styleId,
-      "curveType": [curveType]
+      "curveType": [curveType.value]
     });
   }
 
