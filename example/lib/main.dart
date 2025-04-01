@@ -160,7 +160,11 @@ class _MyAppState extends State<MyApp> {
                   aspectRatio: 1.0,
                   stroke: 2,
                   strokeColor: Colors.white)
-            ]));
+            ]),
+      onClick: () {
+          print("Poi Clicked");
+      }
+    );
     // .then((poi) => poi.changeText("KAKAO MAP LABEL"));
 
     /// 카카오 판교캠퍼스 주변에 "휘어지는 글씨 테스트"를 그린다.
@@ -192,7 +196,6 @@ class _MyAppState extends State<MyApp> {
         .then((shape) {
       shape.changeStyle(PolygonStyle(Colors.red));
     });
-    return;
 
     /// 경부고속도로를 따라 경로선을 그린다.
     controller.routeLayer.addRoute(const [
@@ -201,10 +204,14 @@ class _MyAppState extends State<MyApp> {
       LatLng(37.40049196436421, 127.09982509355939),
       LatLng(37.40605078821915, 127.09458697605862),
       LatLng(37.43918161748264, 127.06078195006104),
-    ], RouteStyle(Colors.blue, 10));
+    ], RouteStyle(Colors.blue, 10)).then((route) {
+      route.changeStyle(RouteStyle(Colors.red, 12));
+    });
 
     controller.compass.show();
+    controller.compass.changePosition(MapGravity(HorizontalAlign.left, VerticalAlign.bottom), 10, 20);
     controller.scaleBar.show();
+    controller.scaleBar.changePosition(MapGravity(HorizontalAlign.right, VerticalAlign.top), 20, 30);
   }
 
   void onMapError(Error exception) {
