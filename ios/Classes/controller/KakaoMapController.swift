@@ -175,7 +175,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         onSuccess(nil)
     }
 
-    func scaleAnimationTime(fadeIn: Int, fadeOut: Int, retention: Int, onSuccess: (Any?) -> Void) {
+    func scaleAnimationTime(fadeIn: UInt32, fadeOut: UInt32, retention: UInt32, onSuccess: (Any?) -> Void) {
         kakaoMap.setScaleBarFadeInOutOption(
             FadeInOutOptions(
                 fadeInTime: fadeIn,
