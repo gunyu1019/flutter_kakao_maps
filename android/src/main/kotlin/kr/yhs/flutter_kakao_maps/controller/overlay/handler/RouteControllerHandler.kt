@@ -50,7 +50,7 @@ interface RouteControllerHandler {
             "removeRoute" -> removeRoute(layer!!, routeLine!!, result::success)
             "changeRoute" -> {
                 val styleId = arguments["styleId"]!!.asString()
-                val curveType = arguments["curvedType"]!!.asList<Any>().map{ it.asInt().let{ CurveType.getEnum(it) }}
+                val curveType = arguments["curveType"]!!.asList<Any>().map{ it.asInt().let{ CurveType.getEnum(it) }}
                 val points = arguments["points"]!!.asList<Any>().map<Any, List<LatLng>> {
                     it.asList<Any>().map{ it.asLatLng() } 
                }
