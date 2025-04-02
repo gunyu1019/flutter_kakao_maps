@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
@@ -24,28 +25,28 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    var mediaQueryData = MediaQuery.of(context);
-    var screenWidth = mediaQueryData.size.width;
-    var screenHeight = mediaQueryData.size.height;
+    var router = GoRouter(routes: [
+      GoRoute(path: '/', builder: (context, state) => const KakaoMapView())
+    ], initialLocation: '/');
+    return MaterialApp.router(
+      routerConfig: router,
+    );
+  }
+}
 
-    return MaterialApp(
-        home: Scaffold(
-          body: SizedBox(
-            width: screenWidth,
-            height: screenHeight,
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [],
-            ),
-          ),
-        ));
+class KakaoMapView extends StatefulWidget {
+  const KakaoMapView({super.key});
+
+  @override
+  State<KakaoMapView> createState() => _KakaoMapViewState();
+}
+
+
+class _KakaoMapViewState extends State<KakaoMapView> {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 
-  /// 지도가 문제없이 불러와지면 호출되는 함수
-  /// [controller]에는 지도를 조작하기 위한 컨트롤러 객체가 담겨있다.
-  void onMapReady(KakaoMapController controller) {
-  }
-
-  void onMapError(Error exception) {
-  }
 }
