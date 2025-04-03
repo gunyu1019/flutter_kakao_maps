@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
-import 'package:kakao_map_sdk_example/components/controller_mobile.dart';
 
 class KakaoMapView extends StatefulWidget {
-  const KakaoMapView({super.key});
+  final Widget menuPage;
+
+  const KakaoMapView({super.key, required this.menuPage});
 
   @override
   State<KakaoMapView> createState() => _KakaoMapViewState();
@@ -35,12 +36,12 @@ class _KakaoMapViewState extends State<KakaoMapView> {
           right: 0,
           bottom: 200,
           child: mapWidget(context)),
-      const AnimatedPositioned(
-          duration: Duration(milliseconds: 150),
+      AnimatedPositioned(
+          duration: const Duration(milliseconds: 150),
           left: 0,
           right: 0,
           bottom: 0,
-          child: MobileControllerWidget()),
+          child: widget.menuPage)
     ]);
     return Stack(
         alignment: AlignmentDirectional.centerStart, children: children);
