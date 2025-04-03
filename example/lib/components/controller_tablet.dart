@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class KakaoMapControllerWidget extends StatefulWidget {
-  const KakaoMapControllerWidget({super.key});
+class TabletControllerWidget extends StatefulWidget {
+  const TabletControllerWidget({super.key});
 
   @override
-  State<KakaoMapControllerWidget> createState() => _KakaoMapControllerWidgetState();
+  State<TabletControllerWidget> createState() => _TabletControllerWidgetState();
 }
 
-class _KakaoMapControllerWidgetState extends State<KakaoMapControllerWidget> {
+class _TabletControllerWidgetState extends State<TabletControllerWidget> {
   @override
   Widget build(BuildContext context) {
     return const Card();
