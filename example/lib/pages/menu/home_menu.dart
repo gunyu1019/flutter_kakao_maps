@@ -43,7 +43,7 @@ class _HomeMenuState extends State<HomeMenu> with TitleComponent {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            titleText(),
+            Flexible(child: titleText()),
             Row(spacing: 8, children: [
               flutterCard(),
               platformCard(),
