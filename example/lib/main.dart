@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
-import 'package:kakao_map_sdk_example/pages/kakao_map_view.dart';
-import 'package:kakao_map_sdk_example/pages/menu/home_menu.dart';
+import 'package:kakao_map_sdk_example/pages/routers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,14 +23,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    var router = GoRouter(routes: [
-      ShellRoute(
-        builder: (context, state, widget) => KakaoMapView(menuPage: widget),
-        routes: [
-          GoRoute(path: '/', builder: (context, state) => HomeMenu())
-        ]
-      )
-    ], initialLocation: '/');
     return MaterialApp.router(
       routerConfig: router,
     );
