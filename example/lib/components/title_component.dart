@@ -3,23 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kakao_map_sdk_example/pages/routers.dart';
 
 mixin TitleComponent {
-  Widget title() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            titleText(),
-            Row(spacing: 8, children: [
-              flutterCard(),
-              platformCard(),
-            ])
-          ],
-        ));
-  }
-
   Widget titleText([String? text]) =>
       Text(text ?? "Kakao Map SDK", style: titleTextStyle);
 
@@ -64,22 +50,11 @@ mixin TitleComponent {
   Widget flutterCard() => baseSubCard("Flutter", FontAwesomeIcons.flutter,
       backgroundColor: flutterColor);
 
-  Widget backButtom(void Function() onPressed) => IconButton(
-      onPressed: onPressed, icon: const FaIcon(FontAwesomeIcons.chevronLeft));
-
-  Widget divider() => const Divider(
-      height: 20,
-      thickness: 3,
-      indent: 10,
-      endIndent: 10,
-      color: Color.fromARGB(128, 0, 0, 0));
+  Widget backButtom([void Function()? onPressed]) => IconButton(
+      onPressed: onPressed ?? () => router.pop(), icon: const FaIcon(FontAwesomeIcons.chevronLeft), padding: const EdgeInsets.all(0));
 
   final titleTextStyle = const TextStyle(
       fontSize: 24, color: Colors.black, decoration: TextDecoration.none);
-  final cardTitleTextStyle = const TextStyle(
-      fontSize: 16, color: Colors.black, decoration: TextDecoration.none);
-  final cardDescriptionTextStyle = const TextStyle(
-      fontSize: 12, color: Colors.black, decoration: TextDecoration.none);
 
   final Color flutterColor = const Color.fromARGB(255, 19, 137, 253);
   final Color androidColor = const Color.fromARGB(255, 50, 222, 132);

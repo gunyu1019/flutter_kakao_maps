@@ -16,23 +16,40 @@ class HomeMenu extends StatefulWidget {
 class _HomeMenuState extends State<HomeMenu> with TitleComponent {
   @override
   Widget build(BuildContext context) {
-    var children = <Widget>[
-      title(),
-    ];
+    var children = <Widget>[];
     children.addAll(Routes.values.map((element) {
       if (!element.menuInfo.visible || element.menuInfo.icon == null) {
         return const SizedBox.shrink();
       }
       return cardButtom(element.menuInfo.iconWidget!, element.menuInfo.title,
           element.menuInfo.description, () {
-            router.go(element.menuInfo.id);
+            router.push(element.menuInfo.id);
           });
     }));
-
     return Column(
       spacing: 1,
-      children: children,
+      children: [
+        title(),
+        Expanded(child: SingleChildScrollView(
+          child: Column(children: children),
+        ))
+      ],
     );
+  }
+
+  Widget title() {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            titleText(),
+            Row(spacing: 8, children: [
+              flutterCard(),
+              platformCard(),
+            ])
+          ],
+        ));
   }
 
   Widget cardButtom(Widget icon, String title, String description,
@@ -54,4 +71,9 @@ class _HomeMenuState extends State<HomeMenu> with TitleComponent {
                       style: cardDescriptionTextStyle,
                     ))),
           ));
+  
+  final cardTitleTextStyle = const TextStyle(
+      fontSize: 16, color: Colors.black, decoration: TextDecoration.none);
+  final cardDescriptionTextStyle = const TextStyle(
+      fontSize: 12, color: Colors.black, decoration: TextDecoration.none);
 }
