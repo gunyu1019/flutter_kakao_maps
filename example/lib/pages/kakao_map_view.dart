@@ -49,7 +49,9 @@ class _KakaoMapViewState extends State<KakaoMapView> {
                 padding: const EdgeInsets.all(8), child: widget.menuPage),
           ))
     ]);
-    return Stack(
-        alignment: AlignmentDirectional.centerStart, children: children);
+    return Scaffold(
+      body: Stack(
+        alignment: AlignmentDirectional.centerStart, children: children)
+    );
   }
 }
