@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kakao_map_sdk_example/components/control_component.dart';
 import 'package:kakao_map_sdk_example/components/title_component.dart';
 import 'package:kakao_map_sdk_example/models/menu_info.dart';
-import 'package:kakao_map_sdk_example/pages/routers.dart';
 
 class CameraOptionMenu extends StatefulWidget {
   const CameraOptionMenu({super.key});
@@ -11,11 +11,11 @@ class CameraOptionMenu extends StatefulWidget {
   State<CameraOptionMenu> createState() => _CameraOptionMenuState();
 
   static const MenuInfo menuInfo = MenuInfo("/camera", "카메라 기능",
-      "지도를 비추고 있는 카메라 관련 기능", FontAwesomeIcons.camera, true);
+      "지도를 비추고 있는 카메라를 조작합니다.", FontAwesomeIcons.camera, true);
 }
 
 class _CameraOptionMenuState extends State<CameraOptionMenu>
- with TitleComponent {
+ with TitleComponent, ControlComponent {
   Widget title() =>
     Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
@@ -70,14 +70,26 @@ class _CameraOptionMenuState extends State<CameraOptionMenu>
     ]);
   }
 
+  Widget applyCameraButton(String title, void Function() onPressed) => OutlinedButton(
+    onPressed: onPressed, 
+    child: SizedBox(width: double.infinity, child: Text(title, style: buttonText, textAlign: TextAlign.center,))
+  );
+
   @override
   Widget build(BuildContext context) => Column(
       children: [
         title(),
         Expanded(child: SingleChildScrollView(
-          child: Column(children: [
-            cameraInfoText()
-          ]),
+          child: Column(
+            spacing: 2,
+            children: [
+              cameraInfoText(),
+              slider("애니메이션", 0, (value) {}),
+              slider("기울기", 0, (value) {}),
+              slider("틸트", 0, (value) {}),
+              applyCameraButton("적용", () {})
+            ]
+          ),
         ))
       ],
     );
@@ -86,4 +98,6 @@ class _CameraOptionMenuState extends State<CameraOptionMenu>
       fontSize: 14, color: Colors.black, decoration: TextDecoration.none, fontWeight: FontWeight.bold);
   final positionValueText = const TextStyle(
       fontSize: 14, color: Colors.black, decoration: TextDecoration.none, fontWeight: FontWeight.normal);
+  final buttonText = const TextStyle(
+      fontSize: 16, color: Colors.black, decoration: TextDecoration.none, fontWeight: FontWeight.normal);
 }
