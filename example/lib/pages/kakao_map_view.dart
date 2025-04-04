@@ -34,7 +34,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
           top: 0,
           left: 0,
           right: 0,
-          bottom: mediaQuery.size.height * 0.3,
+          bottom: mediaQuery.size.height * 0.35,
           child: mapWidget(context)),
       AnimatedPositioned(
           duration: const Duration(milliseconds: 150),
@@ -43,7 +43,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
           bottom: 0,
           child: Container(
             constraints:
-                BoxConstraints(maxHeight: mediaQuery.size.height * 0.3),
+                BoxConstraints(maxHeight: mediaQuery.size.height * 0.35),
             width: mediaQuery.size.width,
             child: Padding(
                 padding: const EdgeInsets.all(8), child: widget.menuPage),
