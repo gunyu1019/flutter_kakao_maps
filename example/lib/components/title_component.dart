@@ -7,7 +7,7 @@ import 'package:kakao_map_sdk_example/pages/routers.dart';
 
 mixin TitleComponent {
   Widget titleText([String? text]) =>
-      Text(text ?? "Kakao Map SDK", style: titleTextStyle);
+      Text(text ?? "Kakao Map SDK", style: titleTextStyle, overflow: TextOverflow.ellipsis,);
 
   Widget baseSubCard(String text, IconData? icon,
       {Color? color, Color? backgroundColor}) {
@@ -54,7 +54,7 @@ mixin TitleComponent {
       onPressed: onPressed ?? () => router.pop(), icon: const FaIcon(FontAwesomeIcons.chevronLeft), padding: const EdgeInsets.all(0));
 
   final titleTextStyle = const TextStyle(
-      fontSize: 24, color: Colors.black, decoration: TextDecoration.none);
+      fontSize: 24, color: Colors.black, decoration: TextDecoration.none, fontWeight: FontWeight.bold);
 
   final Color flutterColor = const Color.fromARGB(255, 19, 137, 253);
   final Color androidColor = const Color.fromARGB(255, 50, 222, 132);
