@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 mixin TitleComponent {
   Widget title() {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -67,7 +67,12 @@ mixin TitleComponent {
   Widget backButtom(void Function() onPressed) => IconButton(
       onPressed: onPressed, icon: const FaIcon(FontAwesomeIcons.chevronLeft));
 
-  Widget divider() => const Divider(height: 20, thickness: 3, indent: 10, endIndent: 10, color: Color.fromARGB(128, 0, 0, 0));
+  Widget divider() => const Divider(
+      height: 20,
+      thickness: 3,
+      indent: 10,
+      endIndent: 10,
+      color: Color.fromARGB(128, 0, 0, 0));
 
   final titleTextStyle = const TextStyle(
       fontSize: 24, color: Colors.black, decoration: TextDecoration.none);
