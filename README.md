@@ -56,7 +56,11 @@ void main() async {
 Widget build(BuildContext context) {
   return Scaffold(
     body: KakaoMap(
-      option: const KakaoMapOption(),
+      option: const KakaoMapOption(
+        position: LatLng(기본 위치),
+        zoomLevel: 16,
+        mapType: MapType.normal,
+      ),
       onMapReady: (KakaoMapController controller) {
         print("카카오 지도가 정상적으로 불러와졌습니다.");
       },
@@ -64,14 +68,11 @@ Widget build(BuildContext context) {
   );
 }
 ```
-`KakaoMapOption` 매게변수에는 지도를 처음불러올 때 값을 설정해주실 수 있습니다.<br/>
-`position`과 `zoomLevel` 인수는 지도를 불러오면 보여줄 좌표값과 확대/축소 비율입니다.<br/>
-`mapType`은 지도의 유형입니다. 스카이뷰와 일반 지도 중 선택하여 사용자에게 제공할 수 있습니다.
-
+option 매게변수에는 초기화 과정에서 기본 값([KakaoMapOption](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapOption-class.html))을 설정할 수 있습니다.<br/>
 아무 문제 없이 지도를 불러온다면, `onMapReady` 매개변수에 담긴 함수가 호출됩니다.<br/>
-함수 매개변수에는 지도를 관리하기 위한 컨트롤러가 입력됩니다.
+함수 매개변수에는 지도를 관리하기 위한 컨트롤러([KakaoMapController](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController-class.html))가 입력됩니다.
 
-## 3. 지도 그리기
+## 3. Write Overlay(Grapic Element) to Map
 Kakao Map SDK는 사용자에게 표현하기 위한 다양한 그래픽 요소(오버레이 기능)를 제공하고 있습니다.<br/>
 다양한 그래픽 요소는 `KakaoMapController`를 통해 제어하실 수 있습니다.
 
@@ -152,8 +153,8 @@ controller.routeLayer.addRoute(const [
 );
 ```
 
-`Route` 기능에는 일정 간격마다 이미지를 삽입하여 패턴 효과를 제공할 수 있습니다.
-패턴 효과는 `RouteStyle`에 pattern 인수를 제공하여 이용할 수 있습니다.
+`Route` 기능에는 일정 간격마다 이미지를 삽입하는 패턴 효과를 제공할 수 있습니다.
+패턴 효과는 `RouteStyle.withPattern` 생성자를 이용하거나, `pattern` 인수를 제공하여 정의할 수 있습니다.
 
 ```dart
 // 6px 마다 원형의 도형의 패턴을 가지고 있는 스타일을 정의합니다.
@@ -164,9 +165,8 @@ RouteStyle.withPattern(
 )
 ```
 
-## 4. 기여 / 이슈 제보
-Flutter Kakao Maps의 기여는 언제든지 환영합니다. <br/>
-`Pull Reuqest` 해주시면, 확인 후 병합(`Merge`) 해드리겠습니다.
+## 4. Collaboration / Reqort Issue 
+Kakao Map SDK 플러그인에 기여는 항상 환영합니다. <br/>
+기능 개선, 버그 해결 등의 작업하신 내용은 `Pull Reuqest(PR)` 해주시면, 검증 후 병합 해드리겠습니다.
 
-동일하게 버그 제보도 언제든지 환영합니다. 
-문제가 발생하면 `Issue`를 열어주세요.
+질문, 버그 제보도 언제든지 환영합니다.<br/> 이용 중에 문제를 겪으셨다면 `Issue`를 열어주세요. 빠른 시일 내에 도움드리도록 하겠습니다
