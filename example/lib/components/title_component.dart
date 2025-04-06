@@ -3,9 +3,24 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kakao_map_sdk_example/pages/routers.dart';
 
-mixin TitleComponent {
+class TitleComponent extends StatelessWidget {
+  const TitleComponent({super.key});
+
+  @override 
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(child: titleText()),
+        Row(spacing: 8, children: [
+          flutterCard(),
+          platformCard(),
+        ])
+      ],
+  ));
+
   Widget titleText([String? text]) =>
       Text(text ?? "Kakao Map SDK", style: titleTextStyle, overflow: TextOverflow.ellipsis,);
 
@@ -49,9 +64,6 @@ mixin TitleComponent {
 
   Widget flutterCard() => baseSubCard("Flutter", FontAwesomeIcons.flutter,
       backgroundColor: flutterColor);
-
-  Widget backButtom([void Function()? onPressed]) => IconButton(
-      onPressed: onPressed ?? () => router.pop(), icon: const FaIcon(FontAwesomeIcons.chevronLeft), padding: const EdgeInsets.all(0));
 
   final titleTextStyle = const TextStyle(
       fontSize: 24, color: Colors.black, decoration: TextDecoration.none, fontWeight: FontWeight.bold);
