@@ -167,6 +167,16 @@ class _KakaoMapViewState extends State<KakaoMapView> {
         RouteStyle(Colors.blue, 12, strokeWidth: 4, strokeColor: Colors.white);
     await controller.routeLayer
         .addRoute(routes.map((e) => LatLng(e[0], e[1])).toList(), routeStyle);
+
+    poiVisible
+        ? await controller.labelLayer.showAllPoi()
+        : await controller.labelLayer.hideAllPoi();
+    shapeVisible
+        ? await controller.shapeLayer.showAllPolygon()
+        : await controller.shapeLayer.hideAllPolygon();
+    routeVisible
+        ? await controller.routeLayer.showAllRoute()
+        : await controller.routeLayer.hideAllRoute();
   }
 
   /* Event Handler */
