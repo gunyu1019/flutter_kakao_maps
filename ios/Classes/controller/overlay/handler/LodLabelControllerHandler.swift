@@ -66,7 +66,13 @@ extension LodLabelControllerHandler {
         case "rankPoi":
             let rank = asInt(arguments!["rank"]!)
             rankLodPoi(poi: poi!, rank: rank, onSuccess: result)
-        default: result(FlutterMethodNotImplemented)
+        case "setLayerClickable":
+            changeLodLabelLayerClickable(layer: layer!, clickable: asBool(arguments!["clickable"]!), onSuccess: result)
+        case "setLayerZOrder":
+            changeLodLabelLayerZOrder(layer: layer!, zOrder: asInt(arguments!["zOrder"]!), onSuccess: result)
+        case "changeVisibleAllLodPoi": changeLodPoiAllVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
+        default:
+            result(FlutterMethodNotImplemented)
         }
     }
 }

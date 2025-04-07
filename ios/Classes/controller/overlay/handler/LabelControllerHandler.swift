@@ -121,6 +121,13 @@ extension LabelControllerHandler {
         case "rankPoi":
             let rank = asInt(arguments!["rank"]!)
             rankPoi(poi: poi!, rank: rank, onSuccess: result)
+        case "setLayerClickable":
+            changeLabelLayerClickable(layer: layer!, clickable: asBool(arguments!["clickable"]!), onSuccess: result)
+        case "setLayerZOrder":
+            changeLabelLayerZOrder(layer: layer!, zOrder: asInt(arguments!["zOrder"]!), onSuccess: result)
+        case "changeVisibleAllPoi": changePoiAllVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
+        case "changeVisibleAllPolylineText":
+            changePolylineTextAllVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
