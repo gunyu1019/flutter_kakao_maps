@@ -24,10 +24,10 @@ class CameraListener {
             "height": mapView.cameraHeight,
         ]
         payload.merge(position.toMessageable()) { current, _ in current }
-        
+
         channel.invokeMethod("onCameraMoveEnd", arguments: [
             "gesture": param.by.rawValue,
-            "position":payload
+            "position": payload,
         ])
     }
 }

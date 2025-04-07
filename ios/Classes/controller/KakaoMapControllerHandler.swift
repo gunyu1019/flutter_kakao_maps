@@ -20,9 +20,9 @@ protocol KakaoMapControllerHandler {
 
     func setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Void)
 
-    func fromScreenPoint(point: CGPoint, onSuccess: ([String:Double]) -> Void)
+    func fromScreenPoint(point: CGPoint, onSuccess: ([String: Double]) -> Void)
 
-    func toScreenPoint(position: MapPoint, onSuccess: ([String:Double]) -> Void)
+    func toScreenPoint(position: MapPoint, onSuccess: ([String: Double]) -> Void)
 
     func clearCache(onSuccess: (Any?) -> Void)
 
@@ -68,15 +68,15 @@ extension KakaoMapControllerHandler {
         case "toScreenPoint": toScreenPoint(position: MapPoint(payload: arguments!), onSuccess: result)
         case "clearCache": clearCache(onSuccess: result)
         case "clearDiskCache": clearDiskCache(onSuccess: result)
-        case "canPositionVisible": 
+        case "canPositionVisible":
             let zoomLevel = asInt(arguments!["zoomLevel"]!)
             let position = asArray(arguments!["position"]!, caster: { MapPoint(payload: asDict($0)) })
             canPositionVisible(zoomLevel: zoomLevel, position: position, onSuccess: result)
         case "changeMapType": changeMapType(mapType: asString(arguments!["mapType"]!), onSuccess: result)
-        case "overlayVisible": 
+        case "overlayVisible":
             overlayVisible(
-                overlayType: asString(arguments!["overlayType"]!), 
-                visible: asBool(arguments!["visible"]!), 
+                overlayType: asString(arguments!["overlayType"]!),
+                visible: asBool(arguments!["visible"]!),
                 onSuccess: result
             )
         case "defaultGUIvisible":

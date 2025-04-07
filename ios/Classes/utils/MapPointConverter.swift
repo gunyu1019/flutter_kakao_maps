@@ -1,7 +1,6 @@
 import KakaoMapsSDK
 
-
-internal func convertMapPointToPoint(kakaoMap: KakaoMap, position: MapPoint) -> CGPoint {
+func convertMapPointToPoint(kakaoMap: KakaoMap, position: MapPoint) -> CGPoint {
     let minPosition = kakaoMap.getPosition(CGPoint(x: 0.0, y: 0.0))
     let maxPosition = kakaoMap.getPosition(CGPoint(x: 1.0, y: 1.0))
 

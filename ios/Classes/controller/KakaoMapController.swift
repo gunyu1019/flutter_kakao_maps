@@ -87,13 +87,13 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
             poiClickListener.enable = true
         }
     }
-    
-    func fromScreenPoint(point: CGPoint, onSuccess: ([String:Double]) -> Void) {
+
+    func fromScreenPoint(point: CGPoint, onSuccess: ([String: Double]) -> Void) {
         let position = kakaoMap.getPosition(point)
         onSuccess(position.toMessageable())
     }
 
-    func toScreenPoint(position: MapPoint, onSuccess: ([String:Double]) -> Void) {
+    func toScreenPoint(position: MapPoint, onSuccess: ([String: Double]) -> Void) {
         let point = convertMapPointToPoint(kakaoMap: kakaoMap, position: position)
         onSuccess(point.toMessageable())
     }
@@ -111,7 +111,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         kakaoMap.buildingScale = scale
         onSuccess(nil)
     }
-    
+
     func clearCache(onSuccess: (Any?) -> Void) {
         mapController.clearMemoryCache(kakaoMap.viewName())
         mapController.clearViewInfoCaches()
@@ -128,10 +128,10 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         onSuccess(visible)
     }
 
-    func changeMapType(mapType: String, onSuccess: (Any?) -> Void) {
+    func changeMapType(mapType: String, onSuccess _: (Any?) -> Void) {
         kakaoMap.changeViewInfo(appName: "openmap", viewInfoName: mapType)
     }
-    
+
     func overlayVisible(overlayType: String, visible: Bool, onSuccess: (Any?) -> Void) {
         if visible {
             kakaoMap.showOverlay(overlayType)
@@ -143,29 +143,29 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
 
     func defaultGUIvisible(type: DefaultGUIType, visible: Bool, onSuccess: (Any?) -> Void) {
         switch type {
-            case .compass: 
-                if (visible) {
-                    kakaoMap.showCompass()
-                } else {
-                    kakaoMap.hideCompass()
-                }
-            case .scale:
-                if (visible) {
-                    kakaoMap.showScaleBar()
-                } else {
-                    kakaoMap.hideScaleBar()
-                }
-            case .logo: 
-                break
+        case .compass:
+            if visible {
+                kakaoMap.showCompass()
+            } else {
+                kakaoMap.hideCompass()
+            }
+        case .scale:
+            if visible {
+                kakaoMap.showScaleBar()
+            } else {
+                kakaoMap.hideScaleBar()
+            }
+        case .logo:
+            break
         }
         onSuccess(nil)
     }
 
     func defaultGUIposition(type: DefaultGUIType, gravity: GuiAlignment, position: CGPoint, onSuccess: (Any?) -> Void) {
         switch type {
-            case .compass: kakaoMap.setCompassPosition(origin: gravity, position: position)
-            case .scale: kakaoMap.setScaleBarPosition(origin: gravity, position: position)
-            case .logo: kakaoMap.setLogoPosition(origin: gravity, position: position)
+        case .compass: kakaoMap.setCompassPosition(origin: gravity, position: position)
+        case .scale: kakaoMap.setScaleBarPosition(origin: gravity, position: position)
+        case .logo: kakaoMap.setLogoPosition(origin: gravity, position: position)
         }
         onSuccess(nil)
     }

@@ -3,7 +3,6 @@ import KakaoMapsSDK
 extension PerLevelPolygonStyle {
     convenience init(payload: [String: Any]) {
         if !(payload["strokeWidth"] is NSNull || payload["strokeColor"] is NSNull || payload["strokeWidth"] == nil || payload["strokeColor"] == nil) {
-            
             self.init(
                 color: UIColor(value: asUInt(payload["color"]!)),
                 strokeWidth: asUInt(payload["strokeWidth"]!),
@@ -53,21 +52,21 @@ extension PolygonStyleSet {
 extension PerLevelPolylineStyle {
     convenience init(payload: [String: Any]) {
         if !(payload["strokeWidth"] is NSNull || payload["strokeColor"] is NSNull || payload["strokeWidth"] == nil || payload["strokeColor"] == nil) {
-            
-                self.init(
-                    bodyColor: UIColor(value: asUInt(payload["color"]!)),
-                    bodyWidth: asUInt(payload["lineWidth"]!),
-                    strokeColor: UIColor(value: asUInt(payload["strokeColor"]!)),
-                    strokeWidth: asUInt(payload["strokeWidth"]!),
-                    level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
-                )
-                
+            self.init(
+                bodyColor: UIColor(value: asUInt(payload["color"]!)),
+                bodyWidth: asUInt(payload["lineWidth"]!),
+                strokeColor: UIColor(value: asUInt(payload["strokeColor"]!)),
+                strokeWidth: asUInt(payload["strokeWidth"]!),
+                level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
+            )
+
         } else {
             self.init(
                 bodyColor: UIColor(value: asUInt(payload["color"]!)),
                 bodyWidth: asUInt(payload["lineWidth"]!),
                 level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
-            )        }
+            )
+        }
     }
 }
 
