@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
+import 'package:kakao_map_sdk_example/components/drawer_component.dart';
 import 'package:kakao_map_sdk_example/components/switch_component.dart';
 import 'package:kakao_map_sdk_example/components/title_component.dart';
 import 'package:kakao_map_sdk_example/components/toggle_button_component.dart';
@@ -52,7 +53,9 @@ class _KakaoMapViewState extends State<KakaoMapView> {
           ToggleButtonComponent(
             options: location.map((e) => e.name).toList(),
             onChanged: (index) {
-              controller.moveCamera(CameraUpdate.newCenterPosition(location[index].position), animation: const CameraAnimation(5));
+              controller.moveCamera(
+                  CameraUpdate.newCenterPosition(location[index].position),
+                  animation: const CameraAnimation(5));
             },
           ),
         ],
@@ -61,9 +64,18 @@ class _KakaoMapViewState extends State<KakaoMapView> {
   Widget overlayEnableSwitch() {
     return Column(
       children: [
-        SwitchComponent(title: "Poi", textStyle: controllerTextStyle, onChanged: (value) {}),
-        SwitchComponent(title: "Shape", textStyle: controllerTextStyle, onChanged: (value) {}),
-        SwitchComponent(title: "Route", textStyle: controllerTextStyle, onChanged: (value) {}),
+        SwitchComponent(
+            title: "Poi",
+            textStyle: controllerTextStyle,
+            onChanged: (value) {}),
+        SwitchComponent(
+            title: "Shape",
+            textStyle: controllerTextStyle,
+            onChanged: (value) {}),
+        SwitchComponent(
+            title: "Route",
+            textStyle: controllerTextStyle,
+            onChanged: (value) {}),
       ],
     );
   }
@@ -73,65 +85,37 @@ class _KakaoMapViewState extends State<KakaoMapView> {
       locationSelection(),
       overlayEnableSwitch(),
     ];
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Expanded(
-        child: SingleChildScrollView(
-          child: Column(spacing: 1.5, children: [
-            const TitleComponent(),
-            Row(
-                spacing: 8,
-                children: children
-                    .map((e) => Expanded(
-                        flex: 1,
-                        child: Padding(
-                            padding: const EdgeInsets.all(4), child: e)))
-                    .toList())
-          ]),
-        ),
-      )
+    return Wrap(spacing: 1.5, children: [
+      const TitleComponent(),
+      Row(
+          spacing: 8,
+          children: children
+              .map((e) => Expanded(
+                  flex: 1,
+                  child: Padding(padding: const EdgeInsets.all(4), child: e)))
+              .toList())
     ]);
   }
 
-  Widget mapWidget(BuildContext context) {
-    /* return KakaoMap(
-      onMapReady: (controller) => this.controller = controller,
-      option: const KakaoMapOption(
-        position: LatLng(37.394776, 127.11116)
-      ),
-    ); */
-    return Container(color: Colors.grey);
-  }
+  Widget mapWidget(BuildContext context) => KakaoMap(
+        onMapReady: (controller) => this.controller = controller,
+        option: const KakaoMapOption(position: LatLng(37.394776, 127.11116)),
+      );
 
   @override
-  Widget build(BuildContext context) {
-    var mediaQuery = MediaQuery.of(context);
-    var children = <Widget>[];
-
-    children.addAll([
-      AnimatedPositioned(
-          duration: const Duration(milliseconds: 150),
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 260,
-          child: mapWidget(context)),
-      AnimatedPositioned(
-        duration: const Duration(milliseconds: 150),
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: Container(
-            height: 260,
-            width: mediaQuery.size.width,
-            padding: const EdgeInsets.all(8),
-            child: controllerWidget()),
-      )
-    ]);
-    return Scaffold(
-        body: Stack(
-            alignment: AlignmentDirectional.centerStart, children: children));
-  }
+  Widget build(BuildContext context) => Scaffold(
+      body: DrawerComponent(
+          body: mapWidget(context),
+          drawer: controllerWidget(),
+          maxHeight: 260,
+          minHeight: 60));
 
   final controllerTextStyle = const TextStyle(
-      fontSize: 16, color: Colors.black, decoration: TextDecoration.none, fontWeight: FontWeight.bold);
+      fontSize: 16,
+      color: Colors.black,
+      decoration: TextDecoration.none,
+      fontWeight: FontWeight.bold);
+
+  /* Event Handler */
+  void onMapReady(KakaoMapController controller) {}
 }
