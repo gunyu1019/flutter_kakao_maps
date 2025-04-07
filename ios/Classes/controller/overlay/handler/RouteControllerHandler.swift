@@ -62,6 +62,7 @@ extension RouteControllerHandler {
         case "changeRouteZOrder":
             let zOrder = asInt(arguments!["zOrder"]!)
             changeRouteZOrder(route: route!, zOrder: zOrder, onSuccess: result)
+        case "changeVisibleAllRoute": changeRouteLayerVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
