@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:kakao_map_sdk_example/components/drawer_component.dart';
 import 'package:kakao_map_sdk_example/components/switch_component.dart';
@@ -7,8 +10,10 @@ import 'package:kakao_map_sdk_example/components/toggle_button_component.dart';
 import 'package:kakao_map_sdk_example/models/location_info.dart';
 
 void main() async {
+  // main() 함수를 비동기로 실행시키기 위해서는 WidgetsFlutterBinding.ensureInitialized(); 함수를 호출해야 합니다.
   WidgetsFlutterBinding.ensureInitialized();
 
+  // KakaoMapSdk.instance.initialize 함수로 애플리케이션을 인증합니다.
   // await dotenv.load(fileName: 'assets/config/.env');
   // await KakaoMapSdk.instance.initialize(dotenv.env['KAKAO_API_KEY']!);
 
@@ -33,6 +38,9 @@ class KakaoMapView extends StatefulWidget {
 
 class _KakaoMapViewState extends State<KakaoMapView> {
   late KakaoMapController controller;
+  late bool poiVisible;
+  late bool shapeVisible;
+  late bool routeVisible;
 
   final location = <LocationInfo>[
     LocationInfo(
@@ -53,6 +61,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
           ToggleButtonComponent(
             options: location.map((e) => e.name).toList(),
             onChanged: (index) {
+              // 선택된 버튼에 따라 애니메이션(적용시간: 5초)를 적용한 상태로 카메라를 이동합니다.
               controller.moveCamera(
                   CameraUpdate.newCenterPosition(location[index].position),
                   animation: const CameraAnimation(5));
@@ -67,15 +76,30 @@ class _KakaoMapViewState extends State<KakaoMapView> {
         SwitchComponent(
             title: "Poi",
             textStyle: controllerTextStyle,
-            onChanged: (value) {}),
+            onChanged: (value) {
+              value
+                  ? controller.labelLayer.showAllPoi()
+                  : controller.labelLayer.hideAllPoi();
+              setState(() => poiVisible = value);
+            }),
         SwitchComponent(
             title: "Shape",
             textStyle: controllerTextStyle,
-            onChanged: (value) {}),
+            onChanged: (value) {
+              value
+                  ? controller.shapeLayer.showAllPolygon()
+                  : controller.shapeLayer.hideAllPolygon();
+              setState(() => shapeVisible = value);
+            }),
         SwitchComponent(
             title: "Route",
             textStyle: controllerTextStyle,
-            onChanged: (value) {}),
+            onChanged: (value) {
+              value
+                  ? controller.routeLayer.showAllRoute()
+                  : controller.routeLayer.hideAllRoute();
+              setState(() => routeVisible = value);
+            }),
       ],
     );
   }
@@ -97,10 +121,19 @@ class _KakaoMapViewState extends State<KakaoMapView> {
     ]);
   }
 
+  // 지도 뷰
   Widget mapWidget(BuildContext context) => KakaoMap(
-        onMapReady: (controller) => this.controller = controller,
+        onMapReady: onMapReady,
         option: const KakaoMapOption(position: LatLng(37.394776, 127.11116)),
       );
+
+  @override
+  void initState() {
+    poiVisible = false;
+    shapeVisible = false;
+    routeVisible = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -116,6 +149,28 @@ class _KakaoMapViewState extends State<KakaoMapView> {
       decoration: TextDecoration.none,
       fontWeight: FontWeight.bold);
 
+  // 예제에 구현할 오버레이를 지도에 등록합니다.
+  Future<void> initializeOverlay() async {
+    var poiStyle =
+        PoiStyle(icon: KImage.fromAsset("/assets/image/location.png", 100, 30));
+    for (var loc in location) {
+      await controller.labelLayer.addPoi(loc.position, style: poiStyle);
+    }
+
+    // /assets/const/route.json 에 사전에 등록한 경로를 불러옵니다.
+    final String routeRawData =
+        await rootBundle.loadString("/assets/const/route.json");
+    List<dynamic> routes = json.decode(routeRawData);
+
+    var routeStyle =
+        RouteStyle(Colors.blue, 3, strokeWidth: 1, strokeColor: Colors.white);
+    await controller.routeLayer
+        .addRoute(routes.map((e) => LatLng(e[0], e[1])).toList(), routeStyle);
+  }
+
   /* Event Handler */
-  void onMapReady(KakaoMapController controller) {}
+  void onMapReady(KakaoMapController controller) {
+    this.controller = controller;
+    initializeOverlay();
+  }
 }
