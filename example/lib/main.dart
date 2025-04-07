@@ -158,6 +158,22 @@ class _KakaoMapViewState extends State<KakaoMapView> {
       await controller.labelLayer.addPoi(loc.position, style: poiStyle);
     }
 
+    // /assets/const/shape.json 에 사전에 등록한 도형를 불러옵니다.
+    final String shapeRawData =
+        await rootBundle.loadString("assets/const/shape.json");
+    List<dynamic> shapePoints = json.decode(shapeRawData);
+
+    var polylineStyle =
+        PolylineStyle(Colors.yellow, 12);
+    for (var point in shapePoints) {
+    await controller.shapeLayer
+        .addPolylineShape<MapPoint>(
+          point.map((e1) => 
+            MapPoint(e1.map((e2) => LatLng(e2[0], e2[1])).toList())
+          ).toList(), polylineStyle, PolylineCap.round
+        );
+    }
+
     // /assets/const/route.json 에 사전에 등록한 경로를 불러옵니다.
     final String routeRawData =
         await rootBundle.loadString("assets/const/route.json");
