@@ -38,6 +38,7 @@ class _ToggleButtonComponentState extends State<ToggleButtonComponent> {
       fillColor: const Color.fromARGB(255, 19, 137, 253),
       color: Colors.black,
       onPressed: (index) {
+        widget.onChanged(index);
         setState(() {
           for (int i = 0; i < _selectedButton.length; i++) {
             _selectedButton[i] = i == index;
