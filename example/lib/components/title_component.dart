@@ -7,22 +7,25 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class TitleComponent extends StatelessWidget {
   const TitleComponent({super.key});
 
-  @override 
+  @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(child: titleText()),
-        Row(spacing: 8, children: [
-          flutterCard(),
-          platformCard(),
-        ])
-      ],
-  ));
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(child: titleText()),
+          Row(spacing: 8, children: [
+            flutterCard(),
+            platformCard(),
+          ])
+        ],
+      ));
 
-  Widget titleText([String? text]) =>
-      Text(text ?? "Kakao Map SDK", style: titleTextStyle, overflow: TextOverflow.ellipsis,);
+  Widget titleText([String? text]) => Text(
+        text ?? "Kakao Map SDK",
+        style: titleTextStyle,
+        overflow: TextOverflow.ellipsis,
+      );
 
   Widget baseSubCard(String text, IconData? icon,
       {Color? color, Color? backgroundColor}) {
@@ -66,7 +69,10 @@ class TitleComponent extends StatelessWidget {
       backgroundColor: flutterColor);
 
   final titleTextStyle = const TextStyle(
-      fontSize: 24, color: Colors.black, decoration: TextDecoration.none, fontWeight: FontWeight.bold);
+      fontSize: 24,
+      color: Colors.black,
+      decoration: TextDecoration.none,
+      fontWeight: FontWeight.bold);
 
   final Color flutterColor = const Color.fromARGB(255, 19, 137, 253);
   final Color androidColor = const Color.fromARGB(255, 50, 222, 132);

@@ -34,8 +34,10 @@ class _DrawerComponentState extends State<DrawerComponent> {
   void onVerticalDragUpdate(DragUpdateDetails details) {
     var deltaX = details.delta.dy.toInt();
     setState(() {
-      _drawerHeight = min(max(_drawerHeight - deltaX, widget.minHeight), widget.maxHeight);
-      isOpened = (_drawerHeight >= (widget.maxHeight - widget.minHeight) / 2 + widget.minHeight);
+      _drawerHeight =
+          min(max(_drawerHeight - deltaX, widget.minHeight), widget.maxHeight);
+      isOpened = (_drawerHeight >=
+          (widget.maxHeight - widget.minHeight) / 2 + widget.minHeight);
     });
   }
 
@@ -65,20 +67,20 @@ class _DrawerComponentState extends State<DrawerComponent> {
           bottom: _drawerHeight.toDouble(),
           child: widget.body),
       Positioned(
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: GestureDetector(
-            onTap: () {},
-            onVerticalDragUpdate: onVerticalDragUpdate,
-            onVerticalDragEnd: onVerticalDragEnd,
-            child: AnimatedContainer(
-              height: _drawerHeight.toDouble(),
-              width: mediaQuery.size.width,
-              padding: const EdgeInsets.all(8),
-              curve: Curves.ease,
-              duration: const Duration(milliseconds: 150),
-              child: widget.drawer))),
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: GestureDetector(
+              onTap: () {},
+              onVerticalDragUpdate: onVerticalDragUpdate,
+              onVerticalDragEnd: onVerticalDragEnd,
+              child: AnimatedContainer(
+                  height: _drawerHeight.toDouble(),
+                  width: mediaQuery.size.width,
+                  padding: const EdgeInsets.all(8),
+                  curve: Curves.ease,
+                  duration: const Duration(milliseconds: 150),
+                  child: widget.drawer))),
     ]);
     return Stack(
         alignment: AlignmentDirectional.centerStart, children: children);
