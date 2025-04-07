@@ -165,6 +165,9 @@ extension ShapeControllerHandler {
             } else {
                 result(FlutterMethodNotImplemented)
             }
+        case "changeVisibleAllPolyline": changePolygonAllVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
+        case "changeVisibleAllPolygon":
+            changePolygonAllVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
