@@ -16,11 +16,11 @@ extension RoutePattern {
 
 extension PerLevelRouteStyle {
     convenience init(payload: [String: Any], patternIndex: Int = -1) {
-        if payload["strokeSize"] != nil, payload["strokeColor"] != nil {
+        if !(payload["strokeWidth"] is NSNull || payload["strokeColor"] is NSNull || payload["strokeWidth"] == nil || payload["strokeColor"] == nil) {
             self.init(
                 width: asUInt(payload["lineWidth"]!),
                 color: UIColor(value: asUInt(payload["color"]!)),
-                strokeWidth: asUInt(payload["strokeSize"]!),
+                strokeWidth: asUInt(payload["strokeWidth"]!),
                 strokeColor: UIColor(value: asUInt(payload["strokeColor"]!)),
                 level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0,
                 patternIndex: patternIndex
