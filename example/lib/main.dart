@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:kakao_map_sdk_example/components/drawer_component.dart';
 import 'package:kakao_map_sdk_example/components/switch_component.dart';
@@ -14,8 +15,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // KakaoMapSdk.instance.initialize 함수로 애플리케이션을 인증합니다.
-  // await dotenv.load(fileName: 'assets/config/.env');
-  // await KakaoMapSdk.instance.initialize(dotenv.env['KAKAO_API_KEY']!);
+  await dotenv.load(fileName: 'assets/config/.env');
+  await KakaoMapSdk.instance.initialize(dotenv.env['KAKAO_API_KEY']!);
 
   runApp(const MyApp());
 }
@@ -64,7 +65,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
               // 선택된 버튼에 따라 애니메이션(적용시간: 5초)를 적용한 상태로 카메라를 이동합니다.
               controller.moveCamera(
                   CameraUpdate.newCenterPosition(location[index].position),
-                  animation: const CameraAnimation(5));
+                  animation: const CameraAnimation(5000));
             },
           ),
         ],
@@ -152,18 +153,18 @@ class _KakaoMapViewState extends State<KakaoMapView> {
   // 예제에 구현할 오버레이를 지도에 등록합니다.
   Future<void> initializeOverlay() async {
     var poiStyle =
-        PoiStyle(icon: KImage.fromAsset("/assets/image/location.png", 100, 30));
+        PoiStyle(icon: KImage.fromAsset("assets/image/location.png", 40, 60));
     for (var loc in location) {
       await controller.labelLayer.addPoi(loc.position, style: poiStyle);
     }
 
     // /assets/const/route.json 에 사전에 등록한 경로를 불러옵니다.
     final String routeRawData =
-        await rootBundle.loadString("/assets/const/route.json");
+        await rootBundle.loadString("assets/const/route.json");
     List<dynamic> routes = json.decode(routeRawData);
 
     var routeStyle =
-        RouteStyle(Colors.blue, 3, strokeWidth: 1, strokeColor: Colors.white);
+        RouteStyle(Colors.blue, 12, strokeWidth: 4, strokeColor: Colors.white);
     await controller.routeLayer
         .addRoute(routes.map((e) => LatLng(e[0], e[1])).toList(), routeStyle);
   }
