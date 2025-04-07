@@ -34,3 +34,4 @@ flutter:
     - assets/config/.env
     - assets/image/location.png
     - assets/const/route.json
+    - assets/const/shape.json
