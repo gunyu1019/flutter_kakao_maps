@@ -88,8 +88,8 @@ class _KakaoMapViewState extends State<KakaoMapView> {
             textStyle: controllerTextStyle,
             onChanged: (value) {
               value
-                  ? controller.shapeLayer.showAllPolygon()
-                  : controller.shapeLayer.hideAllPolygon();
+                  ? controller.shapeLayer.showAllPolyline()
+                  : controller.shapeLayer.hideAllPolyline();
               setState(() => shapeVisible = value);
             }),
         SwitchComponent(
@@ -165,13 +165,12 @@ class _KakaoMapViewState extends State<KakaoMapView> {
 
     var polylineStyle =
         PolylineStyle(Colors.deepOrange, 12);
-    for (var point in shapePoints) {
-    await controller.shapeLayer
-        .addPolylineShape<MapPoint>(
-          point.map((e1) => 
-            MapPoint(e1.map((e2) => LatLng(e2[0], e2[1])).toList())
-          ).toList(), polylineStyle, PolylineCap.round
-        );
+    for (var rawPoint in shapePoints) {
+      var point = List<dynamic>.from(rawPoint).map((e) => List<double>.from(e)).toList();
+      await controller.shapeLayer
+          .addPolylineShape(
+            MapPoint(point.map((e) => LatLng(e[0], e[1])).toList()), polylineStyle, PolylineCap.round
+          );
     }
 
     // /assets/const/route.json 에 사전에 등록한 경로를 불러옵니다.
