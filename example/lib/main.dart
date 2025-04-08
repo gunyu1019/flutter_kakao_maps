@@ -164,7 +164,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
     List<dynamic> shapePoints = json.decode(shapeRawData);
 
     var polylineStyle =
-        PolylineStyle(Colors.yellow, 12);
+        PolylineStyle(Colors.deepOrange, 12);
     for (var point in shapePoints) {
     await controller.shapeLayer
         .addPolylineShape<MapPoint>(
@@ -188,8 +188,8 @@ class _KakaoMapViewState extends State<KakaoMapView> {
         ? await controller.labelLayer.showAllPoi()
         : await controller.labelLayer.hideAllPoi();
     shapeVisible
-        ? await controller.shapeLayer.showAllPolygon()
-        : await controller.shapeLayer.hideAllPolygon();
+        ? await controller.shapeLayer.showAllPolyline()
+        : await controller.shapeLayer.hideAllPolyline();
     routeVisible
         ? await controller.routeLayer.showAllRoute()
         : await controller.routeLayer.hideAllRoute();
