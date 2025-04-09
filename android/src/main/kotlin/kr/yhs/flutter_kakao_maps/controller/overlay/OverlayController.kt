@@ -391,11 +391,18 @@ class OverlayController(
     }
     
     override fun changePolylineAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Unit) {
-        if (visible) {
+        /* if (visible) {
             layer.showAllPolyline()
         } else {
             layer.hideAllPolyline()
-        }  
+        } */
+        layer.getAllPolylines().map { shape ->
+            if (visible) {
+                shape.show()
+            } else {
+                shape.hide()
+            }
+        }
         onSuccess.invoke(null)
     }
 
