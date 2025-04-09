@@ -163,14 +163,15 @@ class _KakaoMapViewState extends State<KakaoMapView> {
         await rootBundle.loadString("assets/const/shape.json");
     List<dynamic> shapePoints = json.decode(shapeRawData);
 
-    var polylineStyle =
-        PolylineStyle(Colors.deepOrange, 12);
+    var polylineStyle = PolylineStyle(Colors.deepOrange, 12);
     for (var rawPoint in shapePoints) {
-      var point = List<dynamic>.from(rawPoint).map((e) => List<double>.from(e)).toList();
-      await controller.shapeLayer
-          .addPolylineShape(
-            MapPoint(point.map((e) => LatLng(e[0], e[1])).toList()), polylineStyle, PolylineCap.round
-          );
+      var point = List<dynamic>.from(rawPoint)
+          .map((e) => List<double>.from(e))
+          .toList();
+      await controller.shapeLayer.addPolylineShape(
+          MapPoint(point.map((e) => LatLng(e[0], e[1])).toList()),
+          polylineStyle,
+          PolylineCap.round);
     }
 
     // /assets/const/route.json 에 사전에 등록한 경로를 불러옵니다.
