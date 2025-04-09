@@ -77,6 +77,8 @@ Kakao Map SDK는 사용자에게 표현하기 위한 다양한 그래픽 요소(
 다양한 그래픽 요소는 `KakaoMapController`를 통해 제어하실 수 있습니다.
 
 ### 3-1. Poi (Label)
+<img src="https://github.com/user-attachments/assets/d979c662-64cb-4ced-a96a-f94b67baace3" width="35%" />
+
 특정 위치에 정보를 제공하기 위한 이미지 또는 텍스트를 제공합니다.<br/>
 Poi에는 사용하는 방법에 따라 3가지로 구분할 수 있습니다.<br/>
 
@@ -114,6 +116,20 @@ controller.labelLayer.addPolylineText(
 ```
 
 ### 3-2. Shape
+<table>
+  <thead>
+    <th>Android</th>
+    <th>iOS</th>
+  </thead>
+  <tbody>
+    <td>
+      <img src="https://github.com/user-attachments/assets/39cfe1b6-4349-4b1a-8527-a465c3964f57"/>
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/fe9d50ae-e7a4-4b70-b09d-cdb603b7bb37"/>
+    </td>
+  </tbody>
+</table>
 지도에 선분이 담긴 도형을 제공합니다.<br/>
 Kakao Map SDK에서 제공하는 도형은 두 가지가 있습니다.
 * PolylineShape: 선형으로 된 도형입니다.
@@ -139,6 +155,20 @@ controller.shapeLayer.addPolygonShape(
 ```
 
 ### 3-3. Route
+<table>
+  <thead>
+    <th>Android</th>
+    <th>iOS</th>
+  </thead>
+  <tbody>
+    <td>
+      <img src="https://github.com/user-attachments/assets/39c070a4-908f-4954-8683-e6f556eae34a"/>
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/f04bcae4-7f39-4c4f-83c1-b0a59bf11217"/>
+    </td>
+  </tbody>
+</table>
 지도에 다양한 선분이 담긴 길찾기 경로 모양의 도형을 제공합니다.
 
 ```dart
