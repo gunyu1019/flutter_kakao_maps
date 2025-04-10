@@ -1,3 +1,16 @@
+## 1.0.0
+This is first stable version of Kakao Map SDK (Flutter Plugin)
+A Kakao Map SDK was planned in October 25th, and development began on November 26th.
+I completed the implementation of the Kakao Map SDK on Android platform in early January and in February, I worked on the implementation for iOS platform.
+Finally, after testing in all platforms, I officially released the Kakao Map SDK.
+
+* Implement the native based Kakao Map view.
+* Support all features of overlay in Android, iOS platform.
+  * Poi, Lod Poi (Level of detail Poi), Polyline Text
+  * Polyline Shape, Polygon shape
+  * Route, Multiple Route
+* Support all features of camera controls in Android, iOS platform.
+
 ## 0.2.0-dev.5
 * Support all feature related Shape in iOS and Android Platform.
   * Support point based position.
