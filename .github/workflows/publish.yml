@@ -58,8 +58,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Install and setup Dart SDK
         uses: dart-lang/setup-dart@v1
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          channel: stable
+          version: 3.0.2
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
       - name: Publish - dry run
         run: dart pub publish --dry-run
       - name: Publish to pub.dev
