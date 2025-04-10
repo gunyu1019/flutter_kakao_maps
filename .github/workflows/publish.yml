@@ -53,8 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-    steps:
-      - uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
   deploy:
     needs: example_build
     runs-on: ubuntu-latest
