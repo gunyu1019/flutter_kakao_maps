@@ -59,11 +59,11 @@ jobs:
       - name: Install and setup Dart SDK
         uses: dart-lang/setup-dart@v1
       - name: Install dependencies
-        run: .flutter/bin/flutter pub get
+        run: flutter pub get
       - name: Publish - dry run
-        run: .flutter/bin/dart pub publish --dry-run
+        run: dart pub publish --dry-run
       - name: Publish to pub.dev
-        run: .flutter/bin/dart pub publish -f
+        run: dart pub publish -f
   deploy:
     needs: example_build
     runs-on: ubuntu-latest
