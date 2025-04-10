@@ -1,8 +1,8 @@
 name: kakao_map_sdk
-description: "A Flutter plugin that provides Kakao Map."
-version: 0.2.0-dev.5
+description: "A Flutter plugin that provides a native platform-based Kakao Map(Korean Map Service)."
+version: 1.0.0
 repository: https://github.com/gunyu1019/flutter_kakao_maps
-issue_tracker: https://github.com/gunyu1019/flutter_kakao_maps/issues?q=is%3Aissue%20state%3Aopen%20
+issue_tracker: https://github.com/gunyu1019/flutter_kakao_maps/issues?q=is%3Aissue%20is%3Aopen
 
 environment:
   sdk: ^3.5.3

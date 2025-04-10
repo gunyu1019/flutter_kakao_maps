@@ -40,6 +40,9 @@ jobs:
         run: |
           .flutter/bin/flutter build apk --release 
         working-directory: ${{ env.working-directory }}
+      - name: Get keyhash to authentic Kakao SDK
+        run: |
+          keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
       - name: Upload application pacakge.
         uses: actions/upload-artifact@v4
         with:
@@ -50,17 +53,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install and setup Dart SDK
-        uses: dart-lang/setup-dart@v1
-      - name: Install dependencies
-        run: .flutter/bin/flutter pub get
-      - name: Publish - dry run
-        run: .flutter/bin/dart pub publish --dry-run
-      - name: Publish to pub.dev
-        run: .flutter/bin/dart pub publish -f
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      environment: 'pub.dev'
   deploy:
     needs: example_build
     runs-on: ubuntu-latest
