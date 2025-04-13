@@ -1,7 +1,7 @@
 ## 1.0.1
 * The padding, zoomLevel parameters in CameraUpdate.fitMapPoints are no longer required.
 * [Fix] Invalid type of CameraUpdate.fitMapPoints
-* [Fix] Remake CameraUpdate.fitMapPoints parts in CameraTypeConvertType.swift to avoid Swift Compiling Error ([#12](https://github.com/gunyu1019/flutter_kakao_maps/issues/12)
+* [Fix] Remake CameraUpdate.fitMapPoints parts in CameraTypeConvertType.swift to avoid Swift Compiling Error ([#12](https://github.com/gunyu1019/flutter_kakao_maps/issues/12))
 
 ## 1.0.0
 This is first stable version of Kakao Map SDK (Flutter Plugin)
