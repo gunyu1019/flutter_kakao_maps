@@ -14,7 +14,6 @@ class LatLng with KMessageable {
       LatLng(payload['latitude'], payload['longitude']);
 
   @override
-  Map<String, dynamic> toMessageable() {
-    return {"latitude": latitude, "longitude": longitude};
-  }
+  Map<String, dynamic> toMessageable() =>
+      {"latitude": latitude, "longitude": longitude};
 }

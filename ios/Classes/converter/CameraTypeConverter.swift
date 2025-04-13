@@ -42,10 +42,13 @@ func asCameraUpdate(kakaoMap: KakaoMap, payload: [String: Any]) -> CameraUpdate 
     case 5: return CameraUpdate.make(zoomLevel: kakaoMap.zoomLevel - 1, mapView: kakaoMap)
     case 6: return CameraUpdate.make(rotation: angle!, tilt: kakaoMap.tiltAngle, mapView: kakaoMap)
     case 7: return CameraUpdate.make(rotation: kakaoMap.rotationAngle, tilt: angle!, mapView: kakaoMap)
-    case 8: return CameraUpdate.make(
-            area: AreaRect(points: asArray<Dictionary>(payload["points"]!, caster: asDict).map {
-                element in MapPoint(payload: element)
-            }),
+    case 8:
+        let points = asArray(payload["points"]!).map {
+            element in MapPoint(payload: asDictTyped(element, caster: asDouble))
+        }
+        let area = AreaRect(points: points)
+        return CameraUpdate.make(
+            area: area,
             levelLimit: zoomLevel
         )
     default: return CameraUpdate.make(mapView: kakaoMap)
