@@ -61,8 +61,8 @@ class CameraUpdate with KMessageable {
 
   /// [fitPoints]에 주어진 위치(좌표)들이 화면의 가장자리에 맞춰 보여지도록 카메라의 위치를 변경합니다.
   factory CameraUpdate.fitMapPoints(
-          List<LatLng> fitPoints, int? padding, int? zoomLevel) =>
-      CameraUpdate._(CameraUpdateType.tilt,
+          List<LatLng> fitPoints, {int? padding, int? zoomLevel}) =>
+      CameraUpdate._(CameraUpdateType.fitMapPoints,
           fitPoints: fitPoints, padding: padding, zoomLevel: zoomLevel ?? -1);
 
   @override
@@ -86,9 +86,7 @@ class CameraUpdate with KMessageable {
         payload['angle'] = angle;
         break;
       case CameraUpdateType.fitMapPoints:
-        payload['points'] = fitPoints!.map((latlng) {
-          latlng.toMessageable();
-        });
+        payload['points'] = fitPoints!.map((latlng) => latlng.toMessageable()).toList();
         payload['padding'] = padding ?? 0;
         payload['zoomLevel'] = zoomLevel;
         break;
