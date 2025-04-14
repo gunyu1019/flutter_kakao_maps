@@ -13,6 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -27,3 +28,5 @@ flutter:
         pluginClass: FlutterKakaoMapsPlugin
       ios:
         pluginClass: FlutterKakaoMapsPlugin
+#      web:
+#        fileName: kakao_map_sdk.dart
