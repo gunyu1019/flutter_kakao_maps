@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
+import 'dart:ui_web' as ui_web;
+import 'dart:js_interop';
+import 'package:web/web.dart' as web;
+
 /* chnnael */
 part 'channel/channel_type.dart';
 
@@ -104,3 +108,12 @@ part 'models/enums/route/curve_type.dart';
 /* widget */
 part 'widget/map_widget.dart';
 part 'widget/platform_view.dart';
+
+/* web (Experimentation) */
+part 'web/web_controller.dart';
+part 'web/web_initializer.dart';
+
+part 'web/models/web_map_option.dart';
+
+part 'web/interoperability/web_latlng.dart';
+part 'web/interoperability/web_map_controller.dart';
