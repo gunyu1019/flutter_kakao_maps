@@ -1,6 +1,6 @@
 part of '../kakao_map_sdk.dart';
 
-abstract class KakaoMapControllerSender {
+abstract class KakaoMapControllerSender with OverlayManager {
   double? buildingHeightScale;
 
   /// 현재 카메라가 보고 있는 속성을 불러옵니다.
