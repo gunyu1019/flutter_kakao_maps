@@ -115,5 +115,6 @@ part 'web/web_initializer.dart';
 
 part 'web/models/web_map_option.dart';
 
+part 'web/interoperability/web_latlng_bound.dart';
 part 'web/interoperability/web_latlng.dart';
 part 'web/interoperability/web_map_controller.dart';
