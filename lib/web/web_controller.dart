@@ -122,70 +122,37 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  LabelController? getLabelLayer(String id) {
-    // TODO: implement getLabelLayer
-    throw UnimplementedError();
-  }
+  LabelController? getLabelLayer(String id) => _labelController[id];
 
   @override
-  LodLabelController? getLodLabelLayer(String id) {
-    // TODO: implement getLodLabelLayer
-    throw UnimplementedError();
-  }
+  LodLabelController? getLodLabelLayer(String id) => _lodLabelController[id];
 
   @override
-  List<PolygonStyle>? getMultiplePolygonShapeStyle(String id) {
-    // TODO: implement getMultiplePolygonShapeStyle
-    throw UnimplementedError();
-  }
+  List<PolygonStyle>? getMultiplePolygonShapeStyle(String id) => _polygonStyle[id];
 
   @override
-  List<PolylineStyle>? getMultiplePolylineShapeStyle(String id) {
-    // TODO: implement getMultiplePolylineShapeStyle
-    throw UnimplementedError();
-  }
+  List<PolylineStyle>? getMultiplePolylineShapeStyle(String id) => _polylineStyle[id];
 
   @override
-  List<RouteStyle>? getMultipleRotueStyle(String id) {
-    // TODO: implement getMultipleRotueStyle
-    throw UnimplementedError();
-  }
+  List<RouteStyle>? getMultipleRotueStyle(String id) => _routeStyle[id];
 
   @override
-  PoiStyle? getPoiStyle(String id) {
-    // TODO: implement getPoiStyle
-    throw UnimplementedError();
-  }
+  PoiStyle? getPoiStyle(String id) => _poiStyle[id];
 
   @override
-  PolygonStyle? getPolygonShapeStyle(String id) {
-    // TODO: implement getPolygonShapeStyle
-    throw UnimplementedError();
-  }
+  PolygonStyle? getPolygonShapeStyle(String id) => getMultiplePolygonShapeStyle(id)?[0];
 
   @override
-  PolylineStyle? getPolylineShapeStyle(String id) {
-    // TODO: implement getPolylineShapeStyle
-    throw UnimplementedError();
-  }
+  PolylineStyle? getPolylineShapeStyle(String id) => getMultiplePolylineShapeStyle(id)?[0];
 
   @override
-  RouteStyle? getRotueStyle(String id) {
-    // TODO: implement getRotueStyle
-    throw UnimplementedError();
-  }
+  RouteStyle? getRotueStyle(String id) => getMultipleRotueStyle(id)?[0];
 
   @override
-  RouteController? getRouteLayer(String id) {
-    // TODO: implement getRouteLayer
-    throw UnimplementedError();
-  }
+  RouteController? getRouteLayer(String id) => _routeController[id];
 
   @override
-  ShapeController? getShapeLayer(String id) {
-    // TODO: implement getShapeLayer
-    throw UnimplementedError();
-  }
+  ShapeController? getShapeLayer(String id) => _shapeController[id];
 
   @override
   Future<void> hideOverlay(MapOverlay overlay) {
@@ -282,20 +249,11 @@ class KakaoMapWebController extends KakaoMapController {
   }
   
   @override
-  Future<void> _defaultGUIvisible(DefaultGUIType type, bool visible) {
-    // TODO: implement _defaultGUIvisible
-    throw UnimplementedError();
-  }
+  Future<void> _defaultGUIvisible(DefaultGUIType type, bool visible) async {}
   
   @override
-  Future<void> _scaleAnimationTime(int fadeIn, int fadeOut, int retention) {
-    // TODO: implement _scaleAnimationTime
-    throw UnimplementedError();
-  }
+  Future<void> _scaleAnimationTime(int fadeIn, int fadeOut, int retention) async {}
   
   @override
-  Future<void> _scaleAutohide(bool autohide) {
-    // TODO: implement _scaleAutohide
-    throw UnimplementedError();
-  }
+  Future<void> _scaleAutohide(bool autohide) async {}
 }
