@@ -42,5 +42,6 @@ extension type WebMapController._(JSObject _) implements JSObject {
   external void getKeyboardShortcuts();
 
   external void setCopyrightPosition(int copyrightPosition, bool reversed);
+  external WebMapProjection getProjection();
   external void setCursor(String cursor);
 }
