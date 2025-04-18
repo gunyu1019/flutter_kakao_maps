@@ -1,9 +1,13 @@
 part of '../kakao_map_sdk.dart';
 
 
-class KakaoMapWebController extends KakaoMapControllerSender {
+class KakaoMapWebController extends KakaoMapController {
   // ignore: constant_identifier_names
   static const VIEW_TYPE = "plugin/kakao_map";
+
+  final KakaoMapWebController controller;
+
+  KakaoMapWebController({required this.controller});
 
   @override
   Future<LabelController> addLabelLayer(String id, {CompetitionType competitionType = BaseLabelController.defaultCompetitionType, CompetitionUnit competitionUnit = BaseLabelController.defaultCompetitionUnit, OrderingType orderingType = BaseLabelController.defaultOrderingType, int zOrder = BaseLabelController.defaultZOrder}) {
