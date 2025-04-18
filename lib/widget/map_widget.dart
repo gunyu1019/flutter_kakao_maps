@@ -108,7 +108,7 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
     channel.setMethodCallHandler(handle);
 
     final overlayChannel = ChannelType.overlay.channelWithId(viewId);
-    controller = KakaoMapController(channel, overlayChannel: overlayChannel);
+    controller = KakaoMapControllerImplement(channel, overlayChannel: overlayChannel);
   }
 
   void _setEventHandler() {

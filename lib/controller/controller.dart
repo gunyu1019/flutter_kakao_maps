@@ -1,378 +1,66 @@
 part of '../kakao_map_sdk.dart';
 
-class KakaoMapController extends KakaoMapControllerSender {
-  final MethodChannel channel;
+abstract class KakaoMapController with OverlayManager {
+  double? buildingHeightScale;
 
-  @override
-  final MethodChannel overlayChannel;
+  /// 현재 카메라가 보고 있는 속성을 불러옵니다.
+  /// [CameraPosition] 형태로 반환하며, 카메라가 보고 있는 위치, 확대/축소, 회전, 기울기 값을 반환받는다.
+  Future<CameraPosition> getCameraPosition();
 
-  KakaoMapController(this.channel, {required this.overlayChannel}) {
-    _initalizeOverlayController();
-  }
+  /// 카메라를 이동시켜 지도를 움직인다.
+  /// [animation] 매개변수를 입력하면 이동 애니메이션을 가지게된다.
+  Future<void> moveCamera(CameraUpdate camera, {CameraAnimation? animation});
 
-  /* Sender */
-  @override
-  Future<CameraPosition> getCameraPosition() async {
-    final rawCameraPosition = await channel.invokeMethod("getCameraPosition");
-    return CameraPosition.fromMessageable(rawCameraPosition);
-  }
+  /// 주어진 [x]와 [y] 값이 지도의 위/경도로 어디에 속해있는지 반환합니다.
+  Future<LatLng?> fromScreenPoint(int x, int y);
 
-  @override
-  Future<void> moveCamera(CameraUpdate camera,
-      {CameraAnimation? animation}) async {
-    await channel.invokeMethod("moveCamera", {
-      "cameraUpdate": camera.toMessageable(),
-      "cameraAnimation": animation?.toMessageable()
-    });
-  }
+  /// 주어진 [position] 매개변수를 통해 스크린의 x 좌표와 y 좌표 값을 [KPoint]에 담아 반환합니다.
+  Future<KPoint?> toScreenPoint(LatLng position);
 
-  @override
-  Future<LatLng?> fromScreenPoint(int x, int y) async {
-    final position =
-        await channel.invokeMethod("fromScreenPoint", {"x": x, "y": y});
-    if (position == null) {
-      return null;
-    }
-    return LatLng.fromMessageable(position);
-  }
+  /// 지도에서 사용할 수 있는 제스처를 설정합니다.
+  /// [gesture]는 사용 유무를 설정한 제스쳐입니다.
+  Future<void> setGesture(GestureType gesture, bool enable);
 
-  @override
-  Future<KPoint?> toScreenPoint(LatLng position) async {
-    final point =
-        await channel.invokeMethod("toScreenPoint", position.toMessageable());
-    if (point == null) {
-      return null;
-    }
-    return KPoint(point['x'], point['y']);
-  }
+  /// 캐시 데이터를 지웁니다.
+  Future<void> clearCache();
 
-  @override
-  Future<void> setGesture(GestureType gesture, bool enable) async {
-    await channel.invokeMethod(
-        "setGestureEnable", {"gestureType": gesture.value, "enable": enable});
-  }
+  /// 디스크에 저장된 캐시 데이터를 지웁니다.
+  Future<void> clearDiskCache();
 
-  @override
-  Future<void> clearCache() async {
-    await channel.invokeMethod("clearCache");
-  }
+  /// 주어진 [zoomLevel]과 [position]에 담긴 위/경도 배열이 카메라 모두 담을 수 있는지 확인합니다.
+  /// 확인된 결과는 [bool] 형태로 반환받으며, 모두 스크린에 표현할 수 있을 경우 [True]를 반환합니다.
+  Future<bool> canShowPosition(int zoomLevel, List<LatLng> position);
 
-  @override
-  Future<void> clearDiskCache() async {
-    await channel.invokeMethod("clearDiskCache");
-  }
+  /// 지도 형태를 변경합니다.
+  Future<void> changeMapType(MapType mapType);
 
-  @override
-  Future<bool> canShowPosition(int zoomLevel, List<LatLng> position) async {
-    final result = await channel.invokeMethod("canShowPosition", {
-      "zoomLevel": zoomLevel,
-      "position": position.map((e) => e.toMessageable()).toList()
-    });
-    return result;
-  }
+  /// 지도에서 제공하는 오버레이를 활성화합니다.
+  Future<void> showOverlay(MapOverlay overlay);
 
-  @override
-  Future<void> changeMapType(MapType mapType) async {
-    await channel.invokeMethod("changeMapType", {"mapType": mapType.value});
-  }
+  /// 지도에서 제공하는 오버레이를 비활성화합니다.
+  Future<void> hideOverlay(MapOverlay overlay);
 
-  @override
-  Future<void> showOverlay(MapOverlay overlay) async {
-    await channel.invokeMethod(
-        "overlayVisible", {"overlayType": overlay.value, "visible": true});
-  }
+  /// 최신 [buildingHeightScale] 값을 카카오맵에서 불러옵니다.
+  Future<double> fetchBuildingHeightScale();
 
-  @override
-  Future<void> hideOverlay(MapOverlay overlay) async {
-    await channel.invokeMethod(
-        "overlayVisible", {"overlayType": overlay.value, "visible": false});
-  }
+  /// [buildingHeightScale] 값을 [scale] 값에 맞게 업데이트 합니다.
+  Future<void> setBuildingHeightScale(double scale);
 
-  @override
-  Future<double> fetchBuildingHeightScale() async {
-    final result = await channel.invokeMethod("getBuildingHeightScale");
-    buildingHeightScale = result;
-    return result;
-  }
+  /// 지도에 표시된 나침판을 불러옵니다.
+  Compass get compass;
 
-  @override
-  Future<void> setBuildingHeightScale(double scale) async {
-    await channel.invokeMethod("setBuildingHeightScale", {"scale": scale});
-    buildingHeightScale = scale;
-  }
+  /// 지도에 표시된 축적바를 불러옵니다.
+  ScaleBar get scaleBar;
 
-  @override
-  Future<void> _defaultGUIvisible(DefaultGUIType type, bool visible) async {
-    await channel.invokeMethod(
-        "defaultGUIvisible", {"type": type.value, "visible": visible});
-  }
+  /// 지도에 표시된 로고를 불러옵니다.
+  Logo get logo;
 
-  @override
+  Future<void> _defaultGUIvisible(DefaultGUIType type, bool visible);
+
   Future<void> _defaultGUIposition(
-      DefaultGUIType type, MapGravity gravity, double x, double y) async {
-    await channel.invokeMethod("defaultGUIposition",
-        {"type": type.value, "gravity": gravity.value, "x": x, "y": y});
-  }
+      DefaultGUIType type, MapGravity gravity, double x, double y);
 
-  @override
-  Future<void> _scaleAutohide(bool autohide) async {
-    await channel.invokeMethod("scaleAutohide", {"autohide": autohide});
-  }
+  Future<void> _scaleAutohide(bool autohide);
 
-  @override
-  Future<void> _scaleAnimationTime(
-      int fadeIn, int fadeOut, int retention) async {
-    await channel.invokeMethod("scaleAnimationTime", {
-      "fadeIn": fadeIn,
-      "fadeOut": fadeOut,
-      "retention": retention,
-    });
-  }
-
-  @override
-  Compass get compass => Compass._(controller: this);
-
-  @override
-  ScaleBar get scaleBar => ScaleBar._(controller: this);
-
-  @override
-  Logo get logo => Logo._(controller: this);
-
-  @override
-  Future<String> addPoiStyle(PoiStyle style) async {
-    if (style.id != null && _routeStyle.containsKey(style.id)) {
-      throw DuplicatedOverlayException(style.id!);
-    }
-    String styleId = await labelLayer._invokeMethod(
-        "addPoiStyle", {"styleId": style.id, "styles": style.toMessageable()});
-    style._setStyleId(styleId);
-    _poiStyle[styleId] = style;
-    return styleId;
-  }
-
-  @override
-  Future<String> addPolygonShapeStyle(PolygonStyle style) async {
-    if (style.id != null && _routeStyle.containsKey(style.id)) {
-      throw DuplicatedOverlayException(style.id!);
-    }
-    final styleIds = await addMultiplePolygonShapeStyle([style], style.id);
-    return styleIds;
-  }
-
-  @override
-  Future<String> addPolylineShapeStyle(
-      PolylineStyle style, PolylineCap polylineCap) async {
-    final styleIds =
-        await addMultiplePolylineShapeStyle([style], polylineCap, style.id);
-    return styleIds;
-  }
-
-  @override
-  Future<String> addMultiplePolygonShapeStyle(List<PolygonStyle> style,
-      [String? id]) async {
-    if (id != null && _routeStyle.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
-    }
-    String styleId = await shapeLayer._invokeMethod("addPolygonShapeStyle", {
-      "styleId": id,
-      "styles": style.map((e) => e.toMessageable()).toList()
-    });
-    for (PolygonStyle element in style) {
-      element._setStyleId(styleId);
-    }
-    _polygonStyle[styleId] = style;
-    return styleId;
-  }
-
-  @override
-  Future<String> addMultiplePolylineShapeStyle(
-      List<PolylineStyle> style, PolylineCap polylineCap,
-      [String? id]) async {
-    if (id != null && _routeStyle.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
-    }
-    String styleId = await shapeLayer._invokeMethod("addPolylineShapeStyle", {
-      "styleId": id,
-      "styles": style.map((e) => e.toMessageable()).toList(),
-      "polylineCap": polylineCap.value
-    });
-    for (PolylineStyle element in style) {
-      element._setStyleId(styleId);
-    }
-    _polylineStyle[styleId] = style;
-    return styleId;
-  }
-
-  @override
-  Future<String> addRouteStyle(RouteStyle style) async {
-    final styleIds = await addMultipleRouteStyle([style], style.id);
-    return styleIds;
-  }
-
-  @override
-  Future<String> addMultipleRouteStyle(List<RouteStyle> styles,
-      [String? id]) async {
-    if (id != null && _routeStyle.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
-    }
-    String styleId = await routeLayer._invokeMethod("addRouteStyle", {
-      "styleId": id,
-      "styles": styles.map((e) => e.toMessageable()).toList()
-    });
-    for (RouteStyle element in styles) {
-      element._setStyleId(styleId);
-    }
-    _routeStyle[styleId] = styles;
-    return styleId;
-  }
-
-  @override
-  PoiStyle? getPoiStyle(String id) => _poiStyle[id];
-
-  @override
-  PolygonStyle? getPolygonShapeStyle(String id) => _polygonStyle[id]?[0];
-
-  @override
-  PolylineStyle? getPolylineShapeStyle(String id) => _polylineStyle[id]?[0];
-
-  @override
-  List<PolygonStyle>? getMultiplePolygonShapeStyle(String id) =>
-      _polygonStyle[id];
-
-  @override
-  List<PolylineStyle>? getMultiplePolylineShapeStyle(String id) =>
-      _polylineStyle[id];
-
-  @override
-  RouteStyle? getRotueStyle(String id) => _routeStyle[id]?[0];
-
-  @override
-  List<RouteStyle>? getMultipleRotueStyle(String id) => _routeStyle[id];
-
-  @override
-  Future<LabelController> addLabelLayer(String id,
-      {CompetitionType competitionType =
-          BaseLabelController.defaultCompetitionType,
-      CompetitionUnit competitionUnit =
-          BaseLabelController.defaultCompetitionUnit,
-      OrderingType orderingType = BaseLabelController.defaultOrderingType,
-      int zOrder = BaseLabelController.defaultZOrder}) async {
-    if (_labelController.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
-    }
-    final labelLayer = LabelController._(
-      overlayChannel,
-      this,
-      id,
-      competitionType: competitionType,
-      competitionUnit: competitionUnit,
-      orderingType: orderingType,
-      zOrder: zOrder,
-    );
-    await labelLayer._createLabelLayer();
-    _labelController[id] = labelLayer;
-    return labelLayer;
-  }
-
-  @override
-  Future<LodLabelController> addLodLabelLayer(String id,
-      {CompetitionType competitionType =
-          BaseLabelController.defaultCompetitionType,
-      CompetitionUnit competitionUnit =
-          BaseLabelController.defaultCompetitionUnit,
-      OrderingType orderingType = BaseLabelController.defaultOrderingType,
-      double radius = LodLabelController.defaultRadius,
-      int zOrder = BaseLabelController.defaultZOrder}) async {
-    if (_lodLabelController.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
-    }
-    final labelLayer = LodLabelController._(
-      overlayChannel,
-      this,
-      id,
-      competitionType: competitionType,
-      competitionUnit: competitionUnit,
-      orderingType: orderingType,
-      radius: radius,
-      zOrder: zOrder,
-    );
-    await labelLayer._createLodLabelLayer();
-    _lodLabelController[id] = labelLayer;
-    return labelLayer;
-  }
-
-  @override
-  Future<ShapeController> addShapeLayer(String id,
-      {ShapeLayerPass passType = ShapeController.defaultShapeLayerPass,
-      int zOrder = ShapeController.defaultZOrder}) async {
-    if (_shapeController.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
-    }
-    final shapeLayer = ShapeController._(overlayChannel, this, id,
-        passType: passType, zOrder: zOrder);
-    await shapeLayer._createShapeLayer();
-    _shapeController[id] = shapeLayer;
-    return shapeLayer;
-  }
-
-  @override
-  Future<RouteController> addRouteLayer(String id,
-      {int zOrder = ShapeController.defaultZOrder}) async {
-    if (_routeController.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
-    }
-    final routeLayer =
-        RouteController._(overlayChannel, this, id, zOrder: zOrder);
-    await routeLayer._createRouteLayer();
-    _routeController[id] = routeLayer;
-    return routeLayer;
-  }
-
-  @override
-  LabelController? getLabelLayer(String id) => _labelController[id];
-
-  @override
-  LodLabelController? getLodLabelLayer(String id) => _lodLabelController[id];
-
-  @override
-  ShapeController? getShapeLayer(String id) => _shapeController[id];
-
-  @override
-  RouteController? getRouteLayer(String id) => _routeController[id];
-
-  @override
-  Future<void> removeLabelLayer(LabelController controller) async {
-    await controller._removeLabelLayer();
-  }
-
-  @override
-  Future<void> removeLodLabelLayer(LodLabelController controller) async {
-    await controller._removeLodLabelLayer();
-  }
-
-  @override
-  Future<void> removeShapeLayer(ShapeController controller) async {
-    await controller._removeShapeLayer();
-  }
-
-  @override
-  Future<void> removeRouteLayer(RouteController controller) async {
-    await controller._removeRouteLayer();
-  }
-
-  @override
-  LabelController get labelLayer =>
-      _labelController[LabelController.defaultId]!;
-
-  @override
-  LodLabelController get lodLabelLayer =>
-      _lodLabelController[LodLabelController.defaultId]!;
-
-  @override
-  ShapeController get shapeLayer =>
-      _shapeController[ShapeController.defaultId]!;
-
-  @override
-  RouteController get routeLayer =>
-      _routeController[RouteController.defaultId]!;
+  Future<void> _scaleAnimationTime(int fadeIn, int fadeOut, int retention);
 }
