@@ -5,8 +5,24 @@ extension type WebMapOption._(JSObject _) implements JSObject  {
   external WebMapOption({
     required WebLatLng center,
     int level = 3,
+    int mapTypeId = 1,
+    bool draggable = true,
+    bool scrollwheel = true,
+    bool disableDoubleClick = true,
+    bool disableDoubleClickZoom = true,
+    String? projectionId = "0",
+    bool titleAnimation = true,
+    bool keyboardShortcuts = false
   });
 
   external WebLatLng get center;
   external int get level;
+  external int get mapTypeId;
+  external bool get draggable;
+  external bool get scrollwheel;
+  external bool get disableDoubleClick;
+  external bool get disableDoubleClickZoom;
+  external String? get projectionId;
+  external bool get titleAnimation;
+  external JSAny get keyboardShortcuts;
 }
