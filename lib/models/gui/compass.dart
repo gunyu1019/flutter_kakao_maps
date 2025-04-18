@@ -5,10 +5,10 @@ class Compass extends DefaultGUI {
   @override
   DefaultGUIType get type => DefaultGUIType.compass;
 
-  KakaoMapControllerSender _controller;
+  KakaoMapController _controller;
 
   Compass._({
-    required KakaoMapControllerSender controller,
+    required KakaoMapController controller,
   }) : _controller = controller;
 
   /// 지도에 표시된 나침판을 숨깁니다.

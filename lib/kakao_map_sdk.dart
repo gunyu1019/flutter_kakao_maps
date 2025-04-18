@@ -16,9 +16,9 @@ import 'package:web/web.dart' as web;
 part 'channel/channel_type.dart';
 
 /* controller */
-part 'controller/controller.dart';
+part 'controller/controller_implement.dart';
 part 'controller/handler.dart';
-part 'controller/sender.dart';
+part 'controller/controller.dart';
 
 part 'controller/overlay/base_overlay_controller.dart';
 part 'controller/overlay/base_label_controller.dart';
