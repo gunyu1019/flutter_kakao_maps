@@ -104,14 +104,31 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
   }
 
   void onPlatformViewCreated(int viewId) {
+    if (kIsWeb) {
+      final webMapOption =
+          WebMapOption.fromMapOption(widget.option ?? const KakaoMapOption());
+      WebInitializer.getController(viewId, webMapOption).then((webController) {
+        if (webController == null) {
+          throw Error();
+        }
+        controller =
+            KakaoMapWebController(controller: webController, handler: this);
+        onMapReady();
+      });
+      return;
+    }
     channel = ChannelType.view.channelWithId(viewId);
     channel.setMethodCallHandler(handle);
 
     final overlayChannel = ChannelType.overlay.channelWithId(viewId);
-    controller = KakaoMapControllerImplement(channel, overlayChannel: overlayChannel);
+    controller =
+        KakaoMapControllerImplement(channel, overlayChannel: overlayChannel);
   }
 
   void _setEventHandler() {
+    if (kIsWeb) {
+      return;
+    }
     int bitMask = EventType.onPoiClick.id | EventType.onLodPoiClick.id;
     if (widget.onCameraMoveStart != null) {
       bitMask |= EventType.onCameraMoveStart.id;
