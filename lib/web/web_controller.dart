@@ -154,13 +154,15 @@ class KakaoMapWebController extends KakaoMapController {
   @override
   Future<LatLng?> fromScreenPoint(int x, int y) async {
     final protection = controller.getProjection();
-    return protection.coordsFromContainerPoint(WebPoint(x.toDouble(), y.toDouble())).toLatLng();
+    return protection
+        .coordsFromContainerPoint(WebPoint(x.toDouble(), y.toDouble()))
+        .toLatLng();
   }
 
   @override
-  Future<CameraPosition> getCameraPosition() {
-    // TODO: implement getCameraPosition
-    throw UnimplementedError();
+  Future<CameraPosition> getCameraPosition() async {
+    return CameraPosition(
+        controller.getCenter().toLatLng(), controller.getLevel());
   }
 
   @override
@@ -225,14 +227,56 @@ class KakaoMapWebController extends KakaoMapController {
   Logo get logo => throw UnimplementedError();
 
   @override
-  Future<void> moveCamera(CameraUpdate camera, {CameraAnimation? animation}) {
-    // TODO: implement moveCamera
-    throw UnimplementedError();
+  Future<void> moveCamera(CameraUpdate camera,
+      {CameraAnimation? animation}) async {
+    JSAny animationOption = {
+      "animate": animation == null ? false : {"duration": animation.duration}
+    }.jsify()!;
+    web.console.log(animationOption);
+    final level = controller.getLevel();
+    switch (camera.type) {
+      case CameraUpdateType.newCenterPoint:
+        final zoomLevel = camera.zoomLevel == -1
+            ? level
+            : calculateZoomLevel(camera.zoomLevel);
+        controller.jump(
+            WebLatLng.fromLatLng(camera.position!), zoomLevel, animationOption);
+        break;
+      case CameraUpdateType.newCameraPos:
+        final zoomLevel = camera.cameraPosition!.zoomLevel == -1
+            ? level
+            : calculateZoomLevel(camera.cameraPosition!.zoomLevel);
+        controller.jump(WebLatLng.fromLatLng(camera.cameraPosition!.position),
+            zoomLevel, animationOption);
+        break;
+      case CameraUpdateType.zoomTo:
+        final zoomLevel = camera.zoomLevel == -1
+            ? level
+            : calculateZoomLevel(camera.zoomLevel);
+        controller.setLevel(zoomLevel, {"options": animationOption}.jsify());
+        break;
+      case CameraUpdateType.zoomIn:
+        controller.setLevel(level - 1, {"options": animationOption}.jsify());
+        break;
+      case CameraUpdateType.zoomOut:
+        controller.setLevel(level + 1, {"options": animationOption}.jsify());
+        break;
+      case CameraUpdateType.newCameraAngle:
+      case CameraUpdateType.rotate:
+      case CameraUpdateType.tilt:
+        break;
+      case CameraUpdateType.fitMapPoints:
+        final bounds = WebLatLngBound();
+        camera.fitPoints!
+            .map((e) => WebLatLng.fromLatLng(e))
+            .forEach((e) => bounds.extend(e));
+        controller.setBounds(bounds, camera.padding ?? 0, camera.padding ?? 0,
+            camera.padding ?? 0, camera.padding ?? 0);
+    }
   }
 
   @override
-  // TODO: implement overlayChannel
-  MethodChannel get overlayChannel => throw UnimplementedError();
+  MethodChannel get overlayChannel => _dummyChannel;
 
   @override
   Future<void> removeLabelLayer(LabelController controller) {
