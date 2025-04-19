@@ -1,34 +1,64 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of '../kakao_map_sdk.dart';
-
 
 class KakaoMapWebController extends KakaoMapController {
   // ignore: constant_identifier_names
   static const VIEW_TYPE = "plugin/kakao_map";
 
-  final KakaoMapWebController controller;
+  final WebMapController controller;
+  final KakaoMapControllerHandler handler;
 
-  KakaoMapWebController({required this.controller});
+  KakaoMapWebController({
+    required this.controller,
+    required this.handler,
+  });
+
+  // Android, iOS Platform: Lv.1 ~ Lv.21 (Lv.19)
+  // Web Platform: Lv.1 ~ Lv.14
+  static int calculateZoomLevel(int level) => switch (level) {
+        >= 18 => 1,
+        >= 17 && <= 16 => 19 - level,
+        >= 15 && <= 7 => 20 - level,
+        <= 6 => 14,
+        int() => 3
+      };
 
   @override
-  Future<LabelController> addLabelLayer(String id, {CompetitionType competitionType = BaseLabelController.defaultCompetitionType, CompetitionUnit competitionUnit = BaseLabelController.defaultCompetitionUnit, OrderingType orderingType = BaseLabelController.defaultOrderingType, int zOrder = BaseLabelController.defaultZOrder}) {
+  Future<LabelController> addLabelLayer(String id,
+      {CompetitionType competitionType =
+          BaseLabelController.defaultCompetitionType,
+      CompetitionUnit competitionUnit =
+          BaseLabelController.defaultCompetitionUnit,
+      OrderingType orderingType = BaseLabelController.defaultOrderingType,
+      int zOrder = BaseLabelController.defaultZOrder}) {
     // TODO: implement addLabelLayer
     throw UnimplementedError();
   }
 
   @override
-  Future<LodLabelController> addLodLabelLayer(String id, {CompetitionType competitionType = BaseLabelController.defaultCompetitionType, CompetitionUnit competitionUnit = BaseLabelController.defaultCompetitionUnit, OrderingType orderingType = BaseLabelController.defaultOrderingType, double radius = LodLabelController.defaultRadius, int zOrder = BaseLabelController.defaultZOrder}) {
+  Future<LodLabelController> addLodLabelLayer(String id,
+      {CompetitionType competitionType =
+          BaseLabelController.defaultCompetitionType,
+      CompetitionUnit competitionUnit =
+          BaseLabelController.defaultCompetitionUnit,
+      OrderingType orderingType = BaseLabelController.defaultOrderingType,
+      double radius = LodLabelController.defaultRadius,
+      int zOrder = BaseLabelController.defaultZOrder}) {
     // TODO: implement addLodLabelLayer
     throw UnimplementedError();
   }
 
   @override
-  Future<String> addMultiplePolygonShapeStyle(List<PolygonStyle> style, [String? id]) {
+  Future<String> addMultiplePolygonShapeStyle(List<PolygonStyle> style,
+      [String? id]) {
     // TODO: implement addMultiplePolygonShapeStyle
     throw UnimplementedError();
   }
 
   @override
-  Future<String> addMultiplePolylineShapeStyle(List<PolylineStyle> style, PolylineCap polylineCap, [String? id]) {
+  Future<String> addMultiplePolylineShapeStyle(
+      List<PolylineStyle> style, PolylineCap polylineCap,
+      [String? id]) {
     // TODO: implement addMultiplePolylineShapeStyle
     throw UnimplementedError();
   }
@@ -40,9 +70,10 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<String> addPoiStyle(PoiStyle style) {
-    // TODO: implement addPoiStyle
-    throw UnimplementedError();
+  Future<String> addPoiStyle(PoiStyle style) async {
+    final poiStyleId = "poi_style_${_poiStyle.length}";
+    _poiStyle[poiStyleId] = style;
+    return poiStyleId;
   }
 
   @override
@@ -52,13 +83,15 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<String> addPolylineShapeStyle(PolylineStyle style, PolylineCap polylineCap) {
+  Future<String> addPolylineShapeStyle(
+      PolylineStyle style, PolylineCap polylineCap) {
     // TODO: implement addPolylineShapeStyle
     throw UnimplementedError();
   }
 
   @override
-  Future<RouteController> addRouteLayer(String id, {int zOrder = RouteController.defaultZOrder}) {
+  Future<RouteController> addRouteLayer(String id,
+      {int zOrder = RouteController.defaultZOrder}) {
     // TODO: implement addRouteLayer
     throw UnimplementedError();
   }
@@ -70,7 +103,9 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<ShapeController> addShapeLayer(String id, {ShapeLayerPass passType = ShapeController.defaultShapeLayerPass, int zOrder = ShapeController.defaultZOrder}) {
+  Future<ShapeController> addShapeLayer(String id,
+      {ShapeLayerPass passType = ShapeController.defaultShapeLayerPass,
+      int zOrder = ShapeController.defaultZOrder}) {
     // TODO: implement addShapeLayer
     throw UnimplementedError();
   }
@@ -104,9 +139,8 @@ class KakaoMapWebController extends KakaoMapController {
   Compass get compass => throw UnimplementedError();
 
   @override
-  Future<double> fetchBuildingHeightScale() {
-    // TODO: implement fetchBuildingHeightScale
-    throw UnimplementedError();
+  Future<double> fetchBuildingHeightScale() async {
+    return 0.0;
   }
 
   @override
@@ -128,10 +162,12 @@ class KakaoMapWebController extends KakaoMapController {
   LodLabelController? getLodLabelLayer(String id) => _lodLabelController[id];
 
   @override
-  List<PolygonStyle>? getMultiplePolygonShapeStyle(String id) => _polygonStyle[id];
+  List<PolygonStyle>? getMultiplePolygonShapeStyle(String id) =>
+      _polygonStyle[id];
 
   @override
-  List<PolylineStyle>? getMultiplePolylineShapeStyle(String id) => _polylineStyle[id];
+  List<PolylineStyle>? getMultiplePolylineShapeStyle(String id) =>
+      _polylineStyle[id];
 
   @override
   List<RouteStyle>? getMultipleRotueStyle(String id) => _routeStyle[id];
@@ -140,10 +176,12 @@ class KakaoMapWebController extends KakaoMapController {
   PoiStyle? getPoiStyle(String id) => _poiStyle[id];
 
   @override
-  PolygonStyle? getPolygonShapeStyle(String id) => getMultiplePolygonShapeStyle(id)?[0];
+  PolygonStyle? getPolygonShapeStyle(String id) =>
+      getMultiplePolygonShapeStyle(id)?[0];
 
   @override
-  PolylineStyle? getPolylineShapeStyle(String id) => getMultiplePolylineShapeStyle(id)?[0];
+  PolylineStyle? getPolylineShapeStyle(String id) =>
+      getMultiplePolylineShapeStyle(id)?[0];
 
   @override
   RouteStyle? getRotueStyle(String id) => getMultipleRotueStyle(id)?[0];
@@ -162,7 +200,7 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   // TODO: implement labelLayer
-  LabelController get labelLayer => throw UnimplementedError();
+  LabelController get labelLayer => WebLabelController._(controller, const MethodChannel("dummy"), this, "default");
 
   @override
   // TODO: implement lodLabelLayer
@@ -241,19 +279,21 @@ class KakaoMapWebController extends KakaoMapController {
     // TODO: implement toScreenPoint
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<void> _defaultGUIposition(DefaultGUIType type, MapGravity gravity, double x, double y) {
+  Future<void> _defaultGUIposition(
+      DefaultGUIType type, MapGravity gravity, double x, double y) {
     // TODO: implement _defaultGUIposition
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> _defaultGUIvisible(DefaultGUIType type, bool visible) async {}
-  
+
   @override
-  Future<void> _scaleAnimationTime(int fadeIn, int fadeOut, int retention) async {}
-  
+  Future<void> _scaleAnimationTime(
+      int fadeIn, int fadeOut, int retention) async {}
+
   @override
   Future<void> _scaleAutohide(bool autohide) async {}
 }
