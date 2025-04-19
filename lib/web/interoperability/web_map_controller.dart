@@ -10,7 +10,7 @@ extension type WebMapController._(JSObject _) implements JSObject {
   external void setMapTypeId(int mapTypeId);
   external int getMapTypeId();
 
-  external void setLevel(int level);
+  external void setLevel(int level, [JSAny? options]);
   external int getLevel();
 
   external void setBounds(WebLatLngBound bounds,
@@ -22,7 +22,7 @@ extension type WebMapController._(JSObject _) implements JSObject {
 
   external void panBy(int dx, int dy);
   external void panTo(WebLatLng latlng, int padding);
-  external void jump(WebLatLng center, int level, JSAny? animate);
+  external void jump(WebLatLng center, int level, [JSAny? animate]);
 
   external void addControl(JSObject control, int position);
   external void removeControl(JSObject control);
