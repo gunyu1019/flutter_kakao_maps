@@ -3,13 +3,7 @@ part of '../../kakao_map_sdk.dart';
 class WebLabelController extends LabelController {
   final WebMapController controller;
 
-  WebLabelController._(this.controller, super.channel, super.manager, super.id,
-      {super.competitionType,
-      super.competitionUnit,
-      super.orderingType,
-      super.visible,
-      super.clickable,
-      super.zOrder})
+  WebLabelController._(this.controller, super.channel, super.manager, super.id)
       : super._();
 
   @override
