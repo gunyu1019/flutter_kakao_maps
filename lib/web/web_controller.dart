@@ -131,20 +131,13 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<void> clearCache() {
-    // TODO: implement clearCache
-    throw UnimplementedError();
-  }
+  Future<void> clearCache() async {}
 
   @override
-  Future<void> clearDiskCache() {
-    // TODO: implement clearDiskCache
-    throw UnimplementedError();
-  }
+  Future<void> clearDiskCache() async {}
 
   @override
-  // TODO: implement compass
-  Compass get compass => throw UnimplementedError();
+  Compass get compass => Compass._(controller: this);
 
   @override
   Future<double> fetchBuildingHeightScale() async {
@@ -223,8 +216,7 @@ class KakaoMapWebController extends KakaoMapController {
   LodLabelController get lodLabelLayer => throw UnimplementedError();
 
   @override
-  // TODO: implement logo
-  Logo get logo => throw UnimplementedError();
+  Logo get logo => Logo._(controller: this);
 
   @override
   Future<void> moveCamera(CameraUpdate camera,
@@ -307,8 +299,7 @@ class KakaoMapWebController extends KakaoMapController {
   RouteController get routeLayer => throw UnimplementedError();
 
   @override
-  // TODO: implement scaleBar
-  ScaleBar get scaleBar => throw UnimplementedError();
+  ScaleBar get scaleBar => ScaleBar._(controller: this);
 
   @override
   Future<void> setBuildingHeightScale(double scale) async {}
