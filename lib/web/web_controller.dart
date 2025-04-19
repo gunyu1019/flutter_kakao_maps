@@ -1,6 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of '../kakao_map_sdk.dart';
 
+/// [KakaoMapController]를 웹 환경에서 사용할 수 있도록 구현하는 객체입니다.
 class KakaoMapWebController extends KakaoMapController {
   // ignore: constant_identifier_names
   static const VIEW_TYPE = "plugin/kakao_map";
@@ -8,13 +8,20 @@ class KakaoMapWebController extends KakaoMapController {
   final WebMapController controller;
   final KakaoMapControllerHandler handler;
 
+  /// Android(Kotlin), iOS(Swift) 플랫폼에서는 고유 네이티브 환경간 소통할 수 있는 [MethodChannel]이 필요합니다.
+  /// Web 환경에서는 네이티브 고유 언어와 소통할 플랫폼 채널이 필요 없으므로 더미 채널을 만듭니다.
+  /// 더미 채널은 오버레이 플랫폼 채널 역할을 대신합니다. 실제로 쓰이지는 않습니다.
+  final MethodChannel _dummyChannel;
+
   KakaoMapWebController({
     required this.controller,
     required this.handler,
-  });
+  }) : _dummyChannel = const MethodChannel("dummy_method_channel");
 
-  // Android, iOS Platform: Lv.1 ~ Lv.21 (Lv.19)
-  // Web Platform: Lv.1 ~ Lv.14
+  /// 네이티브 환경에서 줌 레벨과 웹 환경에서 줌 레벨을 계산합니다.
+  /// 아래의 공식은 축적도를 기반으로 계산된 줌 레벨이며 플랫폼별 제공하는 SDK 한계상 오차가 발생할 수 있습니다.
+  /// Android, iOS Platform: Lv.6 ~ Lv.21 (Lv.19)
+  /// Web Platform: Lv.1 ~ Lv.14
   static int calculateZoomLevel(int level) => switch (level) {
         >= 18 => 1,
         >= 17 && <= 16 => 19 - level,
@@ -30,9 +37,10 @@ class KakaoMapWebController extends KakaoMapController {
       CompetitionUnit competitionUnit =
           BaseLabelController.defaultCompetitionUnit,
       OrderingType orderingType = BaseLabelController.defaultOrderingType,
-      int zOrder = BaseLabelController.defaultZOrder}) {
-    // TODO: implement addLabelLayer
-    throw UnimplementedError();
+      int zOrder = BaseLabelController.defaultZOrder}) async {
+    final layer = WebLabelController._(controller, _dummyChannel, this, id);
+    _labelController[id] = layer;
+    return layer;
   }
 
   @override
@@ -193,9 +201,14 @@ class KakaoMapWebController extends KakaoMapController {
   ShapeController? getShapeLayer(String id) => _shapeController[id];
 
   @override
-  Future<void> hideOverlay(MapOverlay overlay) {
-    // TODO: implement hideOverlay
-    throw UnimplementedError();
+  Future<void> hideOverlay(MapOverlay overlay) async {
+    final mapTypeId = switch(overlay) {
+      MapOverlay.bicycleRoad => 8,
+      MapOverlay.roadviewLine => 5,
+      MapOverlay.hillsading => 7,
+      MapOverlay.hybrid => 3,
+    };
+    controller.removeOverlayMapTypeId(mapTypeId);
   }
 
   @override
@@ -269,9 +282,14 @@ class KakaoMapWebController extends KakaoMapController {
   ShapeController get shapeLayer => throw UnimplementedError();
 
   @override
-  Future<void> showOverlay(MapOverlay overlay) {
-    // TODO: implement showOverlay
-    throw UnimplementedError();
+  Future<void> showOverlay(MapOverlay overlay) async {
+    final mapTypeId = switch(overlay) {
+      MapOverlay.bicycleRoad => 8,
+      MapOverlay.roadviewLine => 5,
+      MapOverlay.hillsading => 7,
+      MapOverlay.hybrid => 3,
+    };
+    controller.addOverlayMapTypeId(mapTypeId);
   }
 
   @override
@@ -282,9 +300,17 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   Future<void> _defaultGUIposition(
-      DefaultGUIType type, MapGravity gravity, double x, double y) {
-    // TODO: implement _defaultGUIposition
-    throw UnimplementedError();
+      DefaultGUIType type, MapGravity gravity, double x, double y) async {
+        if (type != DefaultGUIType.compass && gravity.verticalAlign == VerticalAlign.bottom) {
+          final position = switch(gravity.horizontalAlign) {
+            HorizontalAlign.left => 0,
+            HorizontalAlign.center => -1,
+            HorizontalAlign.right => 1,
+          };
+          if (position >= 0) {
+            controller.setCopyrightPosition(position, false);
+          }
+        }
   }
 
   @override
