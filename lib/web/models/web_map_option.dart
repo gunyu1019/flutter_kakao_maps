@@ -15,6 +15,14 @@ extension type WebMapOption._(JSObject _) implements JSObject  {
     bool keyboardShortcuts = false
   });
 
+  factory WebMapOption.fromMapOption(KakaoMapOption option) =>
+      WebMapOption(
+        center: WebLatLng.fromLatLng(option.position),
+        level: KakaoMapWebController.calculateZoomLevel(option.zoomLevel),
+        mapTypeId: option.mapType.value == "skyview" ? 2 : 1
+      );
+
+
   external WebLatLng get center;
   external int get level;
   external int get mapTypeId;
