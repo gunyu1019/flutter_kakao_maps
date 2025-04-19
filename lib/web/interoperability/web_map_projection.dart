@@ -4,7 +4,7 @@ part of '../../kakao_map_sdk.dart';
 extension type WebMapProjection._(JSObject _) implements JSObject {
   external WebPoint pointFromCoords(WebLatLng latlng);
   external WebLatLng coordsFromPoint(WebPoint point);
-  
+
   external WebPoint containerPointFromCoords(WebLatLng latlng);
   external WebLatLng coordsFromContainerPoint(WebPoint point);
 }

@@ -1,27 +1,22 @@
 part of '../../kakao_map_sdk.dart';
 
+extension type WebMapOption._(JSObject _) implements JSObject {
+  external WebMapOption(
+      {required WebLatLng center,
+      int level = 3,
+      int mapTypeId = 1,
+      bool draggable = true,
+      bool scrollwheel = true,
+      bool disableDoubleClick = true,
+      bool disableDoubleClickZoom = true,
+      String? projectionId = "0",
+      bool titleAnimation = true,
+      bool keyboardShortcuts = false});
 
-extension type WebMapOption._(JSObject _) implements JSObject  {
-  external WebMapOption({
-    required WebLatLng center,
-    int level = 3,
-    int mapTypeId = 1,
-    bool draggable = true,
-    bool scrollwheel = true,
-    bool disableDoubleClick = true,
-    bool disableDoubleClickZoom = true,
-    String? projectionId = "0",
-    bool titleAnimation = true,
-    bool keyboardShortcuts = false
-  });
-
-  factory WebMapOption.fromMapOption(KakaoMapOption option) =>
-      WebMapOption(
-        center: WebLatLng.fromLatLng(option.position),
-        level: KakaoMapWebController.calculateZoomLevel(option.zoomLevel),
-        mapTypeId: option.mapType.value == "skyview" ? 2 : 1
-      );
-
+  factory WebMapOption.fromMapOption(KakaoMapOption option) => WebMapOption(
+      center: WebLatLng.fromLatLng(option.position),
+      level: KakaoMapWebController.calculateZoomLevel(option.zoomLevel),
+      mapTypeId: option.mapType.value == "skyview" ? 2 : 1);
 
   external WebLatLng get center;
   external int get level;

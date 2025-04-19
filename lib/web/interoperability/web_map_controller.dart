@@ -1,6 +1,5 @@
 part of '../../kakao_map_sdk.dart';
 
-
 @JS("kakao.maps.Map")
 extension type WebMapController._(JSObject _) implements JSObject {
   external WebMapController(web.Element element, WebMapOption option);
@@ -14,7 +13,8 @@ extension type WebMapController._(JSObject _) implements JSObject {
   external void setLevel(int level);
   external int getLevel();
 
-  external void setBounds(WebLatLngBound bounds, [int paddingTop, int paddingRight, int paddingBottom, int paddingLeft]);
+  external void setBounds(WebLatLngBound bounds,
+      [int paddingTop, int paddingRight, int paddingBottom, int paddingLeft]);
   external WebLatLngBound getBounds();
 
   external void setMinLevel(int minLevel);

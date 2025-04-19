@@ -5,7 +5,8 @@ abstract class OverlayController {
   abstract final OverlayType type;
   abstract final OverlayManager manager;
 
-  Future<T> _invokeMethod<T>(String method, Map<String, dynamic> payload) async {
+  Future<T> _invokeMethod<T>(
+      String method, Map<String, dynamic> payload) async {
     payload['type'] = type.value;
     return await channel.invokeMethod(method, payload);
   }

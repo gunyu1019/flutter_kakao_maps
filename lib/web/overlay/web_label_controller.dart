@@ -65,11 +65,10 @@ class WebLabelController extends LabelController {
     final styleId = style.id ?? await manager.addPoiStyle(style);
     final poiId = "custom_overlay_$poiCount";
     final webPoiOption = WebCustomOverlayOption(
-      clickable: true,
-      content: "<span id='$poiId'>Hello World</span>",
-      zIndex: rank ?? 10001,
-      position: WebLatLng.fromLatLng(position)
-    );
+        clickable: true,
+        content: "<span id='$poiId'>Hello World</span>",
+        zIndex: rank ?? 10001,
+        position: WebLatLng.fromLatLng(position));
     final webPoi = WebCustomOverlay(webPoiOption);
     webPoi.setMap(controller);
 

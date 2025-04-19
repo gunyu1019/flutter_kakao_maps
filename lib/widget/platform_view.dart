@@ -9,10 +9,9 @@ Widget _createPlatformView({
 }) {
   if (kIsWeb) {
     return HtmlElementView(
-      viewType: viewType,
-      creationParams: creationParams,
-      onPlatformViewCreated: onPlatformViewCreated
-    );
+        viewType: viewType,
+        creationParams: creationParams,
+        onPlatformViewCreated: onPlatformViewCreated);
   }
 
   if (Platform.isAndroid) {

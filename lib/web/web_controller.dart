@@ -202,7 +202,7 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   Future<void> hideOverlay(MapOverlay overlay) async {
-    final mapTypeId = switch(overlay) {
+    final mapTypeId = switch (overlay) {
       MapOverlay.bicycleRoad => 8,
       MapOverlay.roadviewLine => 5,
       MapOverlay.hillsading => 7,
@@ -213,7 +213,8 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   // TODO: implement labelLayer
-  LabelController get labelLayer => WebLabelController._(controller, const MethodChannel("dummy"), this, "default");
+  LabelController get labelLayer => WebLabelController._(
+      controller, const MethodChannel("dummy"), this, "default");
 
   @override
   // TODO: implement lodLabelLayer
@@ -283,7 +284,7 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   Future<void> showOverlay(MapOverlay overlay) async {
-    final mapTypeId = switch(overlay) {
+    final mapTypeId = switch (overlay) {
       MapOverlay.bicycleRoad => 8,
       MapOverlay.roadviewLine => 5,
       MapOverlay.hillsading => 7,
@@ -301,16 +302,17 @@ class KakaoMapWebController extends KakaoMapController {
   @override
   Future<void> _defaultGUIposition(
       DefaultGUIType type, MapGravity gravity, double x, double y) async {
-        if (type != DefaultGUIType.compass && gravity.verticalAlign == VerticalAlign.bottom) {
-          final position = switch(gravity.horizontalAlign) {
-            HorizontalAlign.left => 0,
-            HorizontalAlign.center => -1,
-            HorizontalAlign.right => 1,
-          };
-          if (position >= 0) {
-            controller.setCopyrightPosition(position, false);
-          }
-        }
+    if (type != DefaultGUIType.compass &&
+        gravity.verticalAlign == VerticalAlign.bottom) {
+      final position = switch (gravity.horizontalAlign) {
+        HorizontalAlign.left => 0,
+        HorizontalAlign.center => -1,
+        HorizontalAlign.right => 1,
+      };
+      if (position >= 0) {
+        controller.setCopyrightPosition(position, false);
+      }
+    }
   }
 
   @override
