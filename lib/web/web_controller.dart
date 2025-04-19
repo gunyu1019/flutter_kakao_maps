@@ -125,9 +125,12 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<void> changeMapType(MapType mapType) {
-    // TODO: implement changeMapType
-    throw UnimplementedError();
+  Future<void> changeMapType(MapType mapType) async {
+    final mapTypeId = switch(mapType) {
+      MapType.normal => 1,
+      MapType.skyview => 2,
+    };
+    controller.setMapTypeId(mapTypeId);
   }
 
   @override
@@ -305,9 +308,23 @@ class KakaoMapWebController extends KakaoMapController {
   Future<void> setBuildingHeightScale(double scale) async {}
 
   @override
-  Future<void> setGesture(GestureType gesture, bool enable) {
-    // TODO: implement setGesture
-    throw UnimplementedError();
+  Future<void> setGesture(GestureType gesture, bool enable) async {
+    switch (gesture) {
+      case GestureType.pan:
+        controller.setDraggable(enable);
+        break;
+      case GestureType.oneFingerDoubleTap:
+      case GestureType.twoFingerSingleTap:
+      case GestureType.zoom:
+        controller.setZoomable(enable);
+        break;
+      case GestureType.rotate:
+      case GestureType.tilt:
+      case GestureType.longTapAndDrag:
+      case GestureType.rotateZoom:
+      case GestureType.oneFingerZoom:
+      case GestureType.unknown:
+    }
   }
 
   @override
