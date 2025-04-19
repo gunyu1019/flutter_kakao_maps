@@ -2,7 +2,7 @@ part of '../../kakao_map_sdk.dart';
 
 @JS("kakao.maps.LatLngBounds")
 extension type WebLatLngBound._(JSObject _) implements JSObject {
-  external WebLatLngBound(WebLatLng sw, WebLatLng ne);
+  external WebLatLngBound([WebLatLng sw, WebLatLng ne]);
 
   external WebLatLng getSouthWest();
   external WebLatLng getNorthEast();
