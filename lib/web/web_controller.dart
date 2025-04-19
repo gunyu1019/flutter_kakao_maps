@@ -152,9 +152,9 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<LatLng?> fromScreenPoint(int x, int y) {
-    // TODO: implement fromScreenPoint
-    throw UnimplementedError();
+  Future<LatLng?> fromScreenPoint(int x, int y) async {
+    final protection = controller.getProjection();
+    return protection.coordsFromContainerPoint(WebPoint(x.toDouble(), y.toDouble())).toLatLng();
   }
 
   @override
@@ -267,10 +267,7 @@ class KakaoMapWebController extends KakaoMapController {
   ScaleBar get scaleBar => throw UnimplementedError();
 
   @override
-  Future<void> setBuildingHeightScale(double scale) {
-    // TODO: implement setBuildingHeightScale
-    throw UnimplementedError();
-  }
+  Future<void> setBuildingHeightScale(double scale) async {}
 
   @override
   Future<void> setGesture(GestureType gesture, bool enable) {
@@ -294,9 +291,11 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<KPoint?> toScreenPoint(LatLng position) {
-    // TODO: implement toScreenPoint
-    throw UnimplementedError();
+  Future<KPoint?> toScreenPoint(LatLng position) async {
+    final protection = controller.getProjection();
+    return protection
+        .containerPointFromCoords(WebLatLng.fromLatLng(position))
+        .toPoint();
   }
 
   @override
