@@ -20,7 +20,21 @@ class KakaoMapWebController extends KakaoMapController {
     required this.controller,
     required this.handler,
   })  : _dummyChannel = const MethodChannel("dummy_method_channel"),
-        _uuid = const Uuid();
+        _uuid = const Uuid() {
+    _initalizeOverlayController();
+  }
+
+  @override
+  void _initalizeOverlayController() {
+    _labelController[LabelController.defaultId] =
+        WebLabelController._(controller, overlayChannel, this, LabelController.defaultId);
+    /* _lodLabelController[LodLabelController.defaultId] = LodLabelController._(
+        overlayChannel, this, LodLabelController.defaultId);
+    _shapeController[ShapeController.defaultId] =
+        ShapeController._(overlayChannel, this, ShapeController.defaultId);
+    _routeController[RouteController.defaultId] =
+        RouteController._(overlayChannel, this, RouteController.defaultId); */
+  }
 
   /// 네이티브 환경에서 줌 레벨과 웹 환경에서 줌 레벨을 계산합니다.
   /// 아래의 공식은 축적도를 기반으로 계산된 줌 레벨이며 플랫폼별 제공하는 SDK 한계상 오차가 발생할 수 있습니다.
@@ -99,7 +113,7 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   Future<String> addPolylineShapeStyle(
-   PolylineStyle style, PolylineCap polylineCap) {
+      PolylineStyle style, PolylineCap polylineCap) {
     // TODO: implement addRouteLayer
     throw UnimplementedError();
   }
@@ -217,9 +231,7 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  // TODO: implement labelLayer
-  LabelController get labelLayer => WebLabelController._(
-      controller, const MethodChannel("dummy"), this, "default");
+  LabelController get labelLayer => _labelController[LabelController.defaultId]!;
 
   @override
   // TODO: implement lodLabelLayer
