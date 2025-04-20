@@ -6,12 +6,16 @@ class WebLabelController extends LabelController {
   WebLabelController._(this.controller, super.channel, super.manager, super.id)
       : super._();
 
+  final Map<String, WebPoi> _webPoi = {};
+
   @override
   Future<void> _createLabelLayer() async {}
 
   @override
   Future<void> _removeLabelLayer() async {
-    // 기존에 등록된 모든 Poi를 삭제해야함.
+    for (final poi in _poi.values) {
+      await removePoi(poi);
+    }
   }
 
   @override
@@ -21,25 +25,25 @@ class WebLabelController extends LabelController {
   @override
   Future<void> _changePoiVisible(String poiId, bool visible,
       {bool? autoMove, int? duration}) async {
-        // 구현 확정 (setVisible)
-      }
+    // 구현 확정 (setVisible)
+  }
 
   @override
   Future<void> _changePoiStyle(String poiId, String styleId,
       [bool transition = false]) async {
-        // 구현 확정 (setContent)
-      }
+    // 구현 확정 (setContent)
+  }
 
   Future<void> _invalidatePoi(String poiId, String styleId, String? text,
       [bool transition = false]) async {
-        // 구현 확정 (setContent)
-      }
+    // 구현 확정 (setContent)
+  }
 
   @override
-  Future<void> _movePoi(String poiId, LatLng position,
-      [double? millis]) async {
-        // 구현 확정 (setPosition)
-      }
+  Future<void> _movePoi(String poiId, LatLng position, [double? millis]) async {
+    _webPoi[poiId]?.elements.forEach(
+        (element) => element.setPosition(WebLatLng.fromLatLng(position)));
+  }
 
   @override
   Future<void> _rotatePoi(String poiId, double angle, [double? millis]) async {}
@@ -50,7 +54,7 @@ class WebLabelController extends LabelController {
 
   @override
   Future<void> _rankPoi(String poiId, int rank) async {
-    // 구현 확정 (setZIndex)
+    _webPoi[poiId]?.elements.forEach((element) => element.setZIndex(rank));
   }
 
   @override
@@ -60,9 +64,13 @@ class WebLabelController extends LabelController {
   @override
   Future<void> _changePolylineTextVisible(String labelId, bool visible) async {}
 
-  Future<void> _addPoiElement(String poiId, PoiStyle style, LatLng position, String? text, int? rank, bool visible) async {
+  Future<WebPoi> _addPoiElement(String poiId, PoiStyle style, LatLng position,
+      String? text, int? rank, bool visible) async {
     final imageAnchorY = text == null ? style.anchor.y : 1.0;
     final textAnchorY = text == null ? style.anchor.y : 0.0;
+    WebCustomOverlay? webImagePoi;
+    WebCustomOverlay? webTextPoi;
+
     if (style.icon != null) {
       final imageContent = (await imageElement(style.icon!))
         ..id = "${poiId}_image_${style.zoomLevel}";
@@ -73,12 +81,13 @@ class WebLabelController extends LabelController {
           position: WebLatLng.fromLatLng(position),
           xAnchor: style.anchor.x,
           yAnchor: imageAnchorY);
-      final webImagePoi = WebCustomOverlay(webImagePoiOption);
+      webImagePoi = WebCustomOverlay(webImagePoiOption);
       webImagePoi.setMap(controller);
       webImagePoi.setVisible(visible);
     }
     if (text != null) {
-      final textContent = web.HTMLDivElement()..id = "${poiId}_text_${style.zoomLevel}";
+      final textContent = web.HTMLDivElement()
+        ..id = "${poiId}_text_${style.zoomLevel}";
       text
           .split("\n")
           .mapIndexed(
@@ -91,10 +100,11 @@ class WebLabelController extends LabelController {
           position: WebLatLng.fromLatLng(position),
           xAnchor: style.anchor.x,
           yAnchor: textAnchorY);
-      final webTextPoi = WebCustomOverlay(webTextPoiOption);
+      webTextPoi = WebCustomOverlay(webTextPoiOption);
       webTextPoi.setMap(controller);
       webTextPoi.setVisible(visible);
     }
+    return WebPoi(webImagePoi, webTextPoi, visible);
   }
 
   @override
@@ -116,11 +126,21 @@ class WebLabelController extends LabelController {
     }
 
     final poiId = "custom_overlay_${this.id}_$poiCount";
-    await _addPoiElement(poiId, style, position, text, rank, visible);
-    
+    _webPoi[poiId] =
+        await _addPoiElement(poiId, style, position, text, rank, visible);
+
     // zoomLevel에 따른 element 추가
     for (var secondaryStyle in style._styles) {
-      await _addPoiElement(poiId, secondaryStyle, position, text, rank, false);
+      final otherPoi = await _addPoiElement(
+          poiId, secondaryStyle, position, text, rank, false);
+      if (otherPoi.imageElement != null) {
+        _webPoi[poiId]!.otherImageElement[secondaryStyle.zoomLevel] =
+            otherPoi.imageElement!;
+      }
+      if (otherPoi.textElement != null) {
+        _webPoi[poiId]!.otherTextElement[secondaryStyle.zoomLevel] =
+            otherPoi.textElement!;
+      }
     }
 
     final poi = Poi._(this, poiId,
@@ -137,6 +157,8 @@ class WebLabelController extends LabelController {
 
   @override
   Future<void> removePoi(Poi poi) async {
+    _webPoi[poi.id]?.elements.forEach((element) => element.setMap(null));
+    _webPoi.remove(poi.id);
     _poi.remove(poi.id);
   }
 

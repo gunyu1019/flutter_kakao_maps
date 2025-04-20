@@ -120,6 +120,7 @@ part 'web/elements/text_element.dart';
 
 part 'web/models/web_custom_overlay_option.dart';
 part 'web/models/web_map_option.dart';
+part 'web/models/web_poi.dart';
 
 part 'web/overlay/web_label_controller.dart';
 
