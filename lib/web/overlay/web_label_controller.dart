@@ -62,18 +62,43 @@ class WebLabelController extends LabelController {
     if (id != null && _poi.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
-    final styleId = style.id ?? await manager.addPoiStyle(style);
+    if (style.id == null) {
+      await manager.addPoiStyle(style);
+    }
+
     final poiId = "custom_overlay_$poiCount";
-    final content = await imageElement(style.icon!);
-    final webPoiOption = WebCustomOverlayOption(
-        clickable: true,
-        content: content.outerHTML.dartify() as String, // "<span id='$poiId'>Hello World</span>",
-        zIndex: rank ?? 10001,
-        position: WebLatLng.fromLatLng(position),
-        xAnchor: style.anchor.x,
-        yAnchor: style.anchor.y);
-    final webPoi = WebCustomOverlay(webPoiOption);
-    webPoi.setMap(controller);
+    final imageAnchorY = text == null ? style.anchor.y : 1.0;
+    final textAnchorY = text == null ? style.anchor.y : 0.0;
+    if (style.icon != null) {
+      final imageContent = (await imageElement(style.icon!))
+        ..id = "${poiId}_image";
+      final webImagePoiOption = WebCustomOverlayOption(
+          clickable: true,
+          content: imageContent.outerHTML.dartify() as String,
+          zIndex: rank ?? 10001,
+          position: WebLatLng.fromLatLng(position),
+          xAnchor: style.anchor.x,
+          yAnchor: imageAnchorY);
+      final webImagePoi = WebCustomOverlay(webImagePoiOption);
+      webImagePoi.setMap(controller);
+    }
+    if (text != null) {
+      final textContent = web.HTMLDivElement()..id = "${poiId}_text";
+      text
+          .split("\n")
+          .mapIndexed(
+              (index, element) => textElement(element, style.textStyle[index]))
+          .forEach((element) => textContent.appendChild(element));
+      final webTextPoiOption = WebCustomOverlayOption(
+          clickable: true,
+          content: textContent.outerHTML.dartify() as String,
+          zIndex: rank ?? 10001,
+          position: WebLatLng.fromLatLng(position),
+          xAnchor: style.anchor.x,
+          yAnchor: textAnchorY);
+      final webTextPoi = WebCustomOverlay(webTextPoiOption);
+      webTextPoi.setMap(controller);
+    }
 
     final poi = Poi._(this, poiId,
         transform: transform,
