@@ -25,7 +25,8 @@ class WebLabelController extends LabelController {
   @override
   Future<void> _changePoiVisible(String poiId, bool visible,
       {bool? autoMove, int? duration}) async {
-    // 구현 확정 (setVisible)
+    _webPoi[poiId]?.elements.forEach(
+        (element) => element.setVisible(visible));
   }
 
   @override
@@ -104,7 +105,7 @@ class WebLabelController extends LabelController {
       webTextPoi.setMap(controller);
       webTextPoi.setVisible(visible);
     }
-    return WebPoi(webImagePoi, webTextPoi, visible);
+    return WebPoi(webImagePoi, webTextPoi);
   }
 
   @override
@@ -130,7 +131,9 @@ class WebLabelController extends LabelController {
         await _addPoiElement(poiId, style, position, text, rank, visible);
 
     // zoomLevel에 따른 element 추가
-    for (var secondaryStyle in style._styles) {
+    // 이 방식은 ZoomLevel에 따른 Element가 추가되는 방식인데, 
+    // 최대 30개의 Element가 추가될 수 있음 => 고스란히 모두 연산해야하는 요소로 부하가 커질 수 있다고 판단함.
+    /* for (var secondaryStyle in style._styles) {
       final otherPoi = await _addPoiElement(
           poiId, secondaryStyle, position, text, rank, false);
       if (otherPoi.imageElement != null) {
@@ -141,7 +144,7 @@ class WebLabelController extends LabelController {
         _webPoi[poiId]!.otherTextElement[secondaryStyle.zoomLevel] =
             otherPoi.textElement!;
       }
-    }
+    } */
 
     final poi = Poi._(this, poiId,
         transform: transform,
@@ -163,10 +166,18 @@ class WebLabelController extends LabelController {
   }
 
   @override
-  Future<void> showAllPoi() async {}
+  Future<void> showAllPoi() async {
+    for (var poi in _poi.values) {
+      await poi.show();
+    }
+  }
 
   @override
-  Future<void> hideAllPoi() async {}
+  Future<void> hideAllPoi() async {
+    for (var poi in _poi.values) {
+      await poi.hide();
+    }
+  }
 
   @override
   Future<PolylineText> addPolylineText(

@@ -4,15 +4,7 @@ class WebPoi {
   final WebCustomOverlay? imageElement;
   final WebCustomOverlay? textElement;
 
-  int viewedLevel = 0;
-  bool visible;
-
-  final Map<int, WebCustomOverlay> otherImageElement;
-  final Map<int, WebCustomOverlay> otherTextElement;
-
-  WebPoi(this.imageElement, this.textElement, [this.visible = true])
-      : otherImageElement = {},
-        otherTextElement = {};
+  WebPoi(this.imageElement, this.textElement);
 
   List<WebCustomOverlay> get elements {
     final element = <WebCustomOverlay>[];
@@ -22,8 +14,6 @@ class WebPoi {
     if (textElement != null) {
       element.add(textElement!);
     }
-    element.addAll(otherImageElement.values);
-    element.addAll(otherTextElement.values);
     return element;
   }
 }
