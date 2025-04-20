@@ -4,7 +4,7 @@ part of '../../kakao_map_sdk.dart';
 extension type WebCustomOverlay._(JSObject _) implements JSObject {
   external WebCustomOverlay(WebCustomOverlayOption options);
 
-  external void setMap(WebMapController map);
+  external void setMap(WebMapController? map);
   external WebMapController getMap();
 
   external void setPosition(WebLatLng position);
