@@ -10,7 +10,9 @@ class WebLabelController extends LabelController {
   Future<void> _createLabelLayer() async {}
 
   @override
-  Future<void> _removeLabelLayer() async {}
+  Future<void> _removeLabelLayer() async {
+    // 기존에 등록된 모든 Poi를 삭제해야함.
+  }
 
   @override
   Future<void> _changePoiOffsetPosition(
@@ -18,18 +20,26 @@ class WebLabelController extends LabelController {
 
   @override
   Future<void> _changePoiVisible(String poiId, bool visible,
-      {bool? autoMove, int? duration}) async {}
+      {bool? autoMove, int? duration}) async {
+        // 구현 확정 (setVisible)
+      }
 
   @override
   Future<void> _changePoiStyle(String poiId, String styleId,
-      [bool transition = false]) async {}
+      [bool transition = false]) async {
+        // 구현 확정 (setContent)
+      }
 
   Future<void> _invalidatePoi(String poiId, String styleId, String? text,
-      [bool transition = false]) async {}
+      [bool transition = false]) async {
+        // 구현 확정 (setContent)
+      }
 
   @override
   Future<void> _movePoi(String poiId, LatLng position,
-      [double? millis]) async {}
+      [double? millis]) async {
+        // 구현 확정 (setPosition)
+      }
 
   @override
   Future<void> _rotatePoi(String poiId, double angle, [double? millis]) async {}
@@ -39,7 +49,9 @@ class WebLabelController extends LabelController {
       [double? millis]) async {}
 
   @override
-  Future<void> _rankPoi(String poiId, int rank) async {}
+  Future<void> _rankPoi(String poiId, int rank) async {
+    // 구현 확정 (setZIndex)
+  }
 
   @override
   Future<void> _changePolylineTextStyle(String poiId, PolylineTextStyle style,
@@ -47,6 +59,43 @@ class WebLabelController extends LabelController {
 
   @override
   Future<void> _changePolylineTextVisible(String labelId, bool visible) async {}
+
+  Future<void> _addPoiElement(String poiId, PoiStyle style, LatLng position, String? text, int? rank, bool visible) async {
+    final imageAnchorY = text == null ? style.anchor.y : 1.0;
+    final textAnchorY = text == null ? style.anchor.y : 0.0;
+    if (style.icon != null) {
+      final imageContent = (await imageElement(style.icon!))
+        ..id = "${poiId}_image_${style.zoomLevel}";
+      final webImagePoiOption = WebCustomOverlayOption(
+          clickable: true,
+          content: imageContent.outerHTML.dartify() as String,
+          zIndex: rank ?? 10001,
+          position: WebLatLng.fromLatLng(position),
+          xAnchor: style.anchor.x,
+          yAnchor: imageAnchorY);
+      final webImagePoi = WebCustomOverlay(webImagePoiOption);
+      webImagePoi.setMap(controller);
+      webImagePoi.setVisible(visible);
+    }
+    if (text != null) {
+      final textContent = web.HTMLDivElement()..id = "${poiId}_text_${style.zoomLevel}";
+      text
+          .split("\n")
+          .mapIndexed(
+              (index, element) => textElement(element, style.textStyle[index]))
+          .forEach((element) => textContent.appendChild(element));
+      final webTextPoiOption = WebCustomOverlayOption(
+          clickable: true,
+          content: textContent.outerHTML.dartify() as String,
+          zIndex: rank ?? 10001,
+          position: WebLatLng.fromLatLng(position),
+          xAnchor: style.anchor.x,
+          yAnchor: textAnchorY);
+      final webTextPoi = WebCustomOverlay(webTextPoiOption);
+      webTextPoi.setMap(controller);
+      webTextPoi.setVisible(visible);
+    }
+  }
 
   @override
   Future<Poi> addPoi(
@@ -66,38 +115,12 @@ class WebLabelController extends LabelController {
       await manager.addPoiStyle(style);
     }
 
-    final poiId = "custom_overlay_$poiCount";
-    final imageAnchorY = text == null ? style.anchor.y : 1.0;
-    final textAnchorY = text == null ? style.anchor.y : 0.0;
-    if (style.icon != null) {
-      final imageContent = (await imageElement(style.icon!))
-        ..id = "${poiId}_image";
-      final webImagePoiOption = WebCustomOverlayOption(
-          clickable: true,
-          content: imageContent.outerHTML.dartify() as String,
-          zIndex: rank ?? 10001,
-          position: WebLatLng.fromLatLng(position),
-          xAnchor: style.anchor.x,
-          yAnchor: imageAnchorY);
-      final webImagePoi = WebCustomOverlay(webImagePoiOption);
-      webImagePoi.setMap(controller);
-    }
-    if (text != null) {
-      final textContent = web.HTMLDivElement()..id = "${poiId}_text";
-      text
-          .split("\n")
-          .mapIndexed(
-              (index, element) => textElement(element, style.textStyle[index]))
-          .forEach((element) => textContent.appendChild(element));
-      final webTextPoiOption = WebCustomOverlayOption(
-          clickable: true,
-          content: textContent.outerHTML.dartify() as String,
-          zIndex: rank ?? 10001,
-          position: WebLatLng.fromLatLng(position),
-          xAnchor: style.anchor.x,
-          yAnchor: textAnchorY);
-      final webTextPoi = WebCustomOverlay(webTextPoiOption);
-      webTextPoi.setMap(controller);
+    final poiId = "custom_overlay_${this.id}_$poiCount";
+    await _addPoiElement(poiId, style, position, text, rank, visible);
+    
+    // zoomLevel에 따른 element 추가
+    for (var secondaryStyle in style._styles) {
+      await _addPoiElement(poiId, secondaryStyle, position, text, rank, false);
     }
 
     final poi = Poi._(this, poiId,
