@@ -13,10 +13,14 @@ class KakaoMapWebController extends KakaoMapController {
   /// 더미 채널은 오버레이 플랫폼 채널 역할을 대신합니다. 실제로 쓰이지는 않습니다.
   final MethodChannel _dummyChannel;
 
+  /// Poi Style ID 등의 고유 ID를 가지기 위한 객체입니다.
+  final Uuid _uuid;
+
   KakaoMapWebController({
     required this.controller,
     required this.handler,
-  }) : _dummyChannel = const MethodChannel("dummy_method_channel");
+  })  : _dummyChannel = const MethodChannel("dummy_method_channel"),
+        _uuid = const Uuid();
 
   /// 네이티브 환경에서 줌 레벨과 웹 환경에서 줌 레벨을 계산합니다.
   /// 아래의 공식은 축적도를 기반으로 계산된 줌 레벨이며 플랫폼별 제공하는 SDK 한계상 오차가 발생할 수 있습니다.
@@ -79,21 +83,24 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   Future<String> addPoiStyle(PoiStyle style) async {
-    final poiStyleId = "poi_style_${_poiStyle.length}";
+    if (style.id != null && _routeStyle.containsKey(style.id)) {
+      throw DuplicatedOverlayException(style.id!);
+    }
+    final poiStyleId = style._id = _uuid.v4();
     _poiStyle[poiStyleId] = style;
     return poiStyleId;
   }
 
   @override
   Future<String> addPolygonShapeStyle(PolygonStyle style) {
-    // TODO: implement addPolygonShapeStyle
+    // TODO: implement addRouteLayer
     throw UnimplementedError();
   }
 
   @override
   Future<String> addPolylineShapeStyle(
-      PolylineStyle style, PolylineCap polylineCap) {
-    // TODO: implement addPolylineShapeStyle
+   PolylineStyle style, PolylineCap polylineCap) {
+    // TODO: implement addRouteLayer
     throw UnimplementedError();
   }
 
@@ -106,7 +113,7 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   Future<String> addRouteStyle(RouteStyle style) {
-    // TODO: implement addRouteStyle
+    // TODO: implement addRouteLayer
     throw UnimplementedError();
   }
 
@@ -126,7 +133,7 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   Future<void> changeMapType(MapType mapType) async {
-    final mapTypeId = switch(mapType) {
+    final mapTypeId = switch (mapType) {
       MapType.normal => 1,
       MapType.skyview => 2,
     };
