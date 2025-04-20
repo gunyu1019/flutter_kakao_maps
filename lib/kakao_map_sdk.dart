@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math show Point;
 
@@ -113,6 +114,9 @@ part 'widget/platform_view.dart';
 /* web (Experimentation) */
 part 'web/web_controller.dart';
 part 'web/web_initializer.dart';
+
+part 'web/elements/image_element.dart';
+part 'web/elements/text_element.dart';
 
 part 'web/models/web_custom_overlay_option.dart';
 part 'web/models/web_map_option.dart';
