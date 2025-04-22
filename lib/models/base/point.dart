@@ -1,6 +1,6 @@
 part of '../../kakao_map_sdk.dart';
 
-class KPoint extends math.Point<double> with KMessageable {
+class KPoint extends math.Point with KMessageable {
   const KPoint(super.x, super.y);
 
   @override

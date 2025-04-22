@@ -39,7 +39,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     }
 
     func getCameraPosition(onSuccess: @escaping (_ cameraPosition: [String: Any]) -> Void) {
-        let position = kakaoMap.getPosition(CGPoint(x: 0.5, y: 0.5))
+        let position = kakaoMap.getPosition(CGPoint(x: kakaoMap.viewRect.width * 0.5, y: kakaoMap.viewRect.height * 0.5))
         var payload: [String: Any] = [
             "zoomLevel": kakaoMap.zoomLevel,
             "tiltAngle": kakaoMap.tiltAngle,
