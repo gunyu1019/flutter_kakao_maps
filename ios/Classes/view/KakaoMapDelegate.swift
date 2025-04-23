@@ -40,7 +40,12 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
             error: MapViewLoadFailed()
         )
     }
-
+    
+    func authenticationSucceeded() {
+        if !controller.isEnginePrepared {
+            controller.prepareEngine()
+        }
+    }
     func authenticationFailed(_ errorCode: Int, desc: String) {
         // Handling Network Error
         if (errorCode == 499) {
