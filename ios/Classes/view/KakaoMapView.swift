@@ -53,10 +53,12 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
 
     @objc func onViewPaused() {
         kakaoMap.pauseEngine()
+        controller.onMapPaused()
     }
 
     @objc func onViewResume() {
         kakaoMap.activateEngine()
+        controller.onMapResumed()
     }
 
     deinit {
