@@ -47,7 +47,12 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
     }
 
     func view() -> UIView {
-        kakaoMap.activateEngine()
+        if !kakaoMap.isEnginePrepared {
+            kakaoMap.prepareEngine()
+        }
+        if !kakaoMap.isEngineActive {
+            kakaoMap.activateEngine()
+        }
         return KMView
     }
 
