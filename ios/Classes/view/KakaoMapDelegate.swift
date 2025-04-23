@@ -23,7 +23,15 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
 
     func addViewSucceeded(_ viewName: String, viewInfoName _: String) {
         let kakaoMap = controller.getView(viewName) as! KakaoMap
+        let isInit = kakaoMap.viewRect == CGRect(x: 0, y: 0, width: 1, height: 1)
+        kakaoMap.keepLevelOnResize = true
         kakaoMap.viewRect = view.bounds
+        
+        // (TEMP) re-rendering
+        if isInit {
+            kakaoMap.moveCamera(CameraUpdate.make(zoomLevel: kakaoMap.zoomLevel, mapView: kakaoMap))
+        }
+        
         sender.onMapReady(kakaoMap: kakaoMap)
     }
 
