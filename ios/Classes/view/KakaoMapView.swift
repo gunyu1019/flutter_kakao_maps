@@ -24,6 +24,7 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
         super.init()
 
         eventDelegate = KakaoMapDelegate(
+            view: KMView,
             controller: kakaoMap,
             sender: controller,
             option: option
@@ -59,7 +60,8 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
         self.kakaoMap.pauseEngine()
         self.kakaoMap.resetEngine()
     }

@@ -5,10 +5,12 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
     private let sender: KakaoMapControllerSender
 
     init(
+        view: KMViewContainer,
         controller: KMController,
         sender: KakaoMapControllerSender,
         option: MapviewInfo
     ) {
+        self.view = view
         self.controller = controller
         self.sender = sender
         self.option = option
@@ -20,9 +22,9 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
     }
 
     func addViewSucceeded(_ viewName: String, viewInfoName _: String) {
-        sender.onMapReady(
-            kakaoMap: (controller.getView(viewName) as! KakaoMap)
-        )
+        let kakaoMap = controller.getView(viewName) as! KakaoMap
+        kakaoMap.viewRect = view.bounds
+        sender.onMapReady(kakaoMap: kakaoMap)
     }
 
     func addViewFailed(_: String, viewInfoName _: String) {
@@ -50,4 +52,5 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
     }
 
     var controller: KMController
+    var view: KMViewContainer
 }
