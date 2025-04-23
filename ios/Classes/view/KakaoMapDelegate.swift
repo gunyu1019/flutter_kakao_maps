@@ -34,6 +34,13 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
     }
 
     func authenticationFailed(_ errorCode: Int, desc: String) {
+        // Handling Network Error
+        if (errorCode == 499) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.controller.prepareEngine()
+            }
+            return
+        }
         sender.onMapError(
             error: AuthenticatedFailed(errorCode: errorCode, message: desc)
         )
