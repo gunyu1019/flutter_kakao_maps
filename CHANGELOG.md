@@ -1,3 +1,10 @@
+## 1.0.2
+* Support Pro-Motion display mode in iOS Platform.
+* Apply resizing capabilities in `addViewSucceeded` event handler to onnection and resize duplicate event on iOS platform.
+* [Fix] Invaild extended type in KPoint.
+* [Fix] Missing engine activation due to network error on iOS platform. ([#15](https://github.com/gunyu1019/flutter_kakao_maps/issues/15))
+* [Fix] Adjust screen point to absolute pixels on iOS platform.
+
 ## 1.0.1
 * The padding, zoomLevel parameters in CameraUpdate.fitMapPoints are no longer required.
 * [Fix] Invalid type of CameraUpdate.fitMapPoints
