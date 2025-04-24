@@ -5,10 +5,12 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
     private let sender: KakaoMapControllerSender
 
     init(
+        view: KMViewContainer,
         controller: KMController,
         sender: KakaoMapControllerSender,
         option: MapviewInfo
     ) {
+        self.view = view
         self.controller = controller
         self.sender = sender
         self.option = option
@@ -20,9 +22,17 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
     }
 
     func addViewSucceeded(_ viewName: String, viewInfoName _: String) {
-        sender.onMapReady(
-            kakaoMap: (controller.getView(viewName) as! KakaoMap)
-        )
+        let kakaoMap = controller.getView(viewName) as! KakaoMap
+        let isInit = kakaoMap.viewRect == CGRect(x: 0, y: 0, width: 1, height: 1)
+        kakaoMap.keepLevelOnResize = true
+        kakaoMap.viewRect = view.bounds
+        
+        // (TEMP) re-rendering
+        if isInit {
+            kakaoMap.moveCamera(CameraUpdate.make(zoomLevel: kakaoMap.zoomLevel, mapView: kakaoMap))
+        }
+        
+        sender.onMapReady(kakaoMap: kakaoMap)
     }
 
     func addViewFailed(_: String, viewInfoName _: String) {
@@ -30,8 +40,20 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
             error: MapViewLoadFailed()
         )
     }
-
+    
+    func authenticationSucceeded() {
+        if !controller.isEnginePrepared {
+            controller.prepareEngine()
+        }
+    }
     func authenticationFailed(_ errorCode: Int, desc: String) {
+        // Handling Network Error
+        if (errorCode == 499) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.controller.prepareEngine()
+            }
+            return
+        }
         sender.onMapError(
             error: AuthenticatedFailed(errorCode: errorCode, message: desc)
         )
@@ -50,4 +72,5 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
     }
 
     var controller: KMController
+    var view: KMViewContainer
 }
