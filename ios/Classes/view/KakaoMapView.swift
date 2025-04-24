@@ -30,6 +30,9 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
         )
         kakaoMap.delegate = eventDelegate
 
+        // Support ProMotion Mode
+        kakaoMap.proMotionSupport = KMView.proMotionDisplay
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(onViewPaused),
