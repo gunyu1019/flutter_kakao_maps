@@ -125,6 +125,7 @@ part 'web/models/web_poi.dart';
 part 'web/overlay/web_label_controller.dart';
 
 part 'web/interoperability/web_custom_overlay.dart';
+part 'web/interoperability/web_event_listener.dart';
 part 'web/interoperability/web_latlng_bound.dart';
 part 'web/interoperability/web_latlng.dart';
 part 'web/interoperability/web_map_controller.dart';
