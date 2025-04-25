@@ -1,18 +1,18 @@
 part of '../../kakao_map_sdk.dart';
 
 class WebPoi {
-  final WebCustomOverlay? imageElement;
-  final WebCustomOverlay? textElement;
+  final WebCustomOverlay? imageOverlay;
+  final WebCustomOverlay? textOverlay;
 
-  WebPoi(this.imageElement, this.textElement);
+  WebPoi(this.imageOverlay, this.textOverlay);
 
-  List<WebCustomOverlay> get elements {
+  List<WebCustomOverlay> get overlays {
     final element = <WebCustomOverlay>[];
-    if (imageElement != null) {
-      element.add(imageElement!);
+    if (imageOverlay != null) {
+      element.add(imageOverlay!);
     }
-    if (textElement != null) {
-      element.add(textElement!);
+    if (textOverlay != null) {
+      element.add(textOverlay!);
     }
     return element;
   }

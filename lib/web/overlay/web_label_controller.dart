@@ -25,7 +25,7 @@ class WebLabelController extends LabelController {
   @override
   Future<void> _changePoiVisible(String poiId, bool visible,
       {bool? autoMove, int? duration}) async {
-    _webPoi[poiId]?.elements.forEach(
+    _webPoi[poiId]?.overlays.forEach(
         (element) => element.setVisible(visible));
   }
 
@@ -37,12 +37,12 @@ class WebLabelController extends LabelController {
 
   Future<void> _invalidatePoi(String poiId, String styleId, String? text,
       [bool transition = false]) async {
-    // 구현 확정 (setContent)
+    _webPoi[poiId]?.imageOverlay?.setContent(content)
   }
 
   @override
   Future<void> _movePoi(String poiId, LatLng position, [double? millis]) async {
-    _webPoi[poiId]?.elements.forEach(
+    _webPoi[poiId]?.overlays.forEach(
         (element) => element.setPosition(WebLatLng.fromLatLng(position)));
   }
 
@@ -55,7 +55,7 @@ class WebLabelController extends LabelController {
 
   @override
   Future<void> _rankPoi(String poiId, int rank) async {
-    _webPoi[poiId]?.elements.forEach((element) => element.setZIndex(rank));
+    _webPoi[poiId]?.overlays.forEach((element) => element.setZIndex(rank));
   }
 
   @override
@@ -66,18 +66,18 @@ class WebLabelController extends LabelController {
   Future<void> _changePolylineTextVisible(String labelId, bool visible) async {}
 
   Future<WebPoi> _addPoiElement(String poiId, PoiStyle style, LatLng position,
-      String? text, int? rank, bool visible) async {
+      String? text, int? rank, bool visible, [void Function()? onClick]) async {
     final imageAnchorY = text == null ? style.anchor.y : 1.0;
     final textAnchorY = text == null ? style.anchor.y : 0.0;
     WebCustomOverlay? webImagePoi;
     WebCustomOverlay? webTextPoi;
 
     if (style.icon != null) {
-      final imageContent = (await imageElement(style.icon!))
+      final imageContent = (await imageElement(style.icon!, onClick))
         ..id = "${poiId}_image_${style.zoomLevel}";
       final webImagePoiOption = WebCustomOverlayOption(
           clickable: true,
-          content: imageContent.outerHTML.dartify() as String,
+          content: imageContent,
           zIndex: rank ?? 10001,
           position: WebLatLng.fromLatLng(position),
           xAnchor: style.anchor.x,
@@ -92,11 +92,11 @@ class WebLabelController extends LabelController {
       text
           .split("\n")
           .mapIndexed(
-              (index, element) => textElement(element, style.textStyle[index]))
+              (index, element) => textElement(element, style.textStyle[index], onClick))
           .forEach((element) => textContent.appendChild(element));
       final webTextPoiOption = WebCustomOverlayOption(
           clickable: true,
-          content: textContent.outerHTML.dartify() as String,
+          content: textContent,
           zIndex: rank ?? 10001,
           position: WebLatLng.fromLatLng(position),
           xAnchor: style.anchor.x,
@@ -128,8 +128,8 @@ class WebLabelController extends LabelController {
 
     final poiId = "custom_overlay_${this.id}_$poiCount";
     _webPoi[poiId] =
-        await _addPoiElement(poiId, style, position, text, rank, visible);
-
+        await _addPoiElement(poiId, style, position, text, rank, visible, onClick);
+    
     // zoomLevel에 따른 element 추가
     // 이 방식은 ZoomLevel에 따른 Element가 추가되는 방식인데, 
     // 최대 30개의 Element가 추가될 수 있음 => 고스란히 모두 연산해야하는 요소로 부하가 커질 수 있다고 판단함.
@@ -160,7 +160,7 @@ class WebLabelController extends LabelController {
 
   @override
   Future<void> removePoi(Poi poi) async {
-    _webPoi[poi.id]?.elements.forEach((element) => element.setMap(null));
+    _webPoi[poi.id]?.overlays.forEach((element) => element.setMap(null));
     _webPoi.remove(poi.id);
     _poi.remove(poi.id);
   }
