@@ -1,8 +1,9 @@
 part of '../../kakao_map_sdk.dart';
 
-web.HTMLElement textElement(String text, PoiTextStyle style) => web
+web.HTMLElement textElement(String text, PoiTextStyle style, [void Function()? onClick]) => web
     .HTMLParagraphElement()
   ..textContent = text
+  ..onclick = onClick?.toJS
   ..style.fontStretch = "${style.aspectRatio * 100}%"
   ..style.letterSpacing = "${style.characterSpace}px"
   ..style.color = "rgb(${style.color.r}, ${style.color.g} ,${style.color.b})"
