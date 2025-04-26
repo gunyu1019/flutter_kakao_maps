@@ -1,9 +1,9 @@
 part of '../../kakao_map_sdk.dart';
 
-class WebLabelController extends LabelController {
+class WebLodLabelController extends LodLabelController {
   final WebMapController controller;
 
-  WebLabelController._(this.controller, super.channel, super.manager, super.id)
+  WebLodLabelController._(this.controller, super.channel, super.manager, super.id)
       : super._();
 
   final Map<String, WebCustomOverlay> _webPoi = {};
@@ -11,14 +11,14 @@ class WebLabelController extends LabelController {
   final Map<String, int> _currentPoiLevel = {};
 
   @override
-  Future<void> _createLabelLayer() async {
+  Future<void> _createLodLabelLayer() async {
     addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
   }
 
   @override
-  Future<void> _removeLabelLayer() async {
+  Future<void> _removeLodLabelLayer() async {
     for (final poi in _poi.values) {
-      await removePoi(poi);
+      await removeLodPoi(poi);
     }
     removeEventListener(
         controller, "zoom_changed", _zoomChangedEventHandler.toJS);
@@ -29,10 +29,6 @@ class WebLabelController extends LabelController {
       _syncZoomLevel(poi.id, poi.style.id!, poi.text);
     }
   }
-
-  @override
-  Future<void> _changePoiOffsetPosition(
-      String poiId, double x, double y, bool forceDpScale) async {}
 
   @override
   Future<void> _changePoiVisible(String poiId, bool visible,
@@ -61,7 +57,7 @@ class WebLabelController extends LabelController {
   void _syncZoomLevel(String poiId, String styleId, String? text) {
     final poi = _poi[poiId]!;
     final mapZoomLevel = controller.getLevel();
-    var currentZoomLevel = poi.style.zoomLevel;
+    var currentZoomLevel = poi.styles.zoomLevel;
     var style = poi.style;
     for (final secondaryStyle in poi.style._styles) {
       if (calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
@@ -80,35 +76,12 @@ class WebLabelController extends LabelController {
   }
 
   @override
-  Future<void> _invalidatePoi(String poiId, String styleId, String? text,
-      [bool transition = false]) async {
-    await _changePoiStyle(poiId, styleId, transition);
-    _syncZoomLevel(poiId, styleId, text);
-  }
-
-  @override
-  Future<void> _movePoi(String poiId, LatLng position, [double? millis]) async {
-    _webPoi[poiId]?.setPosition(WebLatLng.fromLatLng(position));
-  }
-
-  @override
-  Future<void> _rotatePoi(String poiId, double angle, [double? millis]) async {
-    final element = _webPoi[poiId]?.getContent() as web.HTMLElement;
-    element.style.rotate = "${angle.toInt()}deg";
-    _webPoi[poiId]?.setContent(element);
-  }
-
-  @override
-  Future<void> _scalePoi(String poiId, double x, double y,
-      [double? millis]) async {}
-
-  @override
   Future<void> _rankPoi(String poiId, int rank) async {
     _webPoi[poiId]?.setZIndex(rank);
   }
 
   @override
-  Future<Poi> addPoi(
+  Future<LodPoi> addLodPoi(
     LatLng position, {
     required PoiStyle style,
     String? id,
@@ -124,7 +97,7 @@ class WebLabelController extends LabelController {
     if (style.id == null) {
       await manager.addPoiStyle(style);
     }
-    final poiId = "custom_overlay_${this.id}_$poiCount";
+    final poiId = "custom_overlay_lod_${this.id}_$poiCount";
 
     _preEncodedImage[poiId] = {};
     if (style.icon != null) {
@@ -150,7 +123,7 @@ class WebLabelController extends LabelController {
     overlay.setMap(controller);
     overlay.setVisible(visible);
 
-    final poi = Poi._(this, poiId,
+    final poi = LodPoi._(this, poiId,
         transform: transform,
         position: position,
         style: style,
@@ -164,53 +137,23 @@ class WebLabelController extends LabelController {
   }
 
   @override
-  Future<void> removePoi(Poi poi) async {
+  Future<void> removeLodPoi(LodPoi poi) async {
     _webPoi[poi.id]?.setMap(null);
     _webPoi.remove(poi.id);
     _poi.remove(poi.id);
   }
 
   @override
-  Future<void> showAllPoi() async {
+  Future<void> showAllLodPoi() async {
     for (var poi in _poi.values) {
       await poi.show();
     }
   }
 
   @override
-  Future<void> hideAllPoi() async {
+  Future<void> hideAllLodPoi() async {
     for (var poi in _poi.values) {
       await poi.hide();
     }
   }
-
-  @override
-  Future<void> _changePolylineTextStyle(String poiId, PolylineTextStyle style,
-      [String? text]) async {}
-
-  @override
-  Future<void> _changePolylineTextVisible(String labelId, bool visible) async {}
-
-  @override
-  Future<PolylineText> addPolylineText(
-    String text,
-    List<LatLng> position, {
-    required PolylineTextStyle style,
-    String? id,
-    bool visible = true,
-  }) async =>
-      PolylineText._(this, id ?? "dummy_polyline_text",
-          style: style, text: text, points: position, visible: visible);
-
-  @override
-  PolylineText? getPolylineText(String id) => null;
-
-  @override
-  Future<void> removePolylineText(PolylineText label) async {}
-
-  @override
-  Future<void> showAllPolylineText() async {}
-
-  @override
-  Future<void> hideAllPolylineText() async {}
 }

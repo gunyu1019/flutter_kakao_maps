@@ -123,6 +123,7 @@ part 'web/models/web_custom_overlay_option.dart';
 part 'web/models/web_map_option.dart';
 
 part 'web/overlay/web_label_controller.dart';
+part 'web/overlay/web_lod_label_controller.dart';
 
 part 'web/interoperability/web_abstract_overlay.dart';
 part 'web/interoperability/web_custom_overlay.dart';
