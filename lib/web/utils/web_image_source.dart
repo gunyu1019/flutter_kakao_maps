@@ -8,6 +8,5 @@ Future<Uint8List> convertImageToData(KImage image) async =>
       ImageType.data => image._data!,
     };
 
-String encodeImageToBase64(Uint8List image,
-        [String imageType = "png"]) =>
+String encodeImageToBase64(Uint8List image, [String imageType = "png"]) =>
     "data:image/$imageType;base64,${base64Encode(image)}";

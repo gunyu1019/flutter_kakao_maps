@@ -26,40 +26,63 @@ class KakaoMapWebController extends KakaoMapController {
 
   void _setEventTrigger(int event) {
     if (EventType.onCameraMoveStart.compareTo(event)) {
-      addEventListener(controller, "zoom_start", (() {
-        handler.onCameraMoveStart(GestureType.zoom);
-      }).toJS);
-      addEventListener(controller, "dragstart", (() {
-        handler.onCameraMoveStart(GestureType.pan);
-      }).toJS);
+      addEventListener(
+          controller,
+          "zoom_start",
+          (() {
+            handler.onCameraMoveStart(GestureType.zoom);
+          }).toJS);
+      addEventListener(
+          controller,
+          "dragstart",
+          (() {
+            handler.onCameraMoveStart(GestureType.pan);
+          }).toJS);
     }
-    if (EventType.onCameraMoveEnd.compareTo(event))  {
-      addEventListener(controller, "dragend", (() {
-        getCameraPosition().then((position) {
-          handler.onCameraMoveEnd(position, GestureType.pan);
-        });
-      }).toJS);
-      addEventListener(controller, "zoom_changed", (() {
-        getCameraPosition().then((position) {
-          handler.onCameraMoveEnd(position, GestureType.zoom);
-        });
-      }).toJS);
-      addEventListener(controller, "dblclick", (() {
-        getCameraPosition().then((position) {
-          handler.onCameraMoveEnd(position, GestureType.oneFingerDoubleTap);
-        });
-      }).toJS);
+    if (EventType.onCameraMoveEnd.compareTo(event)) {
+      addEventListener(
+          controller,
+          "dragend",
+          (() {
+            getCameraPosition().then((position) {
+              handler.onCameraMoveEnd(position, GestureType.pan);
+            });
+          }).toJS);
+      addEventListener(
+          controller,
+          "zoom_changed",
+          (() {
+            getCameraPosition().then((position) {
+              handler.onCameraMoveEnd(position, GestureType.zoom);
+            });
+          }).toJS);
+      addEventListener(
+          controller,
+          "dblclick",
+          (() {
+            getCameraPosition().then((position) {
+              handler.onCameraMoveEnd(position, GestureType.oneFingerDoubleTap);
+            });
+          }).toJS);
     }
-    if (EventType.onMapClick.compareTo(event) || EventType.onTerrainClick.compareTo(event)) {
-      addEventListener(controller, "click", ((WebMouseEvent mouse) {
-        handler.onMapClick.call(mouse.getPoint(), mouse.getPosition());
-        handler.onTerrainClick.call(mouse.getPoint(), mouse.getPosition());
-      }).toJS);
+    if (EventType.onMapClick.compareTo(event) ||
+        EventType.onTerrainClick.compareTo(event)) {
+      addEventListener(
+          controller,
+          "click",
+          ((WebMouseEvent mouse) {
+            handler.onMapClick.call(mouse.getPoint(), mouse.getPosition());
+            handler.onTerrainClick.call(mouse.getPoint(), mouse.getPosition());
+          }).toJS);
     }
     if (EventType.onTerrainLongClick.compareTo(event)) {
-      addEventListener(controller, "rightclick", ((WebMouseEvent mouse) {
-        handler.onTerrainLongClick.call(mouse.getPoint(), mouse.getPosition());
-      }).toJS);
+      addEventListener(
+          controller,
+          "rightclick",
+          ((WebMouseEvent mouse) {
+            handler.onTerrainLongClick
+                .call(mouse.getPoint(), mouse.getPosition());
+          }).toJS);
     }
   }
 

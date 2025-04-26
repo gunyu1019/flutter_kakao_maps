@@ -40,12 +40,13 @@ class WebLabelController extends LabelController {
     _webPoi[poiId]?.setVisible(visible);
     if (autoMove ?? false) {
       final currentLevel = controller.getLevel();
-      final Map<String, dynamic> animate = duration != null ? {
-        "animate": {
-          "duration": duration
-        }
-      } : {"animate": true};
-      controller.jump(_webPoi[poiId]!.getPosition(), currentLevel, animate.jsify());
+      final Map<String, dynamic> animate = duration != null
+          ? {
+              "animate": {"duration": duration}
+            }
+          : {"animate": true};
+      controller.jump(
+          _webPoi[poiId]!.getPosition(), currentLevel, animate.jsify());
     }
   }
 

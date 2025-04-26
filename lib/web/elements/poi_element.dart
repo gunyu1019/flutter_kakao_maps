@@ -1,7 +1,7 @@
 part of '../../kakao_map_sdk.dart';
 
-web.HTMLElement poiElement(String id, String? encodedIcon, KImage? icon, String? text,
-    PoiStyle style, void Function()? onClick) {
+web.HTMLElement poiElement(String id, String? encodedIcon, KImage? icon,
+    String? text, PoiStyle style, void Function()? onClick) {
   final element = web.HTMLDivElement()
     ..id = id
     ..style.display = "flex"
