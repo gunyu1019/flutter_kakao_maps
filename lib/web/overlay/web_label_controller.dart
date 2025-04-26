@@ -38,6 +38,15 @@ class WebLabelController extends LabelController {
   Future<void> _changePoiVisible(String poiId, bool visible,
       {bool? autoMove, int? duration}) async {
     _webPoi[poiId]?.setVisible(visible);
+    if (autoMove ?? false) {
+      final currentLevel = controller.getLevel();
+      final Map<String, dynamic> animate = duration != null ? {
+        "animate": {
+          "duration": duration
+        }
+      } : {"animate": true};
+      controller.jump(_webPoi[poiId]!.getPosition(), currentLevel, animate.jsify());
+    }
   }
 
   @override

@@ -291,7 +291,6 @@ class KakaoMapWebController extends KakaoMapController {
     JSAny animationOption = {
       "animate": animation == null ? false : {"duration": animation.duration}
     }.jsify()!;
-    web.console.log(animationOption);
     final level = controller.getLevel();
     switch (camera.type) {
       case CameraUpdateType.newCenterPoint:

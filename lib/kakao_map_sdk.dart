@@ -122,6 +122,8 @@ part 'web/elements/text_element.dart';
 part 'web/models/web_custom_overlay_option.dart';
 part 'web/models/web_map_option.dart';
 part 'web/models/web_mouse_event.dart';
+part 'web/models/web_polygon_option.dart';
+part 'web/models/web_polyline_option.dart';
 
 part 'web/overlay/web_label_controller.dart';
 part 'web/overlay/web_lod_label_controller.dart';
@@ -134,5 +136,7 @@ part 'web/interoperability/web_latlng.dart';
 part 'web/interoperability/web_map_controller.dart';
 part 'web/interoperability/web_map_projection.dart';
 part 'web/interoperability/web_point.dart';
+part 'web/interoperability/web_polygon.dart';
+part 'web/interoperability/web_polyline.dart';
 
 part 'web/utils/web_image_source.dart';

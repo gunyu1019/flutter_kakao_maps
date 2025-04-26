@@ -3,7 +3,8 @@ part of '../../kakao_map_sdk.dart';
 class WebLodLabelController extends LodLabelController {
   final WebMapController controller;
 
-  WebLodLabelController._(this.controller, super.channel, super.manager, super.id)
+  WebLodLabelController._(
+      this.controller, super.channel, super.manager, super.id)
       : super._();
 
   final Map<String, WebCustomOverlay> _webPoi = {};
@@ -34,6 +35,16 @@ class WebLodLabelController extends LodLabelController {
   Future<void> _changePoiVisible(String poiId, bool visible,
       {bool? autoMove, int? duration}) async {
     _webPoi[poiId]?.setVisible(visible);
+    if (autoMove ?? false) {
+      final currentLevel = controller.getLevel();
+      final Map<String, dynamic> animate = duration != null
+          ? {
+              "animate": {"duration": duration}
+            }
+          : {"animate": true};
+      controller.jump(
+          _webPoi[poiId]!.getPosition(), currentLevel, animate.jsify());
+    }
   }
 
   @override
