@@ -126,9 +126,6 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
   }
 
   void _setEventHandler() {
-    if (kIsWeb) {
-      return;
-    }
     int bitMask = EventType.onPoiClick.id | EventType.onLodPoiClick.id;
     if (widget.onCameraMoveStart != null) {
       bitMask |= EventType.onCameraMoveStart.id;
@@ -139,6 +136,10 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
     if (widget.onTerrainClick != null) bitMask |= EventType.onTerrainClick.id;
     if (widget.onTerrainLongClick != null) {
       bitMask |= EventType.onTerrainLongClick.id;
+    }
+    if (kIsWeb) {
+      (controller as KakaoMapWebController)._setEventTrigger(bitMask);
+      return;
     }
     channel.invokeMethod("setEventHandler", bitMask);
   }
