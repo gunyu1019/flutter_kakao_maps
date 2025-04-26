@@ -124,9 +124,11 @@ part 'web/models/web_map_option.dart';
 part 'web/models/web_mouse_event.dart';
 part 'web/models/web_polygon_option.dart';
 part 'web/models/web_polyline_option.dart';
+part 'web/models/web_route.dart';
 
 part 'web/overlay/web_label_controller.dart';
 part 'web/overlay/web_lod_label_controller.dart';
+part 'web/overlay/web_route_controller.dart';
 
 part 'web/interoperability/web_abstract_overlay.dart';
 part 'web/interoperability/web_custom_overlay.dart';
