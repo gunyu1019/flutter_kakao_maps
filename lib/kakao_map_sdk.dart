@@ -116,14 +116,15 @@ part 'web/web_controller.dart';
 part 'web/web_initializer.dart';
 
 part 'web/elements/image_element.dart';
+part 'web/elements/poi_element.dart';
 part 'web/elements/text_element.dart';
 
 part 'web/models/web_custom_overlay_option.dart';
 part 'web/models/web_map_option.dart';
-part 'web/models/web_poi.dart';
 
 part 'web/overlay/web_label_controller.dart';
 
+part 'web/interoperability/web_abstract_overlay.dart';
 part 'web/interoperability/web_custom_overlay.dart';
 part 'web/interoperability/web_event_listener.dart';
 part 'web/interoperability/web_latlng_bound.dart';
@@ -131,3 +132,5 @@ part 'web/interoperability/web_latlng.dart';
 part 'web/interoperability/web_map_controller.dart';
 part 'web/interoperability/web_map_projection.dart';
 part 'web/interoperability/web_point.dart';
+
+part 'web/utils/web_image_source.dart';
