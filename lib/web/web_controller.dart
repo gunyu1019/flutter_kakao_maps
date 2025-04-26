@@ -143,23 +143,36 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   Future<String> addMultiplePolygonShapeStyle(List<PolygonStyle> style,
-      [String? id]) {
-    // TODO: implement addMultiplePolygonShapeStyle
-    throw UnimplementedError();
+      [String? id]) async {
+    if (_polylineStyle.containsKey(id)) {
+      throw DuplicatedOverlayException(id!);
+    }
+    final polygonStyleId = _uuid.v4();
+    _polygonStyle[polygonStyleId] = style;
+    return polygonStyleId;
   }
 
   @override
   Future<String> addMultiplePolylineShapeStyle(
       List<PolylineStyle> style, PolylineCap polylineCap,
-      [String? id]) {
-    // TODO: implement addMultiplePolylineShapeStyle
-    throw UnimplementedError();
+      [String? id]) async {
+    if (_polylineStyle.containsKey(id)) {
+      throw DuplicatedOverlayException(id!);
+    }
+    final polylineStyleId = _uuid.v4();
+    _polylineStyle[polylineStyleId] = style;
+    return polylineStyleId;
   }
 
   @override
-  Future<String> addMultipleRouteStyle(List<RouteStyle> styles, [String? id]) {
-    // TODO: implement addMultipleRouteStyle
-    throw UnimplementedError();
+  Future<String> addMultipleRouteStyle(List<RouteStyle> styles,
+      [String? id]) async {
+    if (_routeStyle.containsKey(id)) {
+      throw DuplicatedOverlayException(id!);
+    }
+    final routeStyleId = _uuid.v4();
+    _routeStyle[routeStyleId] = styles;
+    return routeStyleId;
   }
 
   @override
@@ -173,17 +186,13 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<String> addPolygonShapeStyle(PolygonStyle style) {
-    // TODO: implement addRouteLayer
-    throw UnimplementedError();
-  }
+  Future<String> addPolygonShapeStyle(PolygonStyle style) async =>
+      await addMultiplePolygonShapeStyle([style], style.id);
 
   @override
   Future<String> addPolylineShapeStyle(
-      PolylineStyle style, PolylineCap polylineCap) {
-    // TODO: implement addRouteLayer
-    throw UnimplementedError();
-  }
+          PolylineStyle style, PolylineCap polylineCap) async =>
+      await addMultiplePolylineShapeStyle([style], polylineCap, style.id);
 
   @override
   Future<RouteController> addRouteLayer(String id,
@@ -193,10 +202,8 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<String> addRouteStyle(RouteStyle style) {
-    // TODO: implement addRouteLayer
-    throw UnimplementedError();
-  }
+  Future<String> addRouteStyle(RouteStyle style) async =>
+      await addMultipleRouteStyle([style], style.id);
 
   @override
   Future<ShapeController> addShapeLayer(String id,
