@@ -34,6 +34,7 @@ class KakaoMapWebController extends KakaoMapController {
         ShapeController._(overlayChannel, this, ShapeController.defaultId);
     _routeController[RouteController.defaultId] =
         RouteController._(overlayChannel, this, RouteController.defaultId); */
+    labelLayer._createLabelLayer();
   }
 
   /// 네이티브 환경에서 줌 레벨과 웹 환경에서 줌 레벨을 계산합니다.
@@ -57,6 +58,7 @@ class KakaoMapWebController extends KakaoMapController {
       OrderingType orderingType = BaseLabelController.defaultOrderingType,
       int zOrder = BaseLabelController.defaultZOrder}) async {
     final layer = WebLabelController._(controller, _dummyChannel, this, id);
+    await labelLayer._createLabelLayer();
     _labelController[id] = layer;
     return layer;
   }

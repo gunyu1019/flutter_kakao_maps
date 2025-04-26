@@ -11,12 +11,22 @@ class WebLabelController extends LabelController {
   final Map<String, int> _currentPoiLevel = {};
 
   @override
-  Future<void> _createLabelLayer() async {}
+  Future<void> _createLabelLayer() async {
+    addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
+  }
 
   @override
   Future<void> _removeLabelLayer() async {
     for (final poi in _poi.values) {
       await removePoi(poi);
+    }
+    removeEventListener(
+        controller, "zoom_changed", _zoomChangedEventHandler.toJS);
+  }
+
+  void _zoomChangedEventHandler() {
+    for (var poi in _poi.values) {
+      _syncZoomLevel(poi.id, poi.style.id!, poi.text);
     }
   }
 
@@ -139,8 +149,6 @@ class WebLabelController extends LabelController {
     overlay.setMap(controller);
     overlay.setVisible(visible);
 
-    _syncZoomLevel(poiId, style.id!, text);
-
     final poi = Poi._(this, poiId,
         transform: transform,
         position: position,
@@ -150,6 +158,7 @@ class WebLabelController extends LabelController {
         visible: visible,
         onClick: onClick);
     _poi[poiId] = poi;
+    _syncZoomLevel(poiId, style.id!, text);
     return poi;
   }
 
