@@ -26,15 +26,16 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   void _initalizeOverlayController() {
-    _labelController[LabelController.defaultId] =
-        WebLabelController._(controller, overlayChannel, this, LabelController.defaultId);
-    /* _lodLabelController[LodLabelController.defaultId] = LodLabelController._(
-        overlayChannel, this, LodLabelController.defaultId);
-    _shapeController[ShapeController.defaultId] =
+    _labelController[LabelController.defaultId] = WebLabelController._(
+        controller, overlayChannel, this, LabelController.defaultId);
+    _lodLabelController[LodLabelController.defaultId] = WebLodLabelController._(
+        controller, overlayChannel, this, LabelController.defaultId);
+    /* _shapeController[ShapeController.defaultId] =
         ShapeController._(overlayChannel, this, ShapeController.defaultId);
     _routeController[RouteController.defaultId] =
         RouteController._(overlayChannel, this, RouteController.defaultId); */
     labelLayer._createLabelLayer();
+    lodLabelLayer._createLodLabelLayer();
   }
 
   /// 네이티브 환경에서 줌 레벨과 웹 환경에서 줌 레벨을 계산합니다.
@@ -71,9 +72,11 @@ class KakaoMapWebController extends KakaoMapController {
           BaseLabelController.defaultCompetitionUnit,
       OrderingType orderingType = BaseLabelController.defaultOrderingType,
       double radius = LodLabelController.defaultRadius,
-      int zOrder = BaseLabelController.defaultZOrder}) {
-    // TODO: implement addLodLabelLayer
-    throw UnimplementedError();
+      int zOrder = BaseLabelController.defaultZOrder}) async {
+    final layer = WebLodLabelController._(controller, _dummyChannel, this, id);
+    await labelLayer._createLabelLayer();
+    _lodLabelController[id] = layer;
+    return layer;
   }
 
   @override
@@ -233,11 +236,12 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  LabelController get labelLayer => _labelController[LabelController.defaultId]!;
+  LabelController get labelLayer =>
+      _labelController[LabelController.defaultId]!;
 
   @override
-  // TODO: implement lodLabelLayer
-  LodLabelController get lodLabelLayer => throw UnimplementedError();
+  LodLabelController get lodLabelLayer =>
+      _lodLabelController[LodLabelController.defaultId]!;
 
   @override
   Logo get logo => Logo._(controller: this);
@@ -295,15 +299,15 @@ class KakaoMapWebController extends KakaoMapController {
   MethodChannel get overlayChannel => _dummyChannel;
 
   @override
-  Future<void> removeLabelLayer(LabelController controller) {
-    // TODO: implement removeLabelLayer
-    throw UnimplementedError();
+  Future<void> removeLabelLayer(LabelController controller) async {
+    await controller._removeLabelLayer();
+    _labelController.remove(controller.id);
   }
 
   @override
-  Future<void> removeLodLabelLayer(LodLabelController controller) {
-    // TODO: implement removeLodLabelLayer
-    throw UnimplementedError();
+  Future<void> removeLodLabelLayer(LodLabelController controller) async {
+    await controller._removeLodLabelLayer();
+    _labelController.remove(controller.id);
   }
 
   @override
