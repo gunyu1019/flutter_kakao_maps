@@ -12,5 +12,7 @@ enum EventType {
 
   final int id;
 
+  bool compareTo(int bitMask) => bitMask & id == id;
+
   const EventType(this.id);
 }
