@@ -68,8 +68,8 @@ class WebLodLabelController extends LodLabelController {
   void _syncZoomLevel(String poiId, String styleId, String? text) {
     final poi = _poi[poiId]!;
     final mapZoomLevel = controller.getLevel();
-    var currentZoomLevel = poi.styles.zoomLevel;
     var style = poi.style;
+    var currentZoomLevel = poi.style.zoomLevel;
     for (final secondaryStyle in poi.style._styles) {
       if (calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
           secondaryStyle.zoomLevel >= currentZoomLevel) {
