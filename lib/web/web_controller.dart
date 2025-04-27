@@ -93,11 +93,12 @@ class KakaoMapWebController extends KakaoMapController {
     _lodLabelController[LodLabelController.defaultId] = WebLodLabelController._(
         controller, overlayChannel, this, LabelController.defaultId);
     /* _shapeController[ShapeController.defaultId] =
-        ShapeController._(overlayChannel, this, ShapeController.defaultId);
+        ShapeController._(overlayChannel, this, ShapeController.defaultId); */
     _routeController[RouteController.defaultId] =
-        RouteController._(overlayChannel, this, RouteController.defaultId); */
+        WebRouteController._(controller, overlayChannel, this, RouteController.defaultId);
     labelLayer._createLabelLayer();
     lodLabelLayer._createLodLabelLayer();
+    routeLayer._createRouteLayer();
   }
 
   /// 네이티브 환경에서 줌 레벨과 웹 환경에서 줌 레벨을 계산합니다.
@@ -121,7 +122,7 @@ class KakaoMapWebController extends KakaoMapController {
       OrderingType orderingType = BaseLabelController.defaultOrderingType,
       int zOrder = BaseLabelController.defaultZOrder}) async {
     final layer = WebLabelController._(controller, _dummyChannel, this, id);
-    await labelLayer._createLabelLayer();
+    await layer._createLabelLayer();
     _labelController[id] = layer;
     return layer;
   }
@@ -196,9 +197,11 @@ class KakaoMapWebController extends KakaoMapController {
 
   @override
   Future<RouteController> addRouteLayer(String id,
-      {int zOrder = RouteController.defaultZOrder}) {
-    // TODO: implement addRouteLayer
-    throw UnimplementedError();
+      {int zOrder = RouteController.defaultZOrder}) async {
+    final layer = WebRouteController._(controller, _dummyChannel, this, id);
+    await layer._createRouteLayer();
+    _routeController[id] = layer;
+    return layer;
   }
 
   @override
@@ -379,9 +382,9 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<void> removeRouteLayer(RouteController controller) {
-    // TODO: implement removeRouteLayer
-    throw UnimplementedError();
+  Future<void> removeRouteLayer(RouteController controller) async {
+    await controller._removeRouteLayer();
+    _routeController.remove(controller.id);
   }
 
   @override
@@ -391,8 +394,7 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  // TODO: implement routeLayer
-  RouteController get routeLayer => throw UnimplementedError();
+  RouteController get routeLayer => _routeController[RouteController.defaultId]!;
 
   @override
   ScaleBar get scaleBar => ScaleBar._(controller: this);
