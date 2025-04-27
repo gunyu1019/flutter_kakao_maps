@@ -5,9 +5,9 @@ class WebRoute {
   final WebPolyline bodyElement;
   final WebPolyline? patternElement;
 
-  final WebPolylineOption? strokeElementOption;
-  final WebPolylineOption bodyElementOption;
-  final WebPolylineOption? patternElementOption;
+  WebPolylineOption? strokeElementOption;
+  WebPolylineOption bodyElementOption;
+  WebPolylineOption? patternElementOption;
 
   WebRoute(
     this.bodyElement,
