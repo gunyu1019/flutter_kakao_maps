@@ -65,7 +65,7 @@ class TitleComponent extends StatelessWidget {
             KakaoMapSdk.instance.hashKey().then((hashKey) {
               final clip = ClipboardData(text: hashKey!);
               Clipboard.setData(clip);
-            })
+            });
           },
           child: baseSubCard(Platform.operatingSystem, FontAwesomeIcons.android,
               backgroundColor: androidColor)),
