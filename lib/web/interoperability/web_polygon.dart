@@ -7,8 +7,8 @@ extension type WebPolygon._(JSObject _) implements JSObject {
   external void setMap(WebMapController map);
   external WebMapController getMap();
   external void setOptions(WebPolygonOption options);
-  external void setPath(List<WebLatLng> path);
-  external List<WebLatLng> getPath();
+  external void setPath(JSArray<WebLatLng> path);
+  external JSArray<WebLatLng> getPath();
   external double getLength();
   external double getArea();
   external void setZIndex(int zIndex);
