@@ -24,6 +24,9 @@ class MultipleRoute extends BaseRoute with BaseMultipleRoute {
   @override
   List<RouteSegment> get segments => _segments;
 
+  @override
+  bool get multiple => true;
+
   MultipleRoute._(this._controller, this.id,
       {required List<RouteStyle> styles,
       required List<RouteSegment> segments,

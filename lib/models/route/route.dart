@@ -17,6 +17,9 @@ class Route extends BaseRoute {
 
   List<LatLng> _points;
 
+  @override
+  bool get multiple => false;
+
   /// [Route]의 지점입니다.
   List<LatLng> get points => _points;
 
