@@ -4,18 +4,99 @@ class WebRouteController extends RouteController {
   final WebMapController controller;
 
   final Map<String, List<WebRoute>> _webRoute = {};
-  final Map<String, int> _currentRouteLevel = {};
+  final Map<String, List<int>> _currentRouteLevel = {};
 
   WebRouteController._(this.controller, super.channel, super.manager, super.id)
       : super._();
 
   @override
-  Future<void> _createRouteLayer() async {}
+  Future<void> _createRouteLayer() async {
+    addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
+  }
 
   @override
   Future<void> _removeRouteLayer() async {
     for (final route in _route.values) {
       await removeRoute(route);
+    }
+    removeEventListener(
+        controller, "zoom_changed", _zoomChangedEventHandler.toJS);
+  }
+
+  void _zoomChangedEventHandler() {
+    for (var route in _route.values) {
+      _syncZoomLevel(
+          route.id,
+          route.multiple
+              ? (route as MultipleRoute).styles
+              : [(route as Route).style]);
+    }
+  }
+
+  static int calculateZoomLevel(int zoomLevel) =>
+      KakaoMapWebController.calculateZoomLevel(zoomLevel);
+
+  void _syncZoomLevel(String routeId, List<RouteStyle> styles) {
+    final mapZoomLevel = controller.getLevel();
+    final route = _route[routeId]!;
+    final webRoute = _webRoute[routeId]!;
+    final zOrder = route.zOrder;
+
+    var currentStyles = styles;
+    var currentZoomLevel = styles.map((e) => e.zoomLevel).toList();
+    for (final (index, style) in styles.indexed) {
+      for (final secondaryStyle in style._styles) {
+        if (calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
+            secondaryStyle.zoomLevel >= currentZoomLevel[index]) {
+          currentZoomLevel[index] = secondaryStyle.zoomLevel;
+          currentStyles[index] = secondaryStyle;
+        }
+      }
+    }
+
+    final points = route.multiple
+        ? (route as MultipleRoute).segments.map((e) => e.points).toList()
+        : [(route as Route).points];
+    for (final (index, routeElement) in webRoute.indexed) {
+      if (_currentRouteLevel[routeId]![index] == currentZoomLevel[index]) {
+        return;
+      }
+      routeElement.bodyElementOption.strokeColor =
+          getColorCode(currentStyles[index].color);
+      routeElement.bodyElementOption.strokeWeight =
+          currentStyles[index].lineWidth * .5;
+      routeElement.bodyElement.setOptions(routeElement.bodyElementOption);
+
+      if (currentStyles[index].strokeWidth > 0) {
+        final strokeElementOption = routeElement.strokeElementOption =
+            getStrokeElementOption(currentStyles[index], points[index], zOrder);
+        if (routeElement.strokeElement == null) {
+          routeElement.strokeElement = WebPolyline(strokeElementOption);
+          routeElement.strokeElement?.setMap(controller);
+        } else {
+          routeElement.patternElement?.setOptions(strokeElementOption);
+        }
+      } else {
+        routeElement.strokeElement?.setMap(null);
+        routeElement.strokeElement = null;
+        routeElement.strokeElementOption = null;
+      }
+      if (currentStyles[index].strokeWidth > 0) {
+        final patternElementOption = routeElement.patternElementOption =
+            getPatternElementOption(
+                currentStyles[index], points[index], zOrder);
+        if (routeElement.patternElement == null) {
+          routeElement.patternElement = WebPolyline(patternElementOption);
+          routeElement.patternElement?.setMap(controller);
+        } else {
+          routeElement.patternElement?.setOptions(patternElementOption);
+        }
+      } else {
+        routeElement.patternElement?.setMap(null);
+        routeElement.patternElement = null;
+        routeElement.patternElementOption = null;
+      }
+      _currentRouteLevel[routeId]![index] = currentZoomLevel[index];
     }
   }
 
@@ -23,32 +104,17 @@ class WebRouteController extends RouteController {
   Future<void> _changeMultipleRoute(
       String routeId, String styleId, List<RouteSegment> segments) async {
     final zOrder = _route[routeId]!.zOrder;
-    final styles = manager.getMultipleRotueStyle(styleId)!;
+    final style = manager.getMultipleRotueStyle(styleId)!;
 
-    for (var (index, webRoute) in _webRoute[routeId]!.indexed) {
-      if (segments.length <= index) {
-        break;
-      }
-      final style = styles[segments[index].styleIndex];
-      final bodyElementOption = _webRoute[routeId]![index].bodyElementOption =
-          getBodyElementOption(style, segments[index].points, zOrder);
-      final strokeElementOption = _webRoute[routeId]![index].strokeElementOption =
-          getStrokeElementOption(style, segments[index].points, zOrder);
-      final patternElementOption = _webRoute[routeId]![index].patternElementOption =
-          getPatternElementOption(style, segments[index].points, zOrder);
-      webRoute.bodyElement.setOptions(bodyElementOption);
-      webRoute.strokeElement?.setOptions(strokeElementOption);
-      webRoute.patternElement?.setOptions(patternElementOption);
-    }
-    final webRouteLength = _webRoute[routeId]!.length;
-    if (segments.length > webRouteLength) {
-      for (var (index, segment) in segments.slice(webRouteLength - 1).indexed) {
-        final style = styles[segments[webRouteLength + index - 1].styleIndex];
-        _webRoute[routeId]!.add(
-          _addRouteElement(style, segment.points, zOrder)
-        );
+    for (final webRoute in _webRoute[routeId]!) {
+      for (final routeElement in webRoute.allElement) {
+        routeElement.setMap(null);
       }
     }
+    _webRoute[routeId] = segments
+        .map((segment) =>
+            _addRouteElement(style[segment.styleIndex], segment.points, zOrder))
+        .toList();
   }
 
   @override
@@ -58,15 +124,10 @@ class WebRouteController extends RouteController {
     final zOrder = _route[routeId]!.zOrder;
     final style = manager.getRotueStyle(styleId)!;
 
-    final bodyElementOption = _webRoute[routeId]![0].bodyElementOption =
-        getBodyElementOption(style, points, zOrder);
-    final strokeElementOption = _webRoute[routeId]![0].strokeElementOption =
-        getStrokeElementOption(style, points, zOrder);
-    final patternElementOption = _webRoute[routeId]![0].patternElementOption =
-        getPatternElementOption(style, points, zOrder);
-    webRoute.bodyElement.setOptions(bodyElementOption);
-    webRoute.strokeElement?.setOptions(strokeElementOption);
-    webRoute.patternElement?.setOptions(patternElementOption);
+    for (final routeElement in webRoute.allElement) {
+      routeElement.setMap(null);
+    }
+    _webRoute[routeId] = [_addRouteElement(style, points, zOrder)];
   }
 
   @override
@@ -156,6 +217,8 @@ class WebRouteController extends RouteController {
     final route = Route._(this, routeId,
         points: points, style: style, curveType: curveType, zOrder: zOrder);
     _route[routeId] = route;
+    _currentRouteLevel[routeId] = [style.zoomLevel];
+    _syncZoomLevel(routeId, [style]);
     return route;
   }
 
@@ -179,6 +242,9 @@ class WebRouteController extends RouteController {
         styles: option.styles,
         zOrder: option.zOrder);
     _route[routeId] = route;
+    _currentRouteLevel[routeId] =
+        option.styles.map((e) => e.zoomLevel).toList();
+    _syncZoomLevel(routeId, option.styles);
     return route;
   }
 
