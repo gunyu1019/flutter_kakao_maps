@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
 class TitleComponent extends StatelessWidget {
   const TitleComponent({super.key});
@@ -58,9 +60,15 @@ class TitleComponent extends StatelessWidget {
     return switch (Platform.operatingSystem) {
       "ios" => baseSubCard(Platform.operatingSystem, FontAwesomeIcons.apple,
           backgroundColor: iOSColor),
-      "android" => baseSubCard(
-          Platform.operatingSystem, FontAwesomeIcons.android,
-          backgroundColor: androidColor),
+      "android" => InkWell(
+          onTap: () {
+            KakaoMapSdk.instance.hashKey().then((hashKey) {
+              final clip = ClipboardData(text: hashKey!);
+              Clipboard.setData(clip);
+            })
+          },
+          child: baseSubCard(Platform.operatingSystem, FontAwesomeIcons.android,
+              backgroundColor: androidColor)),
       String() => baseSubCard("unknown", null),
     };
   }
