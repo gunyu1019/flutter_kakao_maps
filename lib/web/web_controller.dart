@@ -92,12 +92,13 @@ class KakaoMapWebController extends KakaoMapController {
         controller, overlayChannel, this, LabelController.defaultId);
     _lodLabelController[LodLabelController.defaultId] = WebLodLabelController._(
         controller, overlayChannel, this, LabelController.defaultId);
-    /* _shapeController[ShapeController.defaultId] =
-        ShapeController._(overlayChannel, this, ShapeController.defaultId); */
-    _routeController[RouteController.defaultId] =
-        WebRouteController._(controller, overlayChannel, this, RouteController.defaultId);
+    _shapeController[ShapeController.defaultId] = WebShapeController._(
+        controller, overlayChannel, this, ShapeController.defaultId);
+    _routeController[RouteController.defaultId] = WebRouteController._(
+        controller, overlayChannel, this, RouteController.defaultId);
     labelLayer._createLabelLayer();
     lodLabelLayer._createLodLabelLayer();
+    shapeLayer._createShapeLayer();
     routeLayer._createRouteLayer();
   }
 
@@ -211,9 +212,11 @@ class KakaoMapWebController extends KakaoMapController {
   @override
   Future<ShapeController> addShapeLayer(String id,
       {ShapeLayerPass passType = ShapeController.defaultShapeLayerPass,
-      int zOrder = ShapeController.defaultZOrder}) {
-    // TODO: implement addShapeLayer
-    throw UnimplementedError();
+      int zOrder = ShapeController.defaultZOrder}) async {
+    final layer = WebShapeController._(controller, _dummyChannel, this, id);
+    await layer._createShapeLayer();
+    _shapeController[id] = layer;
+    return layer;
   }
 
   @override
@@ -388,13 +391,14 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<void> removeShapeLayer(ShapeController controller) {
-    // TODO: implement removeShapeLayer
-    throw UnimplementedError();
+  Future<void> removeShapeLayer(ShapeController controller) async {
+    await controller._removeShapeLayer();
+    _shapeController.remove(controller.id);
   }
 
   @override
-  RouteController get routeLayer => _routeController[RouteController.defaultId]!;
+  RouteController get routeLayer =>
+      _routeController[RouteController.defaultId]!;
 
   @override
   ScaleBar get scaleBar => ScaleBar._(controller: this);
@@ -423,8 +427,8 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  // TODO: implement shapeLayer
-  ShapeController get shapeLayer => throw UnimplementedError();
+  ShapeController get shapeLayer =>
+      _shapeController[ShapeController.defaultId]!;
 
   @override
   Future<void> showOverlay(MapOverlay overlay) async {

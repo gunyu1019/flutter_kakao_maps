@@ -34,8 +34,7 @@ class WebShapeController extends ShapeController {
   Future<Polyline> addPolylineShape<T extends BasePoint>(
       T position, PolylineStyle style, PolylineCap polylineCap,
       {String? id, int zOrder = 10001}) async {
-    final styleId =
-        style._id ?? await manager.addPolylineShapeStyle(style, polylineCap);
+    style._id ?? await manager.addPolylineShapeStyle(style, polylineCap);
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
@@ -54,7 +53,7 @@ class WebShapeController extends ShapeController {
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
-    final styleId = style._id ?? await manager.addPolygonShapeStyle(style);
+    style._id ?? await manager.addPolygonShapeStyle(style);
     final shapeId = "polygon_shape_${id}_${_polygonShape.length}";
 
     final polygon =
