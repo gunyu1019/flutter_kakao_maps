@@ -30,6 +30,9 @@ class WebShapeController extends ShapeController {
   Future<void> _changePolygon<T extends BasePoint>(
       String shapeId, T position, String styleId) async {}
 
+  // ignore: library_private_types_in_public_api
+  MapPoint convertToMapPoint<T extends _BaseDotPoint>(T point) => throw UnimplementedError();
+
   @override
   Future<Polyline> addPolylineShape<T extends BasePoint>(
       T position, PolylineStyle style, PolylineCap polylineCap,
