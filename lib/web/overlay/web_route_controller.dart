@@ -69,7 +69,7 @@ class WebRouteController extends RouteController {
 
       if (currentStyles[index].strokeWidth > 0) {
         final strokeElementOption = routeElement.strokeElementOption =
-            getStrokeElementOption(currentStyles[index], points[index], zOrder);
+            _getStrokeElementOption(currentStyles[index], points[index], zOrder);
         if (routeElement.strokeElement == null) {
           routeElement.strokeElement = WebPolyline(strokeElementOption);
           routeElement.strokeElement?.setMap(controller);
@@ -83,7 +83,7 @@ class WebRouteController extends RouteController {
       }
       if (currentStyles[index].strokeWidth > 0) {
         final patternElementOption = routeElement.patternElementOption =
-            getPatternElementOption(
+            _getPatternElementOption(
                 currentStyles[index], points[index], zOrder);
         if (routeElement.patternElement == null) {
           routeElement.patternElement = WebPolyline(patternElementOption);
@@ -144,7 +144,7 @@ class WebRouteController extends RouteController {
       }
     }
   }
-  
+
   WebPolylineOption getBodyElementOption(
           RouteStyle style, List<LatLng> points, int zOrder) =>
       WebPolylineOption(
@@ -154,7 +154,7 @@ class WebRouteController extends RouteController {
           strokeOpacity: 1,
           zIndex: zOrder);
 
-  WebPolylineOption getStrokeElementOption(
+  WebPolylineOption _getStrokeElementOption(
           RouteStyle style, List<LatLng> points, int zOrder) =>
       WebPolylineOption(
           path: points.map(WebLatLng.fromLatLng).toList().toJS,
@@ -163,7 +163,7 @@ class WebRouteController extends RouteController {
           strokeOpacity: 1,
           zIndex: zOrder - 1);
 
-  WebPolylineOption getPatternElementOption(
+  WebPolylineOption _getPatternElementOption(
           RouteStyle style, List<LatLng> points, int zOrder) =>
       WebPolylineOption(
           path: points.map(WebLatLng.fromLatLng).toList().toJS,
@@ -176,10 +176,10 @@ class WebRouteController extends RouteController {
   WebRoute _addRouteElement(RouteStyle style, List<LatLng> points, int zOrder) {
     final bodyElementOption = getBodyElementOption(style, points, zOrder);
     final strokeElementOption = style.strokeWidth > 0
-        ? getStrokeElementOption(style, points, zOrder)
+        ? _getStrokeElementOption(style, points, zOrder)
         : null;
     final patternElementOption = style.pattern == null
-        ? getPatternElementOption(style, points, zOrder)
+        ? _getPatternElementOption(style, points, zOrder)
         : null;
 
     final bodyElement = WebPolyline(bodyElementOption);
