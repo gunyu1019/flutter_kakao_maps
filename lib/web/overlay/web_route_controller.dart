@@ -144,13 +144,7 @@ class WebRouteController extends RouteController {
       }
     }
   }
-
-  static String _getSingleColorCode(double value) =>
-      (value * 255).toInt().toRadixString(16);
-
-  static String getColorCode(Color color) =>
-      "#${_getSingleColorCode(color.r)}${_getSingleColorCode(color.g)}${_getSingleColorCode(color.b)}";
-
+  
   WebPolylineOption getBodyElementOption(
           RouteStyle style, List<LatLng> points, int zOrder) =>
       WebPolylineOption(
