@@ -78,7 +78,7 @@ class KImage {
 
     try {
       final image = await repaintBoundary.toImage();
-      final data = await image.toByteData(format: ImageByteFormat.png).then((b) => b!.buffer.asUint8List());
+      final data = await image.toByteData(format: ui.ImageByteFormat.png).then((b) => b!.buffer.asUint8List());
 
       return KImage.fromData(data, size.width as int, size.height as int);
     } finally {
