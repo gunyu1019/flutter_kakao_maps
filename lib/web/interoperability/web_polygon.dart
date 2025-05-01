@@ -4,7 +4,7 @@ part of '../../kakao_map_sdk.dart';
 extension type WebPolygon._(JSObject _) implements JSObject {
   external WebPolygon(WebPolygonOption options);
 
-  external void setMap(WebMapController map);
+  external void setMap(WebMapController? map);
   external WebMapController getMap();
   external void setOptions(WebPolygonOption options);
   external void setPath(JSArray<WebLatLng> path);
