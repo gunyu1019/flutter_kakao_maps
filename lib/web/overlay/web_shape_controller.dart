@@ -130,6 +130,9 @@ class WebShapeController extends ShapeController {
 
   @override
   Future<void> removePolylineShape(Polyline shape) async {
+    _webPolyline[shape.id]!.setMap(null);
+    _webPolylineStroke[shape.id]?.setMap(null);
+
     _polylineShape.remove(shape.id);
     _webPolyline.remove(shape.id);
     _webPolylineStroke.remove(shape.id);
@@ -137,6 +140,8 @@ class WebShapeController extends ShapeController {
 
   @override
   Future<void> removePolygonShape(Polygon shape) async {
+    _webPolygon[shape.id]!.setMap(null);
+
     _polygonShape.remove(shape.id);
     _webPolygon.remove(shape.id);
   }
