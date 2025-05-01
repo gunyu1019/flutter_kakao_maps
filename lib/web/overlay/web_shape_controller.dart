@@ -7,6 +7,10 @@ class WebShapeController extends ShapeController {
   final Map<String, WebPolyline> _webPolyline = {};
   final Map<String, WebPolyline?> _webPolylineStroke = {};
 
+  final Map<String, WebPolygonOption> _webPolygonOption = {};
+  final Map<String, WebPolylineOption> _webPolylineOption = {};
+  final Map<String, WebPolylineOption?> _webPolylineStrokeOption = {};
+
   final Map<String, int> _currentPolylineLevel = {};
   final Map<String, int> _currentPolygonLevel = {};
 
@@ -34,9 +38,10 @@ class WebShapeController extends ShapeController {
       String shapeId, T position, String styleId) async {}
 
   // ignore: library_private_types_in_public_api
-  MapPoint convertToMapPoint<T extends _BaseDotPoint>(T point) => throw UnimplementedError();
-  
-  WebPolylineOption getPolylineElementOption(
+  MapPoint convertToMapPoint<T extends _BaseDotPoint>(T point) =>
+      throw UnimplementedError();
+
+  WebPolylineOption _getPolylineElementOption(
           PolylineStyle style, List<LatLng> points, int zOrder) =>
       WebPolylineOption(
           path: points.map(WebLatLng.fromLatLng).toList().toJS,
@@ -45,7 +50,7 @@ class WebShapeController extends ShapeController {
           strokeOpacity: 1,
           zIndex: zOrder);
 
-  WebPolylineOption getPolylineStrokeElementOption(
+  WebPolylineOption _getPolylineStrokeElementOption(
           PolylineStyle style, List<LatLng> points, int zOrder) =>
       WebPolylineOption(
           path: points.map(WebLatLng.fromLatLng).toList().toJS,
@@ -65,8 +70,17 @@ class WebShapeController extends ShapeController {
     final point = position as MapPoint;
     final shapeId = "polyline_shape_${id}_${_polylineShape.length}";
 
-    _webPolyline[shapeId] = WebPolyline(getPolylineElementOption(style, point.points, zOrder));
+    final polylineOption = _webPolylineOption[shapeId] =
+        _getPolylineElementOption(style, point.points, zOrder);
+    _webPolyline[shapeId] = WebPolyline(polylineOption);
     _webPolyline[shapeId]!.setMap(controller);
+
+    if (style.strokeWidth > 0) {
+      final polylineStrokeOption = _webPolylineStrokeOption[shapeId] =
+          _getPolylineStrokeElementOption(style, point.points, zOrder);
+      _webPolylineStroke[shapeId] = WebPolyline(polylineStrokeOption);
+      _webPolylineStroke[shapeId]!.setMap(controller);
+    }
 
     final polyline = Polyline<T>._(this, shapeId,
         position: position, style: style, polylineCap: polylineCap);
