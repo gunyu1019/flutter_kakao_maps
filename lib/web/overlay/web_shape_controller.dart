@@ -59,6 +59,24 @@ class WebShapeController extends ShapeController {
           strokeOpacity: 1,
           zIndex: zOrder - 1);
 
+  WebPolygonOption _getPolygonElementOption(PolygonStyle style,
+      List<LatLng> points, List<List<LatLng>> holes, int zOrder) {
+    final path = <JSArray<WebLatLng>>[];
+    path.add(points.map(WebLatLng.fromLatLng).toList().toJS);
+    holes
+        .map((hole) => hole.map(WebLatLng.fromLatLng).toList().toJS)
+        .forEach(path.add);
+
+    return WebPolygonOption(
+        path: path.toJS,
+        fillColor: getColorCode(style.color),
+        fillOpacity: 1,
+        strokeWeight: style.strokeWidth,
+        strokeColor: getColorCode(style.strokeColor),
+        strokeOpacity: 1,
+        zIndex: zOrder);
+  }
+
   @override
   Future<Polyline> addPolylineShape<T extends BasePoint>(
       T position, PolylineStyle style, PolylineCap polylineCap,
@@ -95,8 +113,14 @@ class WebShapeController extends ShapeController {
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
+    final point = position as MapPoint;
     style._id ?? await manager.addPolygonShapeStyle(style);
     final shapeId = "polygon_shape_${id}_${_polygonShape.length}";
+
+    final polygonOption = _webPolygonOption[shapeId] =
+        _getPolygonElementOption(style, point.points, point._holes, zOrder);
+    _webPolygon[shapeId] = WebPolygon(polygonOption);
+    _webPolygon[shapeId]!.setMap(controller);
 
     final polygon =
         Polygon<T>._(this, shapeId, position: position, style: style);
@@ -107,11 +131,14 @@ class WebShapeController extends ShapeController {
   @override
   Future<void> removePolylineShape(Polyline shape) async {
     _polylineShape.remove(shape.id);
+    _webPolyline.remove(shape.id);
+    _webPolylineStroke.remove(shape.id);
   }
 
   @override
   Future<void> removePolygonShape(Polygon shape) async {
     _polygonShape.remove(shape.id);
+    _webPolygon.remove(shape.id);
   }
 
   @override
