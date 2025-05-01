@@ -102,6 +102,9 @@ part 'models/enums/shape/shape_layer_pass.dart';
 
 part 'models/enums/route/curve_type.dart';
 
+/* utilties */
+part 'utils/math.dart';
+
 /* widget */
 part 'widget/map_widget.dart';
 part 'widget/platform_view.dart';
