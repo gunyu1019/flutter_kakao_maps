@@ -21,7 +21,14 @@ class WebShapeController extends ShapeController {
   Future<void> _createShapeLayer() async {}
 
   @override
-  Future<void> _removeShapeLayer() async {}
+  Future<void> _removeShapeLayer() async {
+    for (var shape in _polygonShape.values) {
+      await removePolygonShape(shape);
+    }
+    for (var shape in _polylineShape.values) {
+      await removePolylineShape(shape);
+    }
+  }
 
   @override
   Future<void> _changePolylineVisible(String shapeId, bool visible) async {}
@@ -147,14 +154,30 @@ class WebShapeController extends ShapeController {
   }
 
   @override
-  Future<void> showAllPolyline() async {}
+  Future<void> showAllPolyline() async {
+    for (var shape in _polylineShape.values) {
+      await shape.show();
+    }
+  }
 
   @override
-  Future<void> hideAllPolyline() async {}
+  Future<void> hideAllPolyline() async {
+    for (var shape in _polylineShape.values) {
+      await shape.hide();
+    }
+  }
 
   @override
-  Future<void> showAllPolygon() async {}
+  Future<void> showAllPolygon() async {
+    for (var shape in _polygonShape.values) {
+      await shape.show();
+    }
+  }
 
   @override
-  Future<void> hideAllPolygon() async {}
+  Future<void> hideAllPolygon() async {
+    for (var shape in _polygonShape.values) {
+      await shape.hide();
+    }
+  }
 }
