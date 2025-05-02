@@ -52,11 +52,35 @@ class WebShapeController extends ShapeController {
 
   @override
   Future<void> _changePolyline<T extends BasePoint>(
-      String shapeId, T position, String styleId) async {}
+      String shapeId, T position, String styleId) async {
+        final style = manager.getPolylineShapeStyle(styleId)!;
+        final bodyOptions = _webPolylineOption[shapeId]!;
+        final strokeOptions = _webPolylineStrokeOption[shapeId];
+
+        strokeOptions?.strokeColor = getColorCode(style.strokeColor);
+        bodyOptions.strokeColor = getColorCode(style.color);
+        strokeOptions?.strokeWeight = style.lineWidth * .5 + style.strokeWidth * .5;
+        bodyOptions.strokeWeight = style.lineWidth * .5;
+
+        _webPolyline[shapeId]?.setOptions(bodyOptions);
+        _webPolylineStroke[shapeId]?.setOptions(strokeOptions!);
+        _webPolylineOption[shapeId] = bodyOptions;
+        _webPolylineStrokeOption[shapeId] = strokeOptions;
+      }
 
   @override
   Future<void> _changePolygon<T extends BasePoint>(
-      String shapeId, T position, String styleId) async {}
+      String shapeId, T position, String styleId) async {
+        final style = manager.getPolygonShapeStyle(styleId)!;
+        final options = _webPolygonOption[shapeId]!;
+        
+        options.fillColor = getColorCode(style.color);
+        options.strokeColor = getColorCode(style.strokeColor);
+        options.strokeWeight = style.strokeWidth;
+
+        _webPolygon[shapeId]?.setOptions(options);
+        _webPolygonOption[shapeId] = options;
+      }
 
   // ignore: library_private_types_in_public_api
   MapPoint convertToMapPoint<T extends _BaseDotPoint>(T point) =>
