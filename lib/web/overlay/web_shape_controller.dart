@@ -31,10 +31,24 @@ class WebShapeController extends ShapeController {
   }
 
   @override
-  Future<void> _changePolylineVisible(String shapeId, bool visible) async {}
+  Future<void> _changePolylineVisible(String shapeId, bool visible) async {
+    if (visible) {
+      _webPolyline[shapeId]!.setMap(controller);
+      _webPolylineStroke[shapeId]?.setMap(controller);
+    } else {
+      _webPolyline[shapeId]!.setMap(null);
+      _webPolylineStroke[shapeId]?.setMap(null);
+    }
+  }
 
   @override
-  Future<void> _changePolygonVisible(String shapeId, bool visible) async {}
+  Future<void> _changePolygonVisible(String shapeId, bool visible) async {
+    if (visible) {
+      _webPolygon[shapeId]!.setMap(controller);
+    } else {
+      _webPolygon[shapeId]!.setMap(null);
+    }
+  }
 
   @override
   Future<void> _changePolyline<T extends BasePoint>(
