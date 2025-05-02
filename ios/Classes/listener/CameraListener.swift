@@ -16,7 +16,7 @@ class CameraListener {
 
     func onCameraStoppedEvent(_ param: CameraActionEventParam) {
         let mapView = param.view as! KakaoMap
-        let position = mapView.getPosition(CGPoint(x: 0.5, y: 0.5))
+        let position = mapView.getPosition(CGPoint(x: mapView.viewRect.width * 0.5, y: mapView.viewRect.height * 0.5))
         var payload: [String: Any] = [
             "zoomLevel": mapView.zoomLevel,
             "tiltAngle": mapView.tiltAngle,
