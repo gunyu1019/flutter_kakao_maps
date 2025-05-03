@@ -38,9 +38,7 @@ class WebRouteController extends RouteController {
 
   void _syncZoomLevel(String routeId, List<RouteStyle> styles) {
     final mapZoomLevel = controller.getLevel();
-    final route = _route[routeId]!;
     final webRoute = _webRoute[routeId]!;
-    final zOrder = route.zOrder;
 
     var currentStyles = styles;
     var currentZoomLevel = styles.map((e) => e.zoomLevel).toList();
@@ -53,10 +51,8 @@ class WebRouteController extends RouteController {
         }
       }
     }
+    final points = webRoute.map((e) => e.bodyElement.getPath()).toList();
 
-    final points = route.multiple
-        ? (route as MultipleRoute).segments.map((e) => e.points).toList()
-        : [(route as Route).points];
     for (final (index, routeElement) in webRoute.indexed) {
       if (_currentRouteLevel[routeId]![index] == currentZoomLevel[index]) {
         return;
@@ -146,27 +142,27 @@ class WebRouteController extends RouteController {
   }
 
   WebPolylineOption _getBodyElementOption(
-          RouteStyle style, List<LatLng> points, int zOrder) =>
+          RouteStyle style, JSArray<WebLatLng> points, int zOrder) =>
       WebPolylineOption(
-          path: points.map(WebLatLng.fromLatLng).toList().toJS,
+          path: points,
           strokeWeight: style.lineWidth * .5,
           strokeColor: getColorCode(style.color),
           strokeOpacity: 1,
           zIndex: zOrder);
 
   WebPolylineOption _getStrokeElementOption(
-          RouteStyle style, List<LatLng> points, int zOrder) =>
+          RouteStyle style, JSArray<WebLatLng> points, int zOrder) =>
       WebPolylineOption(
-          path: points.map(WebLatLng.fromLatLng).toList().toJS,
+          path: points,
           strokeWeight: style.lineWidth * .5 + style.strokeWidth * .5,
           strokeColor: getColorCode(style.strokeColor),
           strokeOpacity: 1,
           zIndex: zOrder - 1);
 
   WebPolylineOption _getPatternElementOption(
-          RouteStyle style, List<LatLng> points, int zOrder) =>
+          RouteStyle style, JSArray<WebLatLng> points, int zOrder) =>
       WebPolylineOption(
-          path: points.map(WebLatLng.fromLatLng).toList().toJS,
+          path: points,
           strokeWeight: 1,
           strokeColor: getColorCode(style.strokeColor),
           strokeOpacity: 1,
@@ -174,12 +170,13 @@ class WebRouteController extends RouteController {
           zIndex: zOrder + 1);
 
   WebRoute _addRouteElement(RouteStyle style, List<LatLng> points, int zOrder) {
-    final bodyElementOption = _getBodyElementOption(style, points, zOrder);
+    final interopedPoints = points.map(WebLatLng.fromLatLng).toList().toJS;
+    final bodyElementOption = _getBodyElementOption(style, interopedPoints, zOrder);
     final strokeElementOption = style.strokeWidth > 0
-        ? _getStrokeElementOption(style, points, zOrder)
+        ? _getStrokeElementOption(style, interopedPoints, zOrder)
         : null;
     final patternElementOption = style.pattern == null
-        ? _getPatternElementOption(style, points, zOrder)
+        ? _getPatternElementOption(style, interopedPoints, zOrder)
         : null;
 
     final bodyElement = WebPolyline(bodyElementOption);
