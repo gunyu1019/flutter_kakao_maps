@@ -126,8 +126,8 @@ class WebLodLabelController extends LodLabelController {
         content:
             poiElement(poiId, encodedIcon, style.icon, text, style, onClick),
         position: WebLatLng.fromLatLng(position),
-        xAnchor: style.anchor.x,
-        yAnchor: style.anchor.y,
+        xAnchor: style.anchor.x.toDouble(),
+        yAnchor: style.anchor.y.toDouble(),
         zIndex: rank ?? 10001);
     _currentPoiLevel[poiId] = style.zoomLevel;
     final overlay = _webPoi[poiId] = WebCustomOverlay(options);
