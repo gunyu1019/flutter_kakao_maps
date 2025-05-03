@@ -53,38 +53,74 @@ class WebShapeController extends ShapeController {
   @override
   Future<void> _changePolyline<T extends BasePoint>(
       String shapeId, T position, String styleId) async {
-        final style = manager.getPolylineShapeStyle(styleId)!;
-        final bodyOptions = _webPolylineOption[shapeId]!;
-        final strokeOptions = _webPolylineStrokeOption[shapeId];
+    final style = manager.getPolylineShapeStyle(styleId)!;
+    final bodyOptions = _webPolylineOption[shapeId]!;
+    final strokeOptions = _webPolylineStrokeOption[shapeId];
 
-        strokeOptions?.strokeColor = getColorCode(style.strokeColor);
-        bodyOptions.strokeColor = getColorCode(style.color);
-        strokeOptions?.strokeWeight = style.lineWidth * .5 + style.strokeWidth * .5;
-        bodyOptions.strokeWeight = style.lineWidth * .5;
+    strokeOptions?.strokeColor = getColorCode(style.strokeColor);
+    bodyOptions.strokeColor = getColorCode(style.color);
+    strokeOptions?.strokeWeight = style.lineWidth * .5 + style.strokeWidth * .5;
+    bodyOptions.strokeWeight = style.lineWidth * .5;
 
-        _webPolyline[shapeId]?.setOptions(bodyOptions);
-        _webPolylineStroke[shapeId]?.setOptions(strokeOptions!);
-        _webPolylineOption[shapeId] = bodyOptions;
-        _webPolylineStrokeOption[shapeId] = strokeOptions;
-      }
+    _webPolyline[shapeId]?.setOptions(bodyOptions);
+    _webPolylineStroke[shapeId]?.setOptions(strokeOptions!);
+    _webPolylineOption[shapeId] = bodyOptions;
+    _webPolylineStrokeOption[shapeId] = strokeOptions;
+  }
 
   @override
   Future<void> _changePolygon<T extends BasePoint>(
       String shapeId, T position, String styleId) async {
-        final style = manager.getPolygonShapeStyle(styleId)!;
-        final options = _webPolygonOption[shapeId]!;
-        
-        options.fillColor = getColorCode(style.color);
-        options.strokeColor = getColorCode(style.strokeColor);
-        options.strokeWeight = style.strokeWidth;
+    final style = manager.getPolygonShapeStyle(styleId)!;
+    final options = _webPolygonOption[shapeId]!;
 
-        _webPolygon[shapeId]?.setOptions(options);
-        _webPolygonOption[shapeId] = options;
+    options.fillColor = getColorCode(style.color);
+    options.strokeColor = getColorCode(style.strokeColor);
+    options.strokeWeight = style.strokeWidth;
+
+    _webPolygon[shapeId]?.setOptions(options);
+    _webPolygonOption[shapeId] = options;
+  }
+
+  MapPoint _convertToMapPoint<T extends BasePoint>(T point) =>
+      switch (point.type) {
+        0 => point as MapPoint,
+        1 => (() {
+            final dotPoint = point as _BaseDotPoint;
+            final absolutePoint = _getPointsFromDotPoint(dotPoint);
+            final newPoint = MapPoint(absolutePoint);
+
+            dotPoint._holes
+                .map(
+                    (hole) => _getPointsFromDotPoint(hole, dotPoint.basePoint!))
+                .forEach(newPoint.addHole);
+            return newPoint;
+          })(),
+        int() => throw UnimplementedError(),
+      };
+
+  List<LatLng> _getPointsFromDotPoint<T extends _BaseDotPoint>(T point,
+      [LatLng? basePoint]) {
+    final absolutePoint = <LatLng>[];
+    final basePoint0 = basePoint ?? point.basePoint!;
+
+    if (point is CirclePoint) {
+      for (int degrees = 0; degrees < 360; degrees++) {
+        absolutePoint.add(basePoint0.offset(point.radius, degrees.toDouble()));
       }
+    }
 
-  // ignore: library_private_types_in_public_api
-  MapPoint convertToMapPoint<T extends _BaseDotPoint>(T point) =>
-      throw UnimplementedError();
+    if (point is RectanglePoint) {
+      absolutePoint.addAll([
+        basePoint0.offset(-point.width * .5, 90).offset(point.height * .5, 0),
+        basePoint0.offset(point.height * .5, 0).offset(point.width * .5, 90),
+        basePoint0.offset(point.width * .5, 90).offset(-point.height * .5, 0),
+        basePoint0.offset(-point.height * .5, 0).offset(-point.width * .5, 90),
+        basePoint0.offset(-point.width * .5, 90).offset(point.height * .5, 0),
+      ]);
+    }
+    return absolutePoint;
+  }
 
   WebPolylineOption _getPolylineElementOption(
           PolylineStyle style, List<LatLng> points, int zOrder) =>
@@ -130,7 +166,7 @@ class WebShapeController extends ShapeController {
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
-    final point = position as MapPoint;
+    final point = _convertToMapPoint(position);
     final shapeId = "polyline_shape_${id}_${_polylineShape.length}";
 
     final polylineOption = _webPolylineOption[shapeId] =
@@ -158,7 +194,7 @@ class WebShapeController extends ShapeController {
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
-    final point = position as MapPoint;
+    final point = _convertToMapPoint(position);
     style._id ?? await manager.addPolygonShapeStyle(style);
     final shapeId = "polygon_shape_${id}_${_polygonShape.length}";
 
