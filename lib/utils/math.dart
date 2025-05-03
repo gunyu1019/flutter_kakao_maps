@@ -24,3 +24,19 @@ double _haversine(LatLng point1, LatLng point2) {
           math.pow(math.sin(deltaLongtitude * .5), 2));
   return 2 * _earthRadius * math.asin(math.sqrt(distance));
 }
+
+/// [point](WGS84) 기준으로 [degrees] 방향의 [distance](미터) 떨어진 거리의 새로운 WGS84 좌표를 구합니다.
+LatLng _pointOffset(LatLng point, double distance, double degrees) {
+  final latitude = _degreeToRadian(point.latitude);
+  final longtitude = _degreeToRadian(point.longitude);
+  final bearing = _degreeToRadian(degrees);
+  final distance0 = distance / _earthRadius;
+
+  final newLatitude = math.asin(math.sin(latitude) * math.cos(distance0) +
+      math.cos(latitude) * math.sin(distance0) * math.cos(bearing));
+  final newLongtitude = longtitude +
+      math.atan2(math.sin(bearing) * math.sin(distance0) * math.cos(latitude),
+          math.cos(distance0) - math.sin(latitude) * math.sin(newLatitude));
+
+  return LatLng(_radianToDegree(newLatitude), _radianToDegree(newLongtitude));
+}
