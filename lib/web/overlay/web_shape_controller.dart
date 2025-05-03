@@ -75,7 +75,7 @@ class WebShapeController extends ShapeController {
       _webPolylineStrokeOption[shapeId] = null;
     }
 
-    webPolylineOption.strokeColor = getColorCode(currentStyle.color);
+    webPolylineOption.strokeColor = _getColorCode(currentStyle.color);
     webPolylineOption.strokeWeight = currentStyle.lineWidth * .5;
     _webPolyline[shapeId]!.setOptions(webPolylineOption);
   }
@@ -97,8 +97,8 @@ class WebShapeController extends ShapeController {
     if (_currentPolygonLevel[shapeId] == currentZoomLevel) return;
     _currentPolygonLevel[shapeId] = currentZoomLevel;
 
-    webPolygonOption.fillColor = getColorCode(currentStyle.color);
-    webPolygonOption.strokeColor = getColorCode(currentStyle.strokeColor);
+    webPolygonOption.fillColor = _getColorCode(currentStyle.color);
+    webPolygonOption.strokeColor = _getColorCode(currentStyle.strokeColor);
     webPolygonOption.strokeWeight = currentStyle.strokeWidth;
     _webPolygon[shapeId]!.setOptions(webPolygonOption);
   }
@@ -130,8 +130,8 @@ class WebShapeController extends ShapeController {
     final bodyOptions = _webPolylineOption[shapeId]!;
     final strokeOptions = _webPolylineStrokeOption[shapeId];
 
-    strokeOptions?.strokeColor = getColorCode(style.strokeColor);
-    bodyOptions.strokeColor = getColorCode(style.color);
+    strokeOptions?.strokeColor = _getColorCode(style.strokeColor);
+    bodyOptions.strokeColor = _getColorCode(style.color);
     strokeOptions?.strokeWeight = style.lineWidth * .5 + style.strokeWidth * .5;
     bodyOptions.strokeWeight = style.lineWidth * .5;
 
@@ -147,8 +147,8 @@ class WebShapeController extends ShapeController {
     final style = manager.getPolygonShapeStyle(styleId)!;
     final options = _webPolygonOption[shapeId]!;
 
-    options.fillColor = getColorCode(style.color);
-    options.strokeColor = getColorCode(style.strokeColor);
+    options.fillColor = _getColorCode(style.color);
+    options.strokeColor = _getColorCode(style.strokeColor);
     options.strokeWeight = style.strokeWidth;
 
     _webPolygon[shapeId]?.setOptions(options);
@@ -200,7 +200,7 @@ class WebShapeController extends ShapeController {
       WebPolylineOption(
           path: points,
           strokeWeight: style.lineWidth * .5,
-          strokeColor: getColorCode(style.color),
+          strokeColor: _getColorCode(style.color),
           strokeOpacity: 1,
           zIndex: zOrder);
 
@@ -209,7 +209,7 @@ class WebShapeController extends ShapeController {
       WebPolylineOption(
           path: points,
           strokeWeight: style.lineWidth * .5 + style.strokeWidth * .5,
-          strokeColor: getColorCode(style.strokeColor),
+          strokeColor: _getColorCode(style.strokeColor),
           strokeOpacity: 1,
           zIndex: zOrder - 1);
 
@@ -217,10 +217,10 @@ class WebShapeController extends ShapeController {
       PolygonStyle style, JSArray<JSArray<WebLatLng>> path, int zOrder) {
     return WebPolygonOption(
         path: path,
-        fillColor: getColorCode(style.color),
+        fillColor: _getColorCode(style.color),
         fillOpacity: 1,
         strokeWeight: style.strokeWidth,
-        strokeColor: getColorCode(style.strokeColor),
+        strokeColor: _getColorCode(style.strokeColor),
         strokeOpacity: 1,
         zIndex: zOrder);
   }

@@ -58,7 +58,7 @@ class WebRouteController extends RouteController {
         return;
       }
       routeElement.bodyElementOption.strokeColor =
-          getColorCode(currentStyles[index].color);
+          _getColorCode(currentStyles[index].color);
       routeElement.bodyElementOption.strokeWeight =
           currentStyles[index].lineWidth * .5;
       routeElement.bodyElement.setOptions(routeElement.bodyElementOption);
@@ -146,7 +146,7 @@ class WebRouteController extends RouteController {
       WebPolylineOption(
           path: points,
           strokeWeight: style.lineWidth * .5,
-          strokeColor: getColorCode(style.color),
+          strokeColor: _getColorCode(style.color),
           strokeOpacity: 1,
           zIndex: zOrder);
 
@@ -155,7 +155,7 @@ class WebRouteController extends RouteController {
       WebPolylineOption(
           path: points,
           strokeWeight: style.lineWidth * .5 + style.strokeWidth * .5,
-          strokeColor: getColorCode(style.strokeColor),
+          strokeColor: _getColorCode(style.strokeColor),
           strokeOpacity: 1,
           zIndex: zOrder - 1);
 
@@ -164,7 +164,7 @@ class WebRouteController extends RouteController {
       WebPolylineOption(
           path: points,
           strokeWeight: 1,
-          strokeColor: getColorCode(style.strokeColor),
+          strokeColor: _getColorCode(style.strokeColor),
           strokeOpacity: 1,
           strokeStyle: "longdash",
           zIndex: zOrder + 1);
