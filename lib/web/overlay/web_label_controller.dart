@@ -65,16 +65,13 @@ class WebLabelController extends LabelController {
     }
   }
 
-  static int calculateZoomLevel(int zoomLevel) =>
-      KakaoMapWebController.calculateZoomLevel(zoomLevel);
-
   void _syncZoomLevel(String poiId, String styleId, String? text) {
     final poi = _poi[poiId]!;
     final mapZoomLevel = controller.getLevel();
     var currentZoomLevel = poi.style.zoomLevel;
     var style = poi.style;
     for (final secondaryStyle in poi.style._styles) {
-      if (calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
+      if (_calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
           secondaryStyle.zoomLevel >= currentZoomLevel) {
         currentZoomLevel = secondaryStyle.zoomLevel;
         style = poi.style._styles[currentZoomLevel];

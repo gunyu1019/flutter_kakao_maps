@@ -33,8 +33,7 @@ class WebRouteController extends RouteController {
     }
   }
 
-  static int calculateZoomLevel(int zoomLevel) =>
-      KakaoMapWebController.calculateZoomLevel(zoomLevel);
+  
 
   void _syncZoomLevel(String routeId, List<RouteStyle> styles) {
     final mapZoomLevel = controller.getLevel();
@@ -44,7 +43,7 @@ class WebRouteController extends RouteController {
     var currentZoomLevel = styles.map((e) => e.zoomLevel).toList();
     for (final (index, style) in styles.indexed) {
       for (final secondaryStyle in style._styles) {
-        if (calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
+        if (_calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
             secondaryStyle.zoomLevel >= currentZoomLevel[index]) {
           currentZoomLevel[index] = secondaryStyle.zoomLevel;
           currentStyles[index] = secondaryStyle;

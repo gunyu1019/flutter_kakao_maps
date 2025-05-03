@@ -43,8 +43,7 @@ class WebShapeController extends ShapeController {
     }
   }
 
-  static int calculateZoomLevel(int zoomLevel) =>
-      KakaoMapWebController.calculateZoomLevel(zoomLevel);
+  
 
   void _syncPolylineZoomLevel(String shapeId, PolylineStyle style) {
     final mapZoomLevel = controller.getLevel();
@@ -54,7 +53,7 @@ class WebShapeController extends ShapeController {
     var currentStyle = style;
     var currentZoomLevel = style.zoomLevel;
     for (final secondaryStyle in style._styles) {
-      if (calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
+      if (_calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
           secondaryStyle.zoomLevel >= currentZoomLevel) {
         currentZoomLevel = secondaryStyle.zoomLevel;
         currentStyle = secondaryStyle;
@@ -87,7 +86,7 @@ class WebShapeController extends ShapeController {
     var currentStyle = style;
     var currentZoomLevel = style.zoomLevel;
     for (final secondaryStyle in style._styles) {
-      if (calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
+      if (_calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
           secondaryStyle.zoomLevel >= currentZoomLevel) {
         currentZoomLevel = secondaryStyle.zoomLevel;
         currentStyle = secondaryStyle;

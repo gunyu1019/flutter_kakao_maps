@@ -146,5 +146,6 @@ part 'web/interoperability/web_point.dart';
 part 'web/interoperability/web_polygon.dart';
 part 'web/interoperability/web_polyline.dart';
 
+part 'web/utils/web_calculate_level.dart';
 part 'web/utils/web_image_source.dart';
 part 'web/utils/web_color.dart';
