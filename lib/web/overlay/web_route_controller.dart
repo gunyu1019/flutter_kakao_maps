@@ -70,14 +70,14 @@ class WebRouteController extends RouteController {
           routeElement.strokeElement = WebPolyline(strokeElementOption);
           routeElement.strokeElement?.setMap(controller);
         } else {
-          routeElement.patternElement?.setOptions(strokeElementOption);
+          routeElement.strokeElement?.setOptions(strokeElementOption);
         }
       } else {
         routeElement.strokeElement?.setMap(null);
         routeElement.strokeElement = null;
         routeElement.strokeElementOption = null;
       }
-      if (currentStyles[index].strokeWidth > 0) {
+      if (currentStyles[index].pattern != null) {
         final patternElementOption = routeElement.patternElementOption =
             _getPatternElementOption(
                 currentStyles[index], points[index], zOrder);
@@ -175,7 +175,7 @@ class WebRouteController extends RouteController {
     final strokeElementOption = style.strokeWidth > 0
         ? _getStrokeElementOption(style, interopedPoints, zOrder)
         : null;
-    final patternElementOption = style.pattern == null
+    final patternElementOption = style.pattern != null
         ? _getPatternElementOption(style, interopedPoints, zOrder)
         : null;
 
