@@ -18,16 +18,89 @@ class WebShapeController extends ShapeController {
       : super._();
 
   @override
-  Future<void> _createShapeLayer() async {}
+  Future<void> _createShapeLayer() async {
+    addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
+  }
 
   @override
   Future<void> _removeShapeLayer() async {
+    removeEventListener(
+        controller, "zoom_changed", _zoomChangedEventHandler.toJS);
     for (var shape in _polygonShape.values) {
       await removePolygonShape(shape);
     }
     for (var shape in _polylineShape.values) {
       await removePolylineShape(shape);
     }
+  }
+
+  void _zoomChangedEventHandler() {
+    for (var shape in _polygonShape.values) {
+      _syncPolygonZoomLevel(shape.id, shape.style);
+    }
+    for (var shape in _polylineShape.values) {
+      _syncPolylineZoomLevel(shape.id, shape.style);
+    }
+  }
+
+  static int calculateZoomLevel(int zoomLevel) =>
+      KakaoMapWebController.calculateZoomLevel(zoomLevel);
+
+  void _syncPolylineZoomLevel(String shapeId, PolylineStyle style) {
+    final mapZoomLevel = controller.getLevel();
+    final webPolyline = _webPolyline[shapeId]!;
+    final webPolylineOption = _webPolylineOption[shapeId]!;
+
+    var currentStyle = style;
+    var currentZoomLevel = style.zoomLevel;
+    for (final secondaryStyle in style._styles) {
+      if (calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
+          secondaryStyle.zoomLevel >= currentZoomLevel) {
+        currentZoomLevel = secondaryStyle.zoomLevel;
+        currentStyle = secondaryStyle;
+      }
+    }
+
+    if (_currentPolylineLevel[shapeId] == currentZoomLevel) return;
+    _currentPolylineLevel[shapeId] = currentZoomLevel;
+    if (currentStyle.strokeWidth > 0) {
+      final strokeOptions = _webPolylineStrokeOption[shapeId] =
+          _getPolylineStrokeElementOption(currentStyle, webPolylineOption.path,
+              webPolyline.getZIndex() - 1);
+      final strokeElement = _webPolylineStroke[shapeId] = WebPolyline(strokeOptions);
+      strokeElement.setMap(controller);
+    } else {
+      _webPolylineStroke[shapeId]?.setMap(null);
+      _webPolylineStroke[shapeId] = null;
+      _webPolylineStrokeOption[shapeId] = null;
+    }
+
+    webPolylineOption.strokeColor = getColorCode(currentStyle.color);
+    webPolylineOption.strokeWeight = currentStyle.lineWidth * .5;
+    _webPolyline[shapeId]!.setOptions(webPolylineOption);
+  }
+
+  void _syncPolygonZoomLevel(String shapeId, PolygonStyle style) {
+    final mapZoomLevel = controller.getLevel();
+    final webPolygonOption = _webPolygonOption[shapeId]!;
+
+    var currentStyle = style;
+    var currentZoomLevel = style.zoomLevel;
+    for (final secondaryStyle in style._styles) {
+      if (calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
+          secondaryStyle.zoomLevel >= currentZoomLevel) {
+        currentZoomLevel = secondaryStyle.zoomLevel;
+        currentStyle = secondaryStyle;
+      }
+    }
+
+    if (_currentPolygonLevel[shapeId] == currentZoomLevel) return;
+    _currentPolygonLevel[shapeId] = currentZoomLevel;
+
+    webPolygonOption.fillColor = getColorCode(currentStyle.color);
+    webPolygonOption.strokeColor = getColorCode(currentStyle.strokeColor);
+    webPolygonOption.strokeWeight = currentStyle.strokeWidth;
+    _webPolygon[shapeId]!.setOptions(webPolygonOption);
   }
 
   @override
@@ -123,33 +196,27 @@ class WebShapeController extends ShapeController {
   }
 
   WebPolylineOption _getPolylineElementOption(
-          PolylineStyle style, List<LatLng> points, int zOrder) =>
+          PolylineStyle style, JSArray<WebLatLng> points, int zOrder) =>
       WebPolylineOption(
-          path: points.map(WebLatLng.fromLatLng).toList().toJS,
+          path: points,
           strokeWeight: style.lineWidth * .5,
           strokeColor: getColorCode(style.color),
           strokeOpacity: 1,
           zIndex: zOrder);
 
   WebPolylineOption _getPolylineStrokeElementOption(
-          PolylineStyle style, List<LatLng> points, int zOrder) =>
+          PolylineStyle style, JSArray<WebLatLng> points, int zOrder) =>
       WebPolylineOption(
-          path: points.map(WebLatLng.fromLatLng).toList().toJS,
+          path: points,
           strokeWeight: style.lineWidth * .5 + style.strokeWidth * .5,
           strokeColor: getColorCode(style.strokeColor),
           strokeOpacity: 1,
           zIndex: zOrder - 1);
 
-  WebPolygonOption _getPolygonElementOption(PolygonStyle style,
-      List<LatLng> points, List<List<LatLng>> holes, int zOrder) {
-    final path = <JSArray<WebLatLng>>[];
-    path.add(points.map(WebLatLng.fromLatLng).toList().toJS);
-    holes
-        .map((hole) => hole.map(WebLatLng.fromLatLng).toList().toJS)
-        .forEach(path.add);
-
+  WebPolygonOption _getPolygonElementOption(
+      PolygonStyle style, JSArray<JSArray<WebLatLng>> path, int zOrder) {
     return WebPolygonOption(
-        path: path.toJS,
+        path: path,
         fillColor: getColorCode(style.color),
         fillOpacity: 1,
         strokeWeight: style.strokeWidth,
@@ -170,13 +237,15 @@ class WebShapeController extends ShapeController {
     final shapeId = "polyline_shape_${id}_${_polylineShape.length}";
 
     final polylineOption = _webPolylineOption[shapeId] =
-        _getPolylineElementOption(style, point.points, zOrder);
+        _getPolylineElementOption(style,
+            point.points.map(WebLatLng.fromLatLng).toList().toJS, zOrder);
     _webPolyline[shapeId] = WebPolyline(polylineOption);
     _webPolyline[shapeId]!.setMap(controller);
 
     if (style.strokeWidth > 0) {
       final polylineStrokeOption = _webPolylineStrokeOption[shapeId] =
-          _getPolylineStrokeElementOption(style, point.points, zOrder);
+          _getPolylineStrokeElementOption(style,
+              point.points.map(WebLatLng.fromLatLng).toList().toJS, zOrder);
       _webPolylineStroke[shapeId] = WebPolyline(polylineStrokeOption);
       _webPolylineStroke[shapeId]!.setMap(controller);
     }
@@ -198,8 +267,14 @@ class WebShapeController extends ShapeController {
     style._id ?? await manager.addPolygonShapeStyle(style);
     final shapeId = "polygon_shape_${id}_${_polygonShape.length}";
 
+    final path = <JSArray<WebLatLng>>[];
+    path.add(point.points.map(WebLatLng.fromLatLng).toList().toJS);
+    point._holes
+        .map((hole) => hole.map(WebLatLng.fromLatLng).toList().toJS)
+        .forEach(path.add);
+
     final polygonOption = _webPolygonOption[shapeId] =
-        _getPolygonElementOption(style, point.points, point._holes, zOrder);
+        _getPolygonElementOption(style, path.toJS, zOrder);
     _webPolygon[shapeId] = WebPolygon(polygonOption);
     _webPolygon[shapeId]!.setMap(controller);
 
