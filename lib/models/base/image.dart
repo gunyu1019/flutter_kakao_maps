@@ -46,7 +46,13 @@ class KImage {
 
     final renderPositionedBox = RenderPositionedBox(
         alignment: Alignment.center, child: repaintBoundary);
-    final renderView = RenderView(view: view, child: renderPositionedBox);
+    final renderView = RenderView(
+      view: view,
+      child: renderPositionedBox,
+      configuration: ViewConfiguration(
+          logicalConstraints: BoxConstraints.tight(size),
+          devicePixelRatio: pixelRatio ?? view.devicePixelRatio),
+    );
 
     final pipelineOwner = PipelineOwner()..rootNode = renderView;
     final buildOwner = BuildOwner(
