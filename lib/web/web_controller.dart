@@ -220,9 +220,15 @@ class KakaoMapWebController extends KakaoMapController {
   }
 
   @override
-  Future<bool> canShowPosition(int zoomLevel, List<LatLng> position) {
-    // TODO: implement canShowPosition
-    throw UnimplementedError();
+  Future<bool> canShowPosition(int zoomLevel, List<LatLng> position) async {
+    final bound = controller.getBounds();
+    final ne = bound.getNorthEast();
+    final sw = bound.getSouthWest();
+    return !position.any((point) =>
+        point.latitude > ne.getLat() ||
+        point.latitude < sw.getLat() ||
+        point.longitude > ne.getLng() ||
+        point.longitude < sw.getLng());
   }
 
   @override
