@@ -22,6 +22,11 @@ class KakaoMapWebController extends KakaoMapController {
   })  : _dummyChannel = const MethodChannel("dummy_method_channel"),
         _uuid = const Uuid() {
     _initalizeOverlayController();
+    web.window.addEventListener('resize', _resizedEvent.toJS);
+  }
+
+  void _resizedEvent() {
+    controller.relayout();
   }
 
   void _setEventTrigger(int event) {
