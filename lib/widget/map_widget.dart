@@ -109,7 +109,10 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
           WebMapOption.fromMapOption(widget.option ?? const KakaoMapOption());
       WebInitializer.getController(viewId, webMapOption).then((webController) {
         if (webController == null) {
-          throw Error();
+          final error = KakaoMapError("KAKAO_MAP_WEB_LOAD_FAILED",
+              "Timeout loading map elements. Please retry later.");
+          onMapError(error);
+          return;
         }
         controller =
             KakaoMapWebController(controller: webController, handler: this);
