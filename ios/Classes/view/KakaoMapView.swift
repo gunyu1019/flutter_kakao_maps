@@ -24,11 +24,15 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
         super.init()
 
         eventDelegate = KakaoMapDelegate(
+            view: KMView,
             controller: kakaoMap,
             sender: controller,
             option: option
         )
         kakaoMap.delegate = eventDelegate
+
+        // Support ProMotion Mode
+        kakaoMap.proMotionSupport = KMView.proMotionDisplay
 
         NotificationCenter.default.addObserver(
             self,
@@ -46,20 +50,28 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
     }
 
     func view() -> UIView {
-        kakaoMap.activateEngine()
+        if !kakaoMap.isEnginePrepared {
+            kakaoMap.prepareEngine()
+        }
+        if !kakaoMap.isEngineActive {
+            kakaoMap.activateEngine()
+        }
         return KMView
     }
 
     @objc func onViewPaused() {
         kakaoMap.pauseEngine()
+        controller.onMapPaused()
     }
 
     @objc func onViewResume() {
         kakaoMap.activateEngine()
+        controller.onMapResumed()
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
         self.kakaoMap.pauseEngine()
         self.kakaoMap.resetEngine()
     }

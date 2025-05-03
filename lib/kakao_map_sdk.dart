@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math' as math show Point;
+import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -106,6 +107,9 @@ part 'models/enums/shape/polyline_cap.dart';
 part 'models/enums/shape/shape_layer_pass.dart';
 
 part 'models/enums/route/curve_type.dart';
+
+/* utilties */
+part 'utils/math.dart';
 
 /* widget */
 part 'widget/map_widget.dart';

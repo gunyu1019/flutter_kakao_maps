@@ -6,9 +6,9 @@
 
 네이티브 기반의 [카카오맵](https://map.kakao.com/)을 구동할 수 있는 Flutter 플러그인입니다.
 
-| Android                | iOS             |
-|------------------------|-----------------|
-| `SDK 6.0(API 23)` 이상 | `iOS 13` 이상    |
+| Android                | iOS             | Web(Experimental)  |
+|------------------------|-----------------| ------------------ |
+| `SDK 6.0(API 23)` 이상 | `iOS 13` 이상    | 실험버전 지원 예정 |
 | `armeabi-v7a`, `arm64-v8a` 아키텍쳐 지원<br/>(`x86`, `x64` 아키텍쳐 미호환) |        |
 | `OpenGL ES 2.0` 이상 |         |
 | 인터넷 권한 필요   |         |
@@ -198,7 +198,17 @@ RouteStyle.withPattern(
 ## 4. Sample Project
 아래의 [샘플 프로젝트](https://github.com/gunyu1019/flutter_kakao_maps_sample)을 확인하여 카카오맵을 Flutter에 구현한 애플리케이션을 확인해보세요!
 
-## 5. Collaboration / Reqort Issue 
+## 5. (Expermential) Web
+> (Expermential) Web 플랫폼 지원은 곧 패치로 이뤄질 예정입니다. 잠시만 기다려주세요.
+Kakao Map SDK는 Web 플랫폼을 지원합니다. 웹 환경은 네이티브 환경(Android, iOS 플랫폼)을 완벽하게 지원하지 않습니다.<br/>
+
+아래의 나열한 기능을 웹 환경에서는 다르게 지원합니다.
+* LOD Poi(Level Of Details): 기존 Poi와 동일하게 작동합니다.
+* Route Pattern: 웹 환경에서는 패턴을 지원하지 않습니다. `Pattern` 기능은 카카오맵 기능의 길찾기 기능으로 대체됩니다.
+* 각 컨트롤러(Layer)별 기능은 네이티브 환경과 달리 지원하지 않습니다. 
+  예를 들어 Layer의 `zIndex`가 부여되어도 웹 환경에서는 적용되지 않습니다.
+
+## 6. Collaboration / Reqort Issue 
 Kakao Map SDK 플러그인에 기여는 항상 환영합니다. <br/>
 기능 개선, 버그 해결 등의 작업하신 내용은 `Pull Reuqest(PR)` 해주시면, 검증 후 병합 해드리겠습니다.
 
