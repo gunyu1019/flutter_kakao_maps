@@ -35,9 +35,9 @@ class KImage {
       KImage._(ImageType.file, path: file.path, width: width, height: height);
 
   /// Widget을 이미지로 만들어 사용합니다.
-  /// 위젯을 이미지로 만드는 것이기 때문에, 버튼 등의 상호작용 기능은 작용하지 않습니다.
-  static Future<KImage> fromWidget(
-      Widget child, Size size, BuildContext? context) async {
+  /// 위젯을 이미지로 만드는 것이기에 Widget 요소 중에 버튼 등의 상호작용 기능이 있더라도 작용하지 않습니다.
+  static Future<KImage> fromWidget(Widget child, Size size,
+      {double? pixelRatio, BuildContext? context}) async {
     final repaintBoundary = RenderRepaintBoundary();
     final platformDispatcher = WidgetsBinding.instance.platformDispatcher;
     final fallBackView = platformDispatcher.views.first;
@@ -55,11 +55,9 @@ class KImage {
     );
 
     final pipelineOwner = PipelineOwner()..rootNode = renderView;
-    final buildOwner = BuildOwner(
-      focusManager: FocusManager(),
-    );
     renderView.prepareInitialFrame();
 
+    final buildOwner = BuildOwner(focusManager: FocusManager());
     final rootElement = RenderObjectToWidgetAdapter<RenderBox>(
         container: repaintBoundary,
         child: SizedBox(
@@ -80,7 +78,8 @@ class KImage {
       ..flushPaint();
 
     try {
-      final image = await repaintBoundary.toImage();
+      final image = await repaintBoundary.toImage(
+          pixelRatio: pixelRatio ?? view.devicePixelRatio);
       final data = await image
           .toByteData(format: ui.ImageByteFormat.png)
           .then((b) => b!.buffer.asUint8List());
