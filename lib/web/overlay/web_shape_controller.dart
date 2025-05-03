@@ -253,6 +253,7 @@ class WebShapeController extends ShapeController {
     final polyline = Polyline<T>._(this, shapeId,
         position: position, style: style, polylineCap: polylineCap);
     _polylineShape[shapeId] = polyline;
+    _syncPolylineZoomLevel(polyline.id, polyline.style);
     return polyline;
   }
 
@@ -281,6 +282,7 @@ class WebShapeController extends ShapeController {
     final polygon =
         Polygon<T>._(this, shapeId, position: position, style: style);
     _polygonShape[shapeId] = polygon;
+    _syncPolygonZoomLevel(polygon.id, polygon.style);
     return polygon;
   }
 
