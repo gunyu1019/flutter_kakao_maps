@@ -5,10 +5,10 @@ class ScaleBar extends DefaultGUI {
   @override
   DefaultGUIType get type => DefaultGUIType.scale;
 
-  KakaoMapControllerSender _controller;
+  KakaoMapController _controller;
 
   ScaleBar._({
-    required KakaoMapControllerSender controller,
+    required KakaoMapController controller,
   }) : _controller = controller;
 
   /// 지도에 표시된 축적바를 숨깁니다.

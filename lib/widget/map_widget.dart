@@ -104,11 +104,28 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
   }
 
   void onPlatformViewCreated(int viewId) {
+    if (kIsWeb) {
+      final webMapOption =
+          WebMapOption.fromMapOption(widget.option ?? const KakaoMapOption());
+      WebInitializer.getController(viewId, webMapOption).then((webController) {
+        if (webController == null) {
+          final error = KakaoMapError("KAKAO_MAP_WEB_LOAD_FAILED",
+              "Timeout loading map elements. Please retry later.");
+          onMapError(error);
+          return;
+        }
+        controller =
+            KakaoMapWebController(controller: webController, handler: this);
+        onMapReady();
+      });
+      return;
+    }
     channel = ChannelType.view.channelWithId(viewId);
     channel.setMethodCallHandler(handle);
 
     final overlayChannel = ChannelType.overlay.channelWithId(viewId);
-    controller = KakaoMapController(channel, overlayChannel: overlayChannel);
+    controller =
+        KakaoMapControllerImplement(channel, overlayChannel: overlayChannel);
   }
 
   void _setEventHandler() {
@@ -122,6 +139,10 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
     if (widget.onTerrainClick != null) bitMask |= EventType.onTerrainClick.id;
     if (widget.onTerrainLongClick != null) {
       bitMask |= EventType.onTerrainLongClick.id;
+    }
+    if (kIsWeb) {
+      (controller as KakaoMapWebController)._setEventTrigger(bitMask);
+      return;
     }
     channel.invokeMethod("setEventHandler", bitMask);
   }

@@ -12,7 +12,11 @@ dependencies:
   collection: ^1.19.0
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   plugin_platform_interface: ^2.0.2
+  uuid: ^4.5.1
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -27,3 +31,6 @@ flutter:
         pluginClass: FlutterKakaoMapsPlugin
       ios:
         pluginClass: FlutterKakaoMapsPlugin
+      web:
+        pluginClass: WebInitializer
+        fileName: kakao_map_sdk.dart

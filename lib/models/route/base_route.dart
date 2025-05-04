@@ -18,6 +18,9 @@ abstract class BaseRoute {
   /// 선형([Route] 또는 [MultipleRoute])가 현재 지도에 그려지는지 여부를 나타냅니다.
   bool get visible => _visible;
 
+  /// 선형이 단일 선형([Route]), 다중 선형([MultipleRoute])인지 분별합니다.
+  bool get multiple;
+
   /// 선형이 지도에서 보이도록 합니다.
   Future<void> show() async {
     await _controller._changeRouteVisible(id, true);

@@ -35,6 +35,7 @@ class LodPoi {
 
   /// [LodPoi]에 정의된 [PoiStyle] 객체입니다.
   PoiStyle get styles => _style;
+  PoiStyle get style => _style;
 
   bool _visible;
 

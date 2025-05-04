@@ -1,12 +1,19 @@
 part of '../kakao_map_sdk.dart';
 
-StatefulWidget _createPlatformView({
+Widget _createPlatformView({
   required String viewType,
   required Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
   Function(int)? onPlatformViewCreated,
   Map<String, dynamic> creationParams = const {},
   MessageCodec creationParamsCodec = const StandardMessageCodec(),
 }) {
+  if (kIsWeb) {
+    return HtmlElementView(
+        viewType: viewType,
+        creationParams: creationParams,
+        onPlatformViewCreated: onPlatformViewCreated);
+  }
+
   if (Platform.isAndroid) {
     return PlatformViewLink(
         surfaceFactory: (context, controller) => AndroidViewSurface(
