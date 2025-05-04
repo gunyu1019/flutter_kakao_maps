@@ -43,8 +43,6 @@ class WebShapeController extends ShapeController {
     }
   }
 
-  
-
   void _syncPolylineZoomLevel(String shapeId, PolylineStyle style) {
     final mapZoomLevel = controller.getLevel();
     final webPolyline = _webPolyline[shapeId]!;
@@ -66,7 +64,8 @@ class WebShapeController extends ShapeController {
       final strokeOptions = _webPolylineStrokeOption[shapeId] =
           _getPolylineStrokeElementOption(currentStyle, webPolylineOption.path,
               webPolyline.getZIndex() - 1);
-      final strokeElement = _webPolylineStroke[shapeId] = WebPolyline(strokeOptions);
+      final strokeElement =
+          _webPolylineStroke[shapeId] = WebPolyline(strokeOptions);
       strokeElement.setMap(controller);
     } else {
       _webPolylineStroke[shapeId]?.setMap(null);

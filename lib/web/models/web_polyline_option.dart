@@ -9,7 +9,7 @@ extension type WebPolylineOption._(JSObject _) implements JSObject {
       double strokeOpacity = 0.6,
       String strokeStyle = "solid",
       int zIndex = 10000});
-    
+
   external bool get endArrow;
   external JSArray<WebLatLng> get path;
   external double get strokeWeight;
@@ -17,7 +17,7 @@ extension type WebPolylineOption._(JSObject _) implements JSObject {
   external double get strokeOpacity;
   external String get strokeStyle;
   external int get zIndex;
-    
+
   external set endArrow(bool value);
   external set path(JSArray<WebLatLng> value);
   external set strokeWeight(double value);

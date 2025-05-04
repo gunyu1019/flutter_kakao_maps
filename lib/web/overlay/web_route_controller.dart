@@ -33,8 +33,6 @@ class WebRouteController extends RouteController {
     }
   }
 
-  
-
   void _syncZoomLevel(String routeId, List<RouteStyle> styles) {
     final mapZoomLevel = controller.getLevel();
     final webRoute = _webRoute[routeId]!;
@@ -64,7 +62,8 @@ class WebRouteController extends RouteController {
 
       if (currentStyles[index].strokeWidth > 0) {
         final strokeElementOption = routeElement.strokeElementOption =
-            _getStrokeElementOption(currentStyles[index], points[index], zOrder);
+            _getStrokeElementOption(
+                currentStyles[index], points[index], zOrder);
         if (routeElement.strokeElement == null) {
           routeElement.strokeElement = WebPolyline(strokeElementOption);
           routeElement.strokeElement?.setMap(controller);
@@ -170,7 +169,8 @@ class WebRouteController extends RouteController {
 
   WebRoute _addRouteElement(RouteStyle style, List<LatLng> points, int zOrder) {
     final interopedPoints = points.map(WebLatLng.fromLatLng).toList().toJS;
-    final bodyElementOption = _getBodyElementOption(style, interopedPoints, zOrder);
+    final bodyElementOption =
+        _getBodyElementOption(style, interopedPoints, zOrder);
     final strokeElementOption = style.strokeWidth > 0
         ? _getStrokeElementOption(style, interopedPoints, zOrder)
         : null;

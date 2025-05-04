@@ -7,7 +7,8 @@ extension type WebPoint._(JSObject _) implements JSObject {
   external double get x;
   external double get y;
 
-  factory WebPoint.fromPoint(KPoint payload) => WebPoint(payload.x.toDouble(), payload.y.toDouble());
+  factory WebPoint.fromPoint(KPoint payload) =>
+      WebPoint(payload.x.toDouble(), payload.y.toDouble());
 
   KPoint toPoint() => KPoint(x, y);
 }
