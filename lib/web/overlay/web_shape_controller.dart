@@ -252,6 +252,7 @@ class WebShapeController extends ShapeController {
     final polyline = Polyline<T>._(this, shapeId,
         position: position, style: style, polylineCap: polylineCap);
     _polylineShape[shapeId] = polyline;
+    _currentPolylineLevel[shapeId] = style.zoomLevel;
     _syncPolylineZoomLevel(polyline.id, polyline.style);
     return polyline;
   }
@@ -281,6 +282,7 @@ class WebShapeController extends ShapeController {
     final polygon =
         Polygon<T>._(this, shapeId, position: position, style: style);
     _polygonShape[shapeId] = polygon;
+    _currentPolylineLevel[shapeId] = style.zoomLevel;
     _syncPolygonZoomLevel(polygon.id, polygon.style);
     return polygon;
   }
@@ -293,6 +295,9 @@ class WebShapeController extends ShapeController {
     _polylineShape.remove(shape.id);
     _webPolyline.remove(shape.id);
     _webPolylineStroke.remove(shape.id);
+    _currentPolylineLevel.remove(shape.id);
+    _webPolylineOption.remove(shape.id);
+    _webPolylineStrokeOption.remove(shape.id);
   }
 
   @override
@@ -301,6 +306,8 @@ class WebShapeController extends ShapeController {
 
     _polygonShape.remove(shape.id);
     _webPolygon.remove(shape.id);
+    _currentPolygonLevel.remove(shape.id);
+    _webPolygonOption.remove(shape.id);
   }
 
   @override
