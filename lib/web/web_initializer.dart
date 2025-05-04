@@ -5,7 +5,7 @@ class WebInitializer {
   static const int maxAttempts = 100;
   static const int retryTime = 1;
 
-  static void initialize() {
+  static void registerWith(Registrar registrar) {
     ui_web.platformViewRegistry.registerViewFactory(
         KakaoMapWebController.VIEW_TYPE,
         (int viewId, {Object? params}) => web.HTMLDivElement()
