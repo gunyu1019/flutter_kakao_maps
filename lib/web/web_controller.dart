@@ -25,9 +25,7 @@ class KakaoMapWebController extends KakaoMapController {
     web.window.addEventListener('resize', _resizedEvent.toJS);
   }
 
-  void _resizedEvent() {
-    controller.relayout();
-  }
+  void _resizedEvent() => controller.relayout();
 
   void _setEventTrigger(int event) {
     if (EventType.onCameraMoveStart.compareTo(event)) {
@@ -243,9 +241,7 @@ class KakaoMapWebController extends KakaoMapController {
   Compass get compass => Compass._(controller: this);
 
   @override
-  Future<double> fetchBuildingHeightScale() async {
-    return 0.0;
-  }
+  Future<double> fetchBuildingHeightScale() async => 0.0;
 
   @override
   Future<LatLng?> fromScreenPoint(int x, int y) async {
