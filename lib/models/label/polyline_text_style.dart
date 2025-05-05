@@ -59,13 +59,21 @@ class PolylineTextStyle {
     _styles.add(otherStyle);
   }
 
+  /// [PoiStyle.addStyle]로 정의된 다른 스타일의 개수를 불러옵니다.
   PolylineTextStyle? getStyle(int zoomLevel) {
     return _styles.where((e) => e.zoomLevel == zoomLevel).firstOrNull;
   }
 
+  /// [PoiStyle.addStyle]로 정의된 다른 스타일을 [zoomLevel]에 충족한다면 삭제합니다.
   void removeStyle(int zoomLevel) {
     _styles.removeWhere((e) => e.zoomLevel == zoomLevel);
   }
+
+  /// [PolylineTextStyle.addStyle]로 정의된 다른 스타일의 개수를 불러옵니다.
+  int get otherStyleCount => _styles.length;
+
+  /// [PolylineTextStyle.addStyle]로 정의된 다른 스타일의 Zoom Level을 불러옵니다.
+  List<int> get otherStyleLevel => _styles.map((e) => e.zoomLevel).toList(growable: false);
 
   Map<String, dynamic> toMessageable() {
     final payload = <String, dynamic>{
