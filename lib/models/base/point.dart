@@ -11,4 +11,7 @@ class KPoint extends math.Point with KMessageable {
     };
     return payload;
   }
+
+  factory KPoint.fromMessageable(dynamic payload) =>
+      KPoint(payload["x"], payload['y']);
 }
