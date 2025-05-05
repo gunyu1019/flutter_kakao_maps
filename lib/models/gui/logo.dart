@@ -5,7 +5,7 @@ class Logo extends DefaultGUI {
   @override
   DefaultGUIType get type => DefaultGUIType.logo;
 
-  KakaoMapController _controller;
+  final KakaoMapController _controller;
 
   Logo._({
     required KakaoMapController controller,
