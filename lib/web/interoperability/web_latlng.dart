@@ -7,8 +7,13 @@ extension type WebLatLng._(JSObject _) implements JSObject {
   factory WebLatLng.fromLatLng(LatLng payload) =>
       WebLatLng(payload.latitude, payload.longitude);
 
+  factory WebLatLng.fromMessageable(dynamic payload) =>
+      WebLatLng.fromLatLng(LatLng.fromMessageable(payload));
+
   external double getLat();
   external double getLng();
 
   LatLng toLatLng() => LatLng(getLat(), getLng());
+
+  dynamic toMessageable() => LatLng(getLat(), getLng()).toMessageable();
 }
