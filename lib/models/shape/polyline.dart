@@ -55,6 +55,11 @@ class Polyline<T extends BasePoint> {
     _position = position;
   }
 
+  /// [Polyline]를 지도에서 삭제합니다..
+  Future<void> remove() async {
+    await _controller.removePolylineShape(this);
+  }
+
   /// [Polyline]를 지도에서 보이도록 합니다.
   Future<void> show() async {
     await _controller._changePolylineVisible(id, true);

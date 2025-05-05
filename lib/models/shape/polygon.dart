@@ -37,6 +37,11 @@ class Polygon<T extends BasePoint> {
     _style = style;
   }
 
+  /// [Polygon]을 지도에서 삭제합니다..
+  Future<void> remove() async {
+    await _controller.removePolygonShape(this);
+  }
+
   /// 도형에 정의된 위치를 다시 정의합니다.
   /// 이 경우 객체는 유지하지만 도형을 [position] 매개변수에 따라 다시 그리게됩니다.
   /// 다른 형태의 도형을 구성하려고 한다면 새롭게 만드는 것을 권장한다.
