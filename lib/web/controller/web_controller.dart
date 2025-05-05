@@ -1,7 +1,8 @@
 part of '../kakao_map_sdk_web.dart';
 
 /// [KakaoMapController]를 웹 환경에서 사용할 수 있도록 구현하는 객체입니다.
-class KakaoMapWebController with KakaoMapControllerHandler, KakaoMapWebControllerHandler {
+class KakaoMapWebController
+    with KakaoMapControllerHandler, KakaoMapWebControllerHandler {
   late WebMapController controller;
   final MethodChannel channel;
   final MethodChannel overlayChannel;
@@ -24,6 +25,7 @@ class KakaoMapWebController with KakaoMapControllerHandler, KakaoMapWebControlle
     this.controller = controller;
 
     web.window.addEventListener('resize', _resizedEvent.toJS);
+    channel.setMethodCallHandler(webHandle);
     onMapReady();
   }
 
@@ -122,17 +124,19 @@ class KakaoMapWebController with KakaoMapControllerHandler, KakaoMapWebControlle
   Future<double> getBuildingHeightScale() async => 0.0;
 
   @override
-  Future<LatLng?> fromScreenPoint(int x, int y) async {
+  Future<dynamic> fromScreenPoint(int x, int y) async {
     final protection = controller.getProjection();
     return protection
         .coordsFromContainerPoint(WebPoint(x.toDouble(), y.toDouble()))
-        .toLatLng();
+        .toLatLng()
+        .toMessageable();
   }
 
   @override
-  Future<CameraPosition> getCameraPosition() async {
+  Future<dynamic> getCameraPosition() async {
     return CameraPosition(
-        controller.getCenter().toLatLng(), controller.getLevel());
+            controller.getCenter().toLatLng(), controller.getLevel())
+        .toMessageable();
   }
 
   @override
@@ -226,11 +230,12 @@ class KakaoMapWebController with KakaoMapControllerHandler, KakaoMapWebControlle
   }
 
   @override
-  Future<KPoint?> toScreenPoint(LatLng position) async {
+  Future<dynamic> toScreenPoint(LatLng position) async {
     final protection = controller.getProjection();
     return protection
         .containerPointFromCoords(WebLatLng.fromLatLng(position))
-        .toPoint();
+        .toPoint()
+        .toMessageable();
   }
 
   @override
