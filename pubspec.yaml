@@ -32,5 +32,5 @@ flutter:
       ios:
         pluginClass: FlutterKakaoMapsPlugin
       web:
-        pluginClass: WebInitializer
-        fileName: kakao_map_sdk.dart
+        pluginClass: KakaoMapWebPlugin
+        fileName: web/kakao_map_sdk_web.dart
