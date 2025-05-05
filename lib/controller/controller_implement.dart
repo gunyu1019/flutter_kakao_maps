@@ -140,7 +140,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
 
   @override
   Future<String> addPoiStyle(PoiStyle style) async {
-    if (style.id != null && _routeStyle.containsKey(style.id)) {
+    if (style.id != null && _poiStyle.containsKey(style.id)) {
       throw DuplicatedOverlayException(style.id!);
     }
     String styleId = await labelLayer._invokeMethod(
@@ -152,7 +152,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
 
   @override
   Future<String> addPolygonShapeStyle(PolygonStyle style) async {
-    if (style.id != null && _routeStyle.containsKey(style.id)) {
+    if (style.id != null && _polygonStyle.containsKey(style.id)) {
       throw DuplicatedOverlayException(style.id!);
     }
     final styleIds = await addMultiplePolygonShapeStyle([style], style.id);
@@ -162,6 +162,9 @@ class KakaoMapControllerImplement extends KakaoMapController {
   @override
   Future<String> addPolylineShapeStyle(
       PolylineStyle style, PolylineCap polylineCap) async {
+    if (style.id != null && _polylineStyle.containsKey(style.id)) {
+      throw DuplicatedOverlayException(style.id!);
+    }
     final styleIds =
         await addMultiplePolylineShapeStyle([style], polylineCap, style.id);
     return styleIds;
@@ -170,7 +173,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
   @override
   Future<String> addMultiplePolygonShapeStyle(List<PolygonStyle> style,
       [String? id]) async {
-    if (id != null && _routeStyle.containsKey(id)) {
+    if (id != null && _polygonStyle.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
     String styleId = await shapeLayer._invokeMethod("addPolygonShapeStyle", {
@@ -188,7 +191,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
   Future<String> addMultiplePolylineShapeStyle(
       List<PolylineStyle> style, PolylineCap polylineCap,
       [String? id]) async {
-    if (id != null && _routeStyle.containsKey(id)) {
+    if (id != null && _polylineStyle.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
     String styleId = await shapeLayer._invokeMethod("addPolylineShapeStyle", {
