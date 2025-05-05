@@ -10,6 +10,16 @@ enum ChannelType {
   MethodChannel get channel => MethodChannel(id);
   MethodChannel channelWithId(int id) => MethodChannel("${this.id}#$id");
 
+  MethodChannel channelWithParam([
+    codec = const StandardMethodCodec(),
+    BinaryMessenger? binaryMessenger
+  ]) => MethodChannel(id, codec, binaryMessenger);
+
+  MethodChannel channelWithParamAndId(int id, [
+    codec = const StandardMethodCodec(),
+    BinaryMessenger? binaryMessenger
+  ]) => MethodChannel("${this.id}#$id", codec, binaryMessenger);
+
   const ChannelType(this.id);
 
   static const String _baseChannelId = "flutter_kakao_maps";
