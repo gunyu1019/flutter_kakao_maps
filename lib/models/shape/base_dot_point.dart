@@ -15,14 +15,12 @@ sealed class _BaseDotPoint extends BasePoint {
   void addHole(_BaseDotPoint hole) => _holes.add(hole);
 
   /// 도형에 [width]와 [height]를 가지고 있는 사각형의 구멍을 추가합니다.
-  void addRetangleHole(double width, double height) => _holes.add(
-    RectanglePoint(width, height, _DUMMY_POINT, clockwise: false)
-  );
+  void addRetangleHole(double width, double height) =>
+      _holes.add(RectanglePoint(width, height, _DUMMY_POINT, clockwise: false));
 
   /// 도형에 [radius]를 가지고 있는 원형의 구멍을 추가합니다.
-  void addCircleHole(double radius) => _holes.add(
-    CirclePoint(radius, _DUMMY_POINT, clockwise: false)
-  );
+  void addCircleHole(double radius) =>
+      _holes.add(CirclePoint(radius, _DUMMY_POINT, clockwise: false));
 
   /// 도형에 구성한 구멍의 개수를 불러옵니다.
   int get holeCount => _holes.length;
