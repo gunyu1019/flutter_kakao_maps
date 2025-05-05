@@ -1,4 +1,4 @@
-part of '../../kakao_map_sdk.dart';
+part of '../kakao_map_sdk_web.dart';
 
 web.HTMLElement textElement(String text, PoiTextStyle style,
         [void Function()? onClick]) =>

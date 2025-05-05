@@ -104,7 +104,7 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
   }
 
   void onPlatformViewCreated(int viewId) {
-    if (kIsWeb) {
+    /* if (kIsWeb) {
       final webMapOption =
           WebMapOption.fromMapOption(widget.option ?? const KakaoMapOption());
       WebInitializer.getController(viewId, webMapOption).then((webController) {
@@ -119,7 +119,7 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
         onMapReady();
       });
       return;
-    }
+    } */
     channel = ChannelType.view.channelWithId(viewId);
     channel.setMethodCallHandler(handle);
 
@@ -140,10 +140,10 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
     if (widget.onTerrainLongClick != null) {
       bitMask |= EventType.onTerrainLongClick.id;
     }
-    if (kIsWeb) {
+    /* if (kIsWeb) {
       (controller as KakaoMapWebController)._setEventTrigger(bitMask);
       return;
-    }
+    } */
     channel.invokeMethod("setEventHandler", bitMask);
   }
 

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -9,12 +8,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:uuid/uuid.dart';
-
-import 'dart:ui_web' as ui_web;
-import 'dart:js_interop';
-import 'package:web/web.dart' as web;
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 /* chnnael */
 part 'channel/channel_type.dart';
@@ -115,38 +108,3 @@ part 'utils/math.dart';
 /* widget */
 part 'widget/map_widget.dart';
 part 'widget/platform_view.dart';
-
-/* web (Experimentation) */
-part 'web/web_controller.dart';
-part 'web/web_initializer.dart';
-
-part 'web/elements/image_element.dart';
-part 'web/elements/poi_element.dart';
-part 'web/elements/text_element.dart';
-
-part 'web/models/web_custom_overlay_option.dart';
-part 'web/models/web_map_option.dart';
-part 'web/models/web_mouse_event.dart';
-part 'web/models/web_polygon_option.dart';
-part 'web/models/web_polyline_option.dart';
-part 'web/models/web_route.dart';
-
-part 'web/overlay/web_label_controller.dart';
-part 'web/overlay/web_lod_label_controller.dart';
-part 'web/overlay/web_route_controller.dart';
-part 'web/overlay/web_shape_controller.dart';
-
-part 'web/interoperability/web_abstract_overlay.dart';
-part 'web/interoperability/web_custom_overlay.dart';
-part 'web/interoperability/web_event_listener.dart';
-part 'web/interoperability/web_latlng_bound.dart';
-part 'web/interoperability/web_latlng.dart';
-part 'web/interoperability/web_map_controller.dart';
-part 'web/interoperability/web_map_projection.dart';
-part 'web/interoperability/web_point.dart';
-part 'web/interoperability/web_polygon.dart';
-part 'web/interoperability/web_polyline.dart';
-
-part 'web/utils/web_calculate_level.dart';
-part 'web/utils/web_image_source.dart';
-part 'web/utils/web_color.dart';

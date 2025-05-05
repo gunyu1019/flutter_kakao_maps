@@ -1,4 +1,4 @@
-part of '../../kakao_map_sdk.dart';
+part of '../kakao_map_sdk_web.dart';
 
 class WebLodLabelController extends LodLabelController {
   final WebMapController controller;

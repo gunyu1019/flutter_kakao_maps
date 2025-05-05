@@ -1,4 +1,4 @@
-part of '../../kakao_map_sdk.dart';
+part of '../kakao_map_sdk_web.dart';
 
 web.HTMLElement poiElement(String id, String? encodedIcon, KImage? icon,
     String? text, PoiStyle style, void Function()? onClick) {

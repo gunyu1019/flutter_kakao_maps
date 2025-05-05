@@ -1,4 +1,4 @@
-part of '../../kakao_map_sdk.dart';
+part of '../kakao_map_sdk_web.dart';
 
 extension type WebPolygonOption._(JSObject _) implements JSObject {
   external WebPolygonOption(

@@ -1,4 +1,4 @@
-part of '../../kakao_map_sdk.dart';
+part of '../kakao_map_sdk_web.dart';
 
 @JS("kakao.maps.LatLng")
 extension type WebLatLng._(JSObject _) implements JSObject {

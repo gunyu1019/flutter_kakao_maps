@@ -1,4 +1,4 @@
-part of '../../kakao_map_sdk.dart';
+part of '../kakao_map_sdk_web.dart';
 
 @JS("kakao.maps.MapProjection")
 extension type WebMapProjection._(JSObject _) implements JSObject {

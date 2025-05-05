@@ -1,4 +1,4 @@
-part of '../kakao_map_sdk.dart';
+part of 'kakao_map_sdk_web.dart';
 
 /// [KakaoMapController]를 웹 환경에서 사용할 수 있도록 구현하는 객체입니다.
 class KakaoMapWebController extends KakaoMapController {

@@ -1,4 +1,4 @@
-part of '../../../kakao_map_sdk.dart';
+part of '../kakao_map_sdk_web.dart';
 
 Future<Uint8List> convertImageToData(KImage image) async =>
     switch (image.type) {
