@@ -19,7 +19,7 @@ class MapGravity {
         return 16;
       }
       return horizontalAlign.aosValue | verticalAlign.aosValue;
-    } else if (Platform.isIOS) {
+    } else if (Platform.isIOS || kIsWeb) {
       return horizontalAlign.iosValue * 3 + verticalAlign.iosValue;
     }
     return -1;
