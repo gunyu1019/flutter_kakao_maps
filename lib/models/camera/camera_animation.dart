@@ -22,4 +22,9 @@ class CameraAnimation with KMessageable {
       "isConsecutive": isConsecutive,
     };
   }
+
+  factory CameraAnimation.fromMessageable(dynamic payload) =>
+      CameraAnimation(payload["duration"],
+          autoElevation: payload["autoElevation"] ?? false,
+          isConsecutive: payload["isConsecutive"] ?? false);
 }
