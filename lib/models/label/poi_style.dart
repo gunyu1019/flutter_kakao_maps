@@ -120,6 +120,16 @@ class PoiStyle with KMessageable {
     _styles.removeWhere((e) => e.zoomLevel == zoomLevel);
   }
 
+  /// [PoiStyle.addStyle]로 정의된 다른 스타일의 개수를 불러옵니다.
+  int get otherStyleCount => _styles.length;
+
+  /// [PoiStyle.addStyle]로 정의된 다른 스타일의 Zoom Level을 불러옵니다.
+  List<int> get otherStyleLevel =>
+      _styles.map((e) => e.zoomLevel).toList(growable: false);
+
+  /// [PoiStyle.addStyle]로 정의된 다른 스타일을 모두 불러옵니다.
+  List<PoiStyle> get otherStyles => _styles.toList(growable: false);
+
   @override
   Map<String, dynamic> toMessageable() {
     final payload = <String, dynamic>{
@@ -136,5 +146,32 @@ class PoiStyle with KMessageable {
       payload['otherStyle'] = _styles.map((e) => e.toMessageable()).toList();
     }
     return payload;
+  }
+
+  factory PoiStyle.fromMessageable(dynamic payload,
+      [bool isSecondary = false]) {
+    final style = PoiStyle(
+        id: payload["id"],
+        applyDpScale: payload["applyDpScale"],
+        anchor: KPoint.fromMessageable(payload["anchor"]),
+        padding: payload["padding"],
+        icon: payload.containsKey("icon")
+            ? KImage.fromMessageable(payload["icon"])
+            : null,
+        iconTransition:
+            PoiTransition.fromMessageable(payload["iconTransition"]),
+        textGravity: MapGravity.fromValue(payload["textGravity"]),
+        textStyle:
+            payload["textStyle"].map(PoiTextStyle.fromMessageable).toList(),
+        textTransition:
+            PoiTransition.fromMessageable(payload["textTransition"]),
+        zoomLevel: payload["zoomLevel"]);
+    if (!isSecondary) {
+      payload["otherStyle"]
+          .map((e) => PoiStyle.fromMessageable(e, true))
+          .map((e) => e.._isSecondaryStyle = true)
+          .forEach(style._styles.add);
+    }
+    return style;
   }
 }
