@@ -65,6 +65,37 @@ class CameraUpdate with KMessageable {
       CameraUpdate._(CameraUpdateType.fitMapPoints,
           fitPoints: fitPoints, padding: padding, zoomLevel: zoomLevel ?? -1);
 
+  factory CameraUpdate.fromMessageable(dynamic payload) {
+    final type =
+        CameraUpdateType.values.firstWhere((e) => e.value == payload['type']);
+    final angle = payload["angle"];
+    final zoomLevel = payload["zoomLevel"];
+    final position =
+        payload.containsKey("latitude") && payload.containsKey("longitude")
+            ? LatLng.fromMessageable(payload)
+            : null;
+    return switch (type) {
+      CameraUpdateType.newCenterPoint =>
+        CameraUpdate.newCenterPosition(position!, zoomLevel: zoomLevel),
+      CameraUpdateType.newCameraPos => () {
+          final cameraPosition = CameraPosition.fromMessageable(payload);
+          return CameraUpdate.newCameraPos(cameraPosition);
+        }(),
+      CameraUpdateType.newCameraAngle => throw UnimplementedError(),
+      CameraUpdateType.zoomTo => CameraUpdate.zoomTo(zoomLevel),
+      CameraUpdateType.zoomIn => CameraUpdate.zoomIn(),
+      CameraUpdateType.zoomOut => CameraUpdate.zoomOut(),
+      CameraUpdateType.rotate => CameraUpdate.rotate(angle),
+      CameraUpdateType.tilt => CameraUpdate.tilt(angle),
+      CameraUpdateType.fitMapPoints => () {
+          final points =
+              payload['points'].map((e) => LatLng.fromMessageable(e)).toList();
+          return CameraUpdate.fitMapPoints(points,
+              padding: payload["padding"], zoomLevel: zoomLevel);
+        }(),
+    };
+  }
+
   @override
   Map<String, dynamic> toMessageable() {
     Map<String, dynamic> payload = {"type": type.value};
