@@ -27,8 +27,8 @@ class PoiTextStyle with KMessageable {
   /// 글씨 외곽선의 색상
   final Color strokeColor;
 
-  const PoiTextStyle(
-      {this.aspectRatio = 1.0,
+  const PoiTextStyle({
+      this.aspectRatio = 1.0,
       this.characterSpace = 0,
       this.color = Colors.black,
       this.font = "",
@@ -53,4 +53,16 @@ class PoiTextStyle with KMessageable {
     };
     return payload;
   }
+
+  factory PoiTextStyle.fromMessageable(dynamic payload) =>
+    PoiTextStyle(
+      aspectRatio: payload['aspectRatio'],
+      characterSpace: payload['characterSpace'],
+      color: Color(payload['color']),
+      font: payload['font'],
+      lineSpace: payload['lineSpace'],
+      size: payload['size'],
+      stroke: payload['stroke'],
+      strokeColor : Color(payload['strokeColor']),
+    );
 }
