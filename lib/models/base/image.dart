@@ -2,7 +2,7 @@ part of '../../kakao_map_sdk.dart';
 
 /// 지도에서 사용할 수 있는 이미지를 생성하는 객체입니다.
 /// 생성된 이미지 객체는 [Poi] 또는 [RouteStyle.withPattern] 등의 이미지가 필요한 기능에서 사용할 수 있습니다.
-class KImage {
+class KImage with KMessageable {
   final String? _path;
   final Uint8List? _data;
   final ImageType type;
@@ -101,6 +101,7 @@ class KImage {
     }
   }
 
+  @override
   Map<String, dynamic> toMessageable() {
     final payload = <String, dynamic>{
       "type": type.value,
@@ -119,4 +120,18 @@ class KImage {
     }
     return payload;
   }
+
+  factory KImage.fromMessageable(dynamic payload) =>
+      KImage._(ImageType.values.firstWhere((e) => e.value == payload["type"]),
+          width: payload["width"],
+          height: payload["height"],
+          path: payload["path"],
+          data: payload["data"]);
+
+  Future<Uint8List> readBytes() async => switch (type) {
+        ImageType.assets =>
+          (await rootBundle.load(_path!)).buffer.asUint8List(),
+        ImageType.file => await File(_path!).readAsBytes(),
+        ImageType.data => _data!,
+      };
 }
