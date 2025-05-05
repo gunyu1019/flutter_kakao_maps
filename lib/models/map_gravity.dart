@@ -13,15 +13,21 @@ class MapGravity {
         verticalAlign = VerticalAlign.center;
 
   int get value {
-    if (Platform.isAndroid) {
+    if (kIsWeb || Platform.isIOS) {
+      return horizontalAlign.iosValue * 3 + verticalAlign.iosValue;
+    } else if (Platform.isAndroid) {
       if (horizontalAlign == HorizontalAlign.center &&
           verticalAlign == VerticalAlign.center) {
         return 16;
       }
       return horizontalAlign.aosValue | verticalAlign.aosValue;
-    } else if (Platform.isIOS || kIsWeb) {
-      return horizontalAlign.iosValue * 3 + verticalAlign.iosValue;
     }
     return -1;
   }
+
+  factory MapGravity.fromValue(int value) 
+    => MapGravity(
+          HorizontalAlign.values.firstWhere((e) => e.iosValue == value / 3),
+          VerticalAlign.values.firstWhere((e) => e.iosValue == value % 3)
+        );
 }
