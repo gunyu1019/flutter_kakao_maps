@@ -163,7 +163,7 @@ class WebShapeController extends ShapeController {
 
             dotPoint._holes
                 .map(
-                    (hole) => _getPointsFromDotPoint(hole, dotPoint.basePoint!))
+                    (hole) => _getPointsFromDotPoint(hole, dotPoint.basePoint))
                 .forEach(newPoint.addHole);
             return newPoint;
           })(),
@@ -173,7 +173,7 @@ class WebShapeController extends ShapeController {
   List<LatLng> _getPointsFromDotPoint<T extends _BaseDotPoint>(T point,
       [LatLng? basePoint]) {
     final absolutePoint = <LatLng>[];
-    final basePoint0 = basePoint ?? point.basePoint!;
+    final basePoint0 = basePoint ?? point.basePoint;
 
     if (point is CirclePoint) {
       for (int degrees = 0; degrees < 360; degrees++) {
