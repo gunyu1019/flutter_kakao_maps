@@ -15,9 +15,6 @@ class KakaoMapSdkImplement implements KakaoMapSdk {
   @override
   Future<void> initialize(String appKey) async {
     _isInitalized = true;
-    if (kIsWeb) {
-      return;
-    }
     await channel.invokeMethod("initialize", {"appKey": appKey});
   }
 
