@@ -4,28 +4,29 @@ part of '../kakao_map_sdk_web.dart';
 class KakaoMapWebController
     with KakaoMapControllerHandler, KakaoMapWebControllerHandler {
   late WebMapController controller;
+  late WebOverlayController overlay; 
   final MethodChannel channel;
   final MethodChannel overlayChannel;
-
-  /// Poi Style ID 등의 고유 ID를 가지기 위한 객체입니다.
-  final Uuid _uuid;
 
   KakaoMapWebController({
     WebMapController? controller,
     required this.channel,
     required this.overlayChannel,
-  }) : _uuid = const Uuid() {
+  }) {
     if (controller == null) {
       final error = KakaoMapError("KAKAO_MAP_WEB_LOAD_FAILED",
           "Timeout loading map elements. Please retry later.");
       onMapError(error);
       return;
     }
+    overlay = WebOverlayController(overlayChannel, controller);
+
     // ignore: prefer_initializing_formals
     this.controller = controller;
 
     web.window.addEventListener('resize', _resizedEvent.toJS);
     channel.setMethodCallHandler(webHandle);
+    // overlay.setMethodCallHandler();
     onMapReady();
   }
 

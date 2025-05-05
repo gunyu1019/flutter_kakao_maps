@@ -10,6 +10,7 @@ import 'package:web/web.dart' as web;
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
 /* web (Experimentation) */
+part 'controller/web_overlay_controller.dart';
 part 'controller/web_controller.dart';
 part 'controller/web_controller_handler.dart';
 
@@ -24,10 +25,12 @@ part 'models/web_polygon_option.dart';
 part 'models/web_polyline_option.dart';
 part 'models/web_route.dart';
 
-/* part 'overlay/web_label_controller.dart';
-part 'overlay/web_lod_label_controller.dart';
+part 'overlay/web_label_controller.dart';
+/* part 'overlay/web_lod_label_controller.dart';
 part 'overlay/web_route_controller.dart';
 part 'overlay/web_shape_controller.dart'; */
+
+part 'overlay/web_label_controller_handler.dart';
 
 part 'interoperability/web_abstract_overlay.dart';
 part 'interoperability/web_custom_overlay.dart';
