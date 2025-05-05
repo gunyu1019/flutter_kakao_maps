@@ -162,8 +162,7 @@ class WebShapeController extends ShapeController {
             final newPoint = MapPoint(absolutePoint);
 
             dotPoint._holes
-                .map(
-                    (hole) => _getPointsFromDotPoint(hole, dotPoint.basePoint))
+                .map((hole) => _getPointsFromDotPoint(hole, dotPoint.basePoint))
                 .forEach(newPoint.addHole);
             return newPoint;
           })(),
