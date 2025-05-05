@@ -18,6 +18,11 @@ extension type WebMapOption._(JSObject _) implements JSObject {
       level: _calculateZoomLevel(option.zoomLevel),
       mapTypeId: option.mapType.value == "skyview" ? 2 : 1);
 
+  factory WebMapOption.fromMessageable(dynamic payload) => WebMapOption(
+      center: WebLatLng.fromMessageable(payload),
+      level: _calculateZoomLevel(payload['zoomLevel'] as int),
+      mapTypeId: payload['mapType'] == "skyview" ? 2 : 1);
+
   external WebLatLng get center;
   external int get level;
   external int get mapTypeId;
