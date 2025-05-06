@@ -58,6 +58,18 @@ class MultipleRouteOption with BaseMultipleRoute, KMessageable {
     };
   }
 
+  factory MultipleRouteOption.fromMessageable(
+      dynamic payload, List<RouteStyle> styles) {
+    final option =
+        MultipleRouteOption([], id: payload["id"], zOrder: payload["zOrder"]);
+    payload["routes"]
+        .map((e) => RouteSegment.fromMessageable(e, option))
+        .forEach(option.segments.add);
+    option.styles.addAll(styles);
+
+    return option;
+  }
+
   bool _isStyleAdded() {
     var styleId = styles[0].id ?? "";
     return styles.map((e) => e.id).any((e) => e == null || e != styleId);
