@@ -43,6 +43,10 @@ class RouteSegment with KMessageable {
     };
   }
 
+  factory RouteSegment.fromMessageable(dynamic payload, BaseMultipleRoute parent) =>
+      RouteSegment._(payload["points"], payload["styleIndex"],
+          payload["curveType"], parent);
+
   /// 선형의 지점([points])을 다시 정의합니다.
   Future<void> changePoint(List<LatLng> points) async {
     if (!_isAdded()) return;
