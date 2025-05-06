@@ -77,13 +77,13 @@ class WebLabelController with WebLabelControllerHandler {
 
   void _syncZoomLevel(String poiId, String styleId, String? text) {
     final mapZoomLevel = controller.getLevel();
-    var style = manager._poiStyles[_poiStyleId[poiId]!]!;
+    var style = manager._poiStyles[styleId]!;
     var currentZoomLevel = style.zoomLevel;
     for (final zoomLevel in style.otherStyleLevel) {
       if (_calculateZoomLevel(zoomLevel) >= mapZoomLevel &&
           zoomLevel >= currentZoomLevel) {
         currentZoomLevel = zoomLevel;
-        style = style.getStyle(currentZoomLevel)!;
+        style = style.getStyle(zoomLevel)!;
       }
     }
 
@@ -154,7 +154,7 @@ class WebLabelController with WebLabelControllerHandler {
     final overlay = _webPoi[poiId] = WebCustomOverlay(options);
     overlay.setMap(controller);
     overlay.setVisible(visible);
-
+    _poiStyleId[poiId] = style.id!;
     _syncZoomLevel(poiId, style.id!, text);
     return poiId;
   }
