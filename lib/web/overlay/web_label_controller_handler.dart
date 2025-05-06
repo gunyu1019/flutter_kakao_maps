@@ -16,7 +16,7 @@ mixin WebLabelControllerHandler {
       case "removeLabelLayer" || "removeLodLabelLayer":
         await removeLabelLayer();
         break;
-      case "addPoi":
+      case "addPoi" || "addLodPoi":
         final poi = arguments["poi"];
         final position = LatLng.fromMessageable(poi);
         final style = manager._poiStyles[poi["styleId"]!]!;
@@ -25,7 +25,7 @@ mixin WebLabelControllerHandler {
             text: poi["text"],
             rank: poi["rank"],
             visible: poi["visible"] ?? true);
-      case "removePoi":
+      case "removePoi" || "removeLodPoi":
         await removePoi(poiId!);
         break;
       case "changePoiOffsetPosition":
@@ -59,7 +59,7 @@ mixin WebLabelControllerHandler {
       case "rankPoi":
         await rankPoi(poiId, arguments["rank"]);
         break;
-      case "changeVisibleAllPoi":
+      case "changeVisibleAllPoi" || "changeVisibleAllLodPoi":
         if (arguments["visible"]) {
           await showAllPoi();
         } else {
