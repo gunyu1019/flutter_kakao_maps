@@ -35,4 +35,13 @@ class RoutePattern with KMessageable {
       "pinEnd": pinEnd
     };
   }
+  
+  factory RoutePattern.fromMessageable(dynamic payload) =>
+    RoutePattern(
+      KImage.fromMessageable(payload["patternImage"]),
+      payload["distance"],
+      symbolImage: payload["symbolImage"] != null ? KImage.fromMessageable(payload["symbolImage"]) : null,
+      pinStart: payload["pinStart"],
+      pinEnd: payload["pinEnd"]
+    );
 }
