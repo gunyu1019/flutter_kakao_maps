@@ -7,7 +7,6 @@ class WebRouteController with WebRouteControllerHandler {
   final Map<String, List<WebRoute>> _webRoute = {};
   final Map<String, List<int>> _currentRouteLevel = {};
 
-  @override
   final Map<String, String> _routeStyleId = {};
   final Map<String, List<int>> _routeStyleIndex = {};
   final Map<String, int> _routeZOrder = {};
@@ -103,7 +102,6 @@ class WebRouteController with WebRouteControllerHandler {
   @override
   Future<void> changeRoute(
       String routeId, String styleId, List<List<LatLng>> points) async {
-    final webRoute = _webRoute[routeId]!;
     final zOrder = _routeZOrder[routeId]!;
     final styleIndex = _routeStyleIndex[routeId]!;
     final styles = manager._routeStyles[styleId]!;
