@@ -27,10 +27,11 @@ part 'models/web_route.dart';
 
 part 'overlay/web_label_controller.dart';
 part 'overlay/web_route_controller.dart';
-/* part 'overlay/web_shape_controller.dart';  */
+part 'overlay/web_shape_controller.dart';
 
 part 'overlay/web_label_controller_handler.dart';
 part 'overlay/web_route_controller_handler.dart';
+part 'overlay/web_shape_controller_handler.dart';
 
 part 'interoperability/web_abstract_overlay.dart';
 part 'interoperability/web_custom_overlay.dart';
