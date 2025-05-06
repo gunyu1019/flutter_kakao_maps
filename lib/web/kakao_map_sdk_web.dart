@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:js_interop';
 import 'dart:ui_web' as ui_web;
 
+import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
@@ -26,11 +26,11 @@ part 'models/web_polyline_option.dart';
 part 'models/web_route.dart';
 
 part 'overlay/web_label_controller.dart';
-/* part 'overlay/web_lod_label_controller.dart';
 part 'overlay/web_route_controller.dart';
-part 'overlay/web_shape_controller.dart'; */
+/* part 'overlay/web_shape_controller.dart';  */
 
 part 'overlay/web_label_controller_handler.dart';
+part 'overlay/web_route_controller_handler.dart';
 
 part 'interoperability/web_abstract_overlay.dart';
 part 'interoperability/web_custom_overlay.dart';

@@ -13,7 +13,7 @@ class WebOverlayController {
   final Map<String, WebLabelController> _labelLayer = {};
   final Map<String, WebLabelController> _lodLabelLayer = {};
   // final Map<String, WebLabelController> _shapeLayer;
-  // final Map<String, WebLabelController> _routeLayer;
+  final Map<String, WebRouteController> _routeLayer = {};
 
   WebOverlayController(this.channel, this.controller) : _uuid = const Uuid() {
     initalizeOverlayLayer();
@@ -23,8 +23,10 @@ class WebOverlayController {
   void initalizeOverlayLayer() {
     _labelLayer[LabelController.defaultId] =
         WebLabelController._(LabelController.defaultId, controller, this);
-    _lodLabelLayer[LabelController.defaultId] =
+    _lodLabelLayer[LodLabelController.defaultId] =
         WebLabelController._(LodLabelController.defaultId, controller, this);
+    _routeLayer[RouteController.defaultId] =
+        WebRouteController._(RouteController.defaultId, controller, this);
   }
 
   Future<dynamic> overlayHandle(MethodCall method) async {
@@ -33,7 +35,8 @@ class WebOverlayController {
         OverlayType.values.firstWhere((e) => e.value == argument["type"]);
     final layerId =
         argument.containsKey("layerId") ? argument["layerId"] : null;
-    
+    print(method.method);
+
     switch (method.method) {
       case "createLabelLayer":
         _labelLayer[layerId!] =
@@ -43,6 +46,10 @@ class WebOverlayController {
         _lodLabelLayer[layerId!] =
             WebLabelController._(layerId!, controller, this);
         break;
+      case "createRouteLayer":
+        _routeLayer[layerId!] =
+            WebRouteController._(layerId!, controller, this);
+        break;
       case "removeLabelLayer":
         _labelLayer[layerId!]!.removeLabelLayer();
         _labelLayer.remove(layerId!);
@@ -51,10 +58,22 @@ class WebOverlayController {
         _lodLabelLayer[layerId!]!.removeLabelLayer();
         _lodLabelLayer.remove(layerId!);
         return;
+      case "removeRouteLayer":
+        _routeLayer[layerId!]!.removeRouteLayer();
+        _routeLayer.remove(layerId!);
+        return;
       case "addPoiStyle":
         final poiStyleId = argument["styleId"] ?? _uuid.v4();
-        _poiStyles[poiStyleId] = PoiStyle.fromMessageable(argument["styles"], false, poiStyleId);
+        _poiStyles[poiStyleId] =
+            PoiStyle.fromMessageable(argument["styles"], false, poiStyleId);
         return poiStyleId;
+      case "addRouteStyle":
+        final routeStyleId = argument["styleId"] ?? _uuid.v4();
+        _routeStyles[routeStyleId] = argument["styles"]
+            .map<RouteStyle>((e) =>
+                RouteStyle.fromMessageable(e, false, routeStyleId))
+            .toList();
+        return routeStyleId;
     }
 
     switch (type) {
@@ -65,7 +84,7 @@ class WebOverlayController {
       case OverlayType.shape:
         throw UnimplementedError();
       case OverlayType.route:
-        throw UnimplementedError();
+        return await _routeLayer[layerId!]?.routeHandle(method);
     }
   }
 }
