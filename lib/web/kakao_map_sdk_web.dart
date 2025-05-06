@@ -63,7 +63,7 @@ class KakaoMapWebPlugin {
     final channel =
         ChannelType.view.channelWithParamAndId(viewId, codec, registrar);
     final overlayChannel =
-        ChannelType.view.channelWithParamAndId(viewId, codec, registrar);
+        ChannelType.overlay.channelWithParamAndId(viewId, codec, registrar);
     final webMapOption = WebMapOption.fromMessageable(params!);
 
     getController(viewId, webMapOption).then((webController) {

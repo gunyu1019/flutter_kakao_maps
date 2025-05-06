@@ -15,7 +15,8 @@ mixin KakaoMapWebControllerHandler {
         await moveCamera(cameraUpdate, animation: animation);
         break;
       case "setGestureEnable":
-        final gesture = GestureType.values.firstWhere((e) => e.value == arguments["gestureType"]);
+        final gesture = GestureType.values
+            .firstWhere((e) => e.value == arguments["gestureType"]);
         await setGesture(gesture, arguments["enable"]);
         break;
       case "setEventHandler":
@@ -27,13 +28,16 @@ mixin KakaoMapWebControllerHandler {
         return await toScreenPoint(LatLng.fromMessageable(arguments));
       case "canPositionVisible":
         final zoomLevel = arguments["zoomLevel"];
-        final position = arguments["position"].map(LatLng.fromMessageable).toList();
+        final position =
+            arguments["position"].map(LatLng.fromMessageable).toList();
         return await canShowPosition(zoomLevel, position);
       case "changeMapType":
-        await changeMapType(MapType.values.firstWhere((e) => e.value == arguments["mapType"]));
+        await changeMapType(
+            MapType.values.firstWhere((e) => e.value == arguments["mapType"]));
         break;
       case "overlayVisible":
-        final overlay = MapOverlay.values.firstWhere((e) => e.value == arguments["overlayType"]);
+        final overlay = MapOverlay.values
+            .firstWhere((e) => e.value == arguments["overlayType"]);
         if (arguments["visible"]) {
           await showOverlay(overlay);
         } else {
@@ -43,19 +47,17 @@ mixin KakaoMapWebControllerHandler {
       case "getBuildingHeightScale":
         return 0.0;
       case "defaultGUIposition":
-        final gui = DefaultGUIType.values.firstWhere((e) => e.value == arguments["type"]);
-        final gravity = MapGravity(
-          HorizontalAlign.values.firstWhere((e) => e.iosValue == arguments["gravity"] / 3),
-          VerticalAlign.values.firstWhere((e) => e.iosValue == arguments["gravity"] % 3)
-        );
+        final gui = DefaultGUIType.values
+            .firstWhere((e) => e.value == arguments["type"]);
+        final gravity = MapGravity.fromValue(arguments["gravity"]);
         defaultGUIposition(gui, gravity, arguments["x"], arguments["y"]);
         break;
-      case "clearCache":
-      case "clearDiskCache":
-      case "setBuildingHeightScale":
-      case "defaultGUIvisible":
-      case "scaleAutohide":
-      case "scaleAnimationTime":
+      case "clearCache" ||
+            "clearDiskCache" ||
+            "setBuildingHeightScale" ||
+            "defaultGUIvisible" ||
+            "scaleAutohide" ||
+            "scaleAnimationTime":
         break;
       default:
         throw UnimplementedError();
