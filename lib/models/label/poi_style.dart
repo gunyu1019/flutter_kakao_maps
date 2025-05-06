@@ -139,6 +139,7 @@ class PoiStyle with KMessageable {
       "icon": icon?.toMessageable(),
       "iconTransition": iconTransition.toMessageable(),
       "textGravity": textGravity.value,
+      "textTransition": textTransition.toMessageable(),
       "textStyle": textStyle.map((e) => e.toMessageable()).toList(),
       "zoomLevel": zoomLevel
     };
@@ -149,9 +150,9 @@ class PoiStyle with KMessageable {
   }
 
   factory PoiStyle.fromMessageable(dynamic payload,
-      [bool isSecondary = false]) {
+      [bool isSecondary = false, String? id]) {
     final style = PoiStyle(
-        id: payload["id"],
+        id: id,
         applyDpScale: payload["applyDpScale"],
         anchor: KPoint.fromMessageable(payload["anchor"]),
         padding: payload["padding"],
@@ -162,14 +163,14 @@ class PoiStyle with KMessageable {
             PoiTransition.fromMessageable(payload["iconTransition"]),
         textGravity: MapGravity.fromValue(payload["textGravity"]),
         textStyle:
-            payload["textStyle"].map(PoiTextStyle.fromMessageable).toList(),
+            payload["textStyle"].map<PoiTextStyle>(PoiTextStyle.fromMessageable).toList(),
         textTransition:
             PoiTransition.fromMessageable(payload["textTransition"]),
         zoomLevel: payload["zoomLevel"]);
-    if (!isSecondary) {
+    if (!isSecondary && payload.containsKey("otherStyle") && payload["otherStyle"].length > 0) {
       payload["otherStyle"]
-          .map((e) => PoiStyle.fromMessageable(e, true))
-          .map((e) => e.._isSecondaryStyle = true)
+          .map<PoiStyle>((e) => PoiStyle.fromMessageable(e, true))
+          .map<PoiStyle>((e) => e.._isSecondaryStyle = true)
           .forEach(style._styles.add);
     }
     return style;
