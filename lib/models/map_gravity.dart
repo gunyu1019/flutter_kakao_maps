@@ -27,7 +27,7 @@ class MapGravity {
 
   factory MapGravity.fromValue(int value) 
     => MapGravity(
-          HorizontalAlign.values.firstWhere((e) => e.iosValue == value / 3),
+          HorizontalAlign.values.firstWhere((e) => e.iosValue == (value / 3).toInt()),
           VerticalAlign.values.firstWhere((e) => e.iosValue == value % 3)
         );
 }
