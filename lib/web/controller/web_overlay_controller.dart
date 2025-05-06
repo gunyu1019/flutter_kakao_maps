@@ -15,20 +15,33 @@ class WebOverlayController {
   // final Map<String, WebLabelController> _shapeLayer;
   // final Map<String, WebLabelController> _routeLayer;
 
-  WebOverlayController(this.channel, this.controller) : _uuid = const Uuid();
+  WebOverlayController(this.channel, this.controller) : _uuid = const Uuid() {
+    initalizeOverlayLayer();
+    channel.setMethodCallHandler(overlayHandle);
+  }
+
+  void initalizeOverlayLayer() {
+    _labelLayer[LabelController.defaultId] =
+        WebLabelController._(LabelController.defaultId, controller, this);
+    _lodLabelLayer[LabelController.defaultId] =
+        WebLabelController._(LodLabelController.defaultId, controller, this);
+  }
 
   Future<dynamic> overlayHandle(MethodCall method) async {
     final argument = method.arguments;
-    final type = OverlayType.values.firstWhere((e) => e.value == argument["type"]);
-    final layerId = argument.containsKey("layerId") ? argument["layerId"] : null;
-
-    WebLabelController? layer;
-    switch(method.method) {
+    final type =
+        OverlayType.values.firstWhere((e) => e.value == argument["type"]);
+    final layerId =
+        argument.containsKey("layerId") ? argument["layerId"] : null;
+    
+    switch (method.method) {
       case "createLabelLayer":
-        _labelLayer[layerId!] = WebLabelController._(controller);
+        _labelLayer[layerId!] =
+            WebLabelController._(layerId!, controller, this);
         break;
       case "createLodLabelLayer":
-        _lodLabelLayer[layerId!] = WebLabelController._(controller);
+        _lodLabelLayer[layerId!] =
+            WebLabelController._(layerId!, controller, this);
         break;
       case "removeLabelLayer":
         _labelLayer[layerId!]!.removeLabelLayer();
@@ -38,12 +51,15 @@ class WebOverlayController {
         _lodLabelLayer[layerId!]!.removeLabelLayer();
         _lodLabelLayer.remove(layerId!);
         return;
+      case "addPoiStyle":
+        final poiStyleId = argument["styleId"] ?? _uuid.v4();
+        _poiStyles[poiStyleId] = PoiStyle.fromMessageable(argument["styles"], false, poiStyleId);
+        return poiStyleId;
     }
 
-    switch(type) {
-      case OverlayType.label:
-        layer = _labelLayer[layerId!];
-      case OverlayType.lodLabel:
+    switch (type) {
+      case OverlayType.label || OverlayType.lodLabel:
+        WebLabelController? layer = _labelLayer[layerId!];
         layer = layer ?? _lodLabelLayer[layerId!];
         return await layer?.labelHandle(method);
       case OverlayType.shape:
