@@ -98,6 +98,16 @@ class RouteStyle with KMessageable {
     _styles.removeWhere((e) => e.zoomLevel == zoomLevel);
   }
 
+  /// [RouteStyle.addStyle]로 정의된 다른 스타일의 개수를 불러옵니다.
+  int get otherStyleCount => _styles.length;
+
+  /// [RouteStyle.addStyle]로 정의된 다른 스타일의 Zoom Level을 불러옵니다.
+  List<int> get otherStyleLevel =>
+      _styles.map((e) => e.zoomLevel).toList(growable: false);
+
+  /// [RouteStyle.addStyle]로 정의된 다른 스타일을 모두 불러옵니다.
+  List<RouteStyle> get otherStyles => _styles.toList(growable: false);
+
   @override
   Map<String, dynamic> toMessageable() {
     final payload = <String, dynamic>{
@@ -115,5 +125,26 @@ class RouteStyle with KMessageable {
       payload['otherStyle'] = _styles.map((e) => e.toMessageable()).toList();
     }
     return payload;
+  }
+
+  factory RouteStyle.fromMessageable(dynamic payload,
+      [bool isSecondary = false, String? id]) {
+    final style = RouteStyle(Color(payload["color"]), payload["lineWidth"],
+        id: id,
+        strokeColor: Color(payload["strokeColor"]),
+        strokeWidth: payload["strokeWidth"],
+        pattern: payload["pattern"] != null
+            ? RoutePattern.fromMessageable(payload["pattern"])
+            : null,
+        zoomLevel: payload["zoomLevel"]);
+    if (!isSecondary &&
+        payload.containsKey("otherStyle") &&
+        payload["otherStyle"].length > 0) {
+      payload["otherStyle"]
+          .map<RouteStyle>((e) => RouteStyle.fromMessageable(e, true))
+          .map<RouteStyle>((e) => e.._isSecondaryStyle = true)
+          .forEach(style._styles.add);
+    }
+    return style;
   }
 }
