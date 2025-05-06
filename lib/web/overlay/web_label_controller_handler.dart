@@ -1,7 +1,82 @@
 part of '../kakao_map_sdk_web.dart';
 
 mixin WebLabelControllerHandler {
-  Future<dynamic> labelHandle(MethodCall call) async {}
+  WebOverlayController get manager;
+
+  Map<String, String?> get _poiText;
+  Map<String, String> get _poiStyleId;
+
+  Future<dynamic> labelHandle(MethodCall method) async {
+    final arguments = method.arguments;
+    final poiId = arguments["poiId"];
+    switch (method.method) {
+      case "createLabelLayer" || "createLodLabelLayer":
+        await createLabelLayer();
+        break;
+      case "removeLabelLayer" || "removeLodLabelLayer":
+        await removeLabelLayer();
+        break;
+      case "addPoi":
+        final poi = arguments["poi"];
+        final position = LatLng.fromMessageable(poi);
+        final style = manager._poiStyles[poi["styleId"]!]!;
+        return await addPoi(position,
+            style: style,
+            text: poi["text"],
+            rank: poi["rank"],
+            visible: poi["visible"] ?? true);
+      case "removePoi":
+        await removePoi(poiId!);
+        break;
+      case "changePoiOffsetPosition":
+        await changePoiOffsetPosition(
+            poiId, arguments["x"], arguments["y"], arguments["forceDpScale"]);
+        break;
+      case "changePoiVisible":
+        await changePoiVisible(poiId, arguments["visible"],
+            autoMove: arguments["autoMove"], duration: arguments["millis"]);
+        break;
+      case "changePoiStyle":
+        await changePoiStyle(
+            poiId, arguments["styleId"], arguments["transition"]);
+        break;
+      case "changePoiText":
+        final styleId = arguments["styleId"] ?? _poiStyleId[poiId];
+        await invalidatePoi(
+            poiId, styleId, _poiText[poiId], arguments["transition"]);
+        break;
+      case "invalidatePoi":
+        await invalidatePoi(poiId, arguments["styleId"], arguments["text"],
+            arguments["millis"]);
+        break;
+      case "movePoi":
+        await movePoi(
+            poiId, LatLng.fromMessageable(arguments), arguments["millis"]);
+        break;
+      case "rotatePoi":
+        await rotatePoi(poiId, arguments["angle"], arguments["millis"]);
+        break;
+      case "rankPoi":
+        await rankPoi(poiId, arguments["rank"]);
+        break;
+      case "changeVisibleAllPoi":
+        if (arguments["visible"]) {
+          await showAllPoi();
+        } else {
+          await hideAllPoi();
+        }
+        break;
+      case "changePolylineTextStyle" ||
+            "changePolylineTextVisible" ||
+            "changeVisibleAllPolylineText" ||
+            "setLayerClickable" ||
+            "setLayerZOrder" ||
+            "scalePoi":
+        break;
+      default:
+        throw UnimplementedError();
+    }
+  }
 
   Future<void> createLabelLayer();
 
@@ -35,7 +110,7 @@ mixin WebLabelControllerHandler {
     int? rank,
     bool visible = true,
   });
-  
+
   Future<void> removePoi(String poiId);
 
   Future<void> showAllPoi();
