@@ -1,13 +1,23 @@
 part of '../kakao_map_sdk_web.dart';
 
 class WebLabelController with WebLabelControllerHandler {
+  final String id;
   final WebMapController controller;
 
-  WebLabelController._(this.controller);
+  @override
+  final WebOverlayController manager;
+
+  WebLabelController._(this.id, this.controller, this.manager);
 
   final Map<String, WebCustomOverlay> _webPoi = {};
   final Map<String, Map<int, String>> _preEncodedImage = {};
   final Map<String, int> _currentPoiLevel = {};
+
+  @override
+  final Map<String, String?> _poiText = {};
+
+  @override
+  final Map<String, String> _poiStyleId = {};
 
   @override
   Future<void> createLabelLayer() async {
@@ -16,7 +26,7 @@ class WebLabelController with WebLabelControllerHandler {
 
   @override
   Future<void> removeLabelLayer() async {
-    for (final poi in _poi.values) {
+    for (final poi in _webPoi.keys) {
       await removePoi(poi);
     }
     removeEventListener(
@@ -24,8 +34,8 @@ class WebLabelController with WebLabelControllerHandler {
   }
 
   void _zoomChangedEventHandler() {
-    for (var poi in _poi.values) {
-      _syncZoomLevel(poi.id, poi.style.id!, poi.text);
+    for (var poiId in _webPoi.keys) {
+      _syncZoomLevel(poiId, _poiStyleId[poiId]!, _poiText[poiId]);
     }
   }
 
@@ -52,28 +62,28 @@ class WebLabelController with WebLabelControllerHandler {
   @override
   Future<void> changePoiStyle(String poiId, String styleId,
       [bool transition = false]) async {
-    final style = manager.getPoiStyle(styleId)!;
+    final style = manager._poiStyles[styleId]!;
     if (style.icon != null) {
       _preEncodedImage[poiId]![style.zoomLevel] =
-          encodeImageToBase64(await convertImageToData(style.icon!));
+          encodeImageToBase64(await style.icon!.readBytes());
     }
-    for (var inStyle in style._styles) {
+    for (var inStyle in style.otherStyles) {
       if (inStyle.icon == null) continue;
       _preEncodedImage[poiId]![inStyle.zoomLevel] =
-          encodeImageToBase64(await convertImageToData(inStyle.icon!));
+          encodeImageToBase64(await style.icon!.readBytes());
     }
+    _poiStyleId[poiId] = styleId;
   }
 
   void _syncZoomLevel(String poiId, String styleId, String? text) {
-    final poi = _poi[poiId]!;
     final mapZoomLevel = controller.getLevel();
-    var currentZoomLevel = poi.style.zoomLevel;
-    var style = poi.style;
-    for (final secondaryStyle in poi.style._styles) {
-      if (_calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
-          secondaryStyle.zoomLevel >= currentZoomLevel) {
-        currentZoomLevel = secondaryStyle.zoomLevel;
-        style = poi.style._styles[currentZoomLevel];
+    var style = manager._poiStyles[_poiStyleId[poiId]!]!;
+    var currentZoomLevel = style.zoomLevel;
+    for (final zoomLevel in style.otherStyleLevel) {
+      if (_calculateZoomLevel(zoomLevel) >= mapZoomLevel &&
+          zoomLevel >= currentZoomLevel) {
+        currentZoomLevel = zoomLevel;
+        style = style.getStyle(currentZoomLevel)!;
       }
     }
 
@@ -81,14 +91,16 @@ class WebLabelController with WebLabelControllerHandler {
     final encodedIcon = _preEncodedImage[poiId]![currentZoomLevel];
     _currentPoiLevel[poiId] = currentZoomLevel;
     final element =
-        poiElement(poiId, encodedIcon, style.icon, text, style, poi.onClick);
+        poiElement(poiId, encodedIcon, style.icon, text, style, null);
     _webPoi[poiId]?.setContent(element);
   }
 
   @override
   Future<void> invalidatePoi(String poiId, String styleId, String? text,
       [bool transition = false]) async {
-    await _changePoiStyle(poiId, styleId, transition);
+    await changePoiStyle(poiId, styleId, transition);
+    _poiStyleId[poiId] = styleId;
+    _poiText[poiId] = text;
     _syncZoomLevel(poiId, styleId, text);
   }
 
@@ -118,26 +130,22 @@ class WebLabelController with WebLabelControllerHandler {
     int? rank,
     bool visible = true,
   }) async {
-    if (style.id == null) {
-      await manager.addPoiStyle(style);
-    }
     final poiId = "custom_overlay_${this.id}_$poiCount";
 
     _preEncodedImage[poiId] = {};
     if (style.icon != null) {
       _preEncodedImage[poiId]![style.zoomLevel] =
-          encodeImageToBase64(await convertImageToData(style.icon!));
+          encodeImageToBase64(await style.icon!.readBytes());
     }
-    for (var inStyle in style._styles) {
+    for (var inStyle in style.otherStyles) {
       if (inStyle.icon == null) continue;
       _preEncodedImage[poiId]![inStyle.zoomLevel] =
-          encodeImageToBase64(await convertImageToData(inStyle.icon!));
+          encodeImageToBase64(await style.icon!.readBytes());
     }
     final encodedIcon = _preEncodedImage[poiId]?[style.zoomLevel];
     final options = WebCustomOverlayOption(
         clickable: true,
-        content:
-            poiElement(poiId, encodedIcon, style.icon, text, style, onClick),
+        content: poiElement(poiId, encodedIcon, style.icon, text, style, null),
         position: WebLatLng.fromLatLng(position),
         xAnchor: style.anchor.x.toDouble(),
         yAnchor: style.anchor.y.toDouble(),
@@ -148,26 +156,32 @@ class WebLabelController with WebLabelControllerHandler {
     overlay.setVisible(visible);
 
     _syncZoomLevel(poiId, style.id!, text);
-    return poi;
+    return poiId;
   }
 
   @override
-  Future<void> removePoi(Poi poi) async {
-    _webPoi[poi.id]?.setMap(null);
-    _webPoi.remove(poi.id);
+  Future<void> removePoi(String poiId) async {
+    _webPoi[poiId]?.setMap(null);
+    _webPoi.remove(poiId);
+
+    _currentPoiLevel.remove(poiId);
+    _poiStyleId.remove(poiId);
+    _poiText.remove(poiId);
   }
 
   @override
   Future<void> showAllPoi() async {
-    for (var poi in _poi.values) {
-      await poi.show();
+    for (var poi in _webPoi.values) {
+      poi.setVisible(true);
     }
   }
 
   @override
   Future<void> hideAllPoi() async {
-    for (var poi in _poi.values) {
-      await poi.hide();
+    for (var poi in _webPoi.values) {
+      poi.setVisible(false);
     }
   }
+
+  int get poiCount => _webPoi.length;
 }
