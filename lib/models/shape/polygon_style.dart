@@ -76,6 +76,16 @@ class PolygonStyle with KMessageable {
     _styles.removeWhere((e) => e.zoomLevel == zoomLevel);
   }
 
+  /// [PolygonStyle.addStyle]로 정의된 다른 스타일의 개수를 불러옵니다.
+  int get otherStyleCount => _styles.length;
+
+  /// [PolygonStyle.addStyle]로 정의된 다른 스타일의 Zoom Level을 불러옵니다.
+  List<int> get otherStyleLevel =>
+      _styles.map((e) => e.zoomLevel).toList(growable: false);
+
+  /// [PolygonStyle.addStyle]로 정의된 다른 스타일을 모두 불러옵니다.
+  List<PolygonStyle> get otherStyles => _styles.toList(growable: false);
+
   @override
   Map<String, dynamic> toMessageable() {
     final payload = <String, dynamic>{
