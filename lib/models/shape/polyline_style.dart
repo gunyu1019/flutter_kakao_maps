@@ -85,6 +85,16 @@ class PolylineStyle with KMessageable {
     _styles.removeWhere((e) => e.zoomLevel == zoomLevel);
   }
 
+  /// [PolylineStyle.addStyle]로 정의된 다른 스타일의 개수를 불러옵니다.
+  int get otherStyleCount => _styles.length;
+
+  /// [PolylineStyle.addStyle]로 정의된 다른 스타일의 Zoom Level을 불러옵니다.
+  List<int> get otherStyleLevel =>
+      _styles.map((e) => e.zoomLevel).toList(growable: false);
+
+  /// [PolylineStyle.addStyle]로 정의된 다른 스타일을 모두 불러옵니다.
+  List<PolylineStyle> get otherStyles => _styles.toList(growable: false);
+
   @override
   Map<String, dynamic> toMessageable() {
     final payload = <String, dynamic>{
