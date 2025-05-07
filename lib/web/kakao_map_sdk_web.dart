@@ -24,6 +24,7 @@ part 'models/web_mouse_event.dart';
 part 'models/web_polygon_option.dart';
 part 'models/web_polyline_option.dart';
 part 'models/web_route.dart';
+part 'models/web_shape_point.dart';
 
 part 'overlay/web_label_controller.dart';
 part 'overlay/web_route_controller.dart';
