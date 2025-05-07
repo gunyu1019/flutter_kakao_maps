@@ -1,6 +1,7 @@
 part of '../kakao_map_sdk_web.dart';
 
-class WebShapeController extends ShapeController {
+class WebShapeController with WebShapeControllerHandler {
+  final String id;
   final WebMapController controller;
 
   final Map<String, WebPolygon> _webPolygon = {};
@@ -14,32 +15,39 @@ class WebShapeController extends ShapeController {
   final Map<String, int> _currentPolylineLevel = {};
   final Map<String, int> _currentPolygonLevel = {};
 
-  WebShapeController._(this.controller, super.channel, super.manager, super.id)
-      : super._();
+  final Map<String, PolylineStyle> _polylineStyle = {};
+  final Map<String, PolygonStyle> _polygonStyle = {};
 
   @override
-  Future<void> _createShapeLayer() async {
+  final WebOverlayController manager;
+
+  WebShapeController._(this.id, this.controller, this.manager);
+
+  @override
+  Future<void> createShapeLayer() async {
     addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
   }
 
   @override
-  Future<void> _removeShapeLayer() async {
+  Future<void> removeShapeLayer() async {
     removeEventListener(
         controller, "zoom_changed", _zoomChangedEventHandler.toJS);
-    for (var shape in _polygonShape.values) {
+    for (var shape in _webPolygon.keys) {
       await removePolygonShape(shape);
     }
-    for (var shape in _polylineShape.values) {
+    for (var shape in _webPolyline.keys) {
       await removePolylineShape(shape);
     }
   }
 
   void _zoomChangedEventHandler() {
-    for (var shape in _polygonShape.values) {
-      _syncPolygonZoomLevel(shape.id, shape.style);
+    for (var shape in _webPolygon.keys) {
+      final style = _polygonStyle[shape]!;
+      _syncPolygonZoomLevel(shape, style);
     }
-    for (var shape in _polylineShape.values) {
-      _syncPolylineZoomLevel(shape.id, shape.style);
+    for (var shape in _webPolyline.keys) {
+      final style = _polylineStyle[shape]!;
+      _syncPolylineZoomLevel(shape, style);
     }
   }
 
@@ -50,7 +58,7 @@ class WebShapeController extends ShapeController {
 
     var currentStyle = style;
     var currentZoomLevel = style.zoomLevel;
-    for (final secondaryStyle in style._styles) {
+    for (final secondaryStyle in style.otherStyles) {
       if (_calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
           secondaryStyle.zoomLevel >= currentZoomLevel) {
         currentZoomLevel = secondaryStyle.zoomLevel;
@@ -84,7 +92,7 @@ class WebShapeController extends ShapeController {
 
     var currentStyle = style;
     var currentZoomLevel = style.zoomLevel;
-    for (final secondaryStyle in style._styles) {
+    for (final secondaryStyle in style.otherStyles) {
       if (_calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
           secondaryStyle.zoomLevel >= currentZoomLevel) {
         currentZoomLevel = secondaryStyle.zoomLevel;
@@ -102,7 +110,7 @@ class WebShapeController extends ShapeController {
   }
 
   @override
-  Future<void> _changePolylineVisible(String shapeId, bool visible) async {
+  Future<void> changePolylineVisible(String shapeId, bool visible) async {
     if (visible) {
       _webPolyline[shapeId]!.setMap(controller);
       _webPolylineStroke[shapeId]?.setMap(controller);
@@ -113,7 +121,7 @@ class WebShapeController extends ShapeController {
   }
 
   @override
-  Future<void> _changePolygonVisible(String shapeId, bool visible) async {
+  Future<void> changePolygonVisible(String shapeId, bool visible) async {
     if (visible) {
       _webPolygon[shapeId]!.setMap(controller);
     } else {
@@ -122,9 +130,10 @@ class WebShapeController extends ShapeController {
   }
 
   @override
-  Future<void> _changePolyline<T extends BasePoint>(
-      String shapeId, T position, String styleId) async {
-    final style = manager.getPolylineShapeStyle(styleId)!;
+  Future<void> changePolyline(
+      String shapeId, WebShapePoint point, String styleId) async {
+    final style = manager._polylineStyles[styleId]![0];
+    ;
     final bodyOptions = _webPolylineOption[shapeId]!;
     final strokeOptions = _webPolylineStrokeOption[shapeId];
 
@@ -140,9 +149,9 @@ class WebShapeController extends ShapeController {
   }
 
   @override
-  Future<void> _changePolygon<T extends BasePoint>(
-      String shapeId, T position, String styleId) async {
-    final style = manager.getPolygonShapeStyle(styleId)!;
+  Future<void> changePolygon(
+      String shapeId, WebShapePoint point, String styleId) async {
+    final style = manager._polygonStyles[styleId]![0];
     final options = _webPolygonOption[shapeId]!;
 
     options.fillColor = _getColorCode(style.color);
@@ -151,45 +160,6 @@ class WebShapeController extends ShapeController {
 
     _webPolygon[shapeId]?.setOptions(options);
     _webPolygonOption[shapeId] = options;
-  }
-
-  MapPoint _convertToMapPoint<T extends BasePoint>(T point) =>
-      switch (point.type) {
-        0 => point as MapPoint,
-        1 => (() {
-            final dotPoint = point as _BaseDotPoint;
-            final absolutePoint = _getPointsFromDotPoint(dotPoint);
-            final newPoint = MapPoint(absolutePoint);
-
-            dotPoint._holes
-                .map((hole) => _getPointsFromDotPoint(hole, dotPoint.basePoint))
-                .forEach(newPoint.addHole);
-            return newPoint;
-          })(),
-        int() => throw UnimplementedError(),
-      };
-
-  List<LatLng> _getPointsFromDotPoint<T extends _BaseDotPoint>(T point,
-      [LatLng? basePoint]) {
-    final absolutePoint = <LatLng>[];
-    final basePoint0 = basePoint ?? point.basePoint;
-
-    if (point is CirclePoint) {
-      for (int degrees = 0; degrees < 360; degrees++) {
-        absolutePoint.add(basePoint0.offset(point.radius, degrees.toDouble()));
-      }
-    }
-
-    if (point is RectanglePoint) {
-      absolutePoint.addAll([
-        basePoint0.offset(-point.width * .5, 90).offset(point.height * .5, 0),
-        basePoint0.offset(point.height * .5, 0).offset(point.width * .5, 90),
-        basePoint0.offset(point.width * .5, 90).offset(-point.height * .5, 0),
-        basePoint0.offset(-point.height * .5, 0).offset(-point.width * .5, 90),
-        basePoint0.offset(-point.width * .5, 90).offset(point.height * .5, 0),
-      ]);
-    }
-    return absolutePoint;
   }
 
   WebPolylineOption _getPolylineElementOption(
@@ -223,116 +193,91 @@ class WebShapeController extends ShapeController {
   }
 
   @override
-  Future<Polyline> addPolylineShape<T extends BasePoint>(
-      T position, PolylineStyle style, PolylineCap polylineCap,
+  Future<String> addPolylineShape(WebShapePoint point, PolylineStyle style,
       {String? id, int zOrder = 10001}) async {
-    style._id ?? await manager.addPolylineShapeStyle(style, polylineCap);
-    if (id != null && _polygonShape.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
-    }
-    final point = _convertToMapPoint(position);
-    final shapeId = "polyline_shape_${id}_${_polylineShape.length}";
+    final shapeId = "polyline_shape_${id}_${_webPolyline.length}";
+    final path = point.toPolylinePath();
 
     final polylineOption = _webPolylineOption[shapeId] =
-        _getPolylineElementOption(style,
-            point.points.map(WebLatLng.fromLatLng).toList().toJS, zOrder);
+        _getPolylineElementOption(style, path, zOrder);
     _webPolyline[shapeId] = WebPolyline(polylineOption);
     _webPolyline[shapeId]!.setMap(controller);
 
     if (style.strokeWidth > 0) {
       final polylineStrokeOption = _webPolylineStrokeOption[shapeId] =
-          _getPolylineStrokeElementOption(style,
-              point.points.map(WebLatLng.fromLatLng).toList().toJS, zOrder);
+          _getPolylineStrokeElementOption(style, path, zOrder);
       _webPolylineStroke[shapeId] = WebPolyline(polylineStrokeOption);
       _webPolylineStroke[shapeId]!.setMap(controller);
     }
 
-    final polyline = Polyline<T>._(this, shapeId,
-        position: position, style: style, polylineCap: polylineCap);
-    _polylineShape[shapeId] = polyline;
     _currentPolylineLevel[shapeId] = style.zoomLevel;
-    _syncPolylineZoomLevel(polyline.id, polyline.style);
-    return polyline;
+    _syncPolylineZoomLevel(shapeId, style);
+    return shapeId;
   }
 
   @override
-  Future<Polygon> addPolygonShape<T extends BasePoint>(
-      T position, PolygonStyle style,
+  Future<String> addPolygonShape(WebShapePoint point, PolygonStyle style,
       {String? id, int zOrder = 10001}) async {
-    if (id != null && _polygonShape.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
-    }
-    final point = _convertToMapPoint(position);
-    style._id ?? await manager.addPolygonShapeStyle(style);
-    final shapeId = "polygon_shape_${id}_${_polygonShape.length}";
-
-    final path = <JSArray<WebLatLng>>[];
-    path.add(point.points.map(WebLatLng.fromLatLng).toList().toJS);
-    point._holes
-        .map((hole) => hole.map(WebLatLng.fromLatLng).toList().toJS)
-        .forEach(path.add);
+    final shapeId = "polygon_shape_${id}_${_webPolygon.length}";
 
     final polygonOption = _webPolygonOption[shapeId] =
-        _getPolygonElementOption(style, path.toJS, zOrder);
+        _getPolygonElementOption(style, point.toPolygonPath(), zOrder);
     _webPolygon[shapeId] = WebPolygon(polygonOption);
     _webPolygon[shapeId]!.setMap(controller);
 
-    final polygon =
-        Polygon<T>._(this, shapeId, position: position, style: style);
-    _polygonShape[shapeId] = polygon;
     _currentPolylineLevel[shapeId] = style.zoomLevel;
-    _syncPolygonZoomLevel(polygon.id, polygon.style);
-    return polygon;
+    _syncPolygonZoomLevel(shapeId, style);
+    return shapeId;
   }
 
   @override
-  Future<void> removePolylineShape(Polyline shape) async {
-    _webPolyline[shape.id]!.setMap(null);
-    _webPolylineStroke[shape.id]?.setMap(null);
+  Future<void> removePolylineShape(String shapeId) async {
+    _webPolyline[shapeId]!.setMap(null);
+    _webPolylineStroke[shapeId]?.setMap(null);
 
-    _polylineShape.remove(shape.id);
-    _webPolyline.remove(shape.id);
-    _webPolylineStroke.remove(shape.id);
-    _currentPolylineLevel.remove(shape.id);
-    _webPolylineOption.remove(shape.id);
-    _webPolylineStrokeOption.remove(shape.id);
+    _webPolyline.remove(shapeId);
+    _webPolylineStroke.remove(shapeId);
+    _currentPolylineLevel.remove(shapeId);
+    _webPolylineOption.remove(shapeId);
+    _webPolylineStrokeOption.remove(shapeId);
+    _polylineStyle.remove(shapeId);
   }
 
   @override
-  Future<void> removePolygonShape(Polygon shape) async {
-    _webPolygon[shape.id]!.setMap(null);
+  Future<void> removePolygonShape(String shapeId) async {
+    _webPolygon[shapeId]!.setMap(null);
 
-    _polygonShape.remove(shape.id);
-    _webPolygon.remove(shape.id);
-    _currentPolygonLevel.remove(shape.id);
-    _webPolygonOption.remove(shape.id);
+    _webPolygon.remove(shapeId);
+    _currentPolygonLevel.remove(shapeId);
+    _webPolygonOption.remove(shapeId);
+    _polygonStyle.remove(shapeId);
   }
 
   @override
   Future<void> showAllPolyline() async {
-    for (var shape in _polylineShape.values) {
-      await shape.show();
+    for (var shape in _webPolygon.keys) {
+      await changePolygonVisible(shape, true);
     }
   }
 
   @override
   Future<void> hideAllPolyline() async {
-    for (var shape in _polylineShape.values) {
-      await shape.hide();
+    for (var shape in _webPolygon.keys) {
+      await changePolygonVisible(shape, false);
     }
   }
 
   @override
   Future<void> showAllPolygon() async {
-    for (var shape in _polygonShape.values) {
-      await shape.show();
+    for (var shape in _webPolyline.keys) {
+      await changePolygonVisible(shape, true);
     }
   }
 
   @override
   Future<void> hideAllPolygon() async {
-    for (var shape in _polygonShape.values) {
-      await shape.hide();
+    for (var shape in _webPolyline.keys) {
+      await changePolygonVisible(shape, false);
     }
   }
 }
