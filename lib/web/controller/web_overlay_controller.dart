@@ -12,7 +12,7 @@ class WebOverlayController {
 
   final Map<String, WebLabelController> _labelLayer = {};
   final Map<String, WebLabelController> _lodLabelLayer = {};
-  // final Map<String, WebLabelController> _shapeLayer;
+  final Map<String, WebShapeController> _shapeLayer = {};
   final Map<String, WebRouteController> _routeLayer = {};
 
   WebOverlayController(this.channel, this.controller) : _uuid = const Uuid() {
@@ -25,6 +25,8 @@ class WebOverlayController {
         WebLabelController._(LabelController.defaultId, controller, this);
     _lodLabelLayer[LodLabelController.defaultId] =
         WebLabelController._(LodLabelController.defaultId, controller, this);
+    _shapeLayer[ShapeController.defaultId] =
+        WebShapeController._(ShapeController.defaultId, controller, this);
     _routeLayer[RouteController.defaultId] =
         WebRouteController._(RouteController.defaultId, controller, this);
   }
@@ -36,6 +38,7 @@ class WebOverlayController {
     final layerId =
         argument.containsKey("layerId") ? argument["layerId"] : null;
 
+    print(method.method);
     switch (method.method) {
       case "createLabelLayer":
         _labelLayer[layerId!] =
@@ -69,10 +72,24 @@ class WebOverlayController {
       case "addRouteStyle":
         final routeStyleId = argument["styleId"] ?? _uuid.v4();
         _routeStyles[routeStyleId] = argument["styles"]
-            .map<RouteStyle>((e) =>
-                RouteStyle.fromMessageable(e, false, routeStyleId))
+            .map<RouteStyle>(
+                (e) => RouteStyle.fromMessageable(e, false, routeStyleId))
             .toList();
         return routeStyleId;
+      case "addPolylineShapeStyle":
+        final polylineStyleId = argument["styleId"] ?? _uuid.v4();
+        _polylineStyles[polylineStyleId] = argument["styles"]
+            .map<PolylineStyle>((payload) =>
+                PolylineStyle.fromMessageable(payload, false, polylineStyleId))
+            .toList();
+        return polylineStyleId;
+      case "addPolygonShapeStyle":
+        final polygonStyleId = argument["styleId"] ?? _uuid.v4();
+        _polygonStyles[polygonStyleId] = argument["styles"]
+            .map<PolygonStyle>((payload) =>
+                PolygonStyle.fromMessageable(payload, false, polygonStyleId))
+            .toList();
+        return polygonStyleId;
     }
 
     switch (type) {
@@ -81,7 +98,7 @@ class WebOverlayController {
         layer = layer ?? _lodLabelLayer[layerId!];
         return await layer?.labelHandle(method);
       case OverlayType.shape:
-        throw UnimplementedError();
+        return await _shapeLayer[layerId!]?.shapeHandle(method);
       case OverlayType.route:
         return await _routeLayer[layerId!]?.routeHandle(method);
     }
