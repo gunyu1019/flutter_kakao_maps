@@ -27,13 +27,43 @@ mixin WebShapeControllerHandler {
         return await addPolygonShape(point, style,
             id: polygon["id"], zOrder: polygon["zOrder"] ?? 10001);
       case "removePolylineShape":
+        await removePolylineShape(shapeId);
+        break;
       case "removePolygonShape":
+        await removePolygonShape(shapeId);
+        break;
       case "changePolylineVisible":
+        final visible = arguments["visible"];
+        await changePolylineVisible(shapeId, visible);
+        break;
       case "changePolygonVisible":
+        final visible = arguments["visible"];
+        await changePolygonVisible(shapeId, visible);
+        break;
       case "changePolyline":
+        final point = WebShapePoint.fromMessageable(arguments["position"]);
+        final styleId = arguments["styleId"]!;
+        await changePolyline(shapeId, point, styleId);
+        break;
       case "changePolygon":
+        final point = WebShapePoint.fromMessageable(arguments["position"]);
+        final styleId = arguments["styleId"]!;
+        await changePolygon(shapeId, point, styleId);
+        break;
       case "changeVisibleAllPolyline":
+        if (arguments["visible"]) {
+          await showAllPolyline();
+        } else {
+          await hideAllPolyline();
+        }
+        break;
       case "changeVisibleAllPolygon":
+        if (arguments["visible"]) {
+          await showAllPolygon();
+        } else {
+          await hideAllPolygon();
+        }
+        break;
       default:
         throw UnimplementedError();
     }
