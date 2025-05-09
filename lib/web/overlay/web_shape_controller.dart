@@ -133,7 +133,6 @@ class WebShapeController with WebShapeControllerHandler {
   Future<void> changePolyline(
       String shapeId, WebShapePoint point, String styleId) async {
     final style = manager._polylineStyles[styleId]![0];
-    ;
     final bodyOptions = _webPolylineOption[shapeId]!;
     final strokeOptions = _webPolylineStrokeOption[shapeId];
 
