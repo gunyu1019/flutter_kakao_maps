@@ -25,19 +25,20 @@ mixin WebRouteControllerHandler {
             id: route["id"], curveType: curveType, zOrder: route["zOrder"]);
       case "addMultipleRoute":
         final route = arguments["route"];
-        final styleId = route["routeId"][0]["styleId"]!;
+        final styleId = route["routes"][0]["styleId"]!;
         final styles = manager._routeStyles[styleId]!;
         final option = MultipleRouteOption.fromMessageable(route, styles);
-        await addMultipleRoute(option);
-        break;
+        return await addMultipleRoute(option);
       case "removeRoute":
         await removeRoute(routeId);
         break;
       case "changeRoute":
         final styleId = arguments["styleId"];
-        final points =
-            arguments["points"].map<LatLng>(LatLng.fromMessageable).toList();
-        await changeRoute(routeId, styleId, points);
+        List<List<LatLng>> point0 = [];
+        for (final point in arguments["points"]) {
+          point0.add(point.map<LatLng>(LatLng.fromMessageable).toList());
+        }
+        await changeRoute(routeId, styleId, point0);
         break;
       case "changeRouteVisible":
         await changeRouteVisible(routeId, arguments["visible"]);
