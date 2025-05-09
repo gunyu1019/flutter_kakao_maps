@@ -54,7 +54,7 @@ class MultipleRouteOption with BaseMultipleRoute, KMessageable {
         var parsedRoute = segment.toMessageable();
         parsedRoute["styleId"] = styles[segment.styleIndex].id;
         return parsedRoute;
-      })
+      }).toList()
     };
   }
 
@@ -72,6 +72,6 @@ class MultipleRouteOption with BaseMultipleRoute, KMessageable {
 
   bool _isStyleAdded() {
     var styleId = styles[0].id ?? "";
-    return styles.map((e) => e.id).any((e) => e == null || e != styleId);
+    return !styles.map((e) => e.id).any((e) => e == null || e != styleId);
   }
 }
