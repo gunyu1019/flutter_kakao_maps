@@ -5,7 +5,6 @@ mixin WebShapeControllerHandler {
 
   Future<dynamic> shapeHandle(MethodCall method) async {
     final arguments = method.arguments;
-    final shapeId = arguments["shapeId"];
 
     switch (method.method) {
       case "createShapeLayer":
@@ -27,25 +26,31 @@ mixin WebShapeControllerHandler {
         return await addPolygonShape(point, style,
             id: polygon["id"], zOrder: polygon["zOrder"] ?? 10001);
       case "removePolylineShape":
+        final shapeId = arguments["polylineId"];
         await removePolylineShape(shapeId);
         break;
       case "removePolygonShape":
+        final shapeId = arguments["polygonId"];
         await removePolygonShape(shapeId);
         break;
       case "changePolylineVisible":
+        final shapeId = arguments["polylineId"];
         final visible = arguments["visible"];
         await changePolylineVisible(shapeId, visible);
         break;
       case "changePolygonVisible":
+        final shapeId = arguments["polygonId"];
         final visible = arguments["visible"];
         await changePolygonVisible(shapeId, visible);
         break;
       case "changePolyline":
+        final shapeId = arguments["polylineId"];
         final point = WebShapePoint.fromMessageable(arguments["position"]);
         final styleId = arguments["styleId"]!;
         await changePolyline(shapeId, point, styleId);
         break;
       case "changePolygon":
+        final shapeId = arguments["polygonId"];
         final point = WebShapePoint.fromMessageable(arguments["position"]);
         final styleId = arguments["styleId"]!;
         await changePolygon(shapeId, point, styleId);
