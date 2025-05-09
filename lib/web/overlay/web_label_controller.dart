@@ -75,7 +75,7 @@ class WebLabelController with WebLabelControllerHandler {
     _poiStyleId[poiId] = styleId;
   }
 
-  void _syncZoomLevel(String poiId, String styleId, String? text) {
+  void _syncZoomLevel(String poiId, String styleId, String? text, [bool forceUpdate = false]) {
     final mapZoomLevel = controller.getLevel();
     var style = manager._poiStyles[styleId]!;
     var currentZoomLevel = style.zoomLevel;
@@ -87,7 +87,7 @@ class WebLabelController with WebLabelControllerHandler {
       }
     }
 
-    if (_currentPoiLevel[poiId] == currentZoomLevel) return;
+    if (_currentPoiLevel[poiId] == currentZoomLevel && !forceUpdate) return;
     final encodedIcon = _preEncodedImage[poiId]![currentZoomLevel];
     _currentPoiLevel[poiId] = currentZoomLevel;
     final element =
@@ -101,7 +101,7 @@ class WebLabelController with WebLabelControllerHandler {
     await changePoiStyle(poiId, styleId, transition);
     _poiStyleId[poiId] = styleId;
     _poiText[poiId] = text;
-    _syncZoomLevel(poiId, styleId, text);
+    _syncZoomLevel(poiId, styleId, text, true);
   }
 
   @override
