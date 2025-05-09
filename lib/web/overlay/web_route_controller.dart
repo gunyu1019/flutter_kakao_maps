@@ -113,7 +113,10 @@ class WebRouteController with WebRouteControllerHandler {
     }
     _webRoute[routeId] = points
         .mapIndexed((index, point) => _addRouteElement(
-            styles[styleIndex.elementAtOrNull(index) ?? 0], point, zOrder))
+            styles.elementAtOrNull(styleIndex.elementAtOrNull(index) ?? 0) ??
+                styles[0],
+            point,
+            zOrder))
         .toList();
   }
 
