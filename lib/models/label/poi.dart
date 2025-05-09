@@ -141,7 +141,7 @@ class Poi {
 
   /// [Poi]의 [text]을 새롭게 정의합니다.
   /// 정의한 [text]은 [Poi.invalidate] 메소드를 이용하여 갱신할 수 있습니다.
-  void setText() {
+  void setText(String text) {
     _text = text;
   }
 
