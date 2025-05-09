@@ -43,11 +43,12 @@ mixin WebLabelControllerHandler {
       case "changePoiText":
         final styleId = arguments["styleId"] ?? _poiStyleId[poiId];
         await invalidatePoi(
-            poiId, styleId, _poiText[poiId], arguments["transition"]);
+            poiId, styleId, arguments["text"], arguments["transition"]);
         break;
       case "invalidatePoi":
-        await invalidatePoi(poiId, arguments["styleId"], arguments["text"],
-            arguments["millis"]);
+        final styleId = arguments["styleId"] ?? _poiStyleId[poiId];
+        final text = arguments["text"] ?? _poiText[poiId];
+        await invalidatePoi(poiId, styleId, text, arguments["transition"]);
         break;
       case "movePoi":
         await movePoi(
