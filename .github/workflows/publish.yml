@@ -6,7 +6,44 @@ on:
     - 'v[0-9]+.[0-9]+.[0-9]+'
     
 jobs:
-  example_build:
+  example_web_build:
+    env:
+      working-directory: ./example
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Access secret key 
+        run: |
+          mkdir assets/config/
+          echo "KAKAO_API_KEY=$KAKAO_API_KEY" >> assets/config/.env
+        env:
+          KAKAO_API_KEY: ${{secrets.KAKAO_API_KEY}}
+        working-directory: ${{ env.working-directory }}
+      - name: Install Flutter SDK
+        run: |
+          /usr/bin/git clone https://github.com/flutter/flutter.git .flutter -b stable 
+        working-directory: ${{ env.working-directory }}
+      - name: Setup Flutter
+        run: |
+          .flutter/bin/flutter precache
+        working-directory: ${{ env.working-directory }}
+      - name: Install dependencies
+        run: |
+          .flutter/bin/flutter pub get
+        working-directory: ${{ env.working-directory }}
+      - name: Build Web
+        run: |
+          .flutter/bin/flutter build web --release --base-href /${{github.event.repository.name}}/
+        working-directory: ${{ env.working-directory }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./build/web
+        working-directory: ${{ env.working-directory }}
+  example_android_build:
     env:
       working-directory: ./example
     runs-on: ubuntu-latest
@@ -41,16 +78,13 @@ jobs:
         run: |
           .flutter/bin/flutter build apk --release 
         working-directory: ${{ env.working-directory }}
-      - name: Get keyhash to authentic Kakao SDK
-        run: |
-          keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android | openssl sha1 -binary | openssl base64
       - name: Upload application pacakge.
         uses: actions/upload-artifact@v4
         with:
           name: application
           path: example/build/app/outputs/apk/release/app-release.apk
   publish:
-    needs: example_build
+    needs: example_web_build
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -72,8 +106,8 @@ jobs:
         run: dart pub publish --dry-run
       - name: Publish to pub.dev
         run: dart pub publish -f
-  deploy:
-    needs: example_build
+  android_deploy:
+    needs: example_android_build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -92,3 +126,17 @@ jobs:
         with:
           files: |
              ./app-release.apk
+  web_deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    needs: example_web_build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+    
