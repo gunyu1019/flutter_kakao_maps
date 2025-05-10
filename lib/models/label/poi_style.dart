@@ -162,12 +162,15 @@ class PoiStyle with KMessageable {
         iconTransition:
             PoiTransition.fromMessageable(payload["iconTransition"]),
         textGravity: MapGravity.fromValue(payload["textGravity"]),
-        textStyle:
-            payload["textStyle"].map<PoiTextStyle>(PoiTextStyle.fromMessageable).toList(),
+        textStyle: payload["textStyle"]
+            .map<PoiTextStyle>(PoiTextStyle.fromMessageable)
+            .toList(),
         textTransition:
             PoiTransition.fromMessageable(payload["textTransition"]),
         zoomLevel: payload["zoomLevel"]);
-    if (!isSecondary && payload.containsKey("otherStyle") && payload["otherStyle"].length > 0) {
+    if (!isSecondary &&
+        payload.containsKey("otherStyle") &&
+        payload["otherStyle"].length > 0) {
       payload["otherStyle"]
           .map<PoiStyle>((e) => PoiStyle.fromMessageable(e, true))
           .map<PoiStyle>((e) => e.._isSecondaryStyle = true)

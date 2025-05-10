@@ -85,7 +85,7 @@ class KakaoMapWebPlugin {
     KakaoMapWebPlugin.registrar = registrar;
     ui_web.platformViewRegistry
         .registerViewFactory("plugin/kakao_map", viewFactory);
-    
+
     // Unused in Web Environment
     final sdkChannel = ChannelType.sdk.channelWithParam(codec, registrar);
     sdkChannel.setMethodCallHandler((handler) async {});

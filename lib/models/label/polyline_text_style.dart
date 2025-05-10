@@ -73,7 +73,8 @@ class PolylineTextStyle {
   int get otherStyleCount => _styles.length;
 
   /// [PolylineTextStyle.addStyle]로 정의된 다른 스타일의 Zoom Level을 불러옵니다.
-  List<int> get otherStyleLevel => _styles.map((e) => e.zoomLevel).toList(growable: false);
+  List<int> get otherStyleLevel =>
+      _styles.map((e) => e.zoomLevel).toList(growable: false);
 
   Map<String, dynamic> toMessageable() {
     final payload = <String, dynamic>{

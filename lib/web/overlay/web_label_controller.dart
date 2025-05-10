@@ -75,7 +75,8 @@ class WebLabelController with WebLabelControllerHandler {
     _poiStyleId[poiId] = styleId;
   }
 
-  void _syncZoomLevel(String poiId, String styleId, String? text, [bool forceUpdate = false]) {
+  void _syncZoomLevel(String poiId, String styleId, String? text,
+      [bool forceUpdate = false]) {
     final mapZoomLevel = controller.getLevel();
     var style = manager._poiStyles[styleId]!;
     var currentZoomLevel = style.zoomLevel;

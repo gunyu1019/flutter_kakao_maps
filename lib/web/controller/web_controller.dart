@@ -4,7 +4,7 @@ part of '../kakao_map_sdk_web.dart';
 class KakaoMapWebController
     with KakaoMapControllerHandler, KakaoMapWebControllerHandler {
   late WebMapController controller;
-  late WebOverlayController overlay; 
+  late WebOverlayController overlay;
   final MethodChannel channel;
   final MethodChannel overlayChannel;
 

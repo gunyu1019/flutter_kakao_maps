@@ -69,7 +69,8 @@ mixin WebRouteControllerHandler {
 
   Future<void> removeRoute(String routeId);
 
-  Future<void> changeRoute(String routeId, String styleId, List<List<LatLng>> points);
+  Future<void> changeRoute(
+      String routeId, String styleId, List<List<LatLng>> points);
 
   Future<void> changeRouteVisible(String routeId, bool visible);
 
