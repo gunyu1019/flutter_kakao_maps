@@ -117,14 +117,15 @@ func asRouteMultipleOption(payload: [String: Any]) -> RouteOptions {
     var styleId: String? = nil
     let routeId = castSafty(payload["id"], caster: asString)
     let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 10000
-    let segments = asArray(payload["routes"]!, caster: { (rawElement: Any) -> RouteSegment in
+    let segments = asArray(payload["routes"]!).enumerated().map { (index: Int, rawElement: Any) ->
+        RouteSegment in
         let element = asDict(rawElement)
-        if element["styleId"] != nil, styleId != nil {
+        if element["styleId"] != nil && styleId == nil {
             styleId = asString(element["styleId"]!)
         }
-        return RouteSegment(payload: element)
-    })
-
+        return RouteSegment(payload: element, index: UInt(index))
+    }
+    
     let option = routeId != nil ? RouteOptions(
         routeID: routeId!, styleID: styleId!, zOrder: zOrder
     ) : RouteOptions(
