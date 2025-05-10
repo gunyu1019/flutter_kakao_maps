@@ -43,7 +43,7 @@ extension RouteControllerHandler {
         case "removeRouteLayer": removeRouteLayer(layerId: layerId!, onSuccess: result)
         case "addRouteStyle": addRouteStyle(style: RouteStyleSet(payload: arguments!), onSuccess: result)
         case "addRoute": addRoute(layer: layer!, route: asRouteOption(payload: asDict(arguments!["route"]!)), onSuccess: result)
-        case "addMultipleRoute": addRoute(layer: layer!, route: asRouteMultipleOption(payload: arguments!), onSuccess: result)
+        case "addMultipleRoute": addRoute(layer: layer!, route: asRouteMultipleOption(payload: asDict(arguments!["route"]!)), onSuccess: result)
         case "remvoeRoute": removeRoute(layer: layer!, routeId: routeId!, onSuccess: result)
         case "changeRoute":
             let styleId = asString(arguments!["styleId"]!)
