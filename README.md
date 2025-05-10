@@ -6,12 +6,12 @@
 
 네이티브 기반의 [카카오맵](https://map.kakao.com/)을 구동할 수 있는 Flutter 플러그인입니다.
 
-| Android                | iOS             | Web(Experimental)  |
-|------------------------|-----------------| ------------------ |
-| `SDK 6.0(API 23)` 이상 | `iOS 13` 이상    | 실험버전 지원 예정 |
+| Android                | iOS             | Web(Experimental)      |
+|------------------------|-----------------| ---------------------- |
+| `SDK 6.0(API 23)` 이상 | `iOS 13` 이상    | [Flutter Web과 동일 환경](https://docs.flutter.dev/reference/supported-platforms) |
 | `armeabi-v7a`, `arm64-v8a` 아키텍쳐 지원<br/>(`x86`, `x64` 아키텍쳐 미호환) |        |
-| `OpenGL ES 2.0` 이상 |         |
-| 인터넷 권한 필요   |         |
+| `OpenGL ES 2.0` 이상 |         |          |
+| 인터넷 권한 필요   |         |             |
 
 ## 1. Getting Started
 Flutter 환경에서 카카오지도를 이용하기 위해서는 [카카오 개발자 사이트](https://developers.kakao.com/)에서 앱 등록을 합니다.<br/>
@@ -29,6 +29,7 @@ void main() async {
 ```
 
 ### Android Platform
+안드로이드 환경에서 카카오맵을 이용하기 위해서는 아래에 서술된 추가 설정이 필요합니다.
 1. `AndroidManifest.xml`에 아래와 같이 인터넷 권한과 위치 권한을 제공해야 합니다.
     ```xml
       <uses-permission android:name="android.permission.INTERNET" />
@@ -71,6 +72,20 @@ Widget build(BuildContext context) {
 option 매게변수에는 초기화 과정에서 기본 값([KakaoMapOption](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapOption-class.html))을 설정할 수 있습니다.<br/>
 아무 문제 없이 지도를 불러온다면, `onMapReady` 매개변수에 담긴 함수가 호출됩니다.<br/>
 함수 매개변수에는 지도를 관리하기 위한 컨트롤러([KakaoMapController](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController-class.html))가 입력됩니다.
+
+### Web Environment
+웹 환경에서 카카오맵을 이용하기 위해서는 아래에 서술된 추가 설정이 필요합니다.<br/>
+아래에 기재된 소스코드를 `web/index.html`에 추가해주세요.
+
+```html
+<head>
+  ...
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<JavaScript 키>"></script>
+  ...
+</head>
+  <link rel="manifest" href="manifest.json">
+```
+`<JavaScript 키>` 는 `<네이티브 키>`와 다른 키로 [카카오 개발자 사이트](https://developers.kakao.com/)에서 앱 등록을 마치면 발급받을 수 있습니다.
 
 ## 3. Write Overlay(Grapic Element) to Map
 Kakao Map SDK는 사용자에게 표현하기 위한 다양한 그래픽 요소(오버레이 기능)를 제공하고 있습니다.<br/>
@@ -199,14 +214,32 @@ RouteStyle.withPattern(
 아래의 [샘플 프로젝트](https://github.com/gunyu1019/flutter_kakao_maps_sample)을 확인하여 카카오맵을 Flutter에 구현한 애플리케이션을 확인해보세요!
 
 ## 5. (Expermential) Web
-> (Expermential) Web 플랫폼 지원은 곧 패치로 이뤄질 예정입니다. 잠시만 기다려주세요.
-Kakao Map SDK는 Web 플랫폼을 지원합니다. 웹 환경은 네이티브 환경(Android, iOS 플랫폼)을 완벽하게 지원하지 않습니다.<br/>
+<img src="https://private-user-images.githubusercontent.com/16767890/440122062-4f20ddb0-e678-4cbe-b6ca-39be0f9e6b18.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDY4NTE0MTcsIm5iZiI6MTc0Njg1MTExNywicGF0aCI6Ii8xNjc2Nzg5MC80NDAxMjIwNjItNGYyMGRkYjAtZTY3OC00Y2JlLWI2Y2EtMzliZTBmOWU2YjE4LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA1MTAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNTEwVDA0MjUxN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTIyMTVlOTMwZGZkMWEyMzYwNTYxODkzZjlhOThkZDU2ZDBiN2MzOWZmYjlkN2RiNmM2YjYwM2QwOTc5YWRjZGUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.OL6atd5vC8zDewouXbtryBVcO8L-L8CzsUn-IhSfsFY" width="70%" /><br/>
+Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
+본 플러그인은 네이티브를 중심으로 개발되었기 때문에 웹 SDK도 네이티브 환경에 알맞게 포팅 작업을 진행하였습니다.
 
-아래의 나열한 기능을 웹 환경에서는 다르게 지원합니다.
-* LOD Poi(Level Of Details): 기존 Poi와 동일하게 작동합니다.
-* Route Pattern: 웹 환경에서는 패턴을 지원하지 않습니다. `Pattern` 기능은 카카오맵 기능의 길찾기 기능으로 대체됩니다.
-* 각 컨트롤러(Layer)별 기능은 네이티브 환경과 달리 지원하지 않습니다. 
-  예를 들어 Layer의 `zIndex`가 부여되어도 웹 환경에서는 적용되지 않습니다.
+네이티브에 있는 기능과 달리 아래에 서술한 기능은 웹 환경에서 다르게 작동하거나 지원하지 않습니다.
+* **카메라 회전, 틸트**: Kakao Map Web SDK는 카메라 회전 또는 틸트 기능을 제공하지 않습니다.<br/>
+  따라서 카메라 회전 각도, 틸트 각도를 주어져도 무시됩니다.
+* **LOD(Level Of Detail) 기능**: 웹 환경에서 LOD 기능은 적용되지 않은 상태로 작동합니다. <br/>
+  예를 들어 웹 환경에서 `LOD Poi`는 LOD가 적용되지 않은 `Poi`와 동일하게 작동합니다. 
+* 각 **컨트롤러(Layer) 기능**: 웹 환경에서 Layer에 적용한 설정은 적용되지 않습니다.
+* **Polyline Text**: 웹 환경에서 휘어진 텍스트 오버레이는 지원하지 않습니다.
+* **Route Pattern**: 웹 환경에서 경로에 패턴을 찍는 기능은 지원하지 않습니다.<br/>
+  `RouteStyle` 객체에 `pattern`가 입력되면 카카오맵 웹 환경과 동일한 점선으로 대체됩니다.
+  <details>
+  <summary>
+  웹 환경 내 경로에 패턴이 적용된 이미지
+  </summary>
+  </details>
+* 웹 환경에서 `canShowPosition` 함수의 `zoomLevel` 매개변수는 작동하지 않습니다.<br/>
+  사용자에게 보여주는 시점에서 주어진 배열의 좌표만 보여지는 여부를 반환합니다.
+* 웹 환경에서 `buildingHeightScale` 개체는 항상 `0.0`이며 수정할 수 없습니다.
+
+기재한 기능 외에도 일부 기능은 지원하지 않을 수도 있습니다.<br/>
+네이티브 환경을 중점으로 개발된 플러그인이므로 양해부탁드립니다.
+
+웹 환경 내 사용방법은 첫 번째 섹션(Getting Started) 부분을 확인해주세요.
 
 ## 6. Collaboration / Reqort Issue 
 Kakao Map SDK 플러그인에 기여는 항상 환영합니다. <br/>
