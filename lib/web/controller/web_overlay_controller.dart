@@ -75,27 +75,27 @@ class WebOverlayController {
       case "addPoiStyle":
         final poiStyleId = argument["styleId"] ?? _uuid.v4();
         _poiStyles[poiStyleId] =
-            PoiStyle.fromMessageable(argument["styles"], false, poiStyleId);
+            PoiStyle.fromMessageable(argument["styles"], poiStyleId);
         return poiStyleId;
       case "addRouteStyle":
         final routeStyleId = argument["styleId"] ?? _uuid.v4();
         _routeStyles[routeStyleId] = argument["styles"]
             .map<RouteStyle>(
-                (e) => RouteStyle.fromMessageable(e, false, routeStyleId))
+                (e) => RouteStyle.fromMessageable(e, routeStyleId))
             .toList();
         return routeStyleId;
       case "addPolylineShapeStyle":
         final polylineStyleId = argument["styleId"] ?? _uuid.v4();
         _polylineStyles[polylineStyleId] = argument["styles"]
             .map<PolylineStyle>((payload) =>
-                PolylineStyle.fromMessageable(payload, false, polylineStyleId))
+                PolylineStyle.fromMessageable(payload, polylineStyleId))
             .toList();
         return polylineStyleId;
       case "addPolygonShapeStyle":
         final polygonStyleId = argument["styleId"] ?? _uuid.v4();
         _polygonStyles[polygonStyleId] = argument["styles"]
             .map<PolygonStyle>((payload) =>
-                PolygonStyle.fromMessageable(payload, false, polygonStyleId))
+                PolygonStyle.fromMessageable(payload, polygonStyleId))
             .toList();
         return polygonStyleId;
     }
