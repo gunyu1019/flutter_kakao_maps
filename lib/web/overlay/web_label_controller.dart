@@ -131,7 +131,7 @@ class WebLabelController with WebLabelControllerHandler {
     int? rank,
     bool visible = true,
   }) async {
-    final poiId = "custom_overlay_${this.id}_$poiCount";
+    final poiId = manager._uuid.v4();
 
     _preEncodedImage[poiId] = {};
     if (style.icon != null) {

@@ -201,7 +201,7 @@ class WebRouteController with WebRouteControllerHandler {
       {String? id,
       CurveType curveType = CurveType.none,
       int zOrder = 10000}) async {
-    String routeId = "route_overlay_${this.id}_${_webRoute.length}";
+    String routeId = manager._uuid.v4();
     _webRoute[routeId] = [_addRouteElement(style, points, zOrder)];
     _routeStyleId[routeId] = style.id!;
     _routeZOrder[routeId] = zOrder;
@@ -214,7 +214,7 @@ class WebRouteController with WebRouteControllerHandler {
 
   @override
   Future<String> addMultipleRoute(MultipleRouteOption option) async {
-    String routeId = "multiple_route_overlay_${id}_${_webRoute.length}";
+    String routeId = manager._uuid.v4();
     _webRoute[routeId] = option.segments
         .map((segment) =>
             _addRouteElement(segment.style, segment.points, option.zOrder))
