@@ -29,16 +29,16 @@ mixin KakaoMapControllerHandler {
         }
         break;
       case "onCameraMoveStart":
-        final gesture = GestureType.values.firstWhere(
-            (el) => arguments['gesture'] as int == el.value,
-            orElse: () => GestureType.unknown);
+        final gesture = Platform.isIOS
+            ? GestureType._fromMoveByValue(arguments['gesture'] as int)
+            : GestureType.fromValue(arguments['gesture'] as int);
         onCameraMoveStart(gesture);
         break;
       case "onCameraMoveEnd":
         final position = CameraPosition.fromMessageable(arguments['position']);
-        final gesture = GestureType.values.firstWhere(
-            (el) => arguments['gesture'] as int == el.value,
-            orElse: () => GestureType.unknown);
+        final gesture = Platform.isIOS
+            ? GestureType._fromMoveByValue(arguments['gesture'] as int)
+            : GestureType.fromValue(arguments['gesture'] as int);
         onCameraMoveEnd(position, gesture);
         break;
       case "onCompassClick":
