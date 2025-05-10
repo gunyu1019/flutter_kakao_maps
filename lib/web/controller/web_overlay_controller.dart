@@ -15,16 +15,21 @@ class WebOverlayController {
   final Map<String, WebShapeController> _shapeLayer = {};
   final Map<String, WebRouteController> _routeLayer = {};
 
-  WebOverlayController(this.channel, this.controller) : _uuid = const Uuid() {
+  final void Function(String layerId, String poiId)? onPoiClick;
+  final void Function(String layerId, String poiId)? onLodPoiClick;
+
+  WebOverlayController(
+      this.channel, this.controller, this.onPoiClick, this.onLodPoiClick)
+      : _uuid = const Uuid() {
     initalizeOverlayLayer();
     channel.setMethodCallHandler(overlayHandle);
   }
 
   void initalizeOverlayLayer() {
-    _labelLayer[LabelController.defaultId] =
-        WebLabelController._(LabelController.defaultId, controller, this);
-    _lodLabelLayer[LodLabelController.defaultId] =
-        WebLabelController._(LodLabelController.defaultId, controller, this);
+    _labelLayer[LabelController.defaultId] = WebLabelController._(
+        LabelController.defaultId, controller, this, false);
+    _lodLabelLayer[LodLabelController.defaultId] = WebLabelController._(
+        LodLabelController.defaultId, controller, this, true);
     _shapeLayer[ShapeController.defaultId] =
         WebShapeController._(ShapeController.defaultId, controller, this);
     _routeLayer[RouteController.defaultId] =
@@ -34,6 +39,14 @@ class WebOverlayController {
     _lodLabelLayer[LodLabelController.defaultId]!.createLabelLayer();
     _shapeLayer[ShapeController.defaultId]!.createShapeLayer();
     _routeLayer[RouteController.defaultId]!.createRouteLayer();
+  }
+
+  void _onPoiClick(String layerId, String poiId, bool isLod) {
+    if (isLod) {
+      onLodPoiClick?.call(layerId, poiId);
+    } else {
+      onPoiClick?.call(layerId, poiId);
+    }
   }
 
   Future<dynamic> overlayHandle(MethodCall method) async {
@@ -46,11 +59,11 @@ class WebOverlayController {
     switch (method.method) {
       case "createLabelLayer":
         _labelLayer[layerId!] =
-            WebLabelController._(layerId!, controller, this);
+            WebLabelController._(layerId!, controller, this, false);
         break;
       case "createLodLabelLayer":
         _lodLabelLayer[layerId!] =
-            WebLabelController._(layerId!, controller, this);
+            WebLabelController._(layerId!, controller, this, true);
         break;
       case "createRouteLayer":
         _routeLayer[layerId!] =
@@ -80,8 +93,7 @@ class WebOverlayController {
       case "addRouteStyle":
         final routeStyleId = argument["styleId"] ?? _uuid.v4();
         _routeStyles[routeStyleId] = argument["styles"]
-            .map<RouteStyle>(
-                (e) => RouteStyle.fromMessageable(e, routeStyleId))
+            .map<RouteStyle>((e) => RouteStyle.fromMessageable(e, routeStyleId))
             .toList();
         return routeStyleId;
       case "addPolylineShapeStyle":
