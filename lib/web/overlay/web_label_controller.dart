@@ -3,11 +3,12 @@ part of '../kakao_map_sdk_web.dart';
 class WebLabelController with WebLabelControllerHandler {
   final String id;
   final WebMapController controller;
+  final bool isLod;
 
   @override
   final WebOverlayController manager;
 
-  WebLabelController._(this.id, this.controller, this.manager);
+  WebLabelController._(this.id, this.controller, this.manager, this.isLod);
 
   final Map<String, WebCustomOverlay> _webPoi = {};
   final Map<String, Map<int, String>> _preEncodedImage = {};
@@ -91,8 +92,9 @@ class WebLabelController with WebLabelControllerHandler {
     if (_currentPoiLevel[poiId] == currentZoomLevel && !forceUpdate) return;
     final encodedIcon = _preEncodedImage[poiId]![currentZoomLevel];
     _currentPoiLevel[poiId] = currentZoomLevel;
-    final element =
-        poiElement(poiId, encodedIcon, style.icon, text, style, null);
+    final element = poiElement(poiId, encodedIcon, style.icon, text, style, () {
+      manager._onPoiClick(id, poiId, isLod);
+    });
     _webPoi[poiId]?.setContent(element);
   }
 
@@ -146,7 +148,9 @@ class WebLabelController with WebLabelControllerHandler {
     final encodedIcon = _preEncodedImage[poiId]?[style.zoomLevel];
     final options = WebCustomOverlayOption(
         clickable: true,
-        content: poiElement(poiId, encodedIcon, style.icon, text, style, null),
+        content: poiElement(poiId, encodedIcon, style.icon, text, style, () {
+          manager._onPoiClick(this.id, poiId, isLod);
+        }),
         position: WebLatLng.fromLatLng(position),
         xAnchor: style.anchor.x.toDouble(),
         yAnchor: style.anchor.y.toDouble(),
