@@ -25,7 +25,6 @@
 * [Fix] Rename `style` field from `styles` in `LodPoi` to unify the structure of `Poi`.
 * [Fix] Missing `text` parameter in `Poi.setText`.
 * [Fix] A runtime error occurs when adding a `MultipleRoute` overlay.
-1
 * [Fix] Adjust screen point returned by the `onCameraMoveEnd` event from relative pixels to absolute pixels on iOS Platform. ([#16](https://github.com/gunyu1019/flutter_kakao_maps/issues/16))
 * [Fix] Invalid raw value of Gestrue Type returned by the `onCameraMoveEnd` event on iOS Platform ([#20](https://github.com/gunyu1019/flutter_kakao_maps/issues/20))
 
