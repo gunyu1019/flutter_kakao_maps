@@ -103,19 +103,19 @@ class PolygonStyle with KMessageable {
     return payload;
   }
 
-  factory PolygonStyle.fromMessageable(dynamic payload,
-      [bool isSecondary = false, String? id]) {
+  factory PolygonStyle.fromMessageable(dynamic payload, [String? id]) {
     final style = PolygonStyle(Color(payload["color"]),
         id: id,
         strokeColor: Color(payload["strokeColor"]),
         strokeWidth: payload["strokeWidth"],
         zoomLevel: payload["zoomLevel"]);
-    if (!isSecondary &&
-        payload.containsKey("otherStyle") &&
-        payload["otherStyle"].length > 0) {
+    if (payload.containsKey("otherStyle") && payload["otherStyle"].length > 0) {
       payload["otherStyle"]
-          .map<PolygonStyle>((e) => PolylineStyle.fromMessageable(e, true))
-          .map<PolygonStyle>((e) => e.._isSecondaryStyle = true)
+          .map<PolygonStyle>((e) => PolygonStyle._(Color(e["color"]),
+              id: id,
+              strokeColor: Color(e["strokeColor"]),
+              strokeWidth: e["strokeWidth"],
+              zoomLevel: e["zoomLevel"]))
           .forEach(style._styles.add);
     }
     return style;

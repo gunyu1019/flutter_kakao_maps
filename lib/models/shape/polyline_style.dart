@@ -113,19 +113,20 @@ class PolylineStyle with KMessageable {
     return payload;
   }
 
-  factory PolylineStyle.fromMessageable(dynamic payload,
-      [bool isSecondary = false, String? id]) {
+  factory PolylineStyle.fromMessageable(dynamic payload, [String? id]) {
     final style = PolylineStyle(Color(payload["color"]), payload["lineWidth"],
         id: id,
         strokeColor: Color(payload["strokeColor"]),
         strokeWidth: payload["strokeWidth"],
         zoomLevel: payload["zoomLevel"]);
-    if (!isSecondary &&
-        payload.containsKey("otherStyle") &&
-        payload["otherStyle"].length > 0) {
+    if (payload.containsKey("otherStyle") && payload["otherStyle"].length > 0) {
       payload["otherStyle"]
-          .map<PolylineStyle>((e) => PolylineStyle.fromMessageable(e, true))
-          .map<PolylineStyle>((e) => e.._isSecondaryStyle = true)
+          .map<PolylineStyle>((e) => PolylineStyle._(
+              Color(e["color"]), e["lineWidth"],
+              id: id,
+              strokeColor: Color(e["strokeColor"]),
+              strokeWidth: e["strokeWidth"],
+              zoomLevel: e["zoomLevel"]))
           .forEach(style._styles.add);
     }
     return style;

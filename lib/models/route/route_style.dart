@@ -128,7 +128,7 @@ class RouteStyle with KMessageable {
   }
 
   factory RouteStyle.fromMessageable(dynamic payload,
-      [bool isSecondary = false, String? id]) {
+      [String? id]) {
     final style = RouteStyle(Color(payload["color"]), payload["lineWidth"],
         id: id,
         strokeColor: Color(payload["strokeColor"]),
@@ -137,12 +137,18 @@ class RouteStyle with KMessageable {
             ? RoutePattern.fromMessageable(payload["pattern"])
             : null,
         zoomLevel: payload["zoomLevel"]);
-    if (!isSecondary &&
-        payload.containsKey("otherStyle") &&
+    if (payload.containsKey("otherStyle") &&
         payload["otherStyle"].length > 0) {
       payload["otherStyle"]
-          .map<RouteStyle>((e) => RouteStyle.fromMessageable(e, true))
-          .map<RouteStyle>((e) => e.._isSecondaryStyle = true)
+          .map<RouteStyle>((e) => RouteStyle._(
+              Color(e["color"]), e["lineWidth"],
+              id: id,
+              strokeColor: Color(e["strokeColor"]),
+              strokeWidth: e["strokeWidth"],
+              pattern: e["pattern"] != null
+                  ? RoutePattern.fromMessageable(e["pattern"])
+                  : null,
+              zoomLevel: e["zoomLevel"]))
           .forEach(style._styles.add);
     }
     return style;
