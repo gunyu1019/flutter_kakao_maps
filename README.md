@@ -56,12 +56,13 @@ void main() async {
 아래에 기재된 소스코드를 `web/index.html`에 추가해주세요.
 
 ```html
+...
 <head>
   ...
   <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<JavaScript 키>"></script>
   ...
 </head>
-  <link rel="manifest" href="manifest.json">
+...
 ```
 `<JavaScript 키>` 는 `<네이티브 키>`와 다른 키로 [카카오 개발자 사이트](https://developers.kakao.com/)에서 앱 등록을 마치면 발급받을 수 있습니다.
 
