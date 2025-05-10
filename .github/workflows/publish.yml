@@ -34,15 +34,14 @@ jobs:
         working-directory: ${{ env.working-directory }}
       - name: Build Web
         run: |
-          .flutter/bin/flutter build web --release --base-href /${{github.event.repository.name}}/
+          .flutter/bin/flutter build web --release --wasm --base-href /${{github.event.repository.name}}/
         working-directory: ${{ env.working-directory }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./build/web
-        working-directory: ${{ env.working-directory }}
+          path: example/build/web
   example_android_build:
     env:
       working-directory: ./example
@@ -129,7 +128,7 @@ jobs:
   web_deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.web_deploy.outputs.page_url }}
     runs-on: ubuntu-latest
     permissions:
       pages: write
