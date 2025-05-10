@@ -29,6 +29,11 @@ class WebOverlayController {
         WebShapeController._(ShapeController.defaultId, controller, this);
     _routeLayer[RouteController.defaultId] =
         WebRouteController._(RouteController.defaultId, controller, this);
+
+    _labelLayer[LabelController.defaultId]!.createLabelLayer();
+    _lodLabelLayer[LodLabelController.defaultId]!.createLabelLayer();
+    _shapeLayer[ShapeController.defaultId]!.createShapeLayer();
+    _routeLayer[RouteController.defaultId]!.createRouteLayer();
   }
 
   Future<dynamic> overlayHandle(MethodCall method) async {
@@ -38,7 +43,6 @@ class WebOverlayController {
     final layerId =
         argument.containsKey("layerId") ? argument["layerId"] : null;
 
-    print(method.method);
     switch (method.method) {
       case "createLabelLayer":
         _labelLayer[layerId!] =
@@ -51,6 +55,10 @@ class WebOverlayController {
       case "createRouteLayer":
         _routeLayer[layerId!] =
             WebRouteController._(layerId!, controller, this);
+        break;
+      case "createShapeLayer":
+        _shapeLayer[layerId!] =
+            WebShapeController._(layerId!, controller, this);
         break;
       case "removeLabelLayer":
         _labelLayer[layerId!]!.removeLabelLayer();
