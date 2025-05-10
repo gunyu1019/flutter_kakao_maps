@@ -51,6 +51,20 @@ void main() async {
     ```
     안드로이드 플랫폼 외 다른 플랫폼에서 함수를 호출하면 `null`을 반환합니다.
 
+### Web Environment
+웹 환경에서 카카오맵을 이용하기 위해서는 아래에 서술된 추가 설정이 필요합니다.<br/>
+아래에 기재된 소스코드를 `web/index.html`에 추가해주세요.
+
+```html
+<head>
+  ...
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<JavaScript 키>"></script>
+  ...
+</head>
+  <link rel="manifest" href="manifest.json">
+```
+`<JavaScript 키>` 는 `<네이티브 키>`와 다른 키로 [카카오 개발자 사이트](https://developers.kakao.com/)에서 앱 등록을 마치면 발급받을 수 있습니다.
+
 ## 2. Add MapView Widget
 지도를 담고 있는 위젯(Widget)은 아래와 같이 호출하여 사용하실 수 있습니다.
 ```dart
@@ -72,20 +86,6 @@ Widget build(BuildContext context) {
 option 매게변수에는 초기화 과정에서 기본 값([KakaoMapOption](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapOption-class.html))을 설정할 수 있습니다.<br/>
 아무 문제 없이 지도를 불러온다면, `onMapReady` 매개변수에 담긴 함수가 호출됩니다.<br/>
 함수 매개변수에는 지도를 관리하기 위한 컨트롤러([KakaoMapController](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController-class.html))가 입력됩니다.
-
-### Web Environment
-웹 환경에서 카카오맵을 이용하기 위해서는 아래에 서술된 추가 설정이 필요합니다.<br/>
-아래에 기재된 소스코드를 `web/index.html`에 추가해주세요.
-
-```html
-<head>
-  ...
-  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<JavaScript 키>"></script>
-  ...
-</head>
-  <link rel="manifest" href="manifest.json">
-```
-`<JavaScript 키>` 는 `<네이티브 키>`와 다른 키로 [카카오 개발자 사이트](https://developers.kakao.com/)에서 앱 등록을 마치면 발급받을 수 있습니다.
 
 ## 3. Write Overlay(Grapic Element) to Map
 Kakao Map SDK는 사용자에게 표현하기 위한 다양한 그래픽 요소(오버레이 기능)를 제공하고 있습니다.<br/>
@@ -231,6 +231,7 @@ Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
   <summary>
   웹 환경 내 경로에 패턴이 적용된 이미지
   </summary>
+    <img src="https://github.com/user-attachments/assets/b604dcd2-c4e2-4334-b519-140409af543e" width="80%" />
   </details>
 * 웹 환경에서 `canShowPosition` 함수의 `zoomLevel` 매개변수는 작동하지 않습니다.<br/>
   사용자에게 보여주는 시점에서 주어진 배열의 좌표만 보여지는 여부를 반환합니다.
