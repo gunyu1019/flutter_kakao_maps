@@ -1,3 +1,34 @@
+## 1.1.0
+* **Support Kakao Map SDK on Web Platform**
+* Add `KImage.fromWidget` to render the widget as an image element used on Poi Icon, Route Pattern Image, etc...<br/>
+  ```dart
+  final icon = await KImage.fromWidget(const Text("텍스트"), Size(100, 40));
+  final poiStyle = PoiStyle(icon: icon);
+  ...
+  ```
+* Add `offset()` and `distance()` function in LatLng object to measure the distance of two point.<br/>
+  ```dart
+  final point1 = const LatLng(latitude1, longitude1);
+  final point2 = const LatLng(latitude2, longitude2);
+  point1.distance(point2); // Return the distacne of two points.
+  ...
+  ```
+* Add `addRetangleHole`, `addCircleHole` function in instance extended `DotPoint` object.
+  ```dart
+  final point = CirclePoint(radius: 300);
+  point.addCircleHole(radius: 200); // Add circle hole with a radius of 200 meters.
+  ...
+  ```
+* Add `otherStyles`, `otherStyleLevel`, and `otherStyleCount` field in `PoiStyle`, `PolygonStyle`, `PolylineStyle` and `RouteStyle`.
+* Add `multiple` field in `Route`, `MultipleRoute` to seperate two type of route.
+* Add `remove` function in Polyline Shape, Polygon Shape.
+* [Fix] Rename `style` field from `styles` in `LodPoi` to unify the structure of `Poi`.
+* [Fix] Missing `text` parameter in `Poi.setText`.
+* [Fix] A runtime error occurs when adding a `MultipleRoute` overlay.
+1
+* [Fix] Adjust screen point returned by the `onCameraMoveEnd` event from relative pixels to absolute pixels on iOS Platform. ([#16](https://github.com/gunyu1019/flutter_kakao_maps/issues/16))
+* [Fix] Invalid raw value of Gestrue Type returned by the `onCameraMoveEnd` event on iOS Platform ([#20](https://github.com/gunyu1019/flutter_kakao_maps/issues/20))
+
 ## 1.0.2
 * Support Pro-Motion display mode in iOS Platform.
 * Apply resizing capabilities in `addViewSucceeded` event handler to onnection and resize duplicate event on iOS platform.
