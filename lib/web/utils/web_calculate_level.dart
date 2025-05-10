@@ -5,9 +5,9 @@ part of '../kakao_map_sdk_web.dart';
 /// Android, iOS Platform: Lv.6 ~ Lv.21 (Lv.19)
 /// Web Platform: Lv.1 ~ Lv.14
 int _calculateZoomLevel(int level) => switch (level) {
-      >= 18 => 1,
-      >= 17 && <= 16 => 19 - level,
-      >= 15 && <= 7 => 20 - level,
       <= 6 => 14,
+      <= 15 && >= 7 => 20 - level,
+      <= 17 && >= 16 => 19 - level,
+      >= 18 => 1,
       int() => 3
     };
