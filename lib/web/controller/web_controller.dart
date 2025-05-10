@@ -19,14 +19,13 @@ class KakaoMapWebController
       onMapError(error);
       return;
     }
-    overlay = WebOverlayController(overlayChannel, controller);
+    overlay = WebOverlayController(overlayChannel, controller, onPoiClick, onLodPoiClick);
 
     // ignore: prefer_initializing_formals
     this.controller = controller;
 
     web.window.addEventListener('resize', _resizedEvent.toJS);
     channel.setMethodCallHandler(webHandle);
-    // overlay.setMethodCallHandler();
     onMapReady();
   }
 
@@ -257,7 +256,7 @@ class KakaoMapWebController
 
   @override
   void onCameraMoveEnd(CameraPosition position, GestureType gestureType) {
-    channel.invokeMethod("onCameraMoveStart",
+    channel.invokeMethod("onCameraMoveEnd",
         {"gesture": gestureType.value, "position": position.toMessageable()});
   }
 
@@ -320,7 +319,7 @@ class KakaoMapWebController
 
   @override
   void onPoiClick(String layerId, String poiId) {
-    channel.invokeMethod("onLodPoiClick", {"layerId": layerId, "poiId": poiId});
+    channel.invokeMethod("onPoiClick", {"layerId": layerId, "poiId": poiId});
   }
 
   @override
