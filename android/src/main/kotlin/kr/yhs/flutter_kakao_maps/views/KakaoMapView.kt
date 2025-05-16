@@ -25,13 +25,13 @@ class KakaoMapView(
 
   init {
     mapView.start(controller, option)
-    activity.registerActivityLifecycleCallbacks(this)
+    activity.application.registerActivityLifecycleCallbacks(this)
   }
 
   override fun getView(): View = mapView
 
   override fun dispose() {
-    activity.unregisterActivityLifecycleCallbacks(this)
+    activity.application.unregisterActivityLifecycleCallbacks(this)
     controller.dispose()
   }
 
@@ -57,6 +57,6 @@ class KakaoMapView(
   override fun onActivityDestroyed(activity: Activity) {
     if (activity != this.activity) return
     mapView.finish()
-    activity.unregisterActivityLifecycleCallbacks(this)
+    activity.application.unregisterActivityLifecycleCallbacks(this)
   }
 }
