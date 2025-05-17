@@ -237,5 +237,6 @@ class KakaoMapController(
 
   fun dispose() {
     channel.setMethodCallHandler(null)
+    overlayChannel.setMethodCallHandler(null)
   }
 }
