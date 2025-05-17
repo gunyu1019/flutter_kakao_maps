@@ -32,6 +32,7 @@ class KakaoMapView(
 
   override fun dispose() {
     activity.application.unregisterActivityLifecycleCallbacks(this)
+    mapView.finish()
     controller.dispose()
   }
 
