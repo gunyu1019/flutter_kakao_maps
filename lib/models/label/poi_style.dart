@@ -155,7 +155,7 @@ class PoiStyle with KMessageable {
         applyDpScale: payload["applyDpScale"],
         anchor: KPoint.fromMessageable(payload["anchor"]),
         padding: payload["padding"],
-        icon: payload.containsKey("icon")
+        icon: payload["icon"] != null
             ? KImage.fromMessageable(payload["icon"])
             : null,
         iconTransition:
@@ -174,7 +174,7 @@ class PoiStyle with KMessageable {
               applyDpScale: e["applyDpScale"],
               anchor: KPoint.fromMessageable(e["anchor"]),
               padding: e["padding"],
-              icon: e.containsKey("icon")
+              icon: e["icon"] != null
                   ? KImage.fromMessageable(e["icon"])
                   : null,
               iconTransition:
