@@ -19,7 +19,8 @@ class KakaoMapWebController
       onMapError(error);
       return;
     }
-    overlay = WebOverlayController(overlayChannel, controller, onPoiClick, onLodPoiClick);
+    overlay = WebOverlayController(
+        overlayChannel, controller, onPoiClick, onLodPoiClick);
 
     // ignore: prefer_initializing_formals
     this.controller = controller;
