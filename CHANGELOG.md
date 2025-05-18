@@ -1,3 +1,8 @@
+## 1.1.1
+* Add calling `mapView.finish()` function in Map View on Android.
+* [Fix] Fix `NoSuchMethodError` in Map View on Android ([#21](https://github.com/gunyu1019/flutter_kakao_maps/issues/21))
+* [Fix] Fix Poi registration failed exception with text-only style on Web.
+
 ## 1.1.0
 * **Support Kakao Map SDK on Web Platform**
 * Add `KImage.fromWidget` to render the widget as an image element used on Poi Icon, Route Pattern Image, etc...<br/>
