@@ -84,7 +84,7 @@ class KImage with KMessageable {
           .toByteData(format: ui.ImageByteFormat.png)
           .then((b) => b!.buffer.asUint8List());
 
-      return KImage.fromData(data, size.width as int, size.height as int);
+      return KImage.fromData(data, size.width.toInt(), size.height.toInt());
     } finally {
       final emptyElement = RenderObjectToWidgetAdapter<RenderBox>(
         container: repaintBoundary,
