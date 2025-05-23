@@ -215,7 +215,7 @@ RouteStyle.withPattern(
 아래의 [샘플 프로젝트](https://github.com/gunyu1019/flutter_kakao_maps_sample)을 확인하여 카카오맵을 Flutter에 구현한 애플리케이션을 확인해보세요!
 
 ## 5. (Expermential) Web
-<img src="https://github.com/user-attachments/assets/4f20ddb0-e678-4cbe-b6ca-39be0f9e6b18" width="75%" /><br/>
+<img src="https://github.com/user-attachments/assets/4f20ddb0-e678-4cbe-b6ca-39be0f9e6b18" width="70%" /><br/>
 Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
 본 플러그인은 네이티브를 중심으로 개발되었기 때문에 웹 SDK도 네이티브 환경에 알맞게 포팅 작업을 진행하였습니다.
 
