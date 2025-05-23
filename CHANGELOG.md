@@ -1,3 +1,6 @@
+## 1.1.2
+* [Fix] Invalid method called in `KImage.fromWidget.` ([#22](https://github.com/gunyu1019/flutter_kakao_maps/issues/22))
+
 ## 1.1.1
 * Add calling `mapView.finish()` function in Map View on Android.
 * [Fix] Fix `NoSuchMethodError` in Map View on Android ([#21](https://github.com/gunyu1019/flutter_kakao_maps/issues/21))
