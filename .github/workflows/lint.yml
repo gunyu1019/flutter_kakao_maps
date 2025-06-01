@@ -58,7 +58,8 @@ jobs:
           KTFMT_VERSION: ${{ env.ktkmt-version }}
       - name : Verify kotlin code for lint with ktfmt
         run: |
-          java -jar ktfmt-$KTFMT_VERSION-jar-with-dependencies.jar --$CODE_STYLE --set-exit-if-changed
+          java -jar ktfmt-$KTFMT_VERSION-jar-with-dependencies.jar ./android --$CODE_STYLE --set-exit-if-changed
+          java -jar ktfmt-$KTFMT_VERSION-jar-with-dependencies.jar ./example/android --$CODE_STYLE --set-exit-if-changed
         env:
           KTFMT_VERSION: ${{ env.ktkmt-version }}
           CODE_STYLE: ${{ env.code-style }}
