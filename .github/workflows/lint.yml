@@ -25,6 +25,7 @@ jobs:
           flutter analyze
       - name: Verify dart code for formatting.
         run: |
+          echo "KAKAO_API_KEY=1234" >> assets/config/.env
           dart format ./lib --set-exit-if-changed
           dart format ./example/lib --set-exit-if-changed
   lint_swift:
@@ -41,7 +42,7 @@ jobs:
           swiftformat/CommandLineTool/swiftformat --lint ./example/ios --reporter github-actions-log
   lint_kotlin:
     env:
-      ktkmt-version: 0.55
+      ktkmt-version: 0.54
       code-style: google-style  # meta-style, google-style, kotlinlang-style
     runs-on: ubuntu-latest
     steps:
