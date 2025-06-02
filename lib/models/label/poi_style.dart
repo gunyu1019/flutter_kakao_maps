@@ -38,6 +38,7 @@ class PoiStyle with KMessageable {
 
   final List<PoiStyle> _styles = [];
   final bool _isSecondaryStyle;
+  bool _isAdded = false;
 
   PoiStyle(
       {String? id,
