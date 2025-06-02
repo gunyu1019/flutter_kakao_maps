@@ -42,10 +42,10 @@ import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
 import kr.yhs.flutter_kakao_maps.model.OverlayType
 
 class OverlayController(private val channel: MethodChannel, private val kakaoMap: KakaoMap) :
-    LabelControllerHandler,
-    LodLabelControllerHandler,
-    ShapeControllerHandler,
-    RouteControllerHandler {
+  LabelControllerHandler,
+  LodLabelControllerHandler,
+  ShapeControllerHandler,
+  RouteControllerHandler {
   override val labelManager: LabelManager?
     get() = kakaoMap.getLabelManager()
 
@@ -60,14 +60,14 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   fun handle(call: MethodCall, result: MethodChannel.Result) =
-      when (OverlayType.values()
-          .filter { call.arguments.asMap<Int>()["type"]!! == it.value }
-          .first()) {
-        OverlayType.Label -> labelHandle(call, result)
-        OverlayType.LodLabel -> lodLabelHandle(call, result)
-        OverlayType.Shape -> shapeHandle(call, result)
-        OverlayType.Route -> routeHandle(call, result)
-      }
+    when (
+      OverlayType.values().filter { call.arguments.asMap<Int>()["type"]!! == it.value }.first()
+    ) {
+      OverlayType.Label -> labelHandle(call, result)
+      OverlayType.LodLabel -> lodLabelHandle(call, result)
+      OverlayType.Shape -> shapeHandle(call, result)
+      OverlayType.Route -> routeHandle(call, result)
+    }
 
   override fun createLabelLayer(options: LabelLayerOptions, onSuccess: (Any?) -> Unit) {
     labelManager!!.addLayer(options)
@@ -94,40 +94,40 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun addPolylineText(
-      layer: LabelLayer,
-      label: PolylineLabelOptions,
-      onSuccess: (String) -> Unit
+    layer: LabelLayer,
+    label: PolylineLabelOptions,
+    onSuccess: (String) -> Unit,
   ) {
     val polylineText = layer.addPolylineLabel(label)
     onSuccess.invoke(polylineText.labelId)
   }
 
   override fun removePolylineText(
-      layer: LabelLayer,
-      label: PolylineLabel,
-      onSuccess: (Any?) -> Unit
+    layer: LabelLayer,
+    label: PolylineLabel,
+    onSuccess: (Any?) -> Unit,
   ) {
     layer.remove(label)
     onSuccess.invoke(null)
   }
 
   override fun changePoiOffsetPosition(
-      poi: Label,
-      x: Float,
-      y: Float,
-      forceDpScale: Boolean?,
-      onSuccess: Function1<Any?, Unit>
+    poi: Label,
+    x: Float,
+    y: Float,
+    forceDpScale: Boolean?,
+    onSuccess: Function1<Any?, Unit>,
   ) {
     forceDpScale?.let { poi.changePixelOffset(x, y, it) } ?: poi.changePixelOffset(x, y)
     onSuccess.invoke(null)
   }
 
   override fun changePoiVisible(
-      poi: Label,
-      visible: Boolean,
-      autoMove: Boolean?,
-      duration: Int?,
-      onSuccess: Function1<Any?, Unit>
+    poi: Label,
+    visible: Boolean,
+    autoMove: Boolean?,
+    duration: Int?,
+    onSuccess: Function1<Any?, Unit>,
   ) {
     if (visible) {
       poi.show(autoMove ?: false, duration ?: 300)
@@ -138,10 +138,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changePoiStyle(
-      poi: Label,
-      styleId: String,
-      transition: Boolean,
-      onSuccess: Function1<Any?, Unit>
+    poi: Label,
+    styleId: String,
+    transition: Boolean,
+    onSuccess: Function1<Any?, Unit>,
   ) {
     val poiStyle = labelManager!!.getLabelStyles(styleId)
     poi.changeStyles(poiStyle, transition)
@@ -149,21 +149,21 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changePoiText(
-      poi: Label,
-      text: String,
-      transition: Boolean,
-      onSuccess: Function1<Any?, Unit>
+    poi: Label,
+    text: String,
+    transition: Boolean,
+    onSuccess: Function1<Any?, Unit>,
   ) {
     poi.changeText(text.asLabelTextBuilder(), transition)
     onSuccess.invoke(null)
   }
 
   override fun invalidatePoi(
-      poi: Label,
-      styleId: String,
-      text: String,
-      transition: Boolean,
-      onSuccess: Function1<Any?, Unit>
+    poi: Label,
+    styleId: String,
+    text: String,
+    transition: Boolean,
+    onSuccess: Function1<Any?, Unit>,
   ) {
     val poiStyle = labelManager!!.getLabelStyles(styleId)
     poi.setStyles(poiStyle)
@@ -173,10 +173,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun movePoi(
-      poi: Label,
-      position: LatLng,
-      millis: Int?,
-      onSuccess: Function1<Any?, Unit>
+    poi: Label,
+    position: LatLng,
+    millis: Int?,
+    onSuccess: Function1<Any?, Unit>,
   ) {
     millis?.let { poi.moveTo(position, it) } ?: poi.moveTo(position)
     onSuccess.invoke(null)
@@ -188,11 +188,11 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun scalePoi(
-      poi: Label,
-      x: Float,
-      y: Float,
-      millis: Int?,
-      onSuccess: Function1<Any?, Unit>
+    poi: Label,
+    x: Float,
+    y: Float,
+    millis: Int?,
+    onSuccess: Function1<Any?, Unit>,
   ) {
     millis?.let { poi.scaleTo(x, y, it) } ?: poi.scaleTo(x, y)
     onSuccess.invoke(null)
@@ -204,19 +204,19 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changePolylineTextAndStyle(
-      label: PolylineLabel,
-      style: PolylineLabelStyles,
-      text: String?,
-      onSuccess: (Any?) -> Unit
+    label: PolylineLabel,
+    style: PolylineLabelStyles,
+    text: String?,
+    onSuccess: (Any?) -> Unit,
   ) {
     text?.let { label.changeTextAndStyles(it, style) } ?: label.changeStyles(style)
     onSuccess.invoke(null)
   }
 
   override fun changePolylineTextVisible(
-      label: PolylineLabel,
-      visible: Boolean,
-      onSuccess: (Any?) -> Unit
+    label: PolylineLabel,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     if (visible) {
       label.show()
@@ -256,10 +256,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changeLodPoiStyle(
-      poi: LodLabel,
-      styleId: String,
-      transition: Boolean,
-      onSuccess: (Any?) -> Unit
+    poi: LodLabel,
+    styleId: String,
+    transition: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     val poiStyle = labelManager!!.getLabelStyles(styleId)
     poi.changeStyles(poiStyle, transition)
@@ -267,10 +267,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changeLodPoiText(
-      poi: LodLabel,
-      text: String,
-      transition: Boolean,
-      onSuccess: (Any?) -> Unit
+    poi: LodLabel,
+    text: String,
+    transition: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     poi.changeText(text.asLabelTextBuilder(), transition)
     onSuccess.invoke(null)
@@ -302,18 +302,18 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun addPolylineShape(
-      layer: ShapeLayer,
-      shape: PolylineOptions,
-      onSuccess: (String) -> Unit
+    layer: ShapeLayer,
+    shape: PolylineOptions,
+    onSuccess: (String) -> Unit,
   ) {
     val polylineShape = layer.addPolyline(shape)
     onSuccess.invoke(polylineShape.id)
   }
 
   override fun addPolygonShape(
-      layer: ShapeLayer,
-      shape: PolygonOptions,
-      onSuccess: (String) -> Unit
+    layer: ShapeLayer,
+    shape: PolygonOptions,
+    onSuccess: (String) -> Unit,
   ) {
     val polylineShape = layer.addPolygon(shape)
     onSuccess.invoke(polylineShape.id)
@@ -348,10 +348,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changePolylineFromMapPoints(
-      shape: Polyline,
-      styleId: String,
-      position: List<MapPoints>,
-      onSuccess: (Any?) -> Unit
+    shape: Polyline,
+    styleId: String,
+    position: List<MapPoints>,
+    onSuccess: (Any?) -> Unit,
   ) {
     val style = shapeManager!!.getPolylineStyles(styleId)
     shape.changeStylesAndMapPoints(style, position)
@@ -359,10 +359,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changePolygonFromMapPoints(
-      shape: Polygon,
-      styleId: String,
-      position: List<MapPoints>,
-      onSuccess: (Any?) -> Unit
+    shape: Polygon,
+    styleId: String,
+    position: List<MapPoints>,
+    onSuccess: (Any?) -> Unit,
   ) {
     val style = shapeManager!!.getPolygonStyles(styleId)
     shape.changeStylesAndMapPoints(style, position)
@@ -370,10 +370,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changePolylineFromDotPoints(
-      shape: Polyline,
-      styleId: String,
-      position: List<DotPoints>,
-      onSuccess: (Any?) -> Unit
+    shape: Polyline,
+    styleId: String,
+    position: List<DotPoints>,
+    onSuccess: (Any?) -> Unit,
   ) {
     val style = shapeManager!!.getPolylineStyles(styleId)
     shape.changeStylesAndDotPoints(style, position)
@@ -381,10 +381,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changePolygonFromDotPoints(
-      shape: Polygon,
-      styleId: String,
-      position: List<DotPoints>,
-      onSuccess: (Any?) -> Unit
+    shape: Polygon,
+    styleId: String,
+    position: List<DotPoints>,
+    onSuccess: (Any?) -> Unit,
   ) {
     val style = shapeManager!!.getPolygonStyles(styleId)
     shape.changeStylesAndDotPoints(style, position)
@@ -406,9 +406,9 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun addRoute(
-      layer: RouteLineLayer,
-      route: RouteLineOptions,
-      onSuccess: (String) -> Unit
+    layer: RouteLineLayer,
+    route: RouteLineOptions,
+    onSuccess: (String) -> Unit,
   ) {
     layer.addRouteLine(route).let { it.lineId }.let(onSuccess::invoke)
   }
@@ -419,17 +419,17 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changeRoute(
-      route: RouteLine,
-      styleId: String,
-      curveType: List<CurveType>,
-      points: List<List<LatLng>>,
-      onSuccess: (Any?) -> Unit
+    route: RouteLine,
+    styleId: String,
+    curveType: List<CurveType>,
+    points: List<List<LatLng>>,
+    onSuccess: (Any?) -> Unit,
   ) {
     points
-        .mapIndexed { index, element ->
-          RouteLineSegment.from(element).apply { curveType[index].let(::setCurveType) }
-        }
-        .let(route::changeSegments)
+      .mapIndexed { index, element ->
+        RouteLineSegment.from(element).apply { curveType[index].let(::setCurveType) }
+      }
+      .let(route::changeSegments)
     routeManager!!.addStylesSet(RouteLineStylesSet.from(styleId, listOf())).let(route::changeStyle)
     onSuccess.invoke(null)
   }
@@ -458,9 +458,9 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changePolylineTextAllVisible(
-      layer: LabelLayer,
-      visible: Boolean,
-      onSuccess: (Any?) -> Unit
+    layer: LabelLayer,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     if (visible) {
       layer.showAllPolylineLabels()
@@ -471,9 +471,9 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changeLabelLayerClickable(
-      layer: LabelLayer,
-      clickable: Boolean,
-      onSuccess: (Any?) -> Unit
+    layer: LabelLayer,
+    clickable: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     layer.setClickable(clickable)
   }
@@ -483,9 +483,9 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changeLodPoiAllVisible(
-      layer: LodLabelLayer,
-      visible: Boolean,
-      onSuccess: (Any?) -> Unit
+    layer: LodLabelLayer,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     if (visible) {
       layer.showAllLodLabels()
@@ -496,27 +496,27 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changeLabelLayerClickable(
-      layer: LodLabelLayer,
-      clickable: Boolean,
-      onSuccess: (Any?) -> Unit
+    layer: LodLabelLayer,
+    clickable: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     layer.setClickable(clickable)
     onSuccess.invoke(null)
   }
 
   override fun changeLabelLayerZOrder(
-      layer: LodLabelLayer,
-      zOrder: Int,
-      onSuccess: (Any?) -> Unit
+    layer: LodLabelLayer,
+    zOrder: Int,
+    onSuccess: (Any?) -> Unit,
   ) {
     layer.setZOrder(zOrder)
     onSuccess.invoke(null)
   }
 
   override fun changePolylineAllVisible(
-      layer: ShapeLayer,
-      visible: Boolean,
-      onSuccess: (Any?) -> Unit
+    layer: ShapeLayer,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     /* if (visible) {
         layer.showAllPolyline()
@@ -534,9 +534,9 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changePolygonAllVisible(
-      layer: ShapeLayer,
-      visible: Boolean,
-      onSuccess: (Any?) -> Unit
+    layer: ShapeLayer,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     if (visible) {
       layer.showAllPolygon()
@@ -547,9 +547,9 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun changeRouteLayerVisible(
-      layer: RouteLineLayer,
-      visible: Boolean,
-      onSuccess: (Any?) -> Unit
+    layer: RouteLineLayer,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     layer.setVisible(visible)
     onSuccess.invoke(null)

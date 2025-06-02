@@ -5,12 +5,12 @@ import io.flutter.plugin.common.MethodChannel
 
 interface SdkInitializerHandler {
   fun handle(call: MethodCall, result: MethodChannel.Result) =
-      when (call.method) {
-        "initialize" -> initialize(call.argument("appKey")!!, result)
-        "isInitialize" -> isInitialize(result)
-        "hashKey" -> hashKey(result)
-        else -> result.notImplemented()
-      }
+    when (call.method) {
+      "initialize" -> initialize(call.argument("appKey")!!, result)
+      "isInitialize" -> isInitialize(result)
+      "hashKey" -> hashKey(result)
+      else -> result.notImplemented()
+    }
 
   fun initialize(appKey: String, result: MethodChannel.Result)
 

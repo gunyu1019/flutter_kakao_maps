@@ -8,19 +8,21 @@ import com.kakao.vectormap.label.LodLabelLayer
 import io.flutter.plugin.common.MethodChannel
 
 class PoiClickListener(private val channel: MethodChannel) :
-    KakaoMap.OnLabelClickListener, KakaoMap.OnLodLabelClickListener {
+  KakaoMap.OnLabelClickListener, KakaoMap.OnLodLabelClickListener {
   override fun onLabelClicked(kakaoMap: KakaoMap, layer: LabelLayer, label: Label): Boolean {
     channel.invokeMethod("onPoiClick", mapOf("layerId" to layer.layerId, "poiId" to label.labelId))
     return true
   }
 
   override fun onLodLabelClicked(
-      kakaoMap: KakaoMap,
-      layer: LodLabelLayer,
-      label: LodLabel
+    kakaoMap: KakaoMap,
+    layer: LodLabelLayer,
+    label: LodLabel,
   ): Boolean {
     channel.invokeMethod(
-        "onLodPoiClick", mapOf("layerId" to layer.layerId, "poiId" to label.labelId))
+      "onLodPoiClick",
+      mapOf("layerId" to layer.layerId, "poiId" to label.labelId),
+    )
     return true
   }
 }

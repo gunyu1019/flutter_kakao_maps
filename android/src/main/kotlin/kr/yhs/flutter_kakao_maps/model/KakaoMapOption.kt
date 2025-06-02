@@ -8,13 +8,13 @@ import com.kakao.vectormap.MapViewInfo
 import kr.yhs.flutter_kakao_maps.converter.CameraTypeConverter.asLatLng
 
 data class KakaoMapOption(
-    private var onReady: ((KakaoMap) -> Unit),
-    private val initialPosition: LatLng? = null,
-    private val zoomLevel: Int? = null,
-    private val mapType: MapType? = null,
-    private val viewName: String? = null,
-    private val visible: Boolean = true,
-    private val tag: String? = null,
+  private var onReady: ((KakaoMap) -> Unit),
+  private val initialPosition: LatLng? = null,
+  private val zoomLevel: Int? = null,
+  private val mapType: MapType? = null,
+  private val viewName: String? = null,
+  private val visible: Boolean = true,
+  private val tag: String? = null,
 ) : KakaoMapReadyCallback() {
   // lateinit
   override fun onMapReady(map: KakaoMap) = onReady.invoke(map)
@@ -43,18 +43,19 @@ data class KakaoMapOption(
   companion object {
     fun fromMessageable(onReady: ((KakaoMap) -> Unit), rawArgs: Map<String, Any?>): KakaoMapOption {
       return KakaoMapOption(
-          onReady = onReady,
-          initialPosition =
-              (if (rawArgs.containsKey("latitude") && rawArgs.containsKey("longitude"))
-                  rawArgs.asLatLng()
-              else null),
-          zoomLevel = rawArgs["zoomLevel"] as Int?,
-          viewName = rawArgs["viewName"] as String?,
-          mapType =
-              (if (rawArgs.containsKey("mapType")) MapType.getEnum(rawArgs["mapType"] as String)
-              else null),
-          visible = rawArgs["visible"] as Boolean? ?: true,
-          tag = rawArgs["tag"] as String?)
+        onReady = onReady,
+        initialPosition =
+          (if (rawArgs.containsKey("latitude") && rawArgs.containsKey("longitude"))
+            rawArgs.asLatLng()
+          else null),
+        zoomLevel = rawArgs["zoomLevel"] as Int?,
+        viewName = rawArgs["viewName"] as String?,
+        mapType =
+          (if (rawArgs.containsKey("mapType")) MapType.getEnum(rawArgs["mapType"] as String)
+          else null),
+        visible = rawArgs["visible"] as Boolean? ?: true,
+        tag = rawArgs["tag"] as String?,
+      )
     }
   }
 }

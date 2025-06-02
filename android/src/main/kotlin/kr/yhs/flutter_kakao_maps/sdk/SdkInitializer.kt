@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException
 import kotlin.Result
 
 class SdkInitializer(private val context: Context, private val channel: MethodChannel) :
-    SdkInitializerHandler {
+  SdkInitializerHandler {
   init {
     channel.setMethodCallHandler(::handle)
   }

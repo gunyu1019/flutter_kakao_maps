@@ -28,8 +28,8 @@ jobs:
         run: flutter pub get
       - name: Verify dart code for lint.
         run: |
-          mkdir assets/ assets/config/
-          echo "KAKAO_API_KEY=1234" >> assets/config/.env
+          mkdir example/assets/config/
+          echo "KAKAO_API_KEY=1234" >> example/assets/config/.env
           flutter analyze
       - name: Verify dart code for formatting.
         run: |
