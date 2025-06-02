@@ -146,6 +146,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
     String styleId = await labelLayer._invokeMethod(
         "addPoiStyle", {"styleId": style.id, "styles": style.toMessageable()});
     style._setStyleId(styleId);
+    style._isAdded = true;
     _poiStyle[styleId] = style;
     return styleId;
   }
