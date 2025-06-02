@@ -28,6 +28,7 @@ class RouteStyle with KMessageable {
 
   final List<RouteStyle> _styles = [];
   final bool _isSecondaryStyle;
+  bool _isAdded = false;
 
   RouteStyle(this.color, this.lineWidth,
       {String? id,
