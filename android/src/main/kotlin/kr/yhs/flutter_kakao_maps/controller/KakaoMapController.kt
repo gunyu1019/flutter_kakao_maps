@@ -4,6 +4,7 @@ import android.content.Context
 import com.kakao.vectormap.GestureType
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.MapView
 import com.kakao.vectormap.MapAuthException
 import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.MapOverlay
@@ -29,6 +30,7 @@ class KakaoMapController(
 ) : KakaoMapControllerHandler, KakaoMapControllerSender, MapLifeCycleCallback() {
   private lateinit var kakaoMap: KakaoMap
   private lateinit var overlayController: OverlayController
+  public lateinit var mapView: MapView
 
   // listener
   private val cameraListener = CameraListener(channel)
@@ -199,15 +201,18 @@ class KakaoMapController(
   }
 
   override fun pause(onSuccess: (Any?) -> Unit) {
-
+    mapView.pause()
+    onSuccess.invoke(null)
   }
 
   override fun resume(onSuccess: (Any?) -> Unit) {
-
+    mapView.resume()
+    onSuccess.invoke(null)
   }
 
   override fun finish(onSuccess: (Any?) -> Unit) {
-
+    mapView.finish()
+    onSuccess.invoke(null)
   }
 
   /* Sender */
