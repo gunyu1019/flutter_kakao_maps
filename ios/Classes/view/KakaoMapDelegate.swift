@@ -17,6 +17,7 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
         super.init()
     }
 
+
     func addViews() {
         controller.addView(option)
     }
