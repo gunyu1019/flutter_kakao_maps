@@ -2,7 +2,7 @@ name: Review Formatting
 
 on:
   pull_request: 
-    branches: main
+    branches: develop
     types: [opened, reopened, synchronize]
     
 jobs:
@@ -33,8 +33,9 @@ jobs:
         run: |
           TMPFILE=$(mktemp)
           git diff >"${TMPFILE}"
-          git stash -u && git stash drop
           reviewdog -f=diff -f.diff.strip=1 -name="Dart" -log-level="info" -reporter=github-pr-review < "${TMPFILE}"
+        env: 
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.REVIEWDOG_TOKEN }}
   formatting_swift:
     runs-on: macos-latest
     steps:
@@ -46,14 +47,16 @@ jobs:
       - name: Verify swift code for lint with SwiftFormat.
         run: |
           TMP_REPORT_FILE=$(mktemp)
-          swiftformat/CommandLineTool/swiftformat ./ios ./example/ios --lint --reporter xml --report "${TMP_REPORT_FILE}"
+          swiftformat/CommandLineTool/swiftformat ./ios ./example/ios --lint --lenient --reporter xml --report "SWIFT_REPORT.xml"
           swiftformat/CommandLineTool/swiftformat ./ios ./example/ios    
       - uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893 # v1.3.2
         with:
           reviewdog_version: latest
-      - name: Writing review of dart part.
+      - name: Writing review of swift part.
         run: |
-          reviewdog -f=checkstyle -diff="git diff" -name="SwiftFormat" -log-level="info" -reporter=github-pr-review < "${TMP_REPORT_FILE}"
+          cat "SWIFT_REPORT.xml" | reviewdog -f=checkstyle -diff="git diff" -name="SwiftFormat" -log-level="info" -reporter=github-pr-review
+        env: 
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.REVIEWDOG_TOKEN }}
   formatting_kotlin:
     env:
       ktkmt-version: 0.54
@@ -82,9 +85,10 @@ jobs:
       - uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893 # v1.3.2
         with:
           reviewdog_version: latest
-      - name: Writing review of dart part.
+      - name: Writing review of kotlin part.
         run: |
           TMPFILE=$(mktemp)
           git diff >"${TMPFILE}"
-          git stash -u && git stash drop
           reviewdog -f=diff -f.diff.strip=1 -name="ktfmt" -log-level="info" -reporter=github-pr-review < "${TMPFILE}"
+        env: 
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.REVIEWDOG_TOKEN }}
