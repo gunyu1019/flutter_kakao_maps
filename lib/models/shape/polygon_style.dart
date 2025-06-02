@@ -22,6 +22,7 @@ class PolygonStyle with KMessageable {
 
   final List<PolygonStyle> _styles = [];
   final bool _isSecondaryStyle;
+  bool _isAdded = false;
 
   void _setStyleId(String id) {
     _id = id;
