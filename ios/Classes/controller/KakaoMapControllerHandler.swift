@@ -41,6 +41,12 @@ protocol KakaoMapControllerHandler {
     func scaleAutohide(autohide: Bool, onSuccess: (Any?) -> Void)
 
     func scaleAnimationTime(fadeIn: UInt32, fadeOut: UInt32, retention: UInt32, onSuccess: (Any?) -> Void)
+
+    func pause(onSuccess: (Any?) -> Void)
+
+    func resume(onSuccess: (Any?) -> Void)
+
+    func finish(onSuccess: (Any?) -> Void)
 }
 
 extension KakaoMapControllerHandler {
