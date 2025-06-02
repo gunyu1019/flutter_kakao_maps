@@ -186,6 +186,21 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         onSuccess(nil)
     }
 
+    func pause(onSuccess: (Any?) -> Void) {
+        mapController.pauseEngine()
+        onSuccess(nil)
+    }
+
+    func resume(onSuccess: (Any?) -> Void) {
+        mapController.activateEngine()
+        onSuccess(nil)
+    }
+
+    func finish(onSuccess: (Any?) -> Void) {
+        mapController.resetEngine()
+        onSuccess(nil)
+    }
+
     func onMapReady(kakaoMap: KakaoMap) {
         self.kakaoMap = kakaoMap
         overlayController = OverlayController(channel: overlayChannel, kakaoMap: kakaoMap, labelListener: poiClickListener)
