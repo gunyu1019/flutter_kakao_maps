@@ -198,6 +198,18 @@ class KakaoMapController(
     onSuccess.invoke(null)
   }
 
+  override fun pause(onSuccess: (Any?) -> Unit) {
+
+  }
+
+  override fun resume(onSuccess: (Any?) -> Unit) {
+
+  }
+
+  override fun finish(onSuccess: (Any?) -> Unit) {
+
+  }
+
   /* Sender */
   override fun onMapReady(kakaoMap: KakaoMap) {
     this.kakaoMap = kakaoMap

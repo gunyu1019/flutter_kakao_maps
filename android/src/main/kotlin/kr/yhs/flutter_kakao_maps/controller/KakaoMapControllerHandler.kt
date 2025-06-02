@@ -145,4 +145,10 @@ interface KakaoMapControllerHandler {
   fun scaleAutohide(autohide: Boolean, onSuccess: (Any?) -> Unit)
 
   fun scaleAnimationTime(fadeIn: Int, fadeOut: Int, retention: Int, onSuccess: (Any?) -> Unit)
+
+  fun pause(onSuccess: (Any?) -> Unit)
+
+  fun resume(onSuccess: (Any?) -> Unit)
+  
+  fun finish(onSuccess: (Any?) -> Unit)
 }
