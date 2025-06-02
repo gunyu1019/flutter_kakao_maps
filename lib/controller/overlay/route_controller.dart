@@ -78,12 +78,15 @@ class RouteController extends OverlayController {
     if (id != null && _route.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
-    final styleId = style.id ?? await manager.addRouteStyle(style);
+    
+    if (!style._isAdded) {
+      await manager.addRouteStyle(style);
+    }
     Map<String, dynamic> payload = {
       "route": <String, dynamic>{
         "id": id,
         "points": points.map((e) => e.toMessageable()).toList(),
-        "styleId": styleId,
+        "styleId": style.id,
         "curveType": curveType.value,
         "zOrder": zOrder
       }
