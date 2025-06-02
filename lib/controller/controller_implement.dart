@@ -218,14 +218,15 @@ class KakaoMapControllerImplement extends KakaoMapController {
   @override
   Future<String> addMultipleRouteStyle(List<RouteStyle> styles,
       [String? id]) async {
-    if (id != null && _routeStyle.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
+    if ((id != null && _routeStyle.containsKey(id)) || styles.first._isAdded) {
+      throw DuplicatedOverlayException(id ?? "NONE_POLYGON_STYLE_ID");
     }
     String styleId = await routeLayer._invokeMethod("addRouteStyle", {
       "styleId": id,
       "styles": styles.map((e) => e.toMessageable()).toList()
     });
     for (RouteStyle element in styles) {
+      element._isAdded = true;
       element._setStyleId(styleId);
     }
     _routeStyle[styleId] = styles;
