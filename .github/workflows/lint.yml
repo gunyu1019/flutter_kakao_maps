@@ -5,6 +5,9 @@ on:
   push:
     tags:
     - 'v[0-9]+.[0-9]+.[0-9]+'
+  pull_request: 
+    branches: main
+    types: [opened, reopened, synchronize]
     
 jobs:
   lint_dart:
@@ -42,8 +45,7 @@ jobs:
           /usr/bin/git clone https://github.com/nicklockwood/SwiftFormat.git swiftformat -b main
       - name: Verify swift code for lint with SwiftFormat.
         run: |
-          swiftformat/CommandLineTool/swiftformat --lint ./ios --reporter github-actions-log
-          swiftformat/CommandLineTool/swiftformat --lint ./example/ios --reporter github-actions-log
+          swiftformat/CommandLineTool/swiftformat --lint ./ios ./example/ios --reporter github-actions-log
   lint_kotlin:
     env:
       ktkmt-version: 0.54
