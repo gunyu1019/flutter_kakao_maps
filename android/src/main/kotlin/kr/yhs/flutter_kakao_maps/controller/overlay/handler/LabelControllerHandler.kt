@@ -35,7 +35,7 @@ interface LabelControllerHandler {
     }
 
     val layer =
-        arguments["layerId"]?.asString()?.let<String, LabelLayer> { labelManager!!.getLayer(it) }
+      arguments["layerId"]?.asString()?.let<String, LabelLayer> { labelManager!!.getLayer(it) }
     val poi = layer?.run { arguments["poiId"]?.asString()?.let(layer::getLabel) }
     val polylineText = layer?.run { arguments["labelId"]?.asString()?.let(layer::getPolylineLabel) }
 
@@ -155,19 +155,19 @@ interface LabelControllerHandler {
 
   // Poi Controller
   fun changePoiOffsetPosition(
-      poi: Label,
-      x: Float,
-      y: Float,
-      forceDpScale: Boolean?,
-      onSuccess: (Any?) -> Unit
+    poi: Label,
+    x: Float,
+    y: Float,
+    forceDpScale: Boolean?,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun changePoiVisible(
-      poi: Label,
-      visible: Boolean,
-      autoMove: Boolean?,
-      duration: Int?,
-      onSuccess: (Any?) -> Unit
+    poi: Label,
+    visible: Boolean,
+    autoMove: Boolean?,
+    duration: Int?,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun changePoiStyle(poi: Label, styleId: String, transition: Boolean, onSuccess: (Any?) -> Unit)
@@ -175,11 +175,11 @@ interface LabelControllerHandler {
   fun changePoiText(poi: Label, text: String, transition: Boolean, onSuccess: (Any?) -> Unit)
 
   fun invalidatePoi(
-      poi: Label,
-      styleId: String,
-      text: String,
-      transition: Boolean,
-      onSuccess: (Any?) -> Unit
+    poi: Label,
+    styleId: String,
+    text: String,
+    transition: Boolean,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun movePoi(poi: Label, position: LatLng, millis: Int?, onSuccess: (Any?) -> Unit)
@@ -192,10 +192,10 @@ interface LabelControllerHandler {
 
   // Polyline Text Controller
   fun changePolylineTextAndStyle(
-      label: PolylineLabel,
-      style: PolylineLabelStyles,
-      text: String?,
-      onSuccess: (Any?) -> Unit
+    label: PolylineLabel,
+    style: PolylineLabelStyles,
+    text: String?,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun changePolylineTextVisible(label: PolylineLabel, visible: Boolean, onSuccess: (Any?) -> Unit)

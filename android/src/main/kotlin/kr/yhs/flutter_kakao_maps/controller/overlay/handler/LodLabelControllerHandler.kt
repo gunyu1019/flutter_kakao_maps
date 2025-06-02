@@ -25,9 +25,9 @@ interface LodLabelControllerHandler {
     }
 
     val layer =
-        arguments["layerId"]?.asString()?.let<String, LodLabelLayer> {
-          labelManager!!.getLodLayer(it)
-        }
+      arguments["layerId"]?.asString()?.let<String, LodLabelLayer> {
+        labelManager!!.getLodLayer(it)
+      }
     val poi = layer?.run { arguments["poiId"]?.asString()?.let(layer::getLabel) }
 
     when (call.method) {
@@ -90,10 +90,10 @@ interface LodLabelControllerHandler {
   fun changeLodPoiVisible(poi: LodLabel, visible: Boolean, onSuccess: (Any?) -> Unit)
 
   fun changeLodPoiStyle(
-      poi: LodLabel,
-      styleId: String,
-      transition: Boolean,
-      onSuccess: (Any?) -> Unit
+    poi: LodLabel,
+    styleId: String,
+    transition: Boolean,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun changeLodPoiText(poi: LodLabel, text: String, transition: Boolean, onSuccess: (Any?) -> Unit)

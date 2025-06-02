@@ -35,7 +35,7 @@ interface ShapeControllerHandler {
       throw NullPointerException("ShapeManager is null.")
     }
     val layer =
-        arguments["layerId"]?.asString()?.let<String, ShapeLayer> { shapeManager!!.getLayer(it) }
+      arguments["layerId"]?.asString()?.let<String, ShapeLayer> { shapeManager!!.getLayer(it) }
 
     val polylineShape = layer?.run { arguments["polylineId"]?.asString()?.let(layer::getPolyline) }
     val polygonShape = layer?.run { arguments["polygonId"]?.asString()?.let(layer::getPolygon) }
@@ -44,9 +44,9 @@ interface ShapeControllerHandler {
       "createShapeLayer" -> createShapeLayer(arguments.asShapeLayerOption(), result::success)
       "removeShapeLayer" -> removeShapeLayer(layer!!, result::success)
       "addPolylineShapeStyle" ->
-          addPolylineShapeStyle(arguments.asPolylineStylesSet(), result::success)
+        addPolylineShapeStyle(arguments.asPolylineStylesSet(), result::success)
       "addPolygonShapeStyle" ->
-          addPolygonShapeStyle(arguments.asPolygonStylesSet(), result::success)
+        addPolygonShapeStyle(arguments.asPolygonStylesSet(), result::success)
       "addPolylineShape" -> {
         val shapeOption = arguments["polyline"]!!.asPolylineOption(shapeManager!!)
         addPolylineShape(layer!!, shapeOption, result::success)
@@ -120,31 +120,31 @@ interface ShapeControllerHandler {
   fun changePolygonVisible(shape: Polygon, visible: Boolean, onSuccess: (Any?) -> Unit)
 
   fun changePolylineFromMapPoints(
-      shape: Polyline,
-      styleId: String,
-      position: List<MapPoints>,
-      onSuccess: (Any?) -> Unit
+    shape: Polyline,
+    styleId: String,
+    position: List<MapPoints>,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun changePolygonFromMapPoints(
-      shape: Polygon,
-      styleId: String,
-      position: List<MapPoints>,
-      onSuccess: (Any?) -> Unit
+    shape: Polygon,
+    styleId: String,
+    position: List<MapPoints>,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun changePolylineFromDotPoints(
-      shape: Polyline,
-      styleId: String,
-      position: List<DotPoints>,
-      onSuccess: (Any?) -> Unit
+    shape: Polyline,
+    styleId: String,
+    position: List<DotPoints>,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun changePolygonFromDotPoints(
-      shape: Polygon,
-      styleId: String,
-      position: List<DotPoints>,
-      onSuccess: (Any?) -> Unit
+    shape: Polygon,
+    styleId: String,
+    position: List<DotPoints>,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun changePolylineAllVisible(layer: ShapeLayer, visible: Boolean, onSuccess: (Any?) -> Unit)

@@ -13,12 +13,12 @@ import kr.yhs.flutter_kakao_maps.controller.KakaoMapController
 import kr.yhs.flutter_kakao_maps.model.KakaoMapOption
 
 class KakaoMapView(
-    private val activity: Activity,
-    private val context: Context,
-    private val controller: KakaoMapController,
-    private val viewId: Int,
-    private val option: KakaoMapOption,
-    private val channel: MethodChannel
+  private val activity: Activity,
+  private val context: Context,
+  private val controller: KakaoMapController,
+  private val viewId: Int,
+  private val option: KakaoMapOption,
+  private val channel: MethodChannel,
 ) : PlatformView, Application.ActivityLifecycleCallbacks {
   private val mapView = MapView(activity)
   private lateinit var kakaoMap: KakaoMap

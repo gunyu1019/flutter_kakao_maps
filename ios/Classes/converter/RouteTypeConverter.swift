@@ -125,7 +125,7 @@ func asRouteMultipleOption(payload: [String: Any]) -> RouteOptions {
         }
         return RouteSegment(payload: element, index: UInt(index))
     }
-    
+
     let option = routeId != nil ? RouteOptions(
         routeID: routeId!, styleID: styleId!, zOrder: zOrder
     ) : RouteOptions(

@@ -28,9 +28,7 @@ interface RouteControllerHandler {
       throw NullPointerException("RouteManager is null.")
     }
     val layer =
-        arguments["layerId"]?.asString()?.let<String, RouteLineLayer> {
-          routeManager!!.getLayer(it)
-        }
+      arguments["layerId"]?.asString()?.let<String, RouteLineLayer> { routeManager!!.getLayer(it) }
 
     val routeLine = layer?.run { arguments["routeId"]?.asString()?.let(layer::getRouteLine) }
 
@@ -43,25 +41,28 @@ interface RouteControllerHandler {
       "removeRouteLayer" -> removeRouteLayer(layer!!, result::success)
       "addRouteStyle" -> addRouteStyle(arguments.asRouteStylesSet(), result::success)
       "addRoute" ->
-          addRoute(layer!!, arguments["route"]!!.asRouteOption(routeManager!!), result::success)
+        addRoute(layer!!, arguments["route"]!!.asRouteOption(routeManager!!), result::success)
       "addMultipleRoute" ->
-          addRoute(
-              layer!!, arguments["route"]!!.asRouteMultipleOption(routeManager!!), result::success)
+        addRoute(
+          layer!!,
+          arguments["route"]!!.asRouteMultipleOption(routeManager!!),
+          result::success,
+        )
       "removeRoute" -> removeRoute(layer!!, routeLine!!, result::success)
       "changeRoute" -> {
         val styleId = arguments["styleId"]!!.asString()
         val curveType =
-            arguments["curveType"]!!.asList<Any>().map { it.asInt().let { CurveType.getEnum(it) } }
+          arguments["curveType"]!!.asList<Any>().map { it.asInt().let { CurveType.getEnum(it) } }
         val points =
-            arguments["points"]!!.asList<Any>().map<Any, List<LatLng>> {
-              it.asList<Any>().map { it.asLatLng() }
-            }
+          arguments["points"]!!.asList<Any>().map<Any, List<LatLng>> {
+            it.asList<Any>().map { it.asLatLng() }
+          }
         changeRoute(routeLine!!, styleId, curveType, points, result::success)
       }
       "changeRouteVisible" ->
-          changeRouteVisible(routeLine!!, arguments["visible"]!!.asBoolean(), result::success)
+        changeRouteVisible(routeLine!!, arguments["visible"]!!.asBoolean(), result::success)
       "changeRouteZOrder" ->
-          changeRouteZOrder(routeLine!!, arguments["zOrder"]!!.asInt(), result::success)
+        changeRouteZOrder(routeLine!!, arguments["zOrder"]!!.asInt(), result::success)
       "changeVisibleAllRoute" -> {
         val visible = arguments["visible"]?.asBoolean()!!
         changeRouteLayerVisible(layer!!, visible, result::success)
@@ -81,11 +82,11 @@ interface RouteControllerHandler {
   fun removeRoute(layer: RouteLineLayer, route: RouteLine, onSuccess: (Any?) -> Unit)
 
   fun changeRoute(
-      route: RouteLine,
-      styleId: String,
-      curveType: List<CurveType>,
-      points: List<List<LatLng>>,
-      onSuccess: (Any?) -> Unit
+    route: RouteLine,
+    styleId: String,
+    curveType: List<CurveType>,
+    points: List<List<LatLng>>,
+    onSuccess: (Any?) -> Unit,
   )
 
   fun changeRouteVisible(route: RouteLine, visible: Boolean, onSuccess: (Any?) -> Unit)

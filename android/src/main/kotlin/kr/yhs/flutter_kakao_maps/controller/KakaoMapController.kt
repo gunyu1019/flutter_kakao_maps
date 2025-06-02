@@ -22,10 +22,10 @@ import kr.yhs.flutter_kakao_maps.model.DefaultGUIType
 import kr.yhs.flutter_kakao_maps.model.KakaoMapEvent
 
 class KakaoMapController(
-    private val viewId: Int,
-    private val context: Context,
-    private val channel: MethodChannel,
-    private val overlayChannel: MethodChannel
+  private val viewId: Int,
+  private val context: Context,
+  private val channel: MethodChannel,
+  private val overlayChannel: MethodChannel,
 ) : KakaoMapControllerHandler, KakaoMapControllerSender, MapLifeCycleCallback() {
   private lateinit var kakaoMap: KakaoMap
   private lateinit var overlayController: OverlayController
@@ -42,17 +42,18 @@ class KakaoMapController(
   /* Handler */
   override fun getCameraPosition(onSuccess: (cameraPosition: Map<String, Any>) -> Unit) {
     kakaoMap.getCameraPosition(
-        object : KakaoMap.OnCameraPositionListener {
-          override fun onCameraPosition(cameraPosition: CameraPosition) {
-            cameraPosition.toMessageable().let(onSuccess)
-          }
-        })
+      object : KakaoMap.OnCameraPositionListener {
+        override fun onCameraPosition(cameraPosition: CameraPosition) {
+          cameraPosition.toMessageable().let(onSuccess)
+        }
+      }
+    )
   }
 
   override fun moveCamera(
-      cameraUpdate: CameraUpdate,
-      cameraAnimation: CameraAnimation?,
-      onSuccess: (Any?) -> Unit
+    cameraUpdate: CameraUpdate,
+    cameraAnimation: CameraAnimation?,
+    onSuccess: (Any?) -> Unit,
   ) {
     if (cameraAnimation != null) {
       kakaoMap.moveCamera(cameraUpdate, cameraAnimation)
@@ -63,9 +64,9 @@ class KakaoMapController(
   }
 
   override fun setGestureEnable(
-      gestureType: GestureType,
-      enable: Boolean,
-      onSuccess: (Any?) -> Unit
+    gestureType: GestureType,
+    enable: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     kakaoMap.setGestureEnable(gestureType, enable)
     onSuccess(null)
@@ -117,9 +118,9 @@ class KakaoMapController(
   }
 
   override fun canPositionVisible(
-      zoomLevel: Int,
-      position: List<LatLng>,
-      onSuccess: (Boolean) -> Unit
+    zoomLevel: Int,
+    position: List<LatLng>,
+    onSuccess: (Boolean) -> Unit,
   ) {
     kakaoMap.canShowMapPoints(zoomLevel, *position.toTypedArray()).let(onSuccess::invoke)
   }
@@ -130,9 +131,9 @@ class KakaoMapController(
   }
 
   override fun overlayVisible(
-      overlayType: MapOverlay,
-      visible: Boolean,
-      onSuccess: (Any?) -> Unit
+    overlayType: MapOverlay,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     if (visible) {
       kakaoMap.showOverlay(overlayType)
@@ -151,9 +152,9 @@ class KakaoMapController(
   }
 
   override fun defaultGUIvisible(
-      type: DefaultGUIType,
-      visible: Boolean,
-      onSuccess: (Any?) -> Unit
+    type: DefaultGUIType,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
   ) {
     when (type) {
       DefaultGUIType.compass -> {
@@ -168,11 +169,11 @@ class KakaoMapController(
   }
 
   override fun defaultGUIposition(
-      type: DefaultGUIType,
-      gravity: Int,
-      x: Float,
-      y: Float,
-      onSuccess: (Any?) -> Unit
+    type: DefaultGUIType,
+    gravity: Int,
+    x: Float,
+    y: Float,
+    onSuccess: (Any?) -> Unit,
   ) {
     when (type) {
       DefaultGUIType.compass -> kakaoMap.compass?.setPosition(gravity, x, y)
@@ -188,10 +189,10 @@ class KakaoMapController(
   }
 
   override fun scaleAnimationTime(
-      fadeIn: Int,
-      fadeOut: Int,
-      retention: Int,
-      onSuccess: (Any?) -> Unit
+    fadeIn: Int,
+    fadeOut: Int,
+    retention: Int,
+    onSuccess: (Any?) -> Unit,
   ) {
     kakaoMap.scaleBar?.setFadeInOutTime(fadeIn, fadeOut, retention)
     onSuccess.invoke(null)
@@ -219,20 +220,19 @@ class KakaoMapController(
   override fun onMapError(exception: Exception) {
     if (exception is MapAuthException) {
       channel.invokeMethod(
-          "onMapError",
-          mapOf(
-              "className" to "MapAuthException",
-              "errorCode" to exception.errorCode,
-              "message" to exception.message,
-          ))
+        "onMapError",
+        mapOf(
+          "className" to "MapAuthException",
+          "errorCode" to exception.errorCode,
+          "message" to exception.message,
+        ),
+      )
       return
     }
     channel.invokeMethod(
-        "onMapError",
-        mapOf(
-            "className" to exception::javaClass.name,
-            "message" to exception.message,
-        ))
+      "onMapError",
+      mapOf("className" to exception::javaClass.name, "message" to exception.message),
+    )
   }
 
   fun dispose() {

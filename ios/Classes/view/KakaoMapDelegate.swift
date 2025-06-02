@@ -17,7 +17,6 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
         super.init()
     }
 
-
     func addViews() {
         controller.addView(option)
     }
@@ -27,12 +26,12 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
         let isInit = kakaoMap.viewRect == CGRect(x: 0, y: 0, width: 1, height: 1)
         kakaoMap.keepLevelOnResize = true
         kakaoMap.viewRect = view.bounds
-        
+
         // (TEMP) re-rendering
         if isInit {
             kakaoMap.moveCamera(CameraUpdate.make(zoomLevel: kakaoMap.zoomLevel, mapView: kakaoMap))
         }
-        
+
         sender.onMapReady(kakaoMap: kakaoMap)
     }
 
@@ -41,15 +40,16 @@ class KakaoMapDelegate: NSObject, MapControllerDelegate {
             error: MapViewLoadFailed()
         )
     }
-    
+
     func authenticationSucceeded() {
         if !controller.isEnginePrepared {
             controller.prepareEngine()
         }
     }
+
     func authenticationFailed(_ errorCode: Int, desc: String) {
         // Handling Network Error
-        if (errorCode == 499) {
+        if errorCode == 499 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                 self.controller.prepareEngine()
             }
