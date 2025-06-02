@@ -379,4 +379,19 @@ class KakaoMapControllerImplement extends KakaoMapController {
   @override
   RouteController get routeLayer =>
       _routeController[RouteController.defaultId]!;
+      
+  @override
+  Future<void> finish() async {
+    await channel.invokeMethod("finish");
+  }
+  
+  @override
+  Future<void> pause() async {
+    await channel.invokeMethod("pause");
+  }
+  
+  @override
+  Future<void> resume() async {
+    await channel.invokeMethod("resume");
+  }
 }
