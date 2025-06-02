@@ -140,7 +140,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
 
   @override
   Future<String> addPoiStyle(PoiStyle style) async {
-    if (style.id != null && _poiStyle.containsKey(style.id)) {
+    if ((style.id != null && _poiStyle.containsKey(style.id)) || style._isAdded) {
       throw DuplicatedOverlayException(style.id!);
     }
     String styleId = await labelLayer._invokeMethod(
@@ -174,14 +174,15 @@ class KakaoMapControllerImplement extends KakaoMapController {
   @override
   Future<String> addMultiplePolygonShapeStyle(List<PolygonStyle> style,
       [String? id]) async {
-    if (id != null && _polygonStyle.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
+    if ((id != null && _polygonStyle.containsKey(id)) || style.first._isAdded) {
+      throw DuplicatedOverlayException(id ?? "NONE_POLYGON_STYLE_ID");
     }
     String styleId = await shapeLayer._invokeMethod("addPolygonShapeStyle", {
       "styleId": id,
       "styles": style.map((e) => e.toMessageable()).toList()
     });
     for (PolygonStyle element in style) {
+      element._isAdded = true;
       element._setStyleId(styleId);
     }
     _polygonStyle[styleId] = style;
@@ -192,8 +193,8 @@ class KakaoMapControllerImplement extends KakaoMapController {
   Future<String> addMultiplePolylineShapeStyle(
       List<PolylineStyle> style, PolylineCap polylineCap,
       [String? id]) async {
-    if (id != null && _polylineStyle.containsKey(id)) {
-      throw DuplicatedOverlayException(id);
+    if ((id != null && _polylineStyle.containsKey(id)) || style.first._isAdded) {
+      throw DuplicatedOverlayException(id ?? "NONE_POLYLINE_STYLE_ID");
     }
     String styleId = await shapeLayer._invokeMethod("addPolylineShapeStyle", {
       "styleId": id,
@@ -201,6 +202,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
       "polylineCap": polylineCap.value
     });
     for (PolylineStyle element in style) {
+      element._isAdded = true;
       element._setStyleId(styleId);
     }
     _polylineStyle[styleId] = style;
