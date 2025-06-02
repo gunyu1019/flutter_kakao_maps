@@ -102,6 +102,12 @@ extension KakaoMapControllerHandler {
             let fadeOut = arguments!["fadeIn"]! as! UInt32
             let retention = arguments!["fadeIn"]! as! UInt32
             scaleAnimationTime(fadeIn: fadeIn, fadeOut: fadeOut, retention: retention, onSuccess: result)
+        case "pause":
+            pause(onSuccess: result)
+        case "resume":
+            resume(onSuccess: result)
+        case "finish":
+            finish(onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
