@@ -99,6 +99,9 @@ interface KakaoMapControllerHandler {
           result::success,
         )
       }
+      "pause" -> pause(result::success)
+      "resume" -> resume(result::success)
+      "finish" -> finish(result::success)
       else -> result.notImplemented()
     }
 
