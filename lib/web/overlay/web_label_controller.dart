@@ -21,7 +21,9 @@ class WebLabelController with WebLabelControllerHandler {
   final Map<String, String> _poiStyleId = {};
 
   @override
-  Future<void> createLabelLayer() async {addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);}
+  Future<void> createLabelLayer() async {
+    addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
+  }
 
   @override
   Future<void> removeLabelLayer() async {
