@@ -5,7 +5,7 @@ class Compass extends DefaultGUI {
   @override
   DefaultGUIType get type => DefaultGUIType.compass;
 
-  KakaoMapController _controller;
+  final KakaoMapController _controller;
 
   Compass._({
     required KakaoMapController controller,
