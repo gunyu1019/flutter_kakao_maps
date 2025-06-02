@@ -131,14 +131,16 @@ class LabelController extends BaseLabelController {
     if (id != null && _poi.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
-    final styleId = style.id ?? await manager.addPoiStyle(style);
+    if (!style._isAdded) {
+      await manager.addPoiStyle(style);
+    }
     Map<String, dynamic> payload = {
       "poi": <String, dynamic>{
         "id": id,
         "clickable": true,
         "text": text,
         "rank": rank,
-        "styleId": styleId,
+        "styleId": style.id,
         "transform": transform?.value,
         "visible": visible,
       }
