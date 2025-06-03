@@ -87,9 +87,14 @@ class _KakaoMapViewState extends State<KakaoMapView> {
             title: "Shape",
             textStyle: controllerTextStyle,
             onChanged: (value) {
-              value
-                  ? controller.shapeLayer.showAllPolyline()
-                  : controller.shapeLayer.hideAllPolyline();
+              if (value) {
+                // controller.pause();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        color: Colors.green)));
+              }
               setState(() => shapeVisible = value);
             }),
         SwitchComponent(
