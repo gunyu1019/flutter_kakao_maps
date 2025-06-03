@@ -31,9 +31,10 @@ class Polygon<T extends BasePoint> {
 
   /// 도형에 정의된 스타일([PolygonStyle])을 다시 정의합니다.
   Future<void> changeStyle(PolygonStyle style) async {
-    final styleId =
-        style.id ?? await _controller.manager.addPolygonShapeStyle(style);
-    await _controller._changePolygon(id, _position, styleId);
+    if (!style._isAdded) {
+      await _controller.manager.addPolygonShapeStyle(style);
+    }
+    await _controller._changePolygon(id, _position, style.id!);
     _style = style;
   }
 
