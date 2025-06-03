@@ -79,8 +79,10 @@ class Poi {
   /// [Poi]에 적용된 [PoiStyle]을 즉시 변경합니다.
   /// [transition] 매개변수에 따라 [PoiStyle.iconTransition]과 [PoiStyle.textTransition]를 적용할 지 설정합니다.
   Future<void> changeStyles(PoiStyle style, [bool transition = false]) async {
-    final styleId = style.id ?? await _controller.manager.addPoiStyle(style);
-    await _controller._changePoiStyle(id, styleId, transition);
+    if (!style._isAdded) {
+      await _controller.manager.addPoiStyle(style);
+    }
+    await _controller._changePoiStyle(id, style.id!, transition);
     _style = style;
   }
 
