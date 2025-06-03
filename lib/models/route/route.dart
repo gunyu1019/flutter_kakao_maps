@@ -46,8 +46,10 @@ class Route extends BaseRoute {
 
   /// 선형([Route]) 정의된 스타일([RouteStyle])을 다시 정의합니다.
   Future<void> changeStyle(RouteStyle style) async {
-    String styleId = style.id ?? await _controller.manager.addRouteStyle(style);
-    await _controller._changeRoute(id, styleId, _curveType, _points);
+    if (!style._isAdded) {
+      await _controller.manager.addRouteStyle(style);
+    }
+    await _controller._changeRoute(id, style.id!, _curveType, _points);
     _style = style;
   }
 
