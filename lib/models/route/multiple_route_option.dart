@@ -70,8 +70,5 @@ class MultipleRouteOption with BaseMultipleRoute, KMessageable {
     return option;
   }
 
-  bool _isStyleAdded() {
-    var styleId = styles[0].id ?? "";
-    return !styles.map((e) => e.id).any((e) => e == null || e != styleId);
-  }
+  bool _isStyleAdded() => !styles.any((e) => !e._isAdded);
 }
