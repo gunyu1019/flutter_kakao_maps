@@ -152,6 +152,5 @@ interface KakaoMapControllerHandler {
   fun pause(onSuccess: (Any?) -> Unit)
 
   fun resume(onSuccess: (Any?) -> Unit)
-  
   fun finish(onSuccess: (Any?) -> Unit)
 }
