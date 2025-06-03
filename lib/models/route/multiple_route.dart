@@ -45,9 +45,10 @@ class MultipleRoute extends BaseRoute with BaseMultipleRoute {
     if (styles.isEmpty) {
       throw Exception("styles parameter is empty.");
     }
-    final styleId =
-        styles[0].id ?? await _controller.manager.addMultipleRouteStyle(styles);
-    await _controller._changeMultipleRoute(id, styleId, segments);
+    if (styles.any((e) => !e._isAdded)) {
+      await _controller.manager.addMultipleRouteStyle(styles, styles.first.id);
+    }
+    await _controller._changeMultipleRoute(id, styles.first.id!, segments);
     _styles = styles;
   }
 }
