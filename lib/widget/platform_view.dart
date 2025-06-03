@@ -1,12 +1,12 @@
 part of '../kakao_map_sdk.dart';
 
-Widget _createPlatformView({
-  required String viewType,
-  required Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
-  Function(int)? onPlatformViewCreated,
-  Map<String, dynamic> creationParams = const {},
-  MessageCodec creationParamsCodec = const StandardMessageCodec(),
-}) {
+Widget _createPlatformView(
+    {required String viewType,
+    required Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    Function(int)? onPlatformViewCreated,
+    Map<String, dynamic> creationParams = const {},
+    MessageCodec creationParamsCodec = const StandardMessageCodec(),
+    bool useAndroidViewSurface = false}) {
   if (kIsWeb) {
     return HtmlElementView(
         viewType: viewType,
@@ -21,7 +21,11 @@ Widget _createPlatformView({
             hitTestBehavior: PlatformViewHitTestBehavior.opaque,
             gestureRecognizers: gestureRecognizers),
         onCreatePlatformView: (params) {
-          return PlatformViewsService.initSurfaceAndroidView(
+          final platformView = useAndroidViewSurface
+              ? PlatformViewsService.initExpensiveAndroidView
+              : PlatformViewsService.initAndroidView;
+          
+          return platformView.call(
             id: params.id,
             viewType: viewType,
             layoutDirection: TextDirection.ltr,
@@ -31,10 +35,9 @@ Widget _createPlatformView({
               params.onFocusChanged(true);
             },
           )
-            ..addOnPlatformViewCreatedListener((viewId) {
-              params.onPlatformViewCreated(viewId);
-              onPlatformViewCreated?.call(viewId);
-            })
+            ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
+            ..addOnPlatformViewCreatedListener(
+                (viewId) => onPlatformViewCreated?.call(viewId))
             ..create();
         },
         viewType: viewType);
