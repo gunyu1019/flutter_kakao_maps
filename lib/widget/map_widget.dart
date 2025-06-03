@@ -58,6 +58,11 @@ class KakaoMap extends StatefulWidget {
   /// 사용자의 제스쳐가 지도에 우선 전달될 수 있도록 설정하는 값입니다.
   final bool forceGesture;
 
+  /// [KakaoMap]에 보이는 뷰가 Hybrid Composition를 강제로 적용할지 설정합니다.
+  /// 현재 [forceHybridComposition]는 성능 측면에서 충실하지만, 상태관리 측면에서 문제를 겪고 있으므로 적용하는 것을 추천하지 않습니다.
+  /// 자세한 내용은 [Platform View](https://docs.flutter.dev/platform-integration/android/platform-views#texture-layer-or-texture-layer-hybrid-composition)을 참고해주세요.
+  final bool forceHybridComposition;
+
   const KakaoMap(
       {super.key,
       required this.onMapReady,
@@ -72,7 +77,8 @@ class KakaoMap extends StatefulWidget {
       this.onMapClick,
       this.onTerrainClick,
       this.onTerrainLongClick,
-      this.onMapError});
+      this.onMapError,
+      this.forceHybridComposition = false});
 
   @override
   State<StatefulWidget> createState() => _KakaoMapState();
@@ -100,7 +106,8 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
         viewType: VIEW_TYPE,
         gestureRecognizers: gestureRecognizers,
         onPlatformViewCreated: onPlatformViewCreated,
-        creationParams: rawParams);
+        creationParams: rawParams,
+        forceHybridComposition: widget.forceHybridComposition);
   }
 
   void onPlatformViewCreated(int viewId) {

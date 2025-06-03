@@ -6,7 +6,7 @@ Widget _createPlatformView(
     Function(int)? onPlatformViewCreated,
     Map<String, dynamic> creationParams = const {},
     MessageCodec creationParamsCodec = const StandardMessageCodec(),
-    bool useAndroidViewSurface = false}) {
+    bool forceHybridComposition = false}) {
   if (kIsWeb) {
     return HtmlElementView(
         viewType: viewType,
@@ -21,7 +21,7 @@ Widget _createPlatformView(
             hitTestBehavior: PlatformViewHitTestBehavior.opaque,
             gestureRecognizers: gestureRecognizers),
         onCreatePlatformView: (params) {
-          final platformView = useAndroidViewSurface
+          final platformView = forceHybridComposition
               ? PlatformViewsService.initExpensiveAndroidView
               : PlatformViewsService.initAndroidView;
           
