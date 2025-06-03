@@ -66,13 +66,13 @@ abstract class KakaoMapController with OverlayManager {
 
   /// (네이티브 한정) 지도를 일시정지합니다.
   /// 이 메소드는 상태관리(Lifecycle)를 관리하기 위해 사용됩니다.
-  /// Kakao Map SDK는 상태관리가 적용되어 있지만, Navigaotr 등에 의한 페이지가 변경되는 특정 상태에서는 상태 관리가 적용되지 않습니다.
+  /// Kakao Map SDK는 상태관리가 적용되어 있지만, Navigator 등에 의한 페이지가 변경되는 특정 상태에서는 상태 관리가 적용되지 않습니다.
   /// 따라서 지도가 일시정지되어야 하는 환경에는 [pause] 메소드 호출이 필요합니다.
   Future<void> pause();
 
   /// (네이티브 한정) 일시정지 했던 지도를 다시 재게합니다.
   /// 이 메소드는 상태관리(Lifecycle)를 관리하기 위해 사용됩니다.
-  /// Kakao Map SDK는 상태관리가 적용되어 있지만, Navigaotr 등에 의한 페이지가 변경되는 특정 상태에서는 상태 관리가 적용되지 않습니다.
+  /// Kakao Map SDK는 상태관리가 적용되어 있지만, Navigator 등에 의한 페이지가 변경되는 특정 상태에서는 상태 관리가 적용되지 않습니다.
   /// 따라서 지도가 재게되어야 하는 환경에는 [resume] 메소드 호출이 필요합니다.
   Future<void> resume();
 
