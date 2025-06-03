@@ -64,8 +64,10 @@ class LodPoi {
   /// [LodPoi]에 적용된 [PoiStyle]을 즉시 변경합니다.
   /// [transition] 매개변수에 따라 [PoiStyle.iconTransition]과 [PoiStyle.textTransition]를 적용할 지 설정합니다.
   Future<void> changeStyle(PoiStyle style, [bool transition = false]) async {
-    final styleId = style.id ?? await _controller.manager.addPoiStyle(style);
-    await _controller._changePoiStyle(id, styleId);
+    if (!style._isAdded) {
+      await _controller.manager.addPoiStyle(style);
+    }
+    await _controller._changePoiStyle(id, style.id!);
     _style = style;
   }
 
