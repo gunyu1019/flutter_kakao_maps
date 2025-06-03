@@ -392,6 +392,5 @@ class KakaoMapControllerImplement extends KakaoMapController {
   
   @override
   Future<void> resume() async {
-    await channel.invokeMethod("resume");
   }
 }
