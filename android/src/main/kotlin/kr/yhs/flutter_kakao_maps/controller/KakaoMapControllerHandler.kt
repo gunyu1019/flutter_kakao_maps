@@ -99,6 +99,9 @@ interface KakaoMapControllerHandler {
           result::success,
         )
       }
+      "pause" -> pause(result::success)
+      "resume" -> resume(result::success)
+      "finish" -> finish(result::success)
       else -> result.notImplemented()
     }
 
@@ -145,4 +148,10 @@ interface KakaoMapControllerHandler {
   fun scaleAutohide(autohide: Boolean, onSuccess: (Any?) -> Unit)
 
   fun scaleAnimationTime(fadeIn: Int, fadeOut: Int, retention: Int, onSuccess: (Any?) -> Unit)
+
+  fun pause(onSuccess: (Any?) -> Unit)
+
+  fun resume(onSuccess: (Any?) -> Unit)
+
+  fun finish(onSuccess: (Any?) -> Unit)
 }

@@ -24,6 +24,7 @@ class KakaoMapView(
   private lateinit var kakaoMap: KakaoMap
 
   init {
+    controller.mapView = mapView
     mapView.start(controller, option)
     activity.application.registerActivityLifecycleCallbacks(this)
   }

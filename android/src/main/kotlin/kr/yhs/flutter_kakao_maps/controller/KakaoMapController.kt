@@ -29,6 +29,7 @@ class KakaoMapController(
 ) : KakaoMapControllerHandler, KakaoMapControllerSender, MapLifeCycleCallback() {
   private lateinit var kakaoMap: KakaoMap
   private lateinit var overlayController: OverlayController
+  public lateinit var mapView: MapView
 
   // listener
   private val cameraListener = CameraListener(channel)
@@ -195,6 +196,21 @@ class KakaoMapController(
     onSuccess: (Any?) -> Unit,
   ) {
     kakaoMap.scaleBar?.setFadeInOutTime(fadeIn, fadeOut, retention)
+    onSuccess.invoke(null)
+  }
+
+  override fun pause(onSuccess: (Any?) -> Unit) {
+    mapView.pause()
+    onSuccess.invoke(null)
+  }
+
+  override fun resume(onSuccess: (Any?) -> Unit) {
+    mapView.resume()
+    onSuccess.invoke(null)
+  }
+
+  override fun finish(onSuccess: (Any?) -> Unit) {
+    mapView.finish()
     onSuccess.invoke(null)
   }
 

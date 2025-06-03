@@ -41,6 +41,12 @@ protocol KakaoMapControllerHandler {
     func scaleAutohide(autohide: Bool, onSuccess: (Any?) -> Void)
 
     func scaleAnimationTime(fadeIn: UInt32, fadeOut: UInt32, retention: UInt32, onSuccess: (Any?) -> Void)
+
+    func pause(onSuccess: (Any?) -> Void)
+
+    func resume(onSuccess: (Any?) -> Void)
+
+    func finish(onSuccess: (Any?) -> Void)
 }
 
 extension KakaoMapControllerHandler {
@@ -96,6 +102,12 @@ extension KakaoMapControllerHandler {
             let fadeOut = arguments!["fadeIn"]! as! UInt32
             let retention = arguments!["fadeIn"]! as! UInt32
             scaleAnimationTime(fadeIn: fadeIn, fadeOut: fadeOut, retention: retention, onSuccess: result)
+        case "pause":
+            pause(onSuccess: result)
+        case "resume":
+            resume(onSuccess: result)
+        case "finish":
+            finish(onSuccess: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
