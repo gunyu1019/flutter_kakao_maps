@@ -24,7 +24,7 @@ Widget _createPlatformView(
           final platformView = forceHybridComposition
               ? PlatformViewsService.initExpensiveAndroidView
               : PlatformViewsService.initAndroidView;
-          
+
           return platformView.call(
             id: params.id,
             viewType: viewType,

@@ -78,7 +78,7 @@ class ShapeController extends OverlayController {
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
-    
+
     if (!style._isAdded) {
       await manager.addPolylineShapeStyle(style, polylineCap);
     }

@@ -78,7 +78,7 @@ class RouteController extends OverlayController {
     if (id != null && _route.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
-    
+
     if (!style._isAdded) {
       await manager.addRouteStyle(style);
     }

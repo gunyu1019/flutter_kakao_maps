@@ -140,7 +140,8 @@ class KakaoMapControllerImplement extends KakaoMapController {
 
   @override
   Future<String> addPoiStyle(PoiStyle style) async {
-    if ((style.id != null && _poiStyle.containsKey(style.id)) || style._isAdded) {
+    if ((style.id != null && _poiStyle.containsKey(style.id)) ||
+        style._isAdded) {
       throw DuplicatedOverlayException(style.id!);
     }
     String styleId = await labelLayer._invokeMethod(
@@ -193,7 +194,8 @@ class KakaoMapControllerImplement extends KakaoMapController {
   Future<String> addMultiplePolylineShapeStyle(
       List<PolylineStyle> style, PolylineCap polylineCap,
       [String? id]) async {
-    if ((id != null && _polylineStyle.containsKey(id)) || style.first._isAdded) {
+    if ((id != null && _polylineStyle.containsKey(id)) ||
+        style.first._isAdded) {
       throw DuplicatedOverlayException(id ?? "NONE_POLYLINE_STYLE_ID");
     }
     String styleId = await shapeLayer._invokeMethod("addPolylineShapeStyle", {
