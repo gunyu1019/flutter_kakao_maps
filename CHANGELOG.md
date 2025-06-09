@@ -1,3 +1,9 @@
+## 1.1.3
+* [Fix] (Android) Automatic bring map to front when open app from lock screen ([#14](https://github.com/gunyu1019/flutter_kakao_maps/issues/14))
+  * Implement a function that can be called in lifecycle.
+  * Apply other engine that can render between Dart and Android View.
+* [Fix] Invaild pre-added style check condition in overlay addition function ([#24](https://github.com/gunyu1019/flutter_kakao_maps/issues/24))
+
 ## 1.1.2
 * [Fix] Invalid method called in `KImage.fromWidget.` ([#22](https://github.com/gunyu1019/flutter_kakao_maps/issues/22))
 
