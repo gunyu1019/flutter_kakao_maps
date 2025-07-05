@@ -89,9 +89,8 @@ class CameraUpdate with KMessageable {
       CameraUpdateType.tilt => CameraUpdate.tilt(angle),
       CameraUpdateType.fitMapPoints => CameraUpdate.fitMapPoints(
           payload['points'].map<LatLng>(LatLng.fromMessageable).toList(),
-          padding: payload["padding"], 
-          zoomLevel: zoomLevel
-        )
+          padding: payload["padding"],
+          zoomLevel: zoomLevel)
     };
   }
 

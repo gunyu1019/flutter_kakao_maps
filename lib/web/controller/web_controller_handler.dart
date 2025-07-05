@@ -9,10 +9,9 @@ mixin KakaoMapWebControllerHandler {
       case "moveCamera":
         final cameraUpdate =
             CameraUpdate.fromMessageable(arguments["cameraUpdate"]);
-        final animation = (
-          arguments.containsKey("cameraAnimation") &&
-          arguments["cameraAnimation"] != null
-        ) ? CameraAnimation.fromMessageable(arguments["cameraAnimation"])
+        final animation = (arguments.containsKey("cameraAnimation") &&
+                arguments["cameraAnimation"] != null)
+            ? CameraAnimation.fromMessageable(arguments["cameraAnimation"])
             : null;
         await moveCamera(cameraUpdate, animation: animation);
         break;
