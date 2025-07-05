@@ -77,6 +77,7 @@ class KakaoMapWebPlugin {
 
     return web.HTMLDivElement()
       ..id = mapElementId(viewId)
+      ..style.zIndex = '0'
       ..style.width = '100%'
       ..style.height = '100%';
   }
