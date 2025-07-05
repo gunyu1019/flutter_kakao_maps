@@ -87,12 +87,11 @@ class CameraUpdate with KMessageable {
       CameraUpdateType.zoomOut => CameraUpdate.zoomOut(),
       CameraUpdateType.rotate => CameraUpdate.rotate(angle),
       CameraUpdateType.tilt => CameraUpdate.tilt(angle),
-      CameraUpdateType.fitMapPoints => () {
-          final points =
-              payload['points'].map((e) => LatLng.fromMessageable(e)).toList();
-          return CameraUpdate.fitMapPoints(points,
-              padding: payload["padding"], zoomLevel: zoomLevel);
-        }(),
+      CameraUpdateType.fitMapPoints => CameraUpdate.fitMapPoints(
+          payload['points'].map<LatLng>(LatLng.fromMessageable).toList(),
+          padding: payload["padding"], 
+          zoomLevel: zoomLevel
+        )
     };
   }
 
