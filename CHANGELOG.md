@@ -1,3 +1,9 @@
+## 1.1.4 
+* Update version of base SDK (to v2.12.14 in Android / to v2.12.5 in iOS)
+* [Fix] (Web Environment) Ignored Z-Index attribute Kakao Map View in canvas mode ([#23](https://github.com/gunyu1019/flutter_kakao_maps/issues/23))
+* [Fix] (Web Environment) Resolve type 'List<dynamic>' is not a subtype of type 'List<LatLng>' in `CameraUpdate.fromMessageable` factory function.
+* [Fix] (Web Environment) Cannot move camera without animation option.
+
 ## 1.1.3
 * [Fix] (Android) Automatic bring map to front when open app from lock screen ([#14](https://github.com/gunyu1019/flutter_kakao_maps/issues/14))
   * Implement a function that can be called in lifecycle.
