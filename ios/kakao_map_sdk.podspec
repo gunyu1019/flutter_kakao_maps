@@ -15,7 +15,7 @@ An unoffical kakao maps plugin.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'KakaoMapsSDK', '2.12.4'
+  s.dependency 'KakaoMapsSDK', '2.12.5'
   s.platform = :ios, '13.0'
 
   # Flutter.framework does not contain a i386 slice.
