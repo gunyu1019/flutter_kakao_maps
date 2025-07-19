@@ -22,8 +22,7 @@ let package = Package(
             name: "kakao_map_sdk",
             dependencies: [
                 .product(name: "KakaoMapsSDK-SPM", package: "KakaoMapsSDK-SPM")
-            ],
-            resources: []
+            ]
         )
     ]
 )
