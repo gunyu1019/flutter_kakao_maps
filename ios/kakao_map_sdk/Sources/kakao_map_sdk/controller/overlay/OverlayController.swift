@@ -83,7 +83,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addPoi(layer: LabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String) -> Void) {
         let poiInstance = layer.addPoi(option: poi, at: position)
-        if visible && !(poiInstance?.isShow ?? false) {
+        if visible, !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
         poiInstance?.addPoiTappedEventHandler(target: labelListener, handler: PoiClickListener.onPoiInteractionEvent)
@@ -97,7 +97,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addPolylineText(layer: LabelLayer, label: WaveTextOptions, visible: Bool, onSuccess: (String) -> Void) {
         let waveTextInstance = layer.addWaveText(label)
-        if visible && !(waveTextInstance?.isShow ?? false) {
+        if visible, !(waveTextInstance?.isShow ?? false) {
             waveTextInstance?.show()
         }
         onSuccess(waveTextInstance!.itemID)
@@ -114,7 +114,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     }
 
     func changePoiVisible(poi: Poi, visible: Bool, autoMove: Bool, onSuccess: (Any?) -> Void) {
-        if visible && autoMove {
+        if visible, autoMove {
             poi.showWithAutoMove()
         } else if visible {
             poi.show()
@@ -186,7 +186,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addLodPoi(layer: LodLabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String) -> Void) {
         let poiInstance = layer.addLodPoi(option: poi, at: position)
-        if visible && !(poiInstance?.isShow ?? false) {
+        if visible, !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
         poiInstance?.addPoiTappedEventHandler(target: labelListener, handler: PoiClickListener.onLodPoiInteractionEvent)
@@ -199,7 +199,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     }
 
     func changeLodPoiVisible(poi: LodPoi, visible: Bool, autoMove: Bool, onSuccess: (Any?) -> Void) {
-        if visible && autoMove {
+        if visible, autoMove {
             poi.showWithAutoMove()
         } else if visible {
             poi.show()
@@ -249,7 +249,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addMapPolygonShape(layer: ShapeLayer, option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
         let shapeInstance = layer.addMapPolygonShape(option)
-        if visible && !(shapeInstance?.isShow ?? false) {
+        if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
         onSuccess(shapeInstance!.shapeID)
@@ -257,7 +257,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addMapPolylineShape(layer: ShapeLayer, option: MapPolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
         let shapeInstance = layer.addMapPolylineShape(option)
-        if visible && !(shapeInstance?.isShow ?? false) {
+        if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
         onSuccess(shapeInstance!.shapeID)
@@ -265,7 +265,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addPolygonShape(layer: ShapeLayer, option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
         let shapeInstance = layer.addPolygonShape(option)
-        if visible && !(shapeInstance?.isShow ?? false) {
+        if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
         onSuccess(shapeInstance!.shapeID)
@@ -273,7 +273,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
         let shapeInstance = layer.addPolylineShape(option)
-        if visible && !(shapeInstance?.isShow ?? false) {
+        if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
         onSuccess(shapeInstance!.shapeID)

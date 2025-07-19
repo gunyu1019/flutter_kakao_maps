@@ -1,3 +1,5 @@
+import Foundation
+
 func asBool(_ v: Any) -> Bool {
     v as! Bool
 }

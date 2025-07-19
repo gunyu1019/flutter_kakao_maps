@@ -30,3 +30,6 @@ build/
 
 # local properties
 .env
+
+.build/
+.swiftpm/
