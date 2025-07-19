@@ -6,7 +6,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     private let overlayChannel: FlutterMethodChannel
     private let mapController: KMController
 
-    private var lateinitKakaoMap: KakaoMap? = nil
+    private var lateinitKakaoMap: KakaoMap?
     var kakaoMap: KakaoMap {
         get {
             return lateinitKakaoMap!
@@ -16,7 +16,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         }
     }
 
-    private var overlayController: OverlayController? = nil
+    private var overlayController: OverlayController?
 
     private let cameraListener: CameraListener
     private let mapClickListener: MapClickListener

@@ -12,7 +12,7 @@ public class FlutterKakaoMapsPlugin: NSObject, FlutterPlugin {
         registrar.register(kakaoMapFactory, withId: MAP_VIEW_TYPE_ID)
 
         let sdkChannel = FlutterMethodChannel(name: SDK_CHANNEL_NAME, binaryMessenger: registrar.messenger())
-        let _ = SdkInitializer(channel: sdkChannel)
+        _ = SdkInitializer(channel: sdkChannel)
     }
 
     private static let MAP_VIEW_TYPE_ID = "plugin/kakao_map"
