@@ -1,9 +1,12 @@
+// swift-tools-version: 5.9
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
 import PackageDescription
 
 let package = Package(
     name: "kakao_map_sdk",
     platforms: [
-        .iOS("13.0"),
+        .iOS(.v13)
     ],
     products: [
         .library(name: "kakao-map-sdk", targets: ["kakao_map_sdk"]),
@@ -16,7 +19,6 @@ let package = Package(
     ],
     targets: [
         .target(
-            // TODO: Update your target name.
             name: "kakao_map_sdk",
             dependencies: [
                 .product(name: "KakaoMapsSDK-SPM", package: "KakaoMapsSDK-SPM"),
