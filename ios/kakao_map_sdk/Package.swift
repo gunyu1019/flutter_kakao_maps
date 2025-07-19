@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "kakao_map_sdk",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v13),
     ],
     products: [
         .library(name: "kakao-map-sdk", targets: ["kakao_map_sdk"]),
