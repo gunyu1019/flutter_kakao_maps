@@ -31,6 +31,8 @@ flutter:
         pluginClass: FlutterKakaoMapsPlugin
       ios:
         pluginClass: FlutterKakaoMapsPlugin
+        podspec: ios/kakao_map_sdk.podspec
+        support_swift_package_manager: true
       web:
         pluginClass: KakaoMapWebPlugin
         fileName: web/kakao_map_sdk_web.dart
