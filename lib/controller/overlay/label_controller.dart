@@ -146,7 +146,10 @@ class LabelController extends BaseLabelController {
       }
     };
     payload["poi"].addAll(position.toMessageable());
-    String poiId = await _invokeMethod("addPoi", payload);
+    String? poiId = await _invokeMethod("addPoi", payload);
+    if (poiId == null) {
+      throw OverlayRegistrationFailedError(id ?? "Unknown ID", type);
+    }
     final poi = Poi._(this, poiId,
         transform: transform,
         position: position,
