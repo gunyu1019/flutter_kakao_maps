@@ -25,9 +25,12 @@ part 'controller/overlay/label_controller.dart';
 part 'controller/overlay/lod_label_controller.dart';
 part 'controller/overlay/route_controller.dart';
 part 'controller/overlay/shape_controller.dart';
+part 'controller/overlay/tracking_controller.dart';
 
 /* exception */
 part 'exception/duplicated_overlay_exception.dart';
+part 'exception/overlay_style_registration_failed_error.dart';
+part 'exception/overlay_registration_failed_error.dart';
 part 'exception/kakao_auth_error.dart';
 part 'exception/kakao_map_error.dart';
 
@@ -97,6 +100,7 @@ part 'models/enums/label/ordering_type.dart';
 part 'models/enums/label/transition.dart';
 part 'models/enums/label/transform_method.dart';
 
+part 'models/enums/shape/dim_screen_cover.dart';
 part 'models/enums/shape/point_shape_type.dart';
 part 'models/enums/shape/polyline_cap.dart';
 part 'models/enums/shape/shape_layer_pass.dart';
