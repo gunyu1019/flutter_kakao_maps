@@ -2,6 +2,8 @@ part of '../../kakao_map_sdk.dart';
 
 abstract class OverlayController {
   abstract final MethodChannel channel;
+
+  /// 오버레이 유형입니다.
   abstract final OverlayType type;
   abstract final OverlayManager manager;
 
