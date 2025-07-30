@@ -1,7 +1,7 @@
 part of '../../kakao_map_sdk.dart';
 
 /// 지도에 [Polyline] 또는 [Polygon]를 생성하거나 삭제하는 등의 개체 관리를 할 수 있는 컨트롤러입니다.
-class ShapeController extends OverlayController {
+class ShapeController extends BaseShapeController {
   @override
   MethodChannel channel;
 
@@ -24,7 +24,8 @@ class ShapeController extends OverlayController {
   final Map<String, Polygon> _polygonShape = {};
 
   ShapeController._(this.channel, this.manager, this.id,
-      {this.passType = defaultShapeLayerPass, this.zOrder = defaultZOrder});
+      {this.passType = defaultShapeLayerPass, this.zOrder = defaultZOrder})
+      : super._();
 
   Future<void> _createShapeLayer() async {
     await _invokeMethod(
@@ -33,34 +34,6 @@ class ShapeController extends OverlayController {
 
   Future<void> _removeShapeLayer() async {
     await _invokeMethod("removeShapeLayer", {});
-  }
-
-  Future<void> _changePolylineVisible(String shapeId, bool visible) async {
-    await _invokeMethod(
-        "changePolylineVisible", {"polylineId": shapeId, "visible": visible});
-  }
-
-  Future<void> _changePolygonVisible(String shapeId, bool visible) async {
-    await _invokeMethod(
-        "changePolygonVisible", {"polygonId": shapeId, "visible": visible});
-  }
-
-  Future<void> _changePolyline<T extends BasePoint>(
-      String shapeId, T position, String styleId) async {
-    await _invokeMethod("changePolyline", {
-      "polylineId": shapeId,
-      "styleId": styleId,
-      "position": position.toMessageable()
-    });
-  }
-
-  Future<void> _changePolygon<T extends BasePoint>(
-      String shapeId, T position, String styleId) async {
-    await _invokeMethod("changePolygon", {
-      "polygonId": shapeId,
-      "styleId": styleId,
-      "position": position.toMessageable()
-    });
   }
 
   @override
@@ -128,13 +101,13 @@ class ShapeController extends OverlayController {
   /// 입력된 [id]에 따라 지도에 그려진 [Polygon]를 불러옵니다.
   Polygon? getPolygonShape(String id) => _polygonShape[id];
 
-  /// 입력된 [shape]에 따라 지도에 그려진 [Polyline]를 삭제합니다.
+  @override
   Future<void> removePolylineShape(Polyline shape) async {
     await _invokeMethod("removePolylineShape", {"polylineId": shape.id});
     _polylineShape.remove(shape.id);
   }
 
-  /// 입력된 [shape]에 따라 지도에 그려진 [Polygon]를 삭제합니다.
+  @override
   Future<void> removePolygonShape(Polygon shape) async {
     await _invokeMethod("removePolygonShape", {"polygonId": shape.id});
     _polygonShape.remove(shape.id);
