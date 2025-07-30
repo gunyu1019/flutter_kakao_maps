@@ -2,7 +2,7 @@ part of '../../kakao_map_sdk.dart';
 
 /// 지도에 원, 삼각형, 사각형 등의 닫힌 도형을 나타내는 객체입니다.
 class Polygon<T extends BasePoint> {
-  final ShapeController _controller;
+  final BaseShapeController _controller;
 
   /// [Polygon]의 고유 ID입니다.
   final String id;
@@ -22,7 +22,7 @@ class Polygon<T extends BasePoint> {
   /// [Polygon]가 현재 지도에 그려지는지 여부를 나타냅니다.
   bool get visible => _visible;
 
-  Polygon._(ShapeController controller, this.id,
+  Polygon._(BaseShapeController controller, this.id,
       {required T position, required PolygonStyle style})
       : _controller = controller,
         _style = style,

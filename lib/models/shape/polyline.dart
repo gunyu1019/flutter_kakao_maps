@@ -2,7 +2,7 @@ part of '../../kakao_map_sdk.dart';
 
 /// 지도에 선형으로 구성된 도형을 나타내는 객체입니다.
 class Polyline<T extends BasePoint> {
-  final ShapeController _controller;
+  final BaseShapeController _controller;
 
   /// [Polyline]의 고유 ID입니다.
   final String id;
@@ -27,7 +27,7 @@ class Polyline<T extends BasePoint> {
   /// [Polyline]에서 정의된 끝모양을 불러옵니다.
   PolylineCap get polylineCap => _polylineCap;
 
-  Polyline._(ShapeController controller, this.id,
+  Polyline._(BaseShapeController controller, this.id,
       {required T position,
       required PolylineStyle style,
       required PolylineCap polylineCap})
