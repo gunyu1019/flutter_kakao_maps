@@ -19,7 +19,7 @@ enum OverlayType {
   dimScreen(value: 5),
 
   /// [Poi]의 이동을 추적하는 컨트롤러입니다.
-  trackking(value: 6);
+  tracking(value: 6);
 
   final int value;
 

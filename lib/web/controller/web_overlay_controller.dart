@@ -121,7 +121,7 @@ class WebOverlayController {
         return await _shapeLayer[layerId!]?.shapeHandle(method);
       case OverlayType.route:
         return await _routeLayer[layerId!]?.routeHandle(method);
-      case OverlayType.dimScreen:
+      case OverlayType.dimScreen || OverlayType.tracking:
         return null;
     }
   }

@@ -9,7 +9,7 @@ class TrackingController extends OverlayController {
   OverlayManager manager;
 
   @override
-  OverlayType get type => OverlayType.trackking;
+  OverlayType get type => OverlayType.tracking;
 
   TrackingController._(this.channel, this.manager);
 
