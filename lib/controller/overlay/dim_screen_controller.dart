@@ -3,7 +3,7 @@ part of '../../kakao_map_sdk.dart';
 /// 지도의 일부분을 제외하고 특정 색상으로 가리는 것을 조작하는 컨트롤러입니다.
 /// [MapPoint]와 [BaseDotPoint] 기반의 요소를 이용하여 지도의 일부분에 특정 색을 입히거나,
 /// 특정 부분을 제외한 모든 부분을 색상을 입힐 수 있습니다.
-class DimScreenController extends OverlayController {
+class DimScreenController extends BaseShapeController {
   @override
   MethodChannel channel;
 
@@ -13,7 +13,7 @@ class DimScreenController extends OverlayController {
   @override
   OverlayType get type => OverlayType.dimScreen;
 
-  DimScreenController._(this.channel, this.manager);
+  DimScreenController._(this.channel, this.manager) : super._();
 
   /// DimScreen의 색상입니다.
   Color get color => _color;
@@ -27,7 +27,7 @@ class DimScreenController extends OverlayController {
   bool get visible => _visible;
   bool _visible = false;
 
-  Map<String, Polygon> _polygonShape = {};
+  final Map<String, Polygon> _polygonShape = {};
 
   /// 지도를 덮을 범위를 설정합니다.
   Future<void> setCover(DimScreenCover cover) async {
@@ -72,20 +72,23 @@ class DimScreenController extends OverlayController {
       }
     };
     String shapeId = await _invokeMethod("addHighlightPolygonShape", payload);
-    // final polygon =
-    //     Polygon<T>._(this, shapeId, position: position, style: style);
-    // _polygonShape[shapeId] = polygon;
-    // return polygon;
-    // TODO(조치 필요 / 아마 ShapeController과 객체를 묶거나 해야할 듯..?)
-    throw UnimplementedError();
+    final polygon =
+        Polygon<T>._(this, shapeId, position: position, style: style);
+    _polygonShape[shapeId] = polygon;
+    return polygon;
   }
 
   /// 입력된 [id]에 DimScreen에 표출된 [Polygon]를 불러옵니다.
   Polygon? getPolygonShape(String id) => _polygonShape[id];
 
-  /// 입력된 [shape]에 따라 DimScreen에 표출된 [Polygon]를 불러옵니다.
+  @override
   Future<void> removePolygonShape(Polygon shape) async {
     await _invokeMethod("removeHighlightPolygonShape", {"polygonId": shape.id});
     _polygonShape.remove(shape.id);
+  }
+  
+  @override
+  Future<void> removePolylineShape(Polyline<BasePoint> shape) {
+    throw UnimplementedError("Unused feature in dim screen");
   }
 }
