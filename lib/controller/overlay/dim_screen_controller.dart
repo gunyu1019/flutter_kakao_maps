@@ -40,7 +40,7 @@ class DimScreenController extends BaseShapeController {
   /// DimScreen의 색상을 설정합니다.
   Future<void> setColor(Color color) async {
     _color = color;
-    await _invokeMethod("setCover", {
+    await _invokeMethod("setColor", {
       // ignore: deprecated_member_use
       "color": color.value
     });
