@@ -40,7 +40,7 @@ class TrackingController extends OverlayController {
   /// [Poi.rotate] 등에 의해 [Poi]가 회전한다면, 카메라도 따라서 회전합니다.
   Future<void> setTrackingRotate(bool rotation) async {
     _trackingRotation = rotation;
-    await _invokeMethod("setTrackkingRotation", {
+    await _invokeMethod("setTrackingPosition", {
       "rotation": rotation
     });
   }

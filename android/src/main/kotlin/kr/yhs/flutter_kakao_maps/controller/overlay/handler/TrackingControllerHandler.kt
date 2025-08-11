@@ -2,7 +2,6 @@ package kr.yhs.flutter_kakao_maps.controller.overlay.handler
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import java.util.Arrays
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asBoolean
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asInt
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
@@ -30,6 +29,13 @@ interface TrackingControllerHandler {
     }
 
     when (call.method) {
+      "startTracking" -> {
+        val labelLayer = labelManager!!.getLayer(arguments["layerId"]!!.asString())
+        val label = labelLayer.getLabel(arguments["poiId"]!!.asString())
+        startTracking(label, result::success)
+      }
+      "stopTracking" -> stopTracking(result::success)
+      "setTrackingPosition" -> setTrackkingRotation(arguments["rotation"]!!.asBoolean(), result::success)
     }
   }
   
