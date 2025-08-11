@@ -37,7 +37,7 @@ interface DimScreenControllerHandler {
       "setColor" -> setDimColor(arguments["color"]!!.asInt(), result::success)
       "setVisible" -> setDimVisible(arguments["visible"]!!.asBoolean(), result::success)
       "setDimCorver" -> setDimCorver(arguments["cover"]!!.asString().let { value: String ->
-        DimScreenCover.values().filter { it.name == value }
+          DimScreenCover.entries.first { it.name == value }
       }, result::success)
       "addHighlightPolygonShape" -> {}
       "removeHighlightPolygonShape" -> {}
