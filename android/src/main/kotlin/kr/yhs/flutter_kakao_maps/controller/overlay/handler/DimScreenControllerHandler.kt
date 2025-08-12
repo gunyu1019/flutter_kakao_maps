@@ -19,7 +19,7 @@ interface DimScreenControllerHandler {
   val dimScreenManager: DimScreenManager?
 
   val dimScreenLayer: DimScreenLayer?
-    get = dimScreenManager?.getDimScreenLayer()
+    get() = dimScreenManager?.getDimScreenLayer()
  
   fun dimScreenHandle(call: MethodCall, result: MethodChannel.Result) {
     val arguments = call.arguments!!.asMap<Any?>()
