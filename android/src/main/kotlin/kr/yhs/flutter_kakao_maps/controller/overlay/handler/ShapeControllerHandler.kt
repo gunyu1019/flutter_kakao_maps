@@ -48,11 +48,15 @@ interface ShapeControllerHandler {
       "addPolygonShapeStyle" ->
         addPolygonShapeStyle(arguments.asPolygonStylesSet(), result::success)
       "addPolylineShape" -> {
-        val shapeOption = arguments["polyline"]!!.asPolylineOption(shapeManager!!)
+        val rawOption = arguments["polyline"]!!.asMap<Any>()
+        val polylineStyle = shapeManager!!.getPolylineStyles(rawOption["styleId"]!!.asString())
+        val shapeOption = rawOption.asPolylineOption(polylineStyle)
         addPolylineShape(layer!!, shapeOption, result::success)
       }
       "addPolygonShape" -> {
-        val shapeOption = arguments["polygon"]!!.asPolygonOption(shapeManager!!)
+        val rawOption = arguments["polygon"]!!.asMap<Any>()
+        val polygonStyle = shapeManager!!.getPolygonStyles(rawOption["styleId"]!!.asString())
+        val shapeOption = rawOption.asPolygonOption(polygonStyle)
         addPolygonShape(layer!!, shapeOption, result::success)
       }
       "removePolylineShape" -> removePolylineShape(layer!!, polylineShape!!, result::success)

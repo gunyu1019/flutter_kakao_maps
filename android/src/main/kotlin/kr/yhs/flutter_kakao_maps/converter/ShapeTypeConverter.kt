@@ -143,10 +143,9 @@ object ShapeTypeConverter {
         }
     }
 
-  fun Any.asPolygonOption(shapeManager: ShapeManager): PolygonOptions =
+  fun Any.asPolygonOption(style: PolygonStylesSet): PolygonOptions =
     asMap<Any?>().let { rawPayload: Map<String, Any?> ->
       val position = rawPayload["position"]!!.asMap<Any?>()
-      val style = shapeManager.getPolygonStyles(rawPayload["styleId"]!!.asString())
       return ((rawPayload["id"]?.asString()?.let { PolygonOptions.from(it) })
           ?: PolygonOptions.from())
         .apply {
@@ -160,10 +159,9 @@ object ShapeTypeConverter {
         }
     }
 
-  fun Any.asPolylineOption(shapeManager: ShapeManager): PolylineOptions =
+  fun Any.asPolylineOption(style: PolylineStylesSet): PolylineOptions =
     asMap<Any?>().let { rawPayload: Map<String, Any?> ->
       val position = rawPayload["position"]!!.asMap<Any?>()
-      val style = shapeManager.getPolylineStyles(rawPayload["styleId"]!!.asString())
       return ((rawPayload["id"]?.asString()?.let { PolylineOptions.from(it) })
           ?: PolylineOptions.from())
         .apply {
