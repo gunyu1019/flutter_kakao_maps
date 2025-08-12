@@ -589,31 +589,38 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun setDimColor(color: Int, onSuccess: (Any?) -> Unit) {
-    TODO("Not yet implemented")
+    dimScreenLayer?.setColor(color)
+    onSuccess.invoke(null)
   }
 
   override fun setDimVisible(visible: Boolean, onSuccess: (Any?) -> Unit) {
-    TODO("Not yet implemented")
+    dimScreenLayer?.setVisible(visible)
+    onSuccess.invoke(null)
   }
 
   override fun setDimCorver(
     cover: DimScreenCover,
     onSuccess: (Any?) -> Unit
   ) {
-    TODO("Not yet implemented")
+    dimScreenLayer?.setDimScreenCover(cover)
+    onSuccess.invoke(null)
   }
 
   override fun addDimHighlightPolygonShape(
     shape: PolygonOptions,
     onSuccess: (String) -> Unit
   ) {
-    TODO("Not yet implemented")
+    dimScreenLayer?.addPolygon(shape).let {
+      onSuccess.invoke(it!!.id)
+    }
   }
 
   override fun removeDimHighlightPolygonShape(
     polygonId: String,
     onSuccess: (Any?) -> Unit
   ) {
-    TODO("Not yet implemented")
+    val polygon = dimScreenLayer?.getPolygon(polygonId)
+    dimScreenLayer?.remove(polygon)
+    onSuccess.invoke(null)
   }
 }
