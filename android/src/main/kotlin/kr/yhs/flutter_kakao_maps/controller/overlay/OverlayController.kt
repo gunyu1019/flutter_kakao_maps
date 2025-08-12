@@ -14,12 +14,15 @@ import com.kakao.vectormap.label.LodLabelLayer
 import com.kakao.vectormap.label.PolylineLabel
 import com.kakao.vectormap.label.PolylineLabelOptions
 import com.kakao.vectormap.label.PolylineLabelStyles
+import com.kakao.vectormap.label.TrackingManager
 import com.kakao.vectormap.route.RouteLine
 import com.kakao.vectormap.route.RouteLineLayer
 import com.kakao.vectormap.route.RouteLineManager
 import com.kakao.vectormap.route.RouteLineOptions
 import com.kakao.vectormap.route.RouteLineSegment
 import com.kakao.vectormap.route.RouteLineStylesSet
+import com.kakao.vectormap.shape.DimScreenCover
+import com.kakao.vectormap.shape.DimScreenManager
 import com.kakao.vectormap.shape.DotPoints
 import com.kakao.vectormap.shape.MapPoints
 import com.kakao.vectormap.shape.Polygon
@@ -33,10 +36,12 @@ import com.kakao.vectormap.shape.ShapeLayerOptions
 import com.kakao.vectormap.shape.ShapeManager
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import kr.yhs.flutter_kakao_maps.controller.overlay.handler.DimScreenControllerHandler
 import kr.yhs.flutter_kakao_maps.controller.overlay.handler.LabelControllerHandler
 import kr.yhs.flutter_kakao_maps.controller.overlay.handler.LodLabelControllerHandler
 import kr.yhs.flutter_kakao_maps.controller.overlay.handler.RouteControllerHandler
 import kr.yhs.flutter_kakao_maps.controller.overlay.handler.ShapeControllerHandler
+import kr.yhs.flutter_kakao_maps.controller.overlay.handler.TrackingControllerHandler
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelTextBuilder
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
 import kr.yhs.flutter_kakao_maps.model.OverlayType
@@ -45,15 +50,22 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   LabelControllerHandler,
   LodLabelControllerHandler,
   ShapeControllerHandler,
-  RouteControllerHandler {
+  RouteControllerHandler,
+  DimScreenControllerHandler,
+  TrackingControllerHandler {
+  override val trackingManager: TrackingManager?
+    get() = kakaoMap.trackingManager
+
+  override val dimScreenManager: DimScreenManager?
+    get() = kakaoMap.dimScreenManager
   override val labelManager: LabelManager?
-    get() = kakaoMap.getLabelManager()
+    get() = kakaoMap.labelManager
 
   override val shapeManager: ShapeManager?
-    get() = kakaoMap.getShapeManager()
+    get() = kakaoMap.shapeManager
 
   override val routeManager: RouteLineManager?
-    get() = kakaoMap.getRouteLineManager()
+    get() = kakaoMap.routeLineManager
 
   init {
     channel.setMethodCallHandler(::handle)
@@ -67,6 +79,8 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
       OverlayType.LodLabel -> lodLabelHandle(call, result)
       OverlayType.Shape -> shapeHandle(call, result)
       OverlayType.Route -> routeHandle(call, result)
+      OverlayType.DimScreen -> dimScreenHandle(call, result)
+      OverlayType.Tracking -> trackingHandle(call, result)
     }
 
   override fun createLabelLayer(options: LabelLayerOptions, onSuccess: (Any?) -> Unit) {
@@ -553,5 +567,53 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   ) {
     layer.setVisible(visible)
     onSuccess.invoke(null)
+  }
+
+
+  override fun setTrackkingRotation(
+    rotation: Boolean,
+    onSuccess: (Any?) -> Unit
+  ) {
+    trackingManager?.setTrackingRotation(rotation)
+  }
+
+  override fun startTracking(
+    label: Label,
+    onSuccess: (Any?) -> Unit
+  ) {
+    trackingManager?.startTracking(label)
+  }
+
+  override fun stopTracking(onSuccess: (Any?) -> Unit) {
+    trackingManager?.stopTracking()
+  }
+
+  override fun setDimColor(color: Int, onSuccess: (Any?) -> Unit) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setDimVisible(visible: Boolean, onSuccess: (Any?) -> Unit) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setDimCorver(
+    cover: DimScreenCover,
+    onSuccess: (Any?) -> Unit
+  ) {
+    TODO("Not yet implemented")
+  }
+
+  override fun addDimHighlightPolygonShape(
+    shape: PolygonOptions,
+    onSuccess: (String) -> Unit
+  ) {
+    TODO("Not yet implemented")
+  }
+
+  override fun removeDimHighlightPolygonShape(
+    polygonId: String,
+    onSuccess: (Any?) -> Unit
+  ) {
+    TODO("Not yet implemented")
   }
 }
