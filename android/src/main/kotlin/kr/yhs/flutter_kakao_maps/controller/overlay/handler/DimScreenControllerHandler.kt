@@ -13,13 +13,7 @@ import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asBoolean
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asInt
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asString
-import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asDotPoints
-import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asMapPoints
 import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asPolygonOption
-import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asPolygonStylesSet
-import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asPolylineOption
-import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asPolylineStylesSet
-import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asShapeLayerOption
 
 interface DimScreenControllerHandler {
   val dimScreenManager: DimScreenManager?
@@ -39,8 +33,13 @@ interface DimScreenControllerHandler {
       "setDimCorver" -> setDimCorver(arguments["cover"]!!.asString().let { value: String ->
           DimScreenCover.entries.first { it.name == value }
       }, result::success)
-      "addHighlightPolygonShape" -> {}
-      "removeHighlightPolygonShape" -> {}
+      "addHighlightPolygonShape" -> {
+        val rawOption = arguments["polygon"]!!.asMap<Any>()
+        val style = dimScreenManager!!.getPolygonStyles(rawOption["styleId"]!!.asString())
+        val option = rawOption.asPolygonOption(style)
+        addDimHighlightPolygonShape(option, result::success)
+      }
+      "removeHighlightPolygonShape" -> removeDimHighlightPolygonShape(arguments["polygonId"]!!.toString(), result::success)
     }
   }
 
