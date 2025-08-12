@@ -22,7 +22,7 @@ interface TrackingControllerHandler {
 
   val labelManager: LabelManager?
  
-  fun tackingHandle(call: MethodCall, result: MethodChannel.Result) {
+  fun trackingHandle(call: MethodCall, result: MethodChannel.Result) {
     val arguments = call.arguments!!.asMap<Any?>()
     if (trackingManager == null) {
       throw NullPointerException("TrackingManager is null.")
