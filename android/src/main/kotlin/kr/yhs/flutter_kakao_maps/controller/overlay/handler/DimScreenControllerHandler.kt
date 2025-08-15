@@ -13,6 +13,8 @@ import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asBoolean
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asInt
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asString
+import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asDotPoints
+import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asMapPoints
 import kr.yhs.flutter_kakao_maps.converter.ShapeTypeConverter.asPolygonOption
 
 interface DimScreenControllerHandler {
@@ -27,10 +29,12 @@ interface DimScreenControllerHandler {
       throw NullPointerException("DimScreenManager is null.")
     }
 
+    val polygonShape = dimScreenLayer?.run { arguments["polygonId"]?.asString()?.let(dimScreenLayer::getPolygon) }
+
     when (call.method) {
       "setColor" -> setDimColor(arguments["color"]!!.asInt(), result::success)
       "setVisible" -> setDimVisible(arguments["visible"]!!.asBoolean(), result::success)
-      "setDimCorver" -> setDimCorver(arguments["cover"]!!.asString().let { value: String ->
+      "setDimCover" -> setDimCorver(arguments["cover"]!!.asString().let { value: String ->
           DimScreenCover.entries.first { it.name == value }
       }, result::success)
       "addHighlightPolygonShape" -> {
@@ -40,6 +44,21 @@ interface DimScreenControllerHandler {
         addDimHighlightPolygonShape(option, result::success)
       }
       "removeHighlightPolygonShape" -> removeDimHighlightPolygonShape(arguments["polygonId"]!!.toString(), result::success)
+      "changePolygonVisible" -> {
+        val visible = arguments["visible"]?.asBoolean()!!
+        changePolygonVisible(polygonShape!!, visible, result::success)
+      }
+      "changePolygon" -> {
+        val styleId = arguments["styleId"]?.asString()
+        val position = arguments["position"]!!.asMap<Any?>()
+        if (position["type"]!!.asInt() == 0) {
+          val mapPosition = position.asMapPoints().let { Arrays.asList(it) }
+          changePolygonFromMapPoints(polygonShape!!, styleId!!, mapPosition, result::success)
+        } else {
+          val dotPosition: List<DotPoints> = position.asDotPoints().let { Arrays.asList(it) }
+          changePolygonFromDotPoints(polygonShape!!, styleId!!, dotPosition, result::success)
+        }
+      }
     }
   }
 
@@ -52,4 +71,8 @@ interface DimScreenControllerHandler {
   fun addDimHighlightPolygonShape(shape: PolygonOptions, onSuccess: (String) -> Unit)
 
   fun removeDimHighlightPolygonShape(polygonId: String, onSuccess: (Any?) -> Unit);
+
+  fun changePolygonVisible(shape: Polygon, visible: Boolean, onSuccess: (Any?) -> Unit)
+
+  fun changePolygonVisible(shape: Polygon, visible: Boolean, onSuccess: (Any?) -> Unit)
 }
