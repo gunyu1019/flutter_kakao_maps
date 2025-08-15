@@ -5,6 +5,7 @@ import com.kakao.vectormap.shape.MapPoints
 import com.kakao.vectormap.shape.DimScreenManager
 import com.kakao.vectormap.shape.DimScreenLayer
 import com.kakao.vectormap.shape.DimScreenCover
+import com.kakao.vectormap.shape.Polygon
 import com.kakao.vectormap.shape.PolygonOptions
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -25,11 +26,11 @@ interface DimScreenControllerHandler {
  
   fun dimScreenHandle(call: MethodCall, result: MethodChannel.Result) {
     val arguments = call.arguments!!.asMap<Any?>()
-    if (dimScreenManager == null) {
+    if (dimScreenManager == null || dimScreenLayer == null) {
       throw NullPointerException("DimScreenManager is null.")
     }
 
-    val polygonShape = dimScreenLayer?.run { arguments["polygonId"]?.asString()?.let(dimScreenLayer::getPolygon) }
+    val polygonShape = arguments["polygonId"]?.asString()?.let(dimScreenLayer!!::getPolygon)
 
     when (call.method) {
       "setColor" -> setDimColor(arguments["color"]!!.asInt(), result::success)
@@ -74,5 +75,18 @@ interface DimScreenControllerHandler {
 
   fun changePolygonVisible(shape: Polygon, visible: Boolean, onSuccess: (Any?) -> Unit)
 
-  fun changePolygonVisible(shape: Polygon, visible: Boolean, onSuccess: (Any?) -> Unit)
+
+  fun changePolygonFromMapPoints(
+    shape: Polygon,
+    styleId: String,
+    position: List<MapPoints>,
+    onSuccess: (Any?) -> Unit,
+  )
+
+  fun changePolygonFromDotPoints(
+    shape: Polygon,
+    styleId: String,
+    position: List<DotPoints>,
+    onSuccess: (Any?) -> Unit,
+  )
 }
