@@ -243,6 +243,9 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addPolygonShapeStyle(style: PolygonStyleSet, onSuccess: (String) -> Void) {
         shapeManager.addPolygonStyleSet(style)
+        
+        let dimScreenStyle = PolygonStyleSet(styleSetID: style.styleSetID, styles: style.styles)
+        dimScreenManager.addPolygonStyleSet(dimScreenStyle)
         onSuccess(style.styleSetID)
     }
 
