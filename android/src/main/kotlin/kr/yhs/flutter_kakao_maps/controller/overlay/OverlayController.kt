@@ -97,9 +97,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     labelManager!!.addLabelStyles(style).let { it -> onSuccess.invoke(it?.styleId) }
   }
 
-  override fun addPoi(layer: LabelLayer, poi: LabelOptions, onSuccess: (String) -> Unit) {
-    val label = layer.addLabel(poi)
-    onSuccess.invoke(label.labelId)
+  override fun addPoi(layer: LabelLayer, poi: LabelOptions, onSuccess: (String?) -> Unit) {
+    layer.addLabel(poi).let {
+      onSuccess.invoke(it?.labelId)
+    }
   }
 
   override fun removePoi(layer: LabelLayer, poi: Label, onSuccess: Function1<Any?, Unit>) {
@@ -110,10 +111,11 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   override fun addPolylineText(
     layer: LabelLayer,
     label: PolylineLabelOptions,
-    onSuccess: (String) -> Unit,
+    onSuccess: (String?) -> Unit,
   ) {
-    val polylineText = layer.addPolylineLabel(label)
-    onSuccess.invoke(polylineText.labelId)
+    layer.addPolylineLabel(label).let {
+      onSuccess.invoke(it?.labelId)
+    }
   }
 
   override fun removePolylineText(
@@ -250,9 +252,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun addLodPoi(layer: LodLabelLayer, poi: LabelOptions, onSuccess: (String) -> Unit) {
-    val label = layer.addLodLabel(poi)
-    onSuccess.invoke(label.labelId)
+  override fun addLodPoi(layer: LodLabelLayer, poi: LabelOptions, onSuccess: (String?) -> Unit) {
+    val label = layer.addLodLabel(poi).let {
+      onSuccess.invoke(it?.labelId)
+    }
   }
 
   override fun removeLodPoi(layer: LodLabelLayer, poi: LodLabel, onSuccess: (Any?) -> Unit) {
@@ -305,32 +308,36 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun addPolylineShapeStyle(style: PolylineStylesSet, onSuccess: (String) -> Unit) {
-    val styleSet = shapeManager!!.addPolylineStyles(style)
-    onSuccess.invoke(styleSet.styleId)
+  override fun addPolylineShapeStyle(style: PolylineStylesSet, onSuccess: (String?) -> Unit) {
+    shapeManager!!.addPolylineStyles(style).let {
+      onSuccess.invoke(it?.styleId)
+    }
   }
 
-  override fun addPolygonShapeStyle(style: PolygonStylesSet, onSuccess: (String) -> Unit) {
-    val styleSet = shapeManager!!.addPolygonStyles(style)
-    onSuccess.invoke(styleSet.styleId)
+  override fun addPolygonShapeStyle(style: PolygonStylesSet, onSuccess: (String?) -> Unit) {
+    shapeManager!!.addPolygonStyles(style).let {
+      onSuccess.invoke(it?.styleId)
+    }
   }
 
   override fun addPolylineShape(
     layer: ShapeLayer,
     shape: PolylineOptions,
-    onSuccess: (String) -> Unit,
+    onSuccess: (String?) -> Unit,
   ) {
-    val polylineShape = layer.addPolyline(shape)
-    onSuccess.invoke(polylineShape.id)
+    layer.addPolyline(shape).let {
+      onSuccess.invoke(it?.id)
+    }
   }
 
   override fun addPolygonShape(
     layer: ShapeLayer,
     shape: PolygonOptions,
-    onSuccess: (String) -> Unit,
+    onSuccess: (String?) -> Unit,
   ) {
-    val polylineShape = layer.addPolygon(shape)
-    onSuccess.invoke(polylineShape.id)
+    layer.addPolygon(shape).let {
+      onSuccess.invoke(it?.id)
+    }
   }
 
   override fun removePolylineShape(layer: ShapeLayer, shape: Polyline, onSuccess: (Any?) -> Unit) {
@@ -415,16 +422,19 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun addRouteStyle(style: RouteLineStylesSet, onSuccess: (String) -> Unit) {
-    routeManager!!.addStylesSet(style).let { it.styleId }.let(onSuccess::invoke)
+  override fun addRouteStyle(style: RouteLineStylesSet, onSuccess: (String?) -> Unit) { routeManager!!.addStylesSet(style).let {
+      onSuccess.invoke(it?.styleId)
+    }
   }
 
   override fun addRoute(
     layer: RouteLineLayer,
     route: RouteLineOptions,
-    onSuccess: (String) -> Unit,
+    onSuccess: (String?) -> Unit,
   ) {
-    layer.addRouteLine(route).let { it.lineId }.let(onSuccess::invoke)
+    layer.addRouteLine(route).let {
+      onSuccess.invoke(it?.lineId)
+    }
   }
 
   override fun removeRoute(layer: RouteLineLayer, route: RouteLine, onSuccess: (Any?) -> Unit) {
@@ -608,10 +618,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
 
   override fun addDimHighlightPolygonShape(
     shape: PolygonOptions,
-    onSuccess: (String) -> Unit
+    onSuccess: (String?) -> Unit
   ) {
     dimScreenLayer?.addPolygon(shape).let {
-      onSuccess.invoke(it!!.id)
+      onSuccess.invoke(it?.id)
     }
   }
 
