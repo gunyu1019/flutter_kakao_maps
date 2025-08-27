@@ -4,7 +4,7 @@ part of '../../kakao_map_sdk.dart';
 /// 지도에 [Poi], [LodPoi], [PolylineText] 개체를 관리하기 위해 필수로 필요한 요소를 관리합니다.
 abstract class BaseShapeController extends OverlayController {
   BaseShapeController._();
-  
+
   Future<void> _changePolylineVisible(String shapeId, bool visible) async {
     await _invokeMethod(
         "changePolylineVisible", {"polylineId": shapeId, "visible": visible});

@@ -32,9 +32,7 @@ class DimScreenController extends BaseShapeController {
   /// 지도를 덮을 범위를 설정합니다.
   Future<void> setCover(DimScreenCover cover) async {
     _cover = cover;
-    await _invokeMethod("setCover", {
-      "cover": cover.value
-    });
+    await _invokeMethod("setCover", {"cover": cover.value});
   }
 
   /// DimScreen의 색상을 설정합니다.
@@ -49,9 +47,7 @@ class DimScreenController extends BaseShapeController {
   /// DimScreen을 지도에 나타낼지 설정합니다.
   Future<void> setVisible(bool visible) async {
     _visible = visible;
-    await _invokeMethod("setVisible", {
-      "visible": visible
-    });
+    await _invokeMethod("setVisible", {"visible": visible});
   }
 
   /// 지도를 덮고 있는 DimScreen에 [Polygon]을 추가하여 일부분을 지도에 보일 수 있도록 합니다.
@@ -86,7 +82,7 @@ class DimScreenController extends BaseShapeController {
     await _invokeMethod("removeHighlightPolygonShape", {"polygonId": shape.id});
     _polygonShape.remove(shape.id);
   }
-  
+
   @override
   Future<void> removePolylineShape(Polyline<BasePoint> shape) {
     throw UnimplementedError("Unused feature in dim screen");

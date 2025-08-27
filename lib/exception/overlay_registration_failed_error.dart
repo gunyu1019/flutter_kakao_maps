@@ -1,7 +1,7 @@
 part of '../kakao_map_sdk.dart';
 
 /// 오버레이 등록에 실패하면 호출되는 에러입니다.
-/// 지도를 그리는 과정에서 올바르지 않은 인수를 주거나, 
+/// 지도를 그리는 과정에서 올바르지 않은 인수를 주거나,
 /// 중복된 ID를 가진 오버레이를 등록하는 등의 이유로
 /// 지도에 오버레이([Poi] 등)을 그리지 못하고 오류를 유발하면 호출되는 에러입니다.
 class OverlayRegistrationFailedError implements Error {

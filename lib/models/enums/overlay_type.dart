@@ -1,6 +1,5 @@
 part of '../../kakao_map_sdk.dart';
 
-
 /// 지도를 나타내는 오버레이의 컨트롤러 유형입니다.
 enum OverlayType {
   /// [Poi], [PolylineText]를 관리하는 컨트롤러입니다.

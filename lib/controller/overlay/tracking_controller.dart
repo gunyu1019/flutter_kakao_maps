@@ -1,6 +1,6 @@
 part of '../../kakao_map_sdk.dart';
 
-/// 
+///
 class TrackingController extends OverlayController {
   @override
   MethodChannel channel;
@@ -26,10 +26,8 @@ class TrackingController extends OverlayController {
   /// [poi]가 지정되지 않았으면 반응하지 않습니다.
   Future<void> start() async {
     if (poi == null) return;
-    await _invokeMethod("startTracking", {
-      "poiId": poi!.id,
-      "layerId": poi!._controller.id
-    });
+    await _invokeMethod(
+        "startTracking", {"poiId": poi!.id, "layerId": poi!._controller.id});
   }
 
   Future<void> stop() async {
@@ -40,8 +38,6 @@ class TrackingController extends OverlayController {
   /// [Poi.rotate] 등에 의해 [Poi]가 회전한다면, 카메라도 따라서 회전합니다.
   Future<void> setTrackingRotate(bool rotation) async {
     _trackingRotation = rotation;
-    await _invokeMethod("setTrackingPosition", {
-      "rotation": rotation
-    });
+    await _invokeMethod("setTrackingPosition", {"rotation": rotation});
   }
 }
