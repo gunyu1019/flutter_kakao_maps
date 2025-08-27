@@ -144,8 +144,11 @@ class KakaoMapControllerImplement extends KakaoMapController {
         style._isAdded) {
       throw DuplicatedOverlayException(style.id!);
     }
-    String styleId = await labelLayer._invokeMethod(
+    String? styleId = await labelLayer._invokeMethod(
         "addPoiStyle", {"styleId": style.id, "styles": style.toMessageable()});
+    if (styleId == null) {
+      throw OverlayStyleRegistrationFailedError(style.id, OverlayType.label);
+    }
     style._setStyleId(styleId);
     style._isAdded = true;
     _poiStyle[styleId] = style;
@@ -178,10 +181,13 @@ class KakaoMapControllerImplement extends KakaoMapController {
     if ((id != null && _polygonStyle.containsKey(id)) || style.first._isAdded) {
       throw DuplicatedOverlayException(id ?? "NONE_POLYGON_STYLE_ID");
     }
-    String styleId = await shapeLayer._invokeMethod("addPolygonShapeStyle", {
+    String? styleId = await shapeLayer._invokeMethod("addPolygonShapeStyle", {
       "styleId": id,
       "styles": style.map((e) => e.toMessageable()).toList()
     });
+    if (styleId == null) {
+      throw OverlayStyleRegistrationFailedError(id, OverlayType.shape);
+    }
     for (PolygonStyle element in style) {
       element._isAdded = true;
       element._setStyleId(styleId);
@@ -198,11 +204,14 @@ class KakaoMapControllerImplement extends KakaoMapController {
         style.first._isAdded) {
       throw DuplicatedOverlayException(id ?? "NONE_POLYLINE_STYLE_ID");
     }
-    String styleId = await shapeLayer._invokeMethod("addPolylineShapeStyle", {
+    String? styleId = await shapeLayer._invokeMethod("addPolylineShapeStyle", {
       "styleId": id,
       "styles": style.map((e) => e.toMessageable()).toList(),
       "polylineCap": polylineCap.value
     });
+    if (styleId == null) {
+      throw OverlayStyleRegistrationFailedError(id, OverlayType.shape);
+    }
     for (PolylineStyle element in style) {
       element._isAdded = true;
       element._setStyleId(styleId);
@@ -223,10 +232,13 @@ class KakaoMapControllerImplement extends KakaoMapController {
     if ((id != null && _routeStyle.containsKey(id)) || styles.first._isAdded) {
       throw DuplicatedOverlayException(id ?? "NONE_POLYGON_STYLE_ID");
     }
-    String styleId = await routeLayer._invokeMethod("addRouteStyle", {
+    String? styleId = await routeLayer._invokeMethod("addRouteStyle", {
       "styleId": id,
       "styles": styles.map((e) => e.toMessageable()).toList()
     });
+    if (styleId == null) {
+      throw OverlayStyleRegistrationFailedError(id, OverlayType.route);
+    }
     for (RouteStyle element in styles) {
       element._isAdded = true;
       element._setStyleId(styleId);
