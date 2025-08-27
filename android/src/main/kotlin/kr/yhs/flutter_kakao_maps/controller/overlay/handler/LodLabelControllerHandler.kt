@@ -82,7 +82,7 @@ interface LodLabelControllerHandler {
 
   fun removeLodLabelLayer(layer: LodLabelLayer, onSuccess: (Any?) -> Unit)
 
-  fun addLodPoi(layer: LodLabelLayer, poi: LabelOptions, onSuccess: (String) -> Unit)
+  fun addLodPoi(layer: LodLabelLayer, poi: LabelOptions, onSuccess: (String?) -> Unit)
 
   fun removeLodPoi(layer: LodLabelLayer, poi: LodLabel, onSuccess: (Any?) -> Unit)
 

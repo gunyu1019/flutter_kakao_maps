@@ -145,11 +145,11 @@ interface LabelControllerHandler {
 
   fun addPoiStyle(style: LabelStyles, onSuccess: (Any?) -> Unit)
 
-  fun addPoi(layer: LabelLayer, poi: LabelOptions, onSuccess: (String) -> Unit)
+  fun addPoi(layer: LabelLayer, poi: LabelOptions, onSuccess: (String?) -> Unit)
 
   fun removePoi(layer: LabelLayer, poi: Label, onSuccess: (Any?) -> Unit)
 
-  fun addPolylineText(layer: LabelLayer, label: PolylineLabelOptions, onSuccess: (String) -> Unit)
+  fun addPolylineText(layer: LabelLayer, label: PolylineLabelOptions, onSuccess: (String?) -> Unit)
 
   fun removePolylineText(layer: LabelLayer, label: PolylineLabel, onSuccess: (Any?) -> Unit)
 

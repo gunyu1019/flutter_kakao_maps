@@ -75,9 +75,9 @@ interface RouteControllerHandler {
 
   fun removeRouteLayer(layer: RouteLineLayer, onSuccess: (Any?) -> Unit)
 
-  fun addRouteStyle(style: RouteLineStylesSet, onSuccess: (String) -> Unit)
+  fun addRouteStyle(style: RouteLineStylesSet, onSuccess: (String?) -> Unit)
 
-  fun addRoute(layer: RouteLineLayer, route: RouteLineOptions, onSuccess: (String) -> Unit)
+  fun addRoute(layer: RouteLineLayer, route: RouteLineOptions, onSuccess: (String?) -> Unit)
 
   fun removeRoute(layer: RouteLineLayer, route: RouteLine, onSuccess: (Any?) -> Unit)
 

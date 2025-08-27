@@ -49,7 +49,7 @@ interface DimScreenControllerHandler {
 
   fun setDimCorver(cover: DimScreenCover, onSuccess: (Any?) -> Unit);
 
-  fun addDimHighlightPolygonShape(shape: PolygonOptions, onSuccess: (String) -> Unit)
+  fun addDimHighlightPolygonShape(shape: PolygonOptions, onSuccess: (String?) -> Unit)
 
   fun removeDimHighlightPolygonShape(polygonId: String, onSuccess: (Any?) -> Unit);
 }

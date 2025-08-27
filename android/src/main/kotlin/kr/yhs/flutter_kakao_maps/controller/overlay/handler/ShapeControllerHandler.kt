@@ -107,13 +107,13 @@ interface ShapeControllerHandler {
 
   fun removeShapeLayer(layer: ShapeLayer, onSuccess: (Any?) -> Unit)
 
-  fun addPolylineShapeStyle(style: PolylineStylesSet, onSuccess: (String) -> Unit)
+  fun addPolylineShapeStyle(style: PolylineStylesSet, onSuccess: (String?) -> Unit)
 
-  fun addPolygonShapeStyle(style: PolygonStylesSet, onSuccess: (String) -> Unit)
+  fun addPolygonShapeStyle(style: PolygonStylesSet, onSuccess: (String?) -> Unit)
 
-  fun addPolylineShape(layer: ShapeLayer, shape: PolylineOptions, onSuccess: (String) -> Unit)
+  fun addPolylineShape(layer: ShapeLayer, shape: PolylineOptions, onSuccess: (String?) -> Unit)
 
-  fun addPolygonShape(layer: ShapeLayer, shape: PolygonOptions, onSuccess: (String) -> Unit)
+  fun addPolygonShape(layer: ShapeLayer, shape: PolygonOptions, onSuccess: (String?) -> Unit)
 
   fun removePolylineShape(layer: ShapeLayer, shape: Polyline, onSuccess: (Any?) -> Unit)
 
