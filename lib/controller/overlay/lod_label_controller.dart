@@ -106,7 +106,10 @@ class LodLabelController extends BaseLabelController {
       }
     };
     payload["poi"].addAll(position.toMessageable());
-    String poiId = await _invokeMethod("addLodPoi", payload);
+    String? poiId = await _invokeMethod("addLodPoi", payload);
+    if (poiId == null) {
+      throw OverlayRegistrationFailedError(id, type);
+    }
     final poi = LodPoi._(this, poiId,
         transform: transform,
         position: position,
