@@ -148,7 +148,7 @@ class LabelController extends BaseLabelController {
     payload["poi"].addAll(position.toMessageable());
     String? poiId = await _invokeMethod("addPoi", payload);
     if (poiId == null) {
-      throw OverlayRegistrationFailedError(id ?? "Unknown ID", type);
+      throw OverlayRegistrationFailedError(id, type);
     }
     final poi = Poi._(this, poiId,
         transform: transform,
@@ -208,7 +208,10 @@ class LabelController extends BaseLabelController {
         "visible": visible
       }
     };
-    String labelId = await _invokeMethod("addPolylineText", payload);
+    String? labelId = await _invokeMethod("addPolylineText", payload);
+    if (labelId == null) {
+      throw OverlayRegistrationFailedError(id, type);
+    }
     final label = PolylineText._(this, labelId,
         style: style, text: text, points: position);
     _polylineText[labelId] = label;
