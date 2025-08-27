@@ -63,7 +63,10 @@ class ShapeController extends BaseShapeController {
         "zOrder": zOrder
       }
     };
-    String shapeId = await _invokeMethod("addPolylineShape", payload);
+    String? shapeId = await _invokeMethod("addPolylineShape", payload);
+    if (shapeId == null) {
+      throw OverlayRegistrationFailedError(id, type);
+    }
     final polyline = Polyline<T>._(this, shapeId,
         position: position, style: style, polylineCap: polylineCap);
     _polylineShape[shapeId] = polyline;
@@ -88,7 +91,10 @@ class ShapeController extends BaseShapeController {
         "zOrder": zOrder
       }
     };
-    String shapeId = await _invokeMethod("addPolygonShape", payload);
+    String? shapeId = await _invokeMethod("addPolygonShape", payload);
+    if (shapeId == null) {
+      throw OverlayRegistrationFailedError(id, type);
+    }
     final polygon =
         Polygon<T>._(this, shapeId, position: position, style: style);
     _polygonShape[shapeId] = polygon;
