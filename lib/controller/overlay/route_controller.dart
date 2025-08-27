@@ -91,7 +91,10 @@ class RouteController extends OverlayController {
         "zOrder": zOrder
       }
     };
-    String routeId = await _invokeMethod("addRoute", payload);
+    String? routeId = await _invokeMethod("addRoute", payload);
+    if (routeId == null) {
+      throw OverlayRegistrationFailedError(id, type);
+    }
     final route = Route._(this, routeId,
         points: points, style: style, curveType: curveType, zOrder: zOrder);
     _route[routeId] = route;
@@ -108,7 +111,10 @@ class RouteController extends OverlayController {
       await manager.addMultipleRouteStyle(option.styles);
     }
     Map<String, dynamic> payload = {"route": option.toMessageable()};
-    String routeId = await _invokeMethod("addMultipleRoute", payload);
+    String? routeId = await _invokeMethod("addMultipleRoute", payload);
+    if (routeId == null) {
+      throw OverlayRegistrationFailedError(option.id, type);
+    }
     final route = MultipleRoute._(this, routeId,
         segments: option.segments,
         styles: option.styles,
