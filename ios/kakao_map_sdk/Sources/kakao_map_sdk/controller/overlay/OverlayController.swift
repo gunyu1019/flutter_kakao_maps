@@ -1,13 +1,14 @@
 import Flutter
 import KakaoMapsSDK
 
-class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler, RouteControllerHandler {
+class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler, RouteControllerHandler, DimScreenControllerHandler {
     private let channel: FlutterMethodChannel
     private let kakaoMap: KakaoMap
 
     let labelManager: LabelManager
     let shapeManager: ShapeManager
     let routeManager: RouteManager
+    let dimScreenManager: DimScreen
 
     let labelListener: PoiClickListener
 
@@ -19,6 +20,8 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         labelManager = kakaoMap.getLabelManager()
         shapeManager = kakaoMap.getShapeManager()
         routeManager = kakaoMap.getRouteManager()
+
+        dimScreenManager = kakaoMap.dimScreen
 
         setupInitLayer()
         channel.setMethodCallHandler(handle)
@@ -62,6 +65,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         case .lodLabel: lodLabelHandle(call: call, result: result)
         case .shape: shapeHandle(call: call, result: result)
         case .route: routeHandle(call: call, result: result)
+        case .dimScreen: dimScreenHandle(call: call, result: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
@@ -239,6 +243,9 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addPolygonShapeStyle(style: PolygonStyleSet, onSuccess: (String) -> Void) {
         shapeManager.addPolygonStyleSet(style)
+        
+        let dimScreenStyle = PolygonStyleSet(styleSetID: style.styleSetID, styles: style.styles)
+        dimScreenManager.addPolygonStyleSet(dimScreenStyle)
         onSuccess(style.styleSetID)
     }
 
@@ -439,6 +446,47 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func changeRouteLayerVisible(layer: RouteLayer, visible: Bool, onSuccess: (Any?) -> Void) {
         layer.visible = visible
+        onSuccess(nil)
+    }
+
+    func setDimColor(color: UIColor, onSuccess: (Any?) -> Void) {
+        dimScreenManager.color = color
+        onSuccess(nil)
+    }
+
+    func setDimVisible(visible: Bool, onSuccess: (Any?) -> Void) {
+        dimScreenManager.isEnabled = visible
+        onSuccess(nil)
+    }
+
+    func setDimCover(cover: DimScreenCover, onSuccess: (Any?) -> Void) {
+        dimScreenManager.cover = cover
+        onSuccess(nil)
+    }
+
+    func addDimHighlightPolygonShape(option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+        let shapeInstance = dimScreenManager.addHighlightPolygonShape(option)
+        if visible, !(shapeInstance?.isShow ?? false) {
+            shapeInstance?.show()
+        }
+        onSuccess(shapeInstance!.shapeID)
+    }
+
+    func addDimHighlightMapPolygonShape(option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+        let shapeInstance = dimScreenManager.addHighlightMapPolygonShape(option)
+        if visible, !(shapeInstance?.isShow ?? false) {
+            shapeInstance?.show()
+        }
+        onSuccess(shapeInstance!.shapeID)
+    }
+
+    func removeDimHighlightPolygonShape(shapeId: String, onSuccess: (Any?) -> Void) {
+        dimScreenManager.removeHighlightPolygonShape(shapeID: shapeId)
+        onSuccess(nil)
+    }
+
+    func removeDimHighlightMapPolygonShape(shapeId: String, onSuccess: (Any?) -> Void) {
+        dimScreenManager.removeHighlightMapPolygonShape(shapeID: shapeId)
         onSuccess(nil)
     }
 }

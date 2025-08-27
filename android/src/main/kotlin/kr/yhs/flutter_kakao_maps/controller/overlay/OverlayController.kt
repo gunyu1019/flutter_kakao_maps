@@ -316,6 +316,8 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
 
   override fun addPolygonShapeStyle(style: PolygonStylesSet, onSuccess: (String?) -> Unit) {
     shapeManager!!.addPolygonStyles(style).let {
+      val dimScreenStyleSet = PolygonStylesSet.from(it.styleId, it.styles)
+      dimScreenManager?.addPolygonStyles(dimScreenStyleSet)
       onSuccess.invoke(it?.styleId)
     }
   }

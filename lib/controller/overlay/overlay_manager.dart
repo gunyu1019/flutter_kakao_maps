@@ -9,7 +9,7 @@ mixin OverlayManager {
   final Map<String, LodLabelController> _lodLabelController = {};
   final Map<String, ShapeController> _shapeController = {};
   final Map<String, RouteController> _routeController = {};
-  // final DimController _dimController;
+  late final DimScreenController _dimController;
   // final TrackingController _trackingController;
 
   // Overlay Style
@@ -87,6 +87,7 @@ mixin OverlayManager {
         ShapeController._(overlayChannel, this, ShapeController.defaultId);
     _routeController[RouteController.defaultId] =
         RouteController._(overlayChannel, this, RouteController.defaultId);
+    _dimController = DimScreenController._(overlayChannel, this);
   }
 
   /// 매개변수에 따라 설정된 LabelLayer([LabelController])를 추가합니다.
@@ -160,4 +161,7 @@ mixin OverlayManager {
 
   /// 기본으로 생성된 RouteLayer([RouteController])를 가져옵니다.
   RouteController get routeLayer;
+
+  /// 지도 뷰 전체를 특정 색으로 덮는 객체를 관리하는 컨트롤러([DimScreenController])를 가져옵니다.
+  DimScreenController get dimScreen => _dimController;
 }
