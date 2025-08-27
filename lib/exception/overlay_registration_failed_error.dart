@@ -6,7 +6,7 @@ part of '../kakao_map_sdk.dart';
 /// 지도에 오버레이([Poi] 등)을 그리지 못하고 오류를 유발하면 호출되는 에러입니다.
 class OverlayRegistrationFailedError implements Error {
   /// 등록에 실패된 오버레이의 ID입니다.
-  String id;
+  String? id;
 
   /// 등록이 실패된 컨트롤러의 유형입니다.
   /// 예를 들어 [Poi] 등록에 실패한다면, [OverlayType.label] 값을 가집니다.
