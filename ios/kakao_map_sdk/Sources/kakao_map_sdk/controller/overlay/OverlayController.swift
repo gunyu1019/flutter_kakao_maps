@@ -80,18 +80,18 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func addPoiStyle(style: PoiStyle, onSuccess: (String) -> Void) {
+    func addPoiStyle(style: PoiStyle, onSuccess: (String?) -> Void) {
         labelManager.addPoiStyle(style)
-        onSuccess(style.styleID)
+        onSuccess(style?.styleID)
     }
 
-    func addPoi(layer: LabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String) -> Void) {
+    func addPoi(layer: LabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String?) -> Void) {
         let poiInstance = layer.addPoi(option: poi, at: position)
         if visible, !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
         poiInstance?.addPoiTappedEventHandler(target: labelListener, handler: PoiClickListener.onPoiInteractionEvent)
-        onSuccess(poiInstance!.itemID)
+        onSuccess(poiInstance?.itemID)
     }
 
     func removePoi(layer: LabelLayer, poiId: String, onSuccess: (Any?) -> Void) {
@@ -99,12 +99,12 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func addPolylineText(layer: LabelLayer, label: WaveTextOptions, visible: Bool, onSuccess: (String) -> Void) {
+    func addPolylineText(layer: LabelLayer, label: WaveTextOptions, visible: Bool, onSuccess: (String?) -> Void) {
         let waveTextInstance = layer.addWaveText(label)
         if visible, !(waveTextInstance?.isShow ?? false) {
             waveTextInstance?.show()
         }
-        onSuccess(waveTextInstance!.itemID)
+        onSuccess(waveTextInstance?.itemID)
     }
 
     func removePolylineText(layer: LabelLayer, labelId: String, onSuccess: (Any?) -> Void) {
@@ -188,13 +188,13 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func addLodPoi(layer: LodLabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String) -> Void) {
+    func addLodPoi(layer: LodLabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String?) -> Void) {
         let poiInstance = layer.addLodPoi(option: poi, at: position)
         if visible, !(poiInstance?.isShow ?? false) {
             poiInstance?.show()
         }
         poiInstance?.addPoiTappedEventHandler(target: labelListener, handler: PoiClickListener.onLodPoiInteractionEvent)
-        onSuccess(poiInstance!.itemID)
+        onSuccess(poiInstance?.itemID)
     }
 
     func removeLodPoi(layer: LodLabelLayer, poiId: String, onSuccess: (Any?) -> Void) {
@@ -254,36 +254,36 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(style.styleSetID)
     }
 
-    func addMapPolygonShape(layer: ShapeLayer, option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+    func addMapPolygonShape(layer: ShapeLayer, option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String?) -> Void) {
         let shapeInstance = layer.addMapPolygonShape(option)
         if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
-        onSuccess(shapeInstance!.shapeID)
+        onSuccess(shapeInstance?.shapeID)
     }
 
-    func addMapPolylineShape(layer: ShapeLayer, option: MapPolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+    func addMapPolylineShape(layer: ShapeLayer, option: MapPolylineShapeOptions, visible: Bool, onSuccess: (String?) -> Void) {
         let shapeInstance = layer.addMapPolylineShape(option)
         if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
-        onSuccess(shapeInstance!.shapeID)
+        onSuccess(shapeInstance?.shapeID)
     }
 
-    func addPolygonShape(layer: ShapeLayer, option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+    func addPolygonShape(layer: ShapeLayer, option: PolygonShapeOptions, visible: Bool, onSuccess: (String?) -> Void) {
         let shapeInstance = layer.addPolygonShape(option)
         if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
-        onSuccess(shapeInstance!.shapeID)
+        onSuccess(shapeInstance?.shapeID)
     }
 
-    func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+    func addPolylineShape(layer: ShapeLayer, option: PolylineShapeOptions, visible: Bool, onSuccess: (String?) -> Void) {
         let shapeInstance = layer.addPolylineShape(option)
         if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
-        onSuccess(shapeInstance!.shapeID)
+        onSuccess(shapeInstance?.shapeID)
     }
 
     func removeMapPolygonShape(layer: ShapeLayer, shapeId: String, onSuccess: (Any?) -> Void) {
@@ -350,9 +350,9 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(style.styleSetID)
     }
 
-    func addRoute(layer: RouteLayer, route: RouteOptions, onSuccess: (String) -> Void) {
+    func addRoute(layer: RouteLayer, route: RouteOptions, onSuccess: (String?) -> Void) {
         let routeInstance = layer.addRoute(option: route)
-        onSuccess(routeInstance!.routeID)
+        onSuccess(routeInstance?.routeID)
     }
 
     func removeRoute(layer: RouteLayer, routeId: String, onSuccess: (Any?) -> Void) {
@@ -464,20 +464,20 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func addDimHighlightPolygonShape(option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+    func addDimHighlightPolygonShape(option: PolygonShapeOptions, visible: Bool, onSuccess: (String?) -> Void) {
         let shapeInstance = dimScreenManager.addHighlightPolygonShape(option)
         if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
-        onSuccess(shapeInstance!.shapeID)
+        onSuccess(shapeInstance?.shapeID)
     }
 
-    func addDimHighlightMapPolygonShape(option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void) {
+    func addDimHighlightMapPolygonShape(option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String?) -> Void) {
         let shapeInstance = dimScreenManager.addHighlightMapPolygonShape(option)
         if visible, !(shapeInstance?.isShow ?? false) {
             shapeInstance?.show()
         }
-        onSuccess(shapeInstance!.shapeID)
+        onSuccess(shapeInstance?.shapeID)
     }
 
     func removeDimHighlightPolygonShape(shapeId: String, onSuccess: (Any?) -> Void) {
