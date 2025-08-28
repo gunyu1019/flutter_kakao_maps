@@ -11,9 +11,9 @@ protocol DimScreenControllerHandler {
 
     func setDimCover(cover: DimScreenCover, onSuccess: (Any?) -> Void)
 
-    func addDimHighlightPolygonShape(option: PolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void)
+    func addDimHighlightPolygonShape(option: PolygonShapeOptions, visible: Bool, onSuccess: (String?) -> Void)
     
-    func addDimHighlightMapPolygonShape(option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String) -> Void)
+    func addDimHighlightMapPolygonShape(option: MapPolygonShapeOptions, visible: Bool, onSuccess: (String?) -> Void)
 
     func removeDimHighlightPolygonShape(shapeId: String, onSuccess: (Any?) -> Void)
 

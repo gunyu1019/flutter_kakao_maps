@@ -9,13 +9,13 @@ protocol LabelControllerHandler {
 
     func removeLabelLayer(layerId: String, onSuccess: (Any?) -> Void)
 
-    func addPoiStyle(style: PoiStyle, onSuccess: (String) -> Void)
+    func addPoiStyle(style: PoiStyle, onSuccess: (String?) -> Void)
 
-    func addPoi(layer: LabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String) -> Void)
+    func addPoi(layer: LabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String?) -> Void)
 
     func removePoi(layer: LabelLayer, poiId: String, onSuccess: (Any?) -> Void)
 
-    func addPolylineText(layer: LabelLayer, label: WaveTextOptions, visible: Bool, onSuccess: (String) -> Void)
+    func addPolylineText(layer: LabelLayer, label: WaveTextOptions, visible: Bool, onSuccess: (String?) -> Void)
 
     func removePolylineText(layer: LabelLayer, labelId: String, onSuccess: (Any?) -> Void)
 

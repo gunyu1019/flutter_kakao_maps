@@ -10,7 +10,7 @@ protocol RouteControllerHandler {
 
     func addRouteStyle(style: RouteStyleSet, onSuccess: (String) -> Void)
 
-    func addRoute(layer: RouteLayer, route: RouteOptions, onSuccess: (String) -> Void)
+    func addRoute(layer: RouteLayer, route: RouteOptions, onSuccess: (String?) -> Void)
 
     func removeRoute(layer: RouteLayer, routeId: String, onSuccess: (Any?) -> Void)
 

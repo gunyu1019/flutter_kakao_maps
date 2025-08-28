@@ -8,7 +8,7 @@ protocol LodLabelControllerHandler {
 
     func removeLodLabelLayer(layerId: String, onSuccess: (Any?) -> Void)
 
-    func addLodPoi(layer: LodLabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String) -> Void)
+    func addLodPoi(layer: LodLabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String?) -> Void)
 
     func removeLodPoi(layer: LodLabelLayer, poiId: String, onSuccess: (Any?) -> Void)
 
