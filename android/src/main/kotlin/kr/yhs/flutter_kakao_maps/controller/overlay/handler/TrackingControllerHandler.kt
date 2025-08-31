@@ -35,11 +35,11 @@ interface TrackingControllerHandler {
         startTracking(label, result::success)
       }
       "stopTracking" -> stopTracking(result::success)
-      "setTrackingPosition" -> setTrackkingRotation(arguments["rotation"]!!.asBoolean(), result::success)
+      "setTrackingPosition" -> setTrackingRotation(arguments["rotation"]!!.asBoolean(), result::success)
     }
   }
   
-  fun setTrackkingRotation(rotation: Boolean, onSuccess: (Any?) -> Unit)
+  fun setTrackingRotation(rotation: Boolean, onSuccess: (Any?) -> Unit)
 
   fun startTracking(label: Label, onSuccess: (Any?) -> Unit)
 

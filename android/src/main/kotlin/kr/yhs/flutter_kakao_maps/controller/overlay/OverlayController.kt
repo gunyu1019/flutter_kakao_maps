@@ -582,7 +582,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
 
-  override fun setTrackkingRotation(
+  override fun setTrackingRotation(
     rotation: Boolean,
     onSuccess: (Any?) -> Unit
   ) {
