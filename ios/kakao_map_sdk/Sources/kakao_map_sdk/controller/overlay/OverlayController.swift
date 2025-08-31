@@ -1,7 +1,7 @@
 import Flutter
 import KakaoMapsSDK
 
-class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler, RouteControllerHandler, DimScreenControllerHandler {
+class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler, RouteControllerHandler, DimScreenControllerHandler, TrackingControllerHandler {
     private let channel: FlutterMethodChannel
     private let kakaoMap: KakaoMap
 
@@ -66,6 +66,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         case .shape: shapeHandle(call: call, result: result)
         case .route: routeHandle(call: call, result: result)
         case .dimScreen: dimScreenHandle(call: call, result: result)
+        case .tracking: trackingHandle(call: call, result: result)
         default: result(FlutterMethodNotImplemented)
         }
     }
@@ -487,6 +488,21 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func removeDimHighlightMapPolygonShape(shapeId: String, onSuccess: (Any?) -> Void) {
         dimScreenManager.removeHighlightMapPolygonShape(shapeID: shapeId)
+        onSuccess(nil)
+    }
+
+    func setTrackingRotation(rotation: Bool, onSuccess: (Any?) -> Void) {
+        trackingManager.isTrackingRoll = rotation
+        onSuccess(nil)
+    }
+
+    func startTracking(label: Poi, onSuccess: (Any?) -> Void) {
+        trackingManager.startTrackingPoi(poi)
+        onSuccess(nil)
+    }
+
+    func stopTracking(onSuccess: (Any?) -> Void) {
+        trackingManager.stopTracking()
         onSuccess(nil)
     }
 }
