@@ -56,6 +56,51 @@ abstract class BaseLabelController extends OverlayController {
     _zOrder = zOrder;
   }
 
+  Future<String?> _addPoiBadge(
+    String poiId, {
+        String? badgeId,
+        required KImage image,
+        required double offsetX,
+        required double offsetY,
+        bool visible = true,
+        int? zOrder
+      }) async {
+    var payload = {
+      "poiId": poiId,
+      "badge": {
+        "id": badgeId,
+        "image": image.toMessageable(),
+        "offsetX": offsetX,
+        "offsetY": offsetY,
+        "visible": visible,
+        "zOrder": zOrder
+      }
+    };
+    return await _invokeMethod("addPoiBadge", payload);
+  }
+
+  Future<void> _removePoiBadge(
+    String poiId,
+    String badgeId
+  ) async {
+    await _invokeMethod("removePoiBadge", {
+      "poiId": poiId,
+      "badgeId": badgeId
+    });
+  }
+
+  Future<void> _setPoiBadgeVisible(
+    String poiId,
+    String badgeId,
+    bool visible,
+  ) async {
+    await _invokeMethod("removePoiBadge", {
+      "poiId": poiId,
+      "badgeId": badgeId,
+      "visible": visible
+    });
+  }
+
   static const int defaultZOrder = 10001;
   static const CompetitionType defaultCompetitionType = CompetitionType.none;
   static const CompetitionUnit defaultCompetitionUnit =
