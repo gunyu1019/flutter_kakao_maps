@@ -91,7 +91,7 @@ class LodPoi {
 
   /// [LodPoi]를 지도에서 보이도록 합니다.
   /// (iOS 한정) [autoMove] 매개변수가 [true] 값이면 해당 위치로 카메라를 이동합니다.
-  Future<void> show([bool? autoMove, int? duration]) async {
+  Future<void> show([bool? autoMove]) async {
     await _controller._changePoiVisible(id, true, autoMove: autoMove);
     _visible = true;
   }
