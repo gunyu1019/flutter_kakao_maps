@@ -51,6 +51,8 @@ part 'models/camera/camera_position.dart';
 part 'models/camera/camera_update.dart';
 part 'models/geolocation/latlng.dart';
 
+part 'models/label/badge.dart';
+part 'models/label/badgeable_poi.dart';
 part 'models/label/poi.dart';
 part 'models/label/poi_style.dart';
 part 'models/label/poi_text_style.dart';
@@ -68,6 +70,7 @@ part 'models/shape/polyline.dart';
 part 'models/shape/polygon_style.dart';
 part 'models/shape/polyline_style.dart';
 part 'models/shape/rectangle_point.dart';
+part 'models/shape/shape.dart';
 
 part 'models/route/base_route.dart';
 part 'models/route/base_multiple_route.dart';
