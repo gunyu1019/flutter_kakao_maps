@@ -1,10 +1,11 @@
 part of '../../kakao_map_sdk.dart';
 
 /// 지도에 선형으로 구성된 도형을 나타내는 객체입니다.
-class Polyline<T extends BasePoint> {
+class Polyline<T extends BasePoint> extends Shape {
+  @override
   final BaseShapeController _controller;
 
-  /// [Polyline]의 고유 ID입니다.
+  @override
   final String id;
 
   PolylineStyle _style;
@@ -61,13 +62,13 @@ class Polyline<T extends BasePoint> {
     await _controller.removePolylineShape(this);
   }
 
-  /// [Polyline]를 지도에서 보이도록 합니다.
+  @override
   Future<void> show() async {
     await _controller._changePolylineVisible(id, true);
     _visible = true;
   }
 
-  /// [Polyline]를 지도에서 노출되지 않도록 합니다.
+  @override
   Future<void> hide() async {
     await _controller._changePolylineVisible(id, false);
     _visible = false;
