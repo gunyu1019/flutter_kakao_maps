@@ -2,10 +2,12 @@ part of '../../kakao_map_sdk.dart';
 
 /// 지도에 [Poi]를 나타내는 객체입니다.
 /// [Poi]는 특정 텍스트 또는 이미지를 지도에 표현하는 오버레이입니다.
-class Poi {
+class Poi with BadgeablePoi {
+  @override
   final LabelController _controller;
 
   /// [Poi]의 고유 ID입니다.
+  @override
   final String id;
 
   /// [Poi]가 나타나거나 사라질 때 적용되는 애니메이션입니다.
@@ -56,11 +58,13 @@ class Poi {
         _rank = rank,
         _visible = visible;
 
-  // void addBadge();
-
   // void addSharePosition(Poi poi) {}
 
   // void addShareTransform(Poi poi) {}
+
+  // void removeSharePosition(Poi poi) {}
+
+  // void removeShareTransform(Poi poi) {}
 
   /// [Poi]가 [x]와 [y]에 따라 픽셀만큼 높여서 그립니다.
   Future<void> changeOffsetPosition(double x, double y,
@@ -116,14 +120,6 @@ class Poi {
   Future<void> remove() async {
     await _controller.removePoi(this);
   }
-
-  // void removeBadge();
-
-  // void removeAllBadge();
-
-  // void removeSharePosition(Poi poi) {}
-
-  // void removeShareTransform(Poi poi) {}
 
   /// [Poi]를 주어진 [angle]에 따라 회전합니다.
   /// [millis] 매개변수를 설정하면 설정된 밀리초 이내로 회전하는 애니메이션을 적용합니다.
