@@ -3,10 +3,12 @@ part of '../../kakao_map_sdk.dart';
 /// 지도에 [LodPoi]를 나타내는 객체입니다.
 /// [LodPoi]는 [Poi]와 달리, 많은 갯수의 [Poi] 을 표시해야 할 때 [Poi]의 우선순위를 미리 계산하여 빠르게 표시할 수 있습니다.
 /// [LodPoi]에는 이동 또는 회전 기능이 없습니다.
-class LodPoi {
+class LodPoi with BadgeablePoi {
+  @override
   final LodLabelController _controller;
 
   /// [LodPoi]의 고유 ID입니다.
+  @override
   final String id;
 
   /// [LodPoi]가 나타나거나 사라질 때 적용되는 애니메이션입니다.
