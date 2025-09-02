@@ -44,6 +44,16 @@ class Poi with BadgeablePoi {
   /// [Poi]가 현재 지도에 그려지는지 여부를 나타냅니다.
   bool get visible => _visible;
 
+  final Map<String, Poi> _sharePositionPoi = {};
+  final Map<String, Poi> _shareTransitionPoi = {};
+  final Map<String, Shape> _shareTransitionShape = {};
+
+  List<Poi> get sharePosition => List.unmodifiable(_sharePositionPoi.values);
+
+  List<Poi> get shareTransitionPoi => List.unmodifiable(_shareTransitionPoi.values);
+
+  List<Shape> get shareTransitionShape => List.unmodifiable(_shareTransitionShape.values);
+
   Poi._(this._controller, this.id,
       {required this.transform,
       required LatLng position,
@@ -58,13 +68,13 @@ class Poi with BadgeablePoi {
         _rank = rank,
         _visible = visible;
 
-  // void addSharePosition(Poi poi) {}
+  void addSharePosition(Poi poi) {}
 
-  // void addShareTransform(Poi poi) {}
+  void addShareTransform(Poi poi) {}
 
-  // void removeSharePosition(Poi poi) {}
+  void removeSharePosition(Poi poi) {}
 
-  // void removeShareTransform(Poi poi) {}
+  void removeShareTransform(Poi poi) {}
 
   /// [Poi]가 [x]와 [y]에 따라 픽셀만큼 높여서 그립니다.
   Future<void> changeOffsetPosition(double x, double y,
