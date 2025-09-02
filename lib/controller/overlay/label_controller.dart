@@ -42,6 +42,30 @@ class LabelController extends BaseLabelController {
     await _invokeMethod("removeLabelLayer", {});
   }
 
+  Future<void> _addSharePositionPoi(String poiId, Poi poi) async {
+
+  }
+
+  Future<void> _removeSharePositionPoi(String poiId, Poi poi) async {
+
+  }
+
+  Future<void> _addShareTransitionPoi(String poiId, Poi poi) async {
+
+  }
+
+  Future<void> _addShareTransitionShape(String poiId, Shape shape) async {
+
+  }
+
+  Future<void> _removeShareTransitionPoi(String poiId, Poi poi) async {
+
+  }
+
+  Future<void> _removeShareTransitionShape(String poiId, Shape shape) async {
+
+  }
+
   Future<void> _changePoiOffsetPosition(
       String poiId, double x, double y, bool forceDpScale) async {
     await _invokeMethod("changePoiOffsetPosition",
