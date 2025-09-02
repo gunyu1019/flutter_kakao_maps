@@ -19,7 +19,7 @@ extension TrackingControllerHandler {
         switch call.method {
         case "startTracking":
             let labelLayerId = asString(arguments!["layerId"]!)
-            let labelLayer = labelManager.getLabelLayer(labelLayerId)
+            let labelLayer = labelManager.getLabelLayer(layerID: labelLayerId)
             let poi = labelLayer.getPoi(asString(arguments!["poiId"]!))
             startTracking(label: poi!, onSuccess: result)
         case "stopTracking": stopTracking(onSuccess: result)
