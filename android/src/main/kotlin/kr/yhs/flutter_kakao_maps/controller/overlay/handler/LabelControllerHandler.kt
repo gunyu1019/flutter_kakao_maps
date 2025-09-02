@@ -8,6 +8,7 @@ import com.kakao.vectormap.label.LabelLayerOptions
 import com.kakao.vectormap.label.LabelManager
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyles
+import com.kakao.vectormap.label.LodLabel
 import com.kakao.vectormap.label.PolylineLabel
 import com.kakao.vectormap.label.PolylineLabelOptions
 import com.kakao.vectormap.label.PolylineLabelStyles
@@ -219,7 +220,7 @@ interface LabelControllerHandler {
 
   fun changeLabelLayerZOrder(layer: LabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit)
 
-  fun addPoiBadge(poi: Label, badgeOption: BadgeOptions, onSuccess: (String?) -> Unit)
+  fun addPoiBadge(poi: Label, badgeOption: BadgeOptions, visible: Boolean, onSuccess: (String?) -> Unit)
 
   fun removePoiBadge(poi: Label, badgeId: String, onSuccess: (Any?) -> Unit)
 

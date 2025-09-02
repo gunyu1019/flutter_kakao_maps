@@ -643,7 +643,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
 
-  override fun addPoiBadge(poi: Label, badgeOption: BadgeOptions, onSuccess: (String?) -> Unit) {
+  override fun addPoiBadge(poi: Label, badgeOption: BadgeOptions, visible: Boolean, onSuccess: (String?) -> Unit) {
     if (!poiBadges.containsKey(poi.layerId))
       poiBadges[poi.layerId] = mutableMapOf()
     if (!poiBadges[poi.layerId]!!.containsKey(poi.labelId))
@@ -651,6 +651,11 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
 
     val badge = (poi.addBadge(badgeOption))?.firstOrNull()
     badge?.let { poiBadges[poi.layerId]!![poi.labelId]!![badgeOption.id] = it }
+    if (visible) {
+      badge?.show()
+    } else {
+      badge?.hide()
+    }
     onSuccess.invoke(badge?.id)
   }
 
@@ -659,7 +664,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun addPoiBadge(poi: LodLabel, badgeOption: BadgeOptions, onSuccess: (String?) -> Unit) {
+  override fun addPoiBadge(poi: LodLabel, badgeOption: BadgeOptions, visible: Boolean, onSuccess: (String?) -> Unit) {
     if (!poiBadges.containsKey(poi.layerId))
       poiBadges[poi.layerId] = mutableMapOf()
     if (!poiBadges[poi.layerId]!!.containsKey(poi.labelId))
@@ -667,6 +672,11 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
 
     val badge = (poi.addBadge(badgeOption))?.firstOrNull()
     badge?.let { poiBadges[poi.layerId]!![poi.labelId]!![badgeOption.id] = it }
+    if (visible) {
+      badge?.show()
+    } else {
+      badge?.hide()
+    }
     onSuccess.invoke(badge?.id)
   }
 

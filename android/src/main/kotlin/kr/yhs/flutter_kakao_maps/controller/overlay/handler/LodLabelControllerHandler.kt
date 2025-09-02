@@ -78,7 +78,11 @@ interface LodLabelControllerHandler {
         val zOrder = arguments["zOrder"]?.asInt()!!
         changeLabelLayerZOrder(layer!!, zOrder, result::success)
       }
-      "addPoiBadge" -> addPoiBadge(poi!!, arguments["badge"]!!.asBadgeOptions(), result::success)
+      "addPoiBadge" -> {
+        val badgeOption = arguments["badge"]!!.asBadgeOptions()
+        val badgeVisible = arguments["badge"]!!.asMap<Any?>()["visible"]?.asBoolean() ?: true
+        addPoiBadge(poi!!, badgeOption, badgeVisible, result::success)
+      }
       "removePoiBadge" -> removePoiBadge(poi!!, poiBadgeId!!, result::success)
       "changePoiBadgeVisible" -> {
         val visible = arguments["visible"]?.asBoolean()!!
@@ -117,7 +121,7 @@ interface LodLabelControllerHandler {
 
   fun changeLabelLayerZOrder(layer: LodLabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit)
 
-  fun addPoiBadge(poi: LodLabel, badgeOption: BadgeOptions, onSuccess: (String?) -> Unit)
+  fun addPoiBadge(poi: LodLabel, badgeOption: BadgeOptions, visible: Boolean, onSuccess: (String?) -> Unit)
 
   fun removePoiBadge(poi: LodLabel, badgeId: String, onSuccess: (Any?) -> Unit)
 
