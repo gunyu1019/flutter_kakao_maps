@@ -140,7 +140,11 @@ interface LabelControllerHandler {
         val zOrder = arguments["visible"]?.asInt()!!
         changeLabelLayerZOrder(layer!!, zOrder, result::success)
       }
-      "addPoiBadge" -> addPoiBadge(poi!!, arguments["badge"]!!.asBadgeOptions(), result::success)
+      "addPoiBadge" -> {
+        val badgeOption = arguments["badge"]!!.asBadgeOptions()
+        val badgeVisible = arguments["badge"]!!.asMap<Any?>()["visible"]?.asBoolean() ?: true
+        addPoiBadge(poi!!, badgeOption, badgeVisible, result::success)
+      }
       "removePoiBadge" -> removePoiBadge(poi!!, poiBadgeId!!, result::success)
       "changePoiBadgeVisible" -> {
         val visible = arguments["visible"]?.asBoolean()!!
