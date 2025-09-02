@@ -1,5 +1,6 @@
 package kr.yhs.flutter_kakao_maps.converter
 
+import com.kakao.vectormap.label.BadgeOptions
 import com.kakao.vectormap.label.CompetitionType
 import com.kakao.vectormap.label.CompetitionUnit
 import com.kakao.vectormap.label.LabelLayerOptions
@@ -185,5 +186,18 @@ object LabelTypeConverter {
             ?.let(::setStyles)
           rawPayload["visible"]?.asBoolean()?.let(::setVisible)
         }
+    }
+
+  fun Any.asBadgeOptions(): BadgeOptions =
+    asMap<Any?>().let { rawPayload: Map<String, Any?> ->
+      val image = rawPayload["image"]!!.asBitmap()
+      BadgeOptions.from(image).apply {
+        setOffset(
+          rawPayload["offsetX"]!!.asFloat(),
+          rawPayload["offsetY"]!!.asFloat()
+        )
+        rawPayload["id"]?.asString()?.let(this@apply::setId)
+        rawPayload["zOrder"]?.asInt()?.let(this@apply::setZOrder)
+      }
     }
 }
