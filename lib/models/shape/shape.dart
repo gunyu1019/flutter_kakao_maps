@@ -1,6 +1,5 @@
 part of '../../kakao_map_sdk.dart';
 
-
 /// [Polygon], [Polyline]을 구성하는 기본 객체입니다.
 abstract class Shape {
   abstract final BaseShapeController _controller;

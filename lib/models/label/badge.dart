@@ -24,14 +24,9 @@ class Badge {
 
   final BadgeablePoi _parent;
 
-  Badge._(
-      BadgeablePoi parent,
-      this.id,
-      this.offsetX,
-      this.offsetY,
-      this.image,
-      this.zOrder
-  ) : _parent = parent,
+  Badge._(BadgeablePoi parent, this.id, this.offsetX, this.offsetY, this.image,
+      this.zOrder)
+      : _parent = parent,
         _visible = true;
 
   /// [Badge]를 지도에서 삭제합니다.
