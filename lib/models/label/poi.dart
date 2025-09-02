@@ -48,10 +48,13 @@ class Poi with BadgeablePoi {
   final Map<String, Poi> _shareTransitionPoi = {};
   final Map<String, Shape> _shareTransitionShape = {};
 
+  /// [Poi]와 위치를 공유받고 있는 다른 [Poi]를 불러옵니다.
   List<Poi> get sharePosition => List.unmodifiable(_sharePositionPoi.values);
 
+  /// [Poi]와 회전 값, 위치 값을 공유받고 있는 다른 [Poi]를 불러옵니다.
   List<Poi> get shareTransitionPoi => List.unmodifiable(_shareTransitionPoi.values);
 
+  /// [Poi]와 회전 값, 위치 값을 공유받고 있는 다른 [Polygon], [Polyline]를 불러옵니다.
   List<Shape> get shareTransitionShape => List.unmodifiable(_shareTransitionShape.values);
 
   Poi._(this._controller, this.id,
@@ -68,13 +71,29 @@ class Poi with BadgeablePoi {
         _rank = rank,
         _visible = visible;
 
-  void addSharePosition(Poi poi) {}
+  Future<void> addSharePosition(Poi poi) async {
 
-  void addShareTransform(Poi poi) {}
+  }
 
-  void removeSharePosition(Poi poi) {}
+  Future<void> addShareTransformPoi(Poi poi) async {
 
-  void removeShareTransform(Poi poi) {}
+  }
+
+  Future<void> addShareTransformShape(Poi poi) async {
+
+  }
+
+  Future<void> removeSharePosition(Poi poi) async {
+
+  }
+
+  Future<void> removeShareTransformPoi(Poi poi) async {
+
+  }
+
+  Future<void> removeShareTransformShape(Poi poi) async {
+
+  }
 
   /// [Poi]가 [x]와 [y]에 따라 픽셀만큼 높여서 그립니다.
   Future<void> changeOffsetPosition(double x, double y,
