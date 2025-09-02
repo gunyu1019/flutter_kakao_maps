@@ -1,6 +1,6 @@
 part of '../../kakao_map_sdk.dart';
 
-///
+/// [Poi]의 위치를 카메라가 추적하는 기능을 제어하는 컨트롤러입니다.
 class TrackingController extends OverlayController {
   @override
   MethodChannel channel;
