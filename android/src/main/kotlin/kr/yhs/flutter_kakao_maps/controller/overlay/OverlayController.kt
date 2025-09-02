@@ -3,6 +3,8 @@ package kr.yhs.flutter_kakao_maps.controller.overlay
 import com.kakao.vectormap.CurveType
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.label.Badge
+import com.kakao.vectormap.label.BadgeOptions
 import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelLayer
 import com.kakao.vectormap.label.LabelLayerOptions
@@ -67,7 +69,11 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   override val routeManager: RouteLineManager?
     get() = kakaoMap.routeLineManager
 
-  init {
+  // TEMPORARY
+  var poiBadges: MutableMap<String, MutableMap<String, MutableMap<String, Badge>>> = mutableMapOf()
+  var lodPoiBadges: MutableMap<String, MutableMap<String, MutableMap<String, Badge>>> = mutableMapOf()
+
+    init {
     channel.setMethodCallHandler(::handle)
   }
 
@@ -633,6 +639,59 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   ) {
     val polygon = dimScreenLayer?.getPolygon(polygonId)
     dimScreenLayer?.remove(polygon)
+    onSuccess.invoke(null)
+  }
+
+
+  override fun addPoiBadge(poi: Label, badgeOption: BadgeOptions, onSuccess: (String?) -> Unit) {
+    if (!poiBadges.containsKey(poi.layerId))
+      poiBadges[poi.layerId] = mutableMapOf()
+    if (!poiBadges[poi.layerId]!!.containsKey(poi.labelId))
+      poiBadges[poi.layerId]!![poi.labelId] = mutableMapOf()
+
+    val badge = (poi.addBadge(badgeOption))?.firstOrNull()
+    badge?.let { poiBadges[poi.layerId]!![poi.labelId]!![badgeOption.id] = it }
+    onSuccess.invoke(badge?.id)
+  }
+
+  override fun removePoiBadge(poi: Label, badgeId: String, onSuccess: (Any?) -> Unit) {
+    poiBadges[poi.layerId]?.get(poi.labelId)?.remove(badgeId)!!.let(poi::removeBadge)
+    onSuccess.invoke(null)
+  }
+
+  override fun addPoiBadge(poi: LodLabel, badgeOption: BadgeOptions, onSuccess: (String?) -> Unit) {
+    if (!poiBadges.containsKey(poi.layerId))
+      poiBadges[poi.layerId] = mutableMapOf()
+    if (!poiBadges[poi.layerId]!!.containsKey(poi.labelId))
+      poiBadges[poi.layerId]!![poi.labelId] = mutableMapOf()
+
+    val badge = (poi.addBadge(badgeOption))?.firstOrNull()
+    badge?.let { poiBadges[poi.layerId]!![poi.labelId]!![badgeOption.id] = it }
+    onSuccess.invoke(badge?.id)
+  }
+
+  override fun removePoiBadge(poi: LodLabel, badgeId: String, onSuccess: (Any?) -> Unit) {
+    lodPoiBadges[poi.layerId]?.get(poi.labelId)?.remove(badgeId)!!.let(poi::removeBadge)
+    onSuccess.invoke(null)
+  }
+
+  override fun changePoiBadgeVisible(poi: Label, badgeId: String, visible: Boolean, onSuccess: (Any?) -> Unit) {
+    val badge = poiBadges[poi.layerId]?.get(poi.labelId)?.get(badgeId)
+    if (visible) {
+      badge?.show()
+    } else {
+      badge?.hide()
+    }
+    onSuccess.invoke(null)
+  }
+
+  override fun changePoiBadgeVisible(poi: LodLabel, badgeId: String, visible: Boolean, onSuccess: (Any?) -> Unit) {
+    val badge = lodPoiBadges[poi.layerId]?.get(poi.labelId)?.get(badgeId)
+    if (visible) {
+      badge?.show()
+    } else {
+      badge?.hide()
+    }
     onSuccess.invoke(null)
   }
 }
