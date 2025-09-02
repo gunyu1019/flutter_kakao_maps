@@ -86,7 +86,7 @@ abstract class BaseLabelController extends OverlayController {
     String badgeId,
     bool visible,
   ) async {
-    await _invokeMethod("removePoiBadge",
+    await _invokeMethod("changePoiBadgeVisible",
         {"poiId": poiId, "badgeId": badgeId, "visible": visible});
   }
 
