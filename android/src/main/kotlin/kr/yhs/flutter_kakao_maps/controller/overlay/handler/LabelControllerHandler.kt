@@ -14,6 +14,7 @@ import com.kakao.vectormap.label.PolylineLabelStyles
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kr.yhs.flutter_kakao_maps.converter.CameraTypeConverter.asLatLng
+import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asBadgeOptions
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelLayerOptions
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelOptions
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelStyles
@@ -39,6 +40,8 @@ interface LabelControllerHandler {
       arguments["layerId"]?.asString()?.let<String, LabelLayer> { labelManager!!.getLayer(it) }
     val poi = layer?.run { arguments["poiId"]?.asString()?.let(layer::getLabel) }
     val polylineText = layer?.run { arguments["labelId"]?.asString()?.let(layer::getPolylineLabel) }
+
+    val poiBadgeId = arguments["badgeId"]?.asString()
 
     when (call.method) {
       "createLabelLayer" -> {
@@ -135,6 +138,12 @@ interface LabelControllerHandler {
       "setLayerZOrder" -> {
         val zOrder = arguments["visible"]?.asInt()!!
         changeLabelLayerZOrder(layer!!, zOrder, result::success)
+      }
+      "addPoiBadge" -> addPoiBadge(poi!!, arguments["badge"]!!.asBadgeOptions(), result::success)
+      "removePoiBadge" -> removePoiBadge(poi!!, poiBadgeId!!, result::success)
+      "changePoiBadgeVisible" -> {
+        val visible = arguments["visible"]?.asBoolean()!!
+        changePoiBadgeVisible(poi!!, poiBadgeId!!, visible, result::success)
       }
       else -> result.notImplemented()
     }

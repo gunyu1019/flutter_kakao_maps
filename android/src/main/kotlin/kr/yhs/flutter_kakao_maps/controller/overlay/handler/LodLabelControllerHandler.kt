@@ -32,7 +32,7 @@ interface LodLabelControllerHandler {
       }
     val poi = layer?.run { arguments["poiId"]?.asString()?.let(layer::getLabel) }
 
-    // val poiBadge = poi?.run { arguments["badgeId"]?.asString()?.let(poi::badge) }
+    val poiBadgeId = arguments["badgeId"]?.asString()
 
     when (call.method) {
       "createLodLabelLayer" -> {
@@ -77,6 +77,12 @@ interface LodLabelControllerHandler {
       "setLayerZOrder" -> {
         val zOrder = arguments["zOrder"]?.asInt()!!
         changeLabelLayerZOrder(layer!!, zOrder, result::success)
+      }
+      "addPoiBadge" -> addPoiBadge(poi!!, arguments["badge"]!!.asBadgeOptions(), result::success)
+      "removePoiBadge" -> removePoiBadge(poi!!, poiBadgeId!!, result::success)
+      "changePoiBadgeVisible" -> {
+        val visible = arguments["visible"]?.asBoolean()!!
+        changePoiBadgeVisible(poi!!, poiBadgeId!!, visible, result::success)
       }
       else -> result.notImplemented()
     }
