@@ -1,6 +1,7 @@
 package kr.yhs.flutter_kakao_maps.controller.overlay.handler
 
 import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.label.BadgeOptions
 import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelLayer
 import com.kakao.vectormap.label.LabelLayerOptions
@@ -208,4 +209,10 @@ interface LabelControllerHandler {
   fun changeLabelLayerClickable(layer: LabelLayer, clickable: Boolean, onSuccess: (Any?) -> Unit)
 
   fun changeLabelLayerZOrder(layer: LabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit)
+
+  fun addPoiBadge(poi: Label, badgeOption: BadgeOptions, onSuccess: (String?) -> Unit)
+
+  fun removePoiBadge(poi: Label, badgeId: String, onSuccess: (Any?) -> Unit)
+
+  fun changePoiBadgeVisible(poi: Label, badgeId: String, visible: Boolean, onSuccess: (Any?) -> Unit)
 }

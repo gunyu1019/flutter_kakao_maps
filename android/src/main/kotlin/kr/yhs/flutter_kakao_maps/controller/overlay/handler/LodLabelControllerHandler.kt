@@ -1,5 +1,6 @@
 package kr.yhs.flutter_kakao_maps.controller.overlay.handler
 
+import com.kakao.vectormap.label.BadgeOptions
 import com.kakao.vectormap.label.LabelLayerOptions
 import com.kakao.vectormap.label.LabelManager
 import com.kakao.vectormap.label.LabelOptions
@@ -7,6 +8,7 @@ import com.kakao.vectormap.label.LodLabel
 import com.kakao.vectormap.label.LodLabelLayer
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asBadgeOptions
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelLayerOptions
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelOptions
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asBoolean
@@ -29,6 +31,8 @@ interface LodLabelControllerHandler {
         labelManager!!.getLodLayer(it)
       }
     val poi = layer?.run { arguments["poiId"]?.asString()?.let(layer::getLabel) }
+
+    // val poiBadge = poi?.run { arguments["badgeId"]?.asString()?.let(poi::badge) }
 
     when (call.method) {
       "createLodLabelLayer" -> {
@@ -106,4 +110,10 @@ interface LodLabelControllerHandler {
   fun changeLabelLayerClickable(layer: LodLabelLayer, clickable: Boolean, onSuccess: (Any?) -> Unit)
 
   fun changeLabelLayerZOrder(layer: LodLabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit)
+
+  fun addPoiBadge(poi: LodLabel, badgeOption: BadgeOptions, onSuccess: (String?) -> Unit)
+
+  fun removePoiBadge(poi: LodLabel, badgeId: String, onSuccess: (Any?) -> Unit)
+
+  fun changePoiBadgeVisible(poi: LodLabel, badgeId: String, visible: Boolean, onSuccess: (Any?) -> Unit)
 }
