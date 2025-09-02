@@ -85,7 +85,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addPoiStyle(style: PoiStyle, onSuccess: (String?) -> Void) {
         labelManager.addPoiStyle(style)
-        onSuccess(style?.styleID)
+        onSuccess(style.styleID)
     }
 
     func addPoi(layer: LabelLayer, poi: PoiOptions, position: MapPoint, visible: Bool, onSuccess: @escaping (String?) -> Void) {
@@ -499,7 +499,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     }
 
     func startTracking(label: Poi, onSuccess: (Any?) -> Void) {
-        trackingManager.startTrackingPoi(poi)
+        trackingManager.startTrackingPoi(label)
         onSuccess(nil)
     }
 
