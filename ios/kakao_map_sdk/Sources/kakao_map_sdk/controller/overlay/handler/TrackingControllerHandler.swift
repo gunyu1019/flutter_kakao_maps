@@ -20,7 +20,7 @@ extension TrackingControllerHandler {
         case "startTracking":
             let labelLayerId = asString(arguments!["layerId"]!)
             let labelLayer = labelManager.getLabelLayer(layerID: labelLayerId)
-            let poi = labelLayer!.getPoi(asString(arguments!["poiId"]!))
+            let poi = labelLayer!.getPoi(poiID: asString(arguments!["poiId"]!))
             startTracking(label: poi!, onSuccess: result)
         case "stopTracking": stopTracking(onSuccess: result)
         case "setTrackingRotation":
