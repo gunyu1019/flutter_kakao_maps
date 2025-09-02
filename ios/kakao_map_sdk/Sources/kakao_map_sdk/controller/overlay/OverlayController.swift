@@ -9,6 +9,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     let shapeManager: ShapeManager
     let routeManager: RouteManager
     let dimScreenManager: DimScreen
+    let trackingManager: TrackingManager
 
     let labelListener: PoiClickListener
 
@@ -22,6 +23,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         routeManager = kakaoMap.getRouteManager()
 
         dimScreenManager = kakaoMap.dimScreen
+        trackingManager = kakaoMap.getTrackingManager()
 
         setupInitLayer()
         channel.setMethodCallHandler(handle)
