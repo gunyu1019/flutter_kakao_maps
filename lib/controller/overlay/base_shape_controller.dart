@@ -3,6 +3,10 @@ part of '../../kakao_map_sdk.dart';
 /// [Poi], [LodPoi], [PolylineText] 개체를 관리하는 컨트롤러를 구현하기 위한 추성 클래스입니다.
 /// 지도에 [Poi], [LodPoi], [PolylineText] 개체를 관리하기 위해 필수로 필요한 요소를 관리합니다.
 abstract class BaseShapeController extends OverlayController {
+  /// [ShapeController]에서 사용되는 고유 ID 입니다.
+  /// [DimScreenController]에서 사용되지 않습니다.
+  abstract final String id;
+
   BaseShapeController._();
 
   Future<void> _changePolylineVisible(String shapeId, bool visible) async {

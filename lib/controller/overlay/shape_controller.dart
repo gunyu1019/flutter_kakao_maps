@@ -12,6 +12,7 @@ class ShapeController extends BaseShapeController {
   OverlayType get type => OverlayType.shape;
 
   /// [ShapeController]의 고유 ID입니다.
+  @override
   final String id;
 
   /// [ShapeController]가 지도에 표시되는 다른 오버레이와 겹치면 그려지는 우선순위를 정의합니다.
