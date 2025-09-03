@@ -58,37 +58,34 @@ class LabelController extends BaseLabelController {
     });
   }
 
-  Future<void> _addShareTransitionPoi(String poiId, Poi poi) async {
-    await _invokeMethod("addShareTransitionPoi", {
+  Future<void> _addShareTransformPoi(String poiId, Poi poi) async {
+    await _invokeMethod("addShareTransformPoi", {
       "poiId": poiId,
       "targetLabelLayerId": poi._controller.id,
       "targetPoiId": poi.id,
     });
   }
 
-  Future<void> _addShareTransitionShape(String poiId, Shape shape) async {
-    await _invokeMethod("addShareTransitionShape", {
+  Future<void> _addShareTransformShape(String poiId, Shape shape) async {
+    await _invokeMethod("addShareTransformShape", {
       "poiId": poiId,
-      // "targetShapeLayerId": shape._controller.id,  TODO(DimScreen은 단일 형태의 Layer를 구성하기 때문에 별도 ID를 가지고 있으면 안된다는 사 --실 ?!?!?!)
+      "targetShapeLayerId": shape._controller.id,
       "targetShapeId": shape.id,
-      // Android SDK는 구조가 깔삼하게 되어 있어서 지장이 없는데
-      // iOS SDK는 MapPolygon, Polygon, MapPolyline, Polyline의 총 4개의 형태를 모두 대응하셔야 합니다 ^-^ == 단일화를 해도 의미가 없었다는 사?---??실 ?!?!?
     });
-
   }
 
-  Future<void> _removeShareTransitionPoi(String poiId, Poi poi) async {
-    await _invokeMethod("removeShareTransitionShape", {
+  Future<void> _removeShareTransformPoi(String poiId, Poi poi) async {
+    await _invokeMethod("removeShareTransformShape", {
       "poiId": poiId,
       "targetLabelLayerId": poi._controller.id,
       "targetShapeId": poi.id,
     });
   }
 
-  Future<void> _removeShareTransitionShape(String poiId, Shape shape) async {
-    await _invokeMethod("removeShareTransitionShape", {
+  Future<void> _removeShareTransformShape(String poiId, Shape shape) async {
+    await _invokeMethod("removeShareTransformShape", {
       "poiId": poiId,
-      // "targetShapeLayerId": shape._controller.id,  TODO(DimScreen은 단일 형태의 Layer를 구성하기 때문에 별도 ID를 가지고 있으면 안된다는 사 --실 ?!?!?!)
+      "targetShapeLayerId": shape._controller.id,
       "targetShapeId": shape.id,
     });
   }
