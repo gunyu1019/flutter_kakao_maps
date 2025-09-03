@@ -45,17 +45,17 @@ class Poi with BadgeablePoi {
   bool get visible => _visible;
 
   final Map<String, Poi> _sharePositionPoi = {};
-  final Map<String, Poi> _shareTransitionPoi = {};
-  final Map<String, Shape> _shareTransitionShape = {};
+  final Map<String, Poi> _shareTransformPoi = {};
+  final Map<String, Shape> _shareTransformShape = {};
 
   /// [Poi]와 위치를 공유받고 있는 다른 [Poi]를 불러옵니다.
   List<Poi> get sharePosition => List.unmodifiable(_sharePositionPoi.values);
 
   /// [Poi]와 회전 값, 위치 값을 공유받고 있는 다른 [Poi]를 불러옵니다.
-  List<Poi> get shareTransitionPoi => List.unmodifiable(_shareTransitionPoi.values);
+  List<Poi> get shareTransformPoi => List.unmodifiable(_shareTransformPoi.values);
 
   /// [Poi]와 회전 값, 위치 값을 공유받고 있는 다른 [Polygon], [Polyline]를 불러옵니다.
-  List<Shape> get shareTransitionShape => List.unmodifiable(_shareTransitionShape.values);
+  List<Shape> get shareTransformShape => List.unmodifiable(_shareTransformShape.values);
 
   Poi._(this._controller, this.id,
       {required this.transform,
@@ -72,27 +72,33 @@ class Poi with BadgeablePoi {
         _visible = visible;
 
   Future<void> addSharePosition(Poi poi) async {
-
+    _sharePositionPoi[poi.id] = poi;
+    await _controller._addSharePositionPoi(id, poi);
   }
 
   Future<void> addShareTransformPoi(Poi poi) async {
-
+    _shareTransformPoi[poi.id] = poi;
+    await _controller._addShareTransformPoi(id, poi);
   }
 
-  Future<void> addShareTransformShape(Poi poi) async {
-
+  Future<void> addShareTransformShape(Shape shape) async {
+    _shareTransformShape[shape.id] = shape;
+    await _controller._addShareTransformShape(id, shape);
   }
 
   Future<void> removeSharePosition(Poi poi) async {
-
+    _sharePositionPoi.remove(poi.id);
+    await _controller._removeSharePositionPoi(id, poi);
   }
 
   Future<void> removeShareTransformPoi(Poi poi) async {
-
+    _shareTransformPoi.remove(poi.id);
+    await _controller._removeShareTransformPoi(id, poi);
   }
 
-  Future<void> removeShareTransformShape(Poi poi) async {
-
+  Future<void> removeShareTransformShape(Shape shape) async {
+    _shareTransformShape.remove(shape.id);
+    await _controller._removeShareTransformShape(id, shape);
   }
 
   /// [Poi]가 [x]와 [y]에 따라 픽셀만큼 높여서 그립니다.
