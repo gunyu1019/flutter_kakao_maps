@@ -138,6 +138,23 @@ class LabelController extends BaseLabelController {
     await _invokeMethod("movePoi", payload);
   }
 
+  Future<void> _movePathPoi(String poiId, List<LatLng> path,
+      double millis, {
+        double? baseRadian,
+        double cornerRadius = 40.0,
+        double jumpThreshold = 200.0
+  }) async {
+    final payload = {
+      "poiId": poiId,
+      "path": path.map((e) => e.toMessageable()).toList(),
+      "millis": millis,
+      "baseRadian": baseRadian,
+      "cornerRadius": cornerRadius,
+      "jumpThreshold": jumpThreshold
+    };
+    await _invokeMethod("movePathPoi", payload);
+  }
+
   Future<void> _rotatePoi(String poiId, double angle, [double? millis]) async {
     await _invokeMethod(
         "rotatePoi", {"poiId": poiId, "angle": angle, "millis": millis});

@@ -164,7 +164,11 @@ class Poi with BadgeablePoi {
       throw Exception("The Path parameter is empty.");
     }
     _position = path.last;
-    // await _controller._movePoi(id, position, millis);
+    await _controller._movePathPoi(
+        id, path, millis,
+        cornerRadius: cornerRadius,
+        jumpThreshold: jumpThreshold
+    );
   }
 
   /// [Poi]를 [path]에 따라 [millis]밀리초 이내 이동합니다.
@@ -182,7 +186,12 @@ class Poi with BadgeablePoi {
       throw Exception("The Path parameter is empty.");
     }
     _position = path.last;
-    // await _controller._movePoi(id, position, millis);
+    await _controller._movePathPoi(
+        id, path, millis,
+        baseRadian: baseRadian,
+        cornerRadius: cornerRadius,
+        jumpThreshold: jumpThreshold
+    );
   }
 
   /// [Poi] 개체를 삭제합니다.
