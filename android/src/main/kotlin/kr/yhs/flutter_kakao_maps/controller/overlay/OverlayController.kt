@@ -13,6 +13,7 @@ import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyles
 import com.kakao.vectormap.label.LodLabel
 import com.kakao.vectormap.label.LodLabelLayer
+import com.kakao.vectormap.label.PathOptions
 import com.kakao.vectormap.label.PolylineLabel
 import com.kakao.vectormap.label.PolylineLabelOptions
 import com.kakao.vectormap.label.PolylineLabelStyles
@@ -738,6 +739,11 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
 
   override fun removeSharePositionPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit) {
     poi.removeShareTransform(targetPoi)
+    onSuccess.invoke(null)
+  }
+
+  override fun movePathPoi(poi: Label, path: PathOptions, onSuccess: (Any?) -> Unit) {
+    poi.moveOnPath(path)
     onSuccess.invoke(null)
   }
 }
