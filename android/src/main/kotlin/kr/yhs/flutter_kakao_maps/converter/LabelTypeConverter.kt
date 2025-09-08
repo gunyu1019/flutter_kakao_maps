@@ -39,10 +39,10 @@ object LabelTypeConverter {
           (rawPayload["strokeColor"] ?: 0).asInt(),
         )
         .apply {
-          rawPayload.get("font")?.asString()?.let(::setFont)
-          rawPayload.get("characterSpace")?.asInt()?.let(::setCharacterSpace)
-          rawPayload.get("lineSpace")?.asFloat()?.let(::setLineSpace)
-          rawPayload.get("aspectRatio")?.asFloat()?.let(::setAspectRatio)
+          rawPayload["font"]?.asString()?.let(::setFont)
+          rawPayload["characterSpace"]?.asInt()?.let(::setCharacterSpace)
+          rawPayload["lineSpace"]?.asFloat()?.let(::setLineSpace)
+          rawPayload["aspectRatio"]?.asFloat()?.let(::setAspectRatio)
         }
     }
 

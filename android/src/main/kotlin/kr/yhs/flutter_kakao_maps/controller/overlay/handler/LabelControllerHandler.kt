@@ -150,22 +150,38 @@ interface LabelControllerHandler {
         changePoiBadgeVisible(poi!!, poiBadgeId!!, visible, result::success)
       }
       "addShareTransformPoi" -> {
-
+        val targetLabelLayerId = arguments["targetLabelLayerId"]?.asString()!!
+        val targetPoiId = arguments["targetPoiId"]?.asString()!!
+        val targetPoi = labelManager?.getLayer(targetLabelLayerId)?.getLabel(targetPoiId)!!
+        addShareTransformPoi(poi!!, targetPoi, result::success)
       }
       "addShareTransformShape" -> {
-
+        val targetShapeLayerId = arguments["targetLabelLayerId"]?.asString()!!
+        val targetShapeId = arguments["targetPoiId"]?.asString()!!
+        addShareTransformPoi(poi!!, targetShapeLayerId, targetShapeId, result::success)
       }
       "removeShareTransformPoi" -> {
-
+        val targetLabelLayerId = arguments["targetLabelLayerId"]?.asString()!!
+        val targetPoiId = arguments["targetPoiId"]?.asString()!!
+        val targetPoi = labelManager?.getLayer(targetLabelLayerId)?.getLabel(targetPoiId)!!
+        removeShareTransformPoi(poi!!, targetPoi, result::success)
       }
       "removeShareTransformShape" -> {
-
+        val targetShapeLayerId = arguments["targetLabelLayerId"]?.asString()!!
+        val targetShapeId = arguments["targetPoiId"]?.asString()!!
+        removeShareTransformPoi(poi!!, targetShapeLayerId, targetShapeId, result::success)
       }
       "addSharePositionPoi" -> {
-
+        val targetLabelLayerId = arguments["targetLabelLayerId"]?.asString()!!
+        val targetPoiId = arguments["targetPoiId"]?.asString()!!
+        val targetPoi = labelManager?.getLayer(targetLabelLayerId)?.getLabel(targetPoiId)!!
+        addSharePositionPoi(poi!!, targetPoi, result::success)
       }
       "removeSharePositionPoi" -> {
-
+        val targetLabelLayerId = arguments["targetLabelLayerId"]?.asString()!!
+        val targetPoiId = arguments["targetPoiId"]?.asString()!!
+        val targetPoi = labelManager?.getLayer(targetLabelLayerId)?.getLabel(targetPoiId)!!
+        removeSharePositionPoi(poi!!, targetPoi, result::success)
       }
       else -> result.notImplemented()
     }
