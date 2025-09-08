@@ -8,6 +8,7 @@ import com.kakao.vectormap.label.LabelLayerOptions
 import com.kakao.vectormap.label.LabelManager
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyles
+import com.kakao.vectormap.label.PathOptions
 import com.kakao.vectormap.label.PolylineLabel
 import com.kakao.vectormap.label.PolylineLabelOptions
 import com.kakao.vectormap.label.PolylineLabelStyles
@@ -274,4 +275,6 @@ interface LabelControllerHandler {
   fun addSharePositionPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit)
 
   fun removeSharePositionPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit)
+
+  fun movePathPoi(poi: Label, path: PathOptions, onSuccess: (Any?) -> Unit)
 }
