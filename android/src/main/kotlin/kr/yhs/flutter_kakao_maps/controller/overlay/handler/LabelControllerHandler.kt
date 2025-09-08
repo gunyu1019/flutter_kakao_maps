@@ -19,6 +19,7 @@ import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asBadgeOptions
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelLayerOptions
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelOptions
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelStyles
+import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asPathOptions
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asPolylineTextOption
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asPolylineTextStyles
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asBoolean
@@ -184,6 +185,7 @@ interface LabelControllerHandler {
         val targetPoi = labelManager?.getLayer(targetLabelLayerId)?.getLabel(targetPoiId)!!
         removeSharePositionPoi(poi!!, targetPoi, result::success)
       }
+      "movePathPoi" -> movePathPoi(poi!!, arguments.asPathOptions(), result::success)
       else -> result.notImplemented()
     }
   }
