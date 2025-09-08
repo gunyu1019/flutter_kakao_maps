@@ -12,6 +12,7 @@ import com.kakao.vectormap.label.LabelTextBuilder
 import com.kakao.vectormap.label.LabelTextStyle
 import com.kakao.vectormap.label.LabelTransition
 import com.kakao.vectormap.label.OrderingType
+import com.kakao.vectormap.label.PathOptions
 import com.kakao.vectormap.label.PolylineLabelOptions
 import com.kakao.vectormap.label.PolylineLabelStyle
 import com.kakao.vectormap.label.PolylineLabelStyles
@@ -198,6 +199,16 @@ object LabelTypeConverter {
         )
         rawPayload["id"]?.asString()?.let(this@apply::setId)
         rawPayload["zOrder"]?.asInt()?.let(this@apply::setZOrder)
+      }
+    }
+
+  fun Any.asPathOptions(): PathOptions =
+    asMap<Any?>().let { rawPayload: Map<String, Any?> ->
+      PathOptions.fromPath(rawPayload["path"]!!.asList<Map<String, Any>>().map { e -> e.asLatLng() }.toList()).apply {
+        rawPayload["millis"]!!.asInt().let(::setDuration)
+        rawPayload["baseRadian"]?.asFloat()?.let(::setBaseRadian)
+        rawPayload["cornerRadius"]?.asFloat()?.let(::setCornerRadius)
+        rawPayload["jumpThreshold"]?.asFloat()?.let(::setJumpThreshold)
       }
     }
 }
