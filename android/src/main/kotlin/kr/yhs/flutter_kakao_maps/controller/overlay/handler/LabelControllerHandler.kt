@@ -8,7 +8,6 @@ import com.kakao.vectormap.label.LabelLayerOptions
 import com.kakao.vectormap.label.LabelManager
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyles
-import com.kakao.vectormap.label.LodLabel
 import com.kakao.vectormap.label.PolylineLabel
 import com.kakao.vectormap.label.PolylineLabelOptions
 import com.kakao.vectormap.label.PolylineLabelStyles
@@ -150,6 +149,24 @@ interface LabelControllerHandler {
         val visible = arguments["visible"]?.asBoolean()!!
         changePoiBadgeVisible(poi!!, poiBadgeId!!, visible, result::success)
       }
+      "addShareTransformPoi" -> {
+
+      }
+      "addShareTransformShape" -> {
+
+      }
+      "removeShareTransformPoi" -> {
+
+      }
+      "removeShareTransformShape" -> {
+
+      }
+      "addSharePositionPoi" -> {
+
+      }
+      "removeSharePositionPoi" -> {
+
+      }
       else -> result.notImplemented()
     }
   }
@@ -229,4 +246,16 @@ interface LabelControllerHandler {
   fun removePoiBadge(poi: Label, badgeId: String, onSuccess: (Any?) -> Unit)
 
   fun changePoiBadgeVisible(poi: Label, badgeId: String, visible: Boolean, onSuccess: (Any?) -> Unit)
+
+  fun addShareTransformPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit)
+
+  fun addShareTransformPoi(poi: Label, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Unit)
+
+  fun removeShareTransformPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit)
+
+  fun removeShareTransformPoi(poi: Label, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Unit)
+
+  fun addSharePositionPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit)
+
+  fun removeSharePositionPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit)
 }
