@@ -704,4 +704,40 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     }
     onSuccess.invoke(null)
   }
+
+  override fun addShareTransformPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit) {
+    poi.addShareTransform(targetPoi)
+    onSuccess.invoke(null)
+  }
+
+  override fun addShareTransformPoi(poi: Label, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Unit) {
+    shapeManager
+      ?.getLayer(targetShapeLayerId)
+      ?.getPolygon(targetShapeId)!!
+      .let(poi::addShareTransform)
+    onSuccess.invoke(null)
+  }
+
+  override fun removeShareTransformPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit) {
+    poi.removeSharePosition(targetPoi)
+    onSuccess.invoke(null)
+  }
+
+  override fun removeShareTransformPoi(poi: Label, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Unit) {
+    shapeManager
+      ?.getLayer(targetShapeLayerId)
+      ?.getPolygon(targetShapeId)!!
+      .let(poi::removeShareTransform)
+    onSuccess.invoke(null)
+  }
+
+  override fun addSharePositionPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit) {
+    poi.addShareTransform(targetPoi)
+    onSuccess.invoke(null)
+  }
+
+  override fun removeSharePositionPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit) {
+    poi.removeShareTransform(targetPoi)
+    onSuccess.invoke(null)
+  }
 }
