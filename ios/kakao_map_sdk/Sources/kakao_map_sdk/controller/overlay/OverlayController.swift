@@ -507,4 +507,52 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         trackingManager.stopTracking()
         onSuccess(nil)
     }
+
+    func addPoiBadge(poi: Poi, badge: PoiBadge, visible: Bool, onSuccess: (String?) -> Void) {
+        poi.addBadge(badge)
+        if visible {
+            poi.showBadge(badgeID: badge.badgeID)
+        } else {
+            poi.hideBadge(badgeID: badge.badgeID)
+        }
+        onSuccess(badge.badgeID)
+    }
+
+    func removePoiBadge(poi: Poi, badgeId: String, onSuccess: (Any?) -> Void) {
+        poi.removeBadge(badgeID: badgeId)
+        onSuccess(nil)
+    }
+
+    func changePoiBadgeVisible(poi: Poi, badgeId: String, visible: Bool, onSuccess: (Any?) -> Void) {
+        if visible {
+            poi.showBadge(badgeID: badgeId)
+        } else {
+            poi.hideBadge(badgeID: badgeId)
+        }
+        onSuccess(nil)
+    }
+
+    func addLodPoiBadge(poi: LodPoi, badge: PoiBadge, visible: Bool, onSuccess: (String?) -> Void) {
+        poi.addBadge(badge)
+        if visible {
+            poi.showBadge(badgeID: badge.badgeID)
+        } else {
+            poi.hideBadge(badgeID: badge.badgeID)
+        }
+        onSuccess(badge.badgeID)
+    }
+
+    func removeLodPoiBadge(poi: LodPoi, badgeId: String, onSuccess: (Any?) -> Void) {
+        poi.removeBadge(badgeID: badgeId)
+        onSuccess(nil)
+    }
+
+    func changeLodPoiBadgeVisible(poi: LodPoi, badgeId: String, visible: Bool, onSuccess: (Any?) -> Void) {
+        if visible {
+            poi.showBadge(badgeID: badgeId)
+        } else {
+            poi.hideBadge(badgeID: badgeId)
+        }
+        onSuccess(nil)
+    }
 }
