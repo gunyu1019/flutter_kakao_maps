@@ -54,6 +54,18 @@ protocol LabelControllerHandler {
     func removePoiBadge(poi: Poi, badgeId: String, onSuccess: (Any?) -> Void)
 
     func changePoiBadgeVisible(poi: Poi, badgeId: String, visible: Bool, onSuccess: (Any?) -> Void)
+
+    func addShareTransformPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void)
+
+    func addShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void)
+
+    func removeShareTransformPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void)
+
+    func removeShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void)
+
+    func addSharePositionPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void)
+
+    func removeSharePositionPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void)
 }
 
 extension LabelControllerHandler {
