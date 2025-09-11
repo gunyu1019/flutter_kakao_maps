@@ -555,4 +555,52 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         }
         onSuccess(nil)
     }
+
+    func addShareTransformPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void) {
+        poi.shareTransformWithPoi(targetPoi)
+        onSuccess(nil)
+    }
+
+    func addShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void) {
+        let shapeLayer = shapeManager.getShapeLayer(layerID: targetShapeLayerId)
+
+        let mapPolylineShape: MapPolylineShape? = shapeLayer!.getMapPolylineShape(shapeID: targetShapeId)
+        let polylineShape: PolylineShape? = shapeLayer!.getPolylineShape(shapeID: targetShapeId)
+
+        let mapPolygonShape: MapPolygonShape? = shapeLayer!.getMapPolygonShape(shapeID: targetShapeId)
+        let polygonShape: PolygonShape? = shapeLayer!.getPolygonShape(shapeID: targetShapeId)
+        let shape: Shape? = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
+
+        let shape = shapeLayer!.getMapPolygonShape
+        poi.shareTransformWithShape(shape)
+    }
+
+    func removeShareTransformPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void) {
+        poi.removeShareTransformWithPoi(targetPoi)
+        onSuccess(nil)
+    }
+
+    func removeShareTransformPoi(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void) {
+        let shapeLayer = shapeManager.getShapeLayer(layerID: targetShapeLayerId)
+
+        let mapPolylineShape: MapPolylineShape? = shapeLayer!.getMapPolylineShape(shapeID: targetShapeId)
+        let polylineShape: PolylineShape? = shapeLayer!.getPolylineShape(shapeID: targetShapeId)
+
+        let mapPolygonShape: MapPolygonShape? = shapeLayer!.getMapPolygonShape(shapeID: targetShapeId)
+        let polygonShape: PolygonShape? = shapeLayer!.getPolygonShape(shapeID: targetShapeId)
+        let shape: Shape? = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
+
+        let shape = shapeLayer!.getMapPolygonShape
+        poi.removeShareTransformWithShape(shape)
+    }
+
+    func addSharePositionPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void) {
+        poi.sharePositionWithPoi(targetPoi)
+        onSuccess(nil)
+    }
+
+    func removeSharePositionPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void) {
+        poi.removeSharePositionWithPoi(targetPoi)
+        onSuccess(nil)
+    }
 }
