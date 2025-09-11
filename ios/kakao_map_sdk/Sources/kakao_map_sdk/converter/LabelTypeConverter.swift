@@ -194,3 +194,14 @@ extension WaveTextOptions {
         }
     }
 }
+
+
+extension PoiBadge {
+    convenience init(payload: [String: Any]) {
+        let id = castSafty(payload["id"], caster: asString) ?? UUID().uuidString
+        let image = payload["image"].flatMap(asDict).flatMap(asImage)
+        let offset = CGPoint(x: asDouble(payload["offsetX"]!), y: asDouble(payload["offsetY"]!))
+        let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 0
+        self.init(badgeID: id, image: image, offset: offset, zOrder: zOrder)
+    }
+}
