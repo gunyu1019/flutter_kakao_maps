@@ -48,6 +48,12 @@ protocol LabelControllerHandler {
     func changeLabelLayerClickable(layer: LabelLayer, clickable: Bool, onSuccess: (Any?) -> Void)
 
     func changeLabelLayerZOrder(layer: LabelLayer, zOrder: Int, onSuccess: (Any?) -> Void)
+
+    func addPoiBadge(poi: Poi, badge: PoiBadge, visible: Bool, onSuccess: (String?) -> Void)
+
+    func removePoiBadge(poi: Poi, badgeId: String, onSuccess: (Any?) -> Void)
+
+    func changePoiBadgeVisible(poi: Poi, badgeId: String, visible: Bool, onSuccess: (Any?) -> Void)
 }
 
 extension LabelControllerHandler {
@@ -128,6 +134,19 @@ extension LabelControllerHandler {
         case "changeVisibleAllPoi": changePoiAllVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
         case "changeVisibleAllPolylineText":
             changePolylineTextAllVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
+        case "addPoiBadge":
+            let badgeArgument = asDict(arguments!["badge"]!)
+            let badgeOption = PoiBadge(payload: badgeArgument)
+            let visible = asBool(arguments!["visible"] ?? true)
+            addPoiBadge(poi: poi!, badge: badgeOption, visible: visible, onSuccess: result)
+        case "removePoiBadge": removePoiBadge(poi: poi!, badgeId: asString(arguments!["badgeId"]!), onSuccess: result)
+        case "changePoiBadgeVisible":
+            changePoiBadgeVisible(
+                poi: poi!,
+                badgeId: asString(arguments!["badgeId"]!),
+                visible: asBool(arguments!["visible"]!),
+                onSuccess: result
+            )
         default: result(FlutterMethodNotImplemented)
         }
     }

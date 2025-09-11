@@ -25,6 +25,12 @@ protocol LodLabelControllerHandler {
     func changeLodLabelLayerClickable(layer: LodLabelLayer, clickable: Bool, onSuccess: (Any?) -> Void)
 
     func changeLodLabelLayerZOrder(layer: LodLabelLayer, zOrder: Int, onSuccess: (Any?) -> Void)
+
+    func addLodPoiBadge(poi: LodPoi, badge: PoiBadge, visible: Bool, onSuccess: (String?) -> Void)
+
+    func removeLodPoiBadge(poi: LodPoi, badgeId: String, onSuccess: (Any?) -> Void)
+
+    func changeLodPoiBadgeVisible(poi: LodPoi, badgeId: String, visible: Bool, onSuccess: (Any?) -> Void)
 }
 
 extension LodLabelControllerHandler {
@@ -71,6 +77,19 @@ extension LodLabelControllerHandler {
         case "setLayerZOrder":
             changeLodLabelLayerZOrder(layer: layer!, zOrder: asInt(arguments!["zOrder"]!), onSuccess: result)
         case "changeVisibleAllLodPoi": changeLodPoiAllVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
+        case "addPoiBadge":
+            let badgeArgument = asDict(arguments!["badge"]!)
+            let badgeOption = PoiBadge(payload: badgeArgument)
+            let visible = asBool(arguments!["visible"] ?? true)
+            addLodPoiBadge(poi: poi!, badge: badgeOption, visible: visible, onSuccess: result)
+        case "removePoiBadge": removeLodPoiBadge(poi: poi!, badgeId: asString(arguments!["badgeId"]!), onSuccess: result)
+        case "changePoiBadgeVisible":
+            changeLodPoiBadgeVisible(
+                poi: poi!,
+                badgeId: asString(arguments!["badgeId"]!),
+                visible: asBool(arguments!["visible"]!),
+                onSuccess: result
+            )
         default:
             result(FlutterMethodNotImplemented)
         }
