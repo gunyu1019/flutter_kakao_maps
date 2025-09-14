@@ -246,7 +246,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addPolygonShapeStyle(style: PolygonStyleSet, onSuccess: (String) -> Void) {
         shapeManager.addPolygonStyleSet(style)
-        
+
         let dimScreenStyle = PolygonStyleSet(styleSetID: style.styleSetID, styles: style.styles)
         dimScreenManager.addPolygonStyleSet(dimScreenStyle)
         onSuccess(style.styleSetID)
@@ -561,7 +561,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func addShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void) {
+    func addShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess _: (Any?) -> Void) {
         let shapeLayer = shapeManager.getShapeLayer(layerID: targetShapeLayerId)
 
         let mapPolylineShape: MapPolylineShape? = shapeLayer!.getMapPolylineShape(shapeID: targetShapeId)
@@ -580,7 +580,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func removeShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void) {
+    func removeShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess _: (Any?) -> Void) {
         let shapeLayer = shapeManager.getShapeLayer(layerID: targetShapeLayerId)
 
         let mapPolylineShape: MapPolylineShape? = shapeLayer!.getMapPolylineShape(shapeID: targetShapeId)

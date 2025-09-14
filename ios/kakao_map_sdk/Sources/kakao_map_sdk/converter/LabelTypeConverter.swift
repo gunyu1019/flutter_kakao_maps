@@ -195,7 +195,6 @@ extension WaveTextOptions {
     }
 }
 
-
 extension PoiBadge {
     convenience init(payload: [String: Any]) {
         let id = castSafty(payload["id"], caster: asString) ?? UUID().uuidString
