@@ -580,7 +580,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
-    func removeShareTransformPoi(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void) {
+    func removeShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void) {
         let shapeLayer = shapeManager.getShapeLayer(layerID: targetShapeLayerId)
 
         let mapPolylineShape: MapPolylineShape? = shapeLayer!.getMapPolylineShape(shapeID: targetShapeId)
