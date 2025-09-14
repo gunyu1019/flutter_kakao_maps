@@ -66,6 +66,8 @@ protocol LabelControllerHandler {
     func addSharePositionPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void)
 
     func removeSharePositionPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void)
+
+    func movePathPoi(poi: Poi, path: [MapPoint], duration: UInt, baseRadian: Float?, cornerRadius: Float, jumpThreshold: Float, onSuccess: (Any?) -> Void)
 }
 
 extension LabelControllerHandler {
