@@ -19,7 +19,7 @@ Flutter 환경에서 카카오지도를 이용하기 위해서는 [카카오 개
 
 앱 키는 아래와 같이 `KakaoMapSdk.instance.initialize` 함수를 호출하여 인증하실 수 있습니다.
 ```dart
-import 'package:kakao_map_sdk/kakao_map.dart';
+import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
