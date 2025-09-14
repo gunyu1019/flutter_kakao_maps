@@ -603,4 +603,13 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         poi.removeSharePositionWithPoi(targetPoi)
         onSuccess(nil)
     }
+
+    func movePathPoi(poi: Poi, path: [MapPoint], duration: UInt, baseRadian: Float?, cornerRadius: Float, jumpThreshold: Float, onSuccess: (Any?) -> Void) {
+        if baseRadian == nil {
+            poi.moveOnPath(path, duration, cornerRadius, jumpThreshold)
+        } else {
+            poi.moveAndRotateOnPath(path, baseRadian, duration, cornerRadius, jumpThreshold)
+        }
+        onSuccess(nil)
+    }
 }
