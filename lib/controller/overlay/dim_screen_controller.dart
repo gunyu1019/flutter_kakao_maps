@@ -5,7 +5,7 @@ part of '../../kakao_map_sdk.dart';
 /// 특정 부분을 제외한 모든 부분을 색상을 입힐 수 있습니다.
 class DimScreenController extends BaseShapeController {
   @override
-  final String id = "dim_screen_layer";  // TEMPORARY ID (NOT USED)
+  final String id = "dim_screen_layer"; // TEMPORARY ID (NOT USED)
 
   @override
   MethodChannel channel;

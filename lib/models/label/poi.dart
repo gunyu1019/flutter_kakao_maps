@@ -52,10 +52,12 @@ class Poi with BadgeablePoi {
   List<Poi> get sharePosition => List.unmodifiable(_sharePositionPoi.values);
 
   /// [Poi]와 회전 값, 위치 값을 공유받고 있는 다른 [Poi]를 불러옵니다.
-  List<Poi> get shareTransformPoi => List.unmodifiable(_shareTransformPoi.values);
+  List<Poi> get shareTransformPoi =>
+      List.unmodifiable(_shareTransformPoi.values);
 
   /// [Poi]와 회전 값, 위치 값을 공유받고 있는 다른 [Polygon], [Polyline]를 불러옵니다.
-  List<Shape> get shareTransformShape => List.unmodifiable(_shareTransformShape.values);
+  List<Shape> get shareTransformShape =>
+      List.unmodifiable(_shareTransformShape.values);
 
   Poi._(this._controller, this.id,
       {required this.transform,
@@ -154,21 +156,14 @@ class Poi with BadgeablePoi {
   /// [Poi]를 [path]에 따라 [millis]밀리초 이내 이동합니다.
   /// [cornerRadius] 매개변수는 곡선 구간(코너)를 통과할 때 부드러운 이동 효과를 주기 위한 길이를 의미합니다.
   /// [jumpThreshold] 매개변수는 함수가 실행 중에 새로운 경로가 입력되었을 때, 현재위치~새 경로 시작점간에 거리에서 점프할 지에 대한 임계 값을 의미합니다.
-  Future<void> movePath(
-      List<LatLng> path,
-      double millis, {
-        double cornerRadius = 40.0,
-        double jumpThreshold = 200.0
-  }) async {
+  Future<void> movePath(List<LatLng> path, double millis,
+      {double cornerRadius = 40.0, double jumpThreshold = 200.0}) async {
     if (path.isEmpty) {
       throw Exception("The Path parameter is empty.");
     }
     _position = path.last;
-    await _controller._movePathPoi(
-        id, path, millis,
-        cornerRadius: cornerRadius,
-        jumpThreshold: jumpThreshold
-    );
+    await _controller._movePathPoi(id, path, millis,
+        cornerRadius: cornerRadius, jumpThreshold: jumpThreshold);
   }
 
   /// [Poi]를 [path]에 따라 [millis]밀리초 이내 이동합니다.
@@ -176,22 +171,16 @@ class Poi with BadgeablePoi {
   /// [cornerRadius] 매개변수는 곡선 구간(코너)를 통과할 때 부드러운 이동 효과를 주기 위한 길이를 의미합니다.
   /// [jumpThreshold] 매개변수는 함수가 실행 중에 새로운 경로가 입력되었을 때, 현재위치~새 경로 시작점간에 거리에서 점프할 지에 대한 임계 값을 의미합니다.
   Future<void> movePathWithRotate(
-      List<LatLng> path,
-      double baseRadian,
-      double millis, {
-        double cornerRadius = 40.0,
-        double jumpThreshold = 200.0
-  }) async {
+      List<LatLng> path, double baseRadian, double millis,
+      {double cornerRadius = 40.0, double jumpThreshold = 200.0}) async {
     if (path.isEmpty) {
       throw Exception("The Path parameter is empty.");
     }
     _position = path.last;
-    await _controller._movePathPoi(
-        id, path, millis,
+    await _controller._movePathPoi(id, path, millis,
         baseRadian: baseRadian,
         cornerRadius: cornerRadius,
-        jumpThreshold: jumpThreshold
-    );
+        jumpThreshold: jumpThreshold);
   }
 
   /// [Poi] 개체를 삭제합니다.
