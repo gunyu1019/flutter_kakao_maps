@@ -61,6 +61,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
 
   override val dimScreenManager: DimScreenManager?
     get() = kakaoMap.dimScreenManager
+
   override val labelManager: LabelManager?
     get() = kakaoMap.labelManager
 
@@ -72,9 +73,10 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
 
   // TEMPORARY
   var poiBadges: MutableMap<String, MutableMap<String, MutableMap<String, Badge>>> = mutableMapOf()
-  var lodPoiBadges: MutableMap<String, MutableMap<String, MutableMap<String, Badge>>> = mutableMapOf()
+  var lodPoiBadges: MutableMap<String, MutableMap<String, MutableMap<String, Badge>>> =
+    mutableMapOf()
 
-    init {
+  init {
     channel.setMethodCallHandler(::handle)
   }
 
@@ -105,9 +107,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun addPoi(layer: LabelLayer, poi: LabelOptions, onSuccess: (String?) -> Unit) {
-    layer.addLabel(poi).let {
-      onSuccess.invoke(it?.labelId)
-    }
+    layer.addLabel(poi).let { onSuccess.invoke(it?.labelId) }
   }
 
   override fun removePoi(layer: LabelLayer, poi: Label, onSuccess: Function1<Any?, Unit>) {
@@ -120,9 +120,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     label: PolylineLabelOptions,
     onSuccess: (String?) -> Unit,
   ) {
-    layer.addPolylineLabel(label).let {
-      onSuccess.invoke(it?.labelId)
-    }
+    layer.addPolylineLabel(label).let { onSuccess.invoke(it?.labelId) }
   }
 
   override fun removePolylineText(
@@ -260,9 +258,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun addLodPoi(layer: LodLabelLayer, poi: LabelOptions, onSuccess: (String?) -> Unit) {
-    val label = layer.addLodLabel(poi).let {
-      onSuccess.invoke(it?.labelId)
-    }
+    val label = layer.addLodLabel(poi).let { onSuccess.invoke(it?.labelId) }
   }
 
   override fun removeLodPoi(layer: LodLabelLayer, poi: LodLabel, onSuccess: (Any?) -> Unit) {
@@ -316,9 +312,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
   }
 
   override fun addPolylineShapeStyle(style: PolylineStylesSet, onSuccess: (String?) -> Unit) {
-    shapeManager!!.addPolylineStyles(style).let {
-      onSuccess.invoke(it?.styleId)
-    }
+    shapeManager!!.addPolylineStyles(style).let { onSuccess.invoke(it?.styleId) }
   }
 
   override fun addPolygonShapeStyle(style: PolygonStylesSet, onSuccess: (String?) -> Unit) {
@@ -334,9 +328,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     shape: PolylineOptions,
     onSuccess: (String?) -> Unit,
   ) {
-    layer.addPolyline(shape).let {
-      onSuccess.invoke(it?.id)
-    }
+    layer.addPolyline(shape).let { onSuccess.invoke(it?.id) }
   }
 
   override fun addPolygonShape(
@@ -344,9 +336,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     shape: PolygonOptions,
     onSuccess: (String?) -> Unit,
   ) {
-    layer.addPolygon(shape).let {
-      onSuccess.invoke(it?.id)
-    }
+    layer.addPolygon(shape).let { onSuccess.invoke(it?.id) }
   }
 
   override fun removePolylineShape(layer: ShapeLayer, shape: Polyline, onSuccess: (Any?) -> Unit) {
@@ -431,9 +421,8 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun addRouteStyle(style: RouteLineStylesSet, onSuccess: (String?) -> Unit) { routeManager!!.addStylesSet(style).let {
-      onSuccess.invoke(it?.styleId)
-    }
+  override fun addRouteStyle(style: RouteLineStylesSet, onSuccess: (String?) -> Unit) {
+    routeManager!!.addStylesSet(style).let { onSuccess.invoke(it?.styleId) }
   }
 
   override fun addRoute(
@@ -441,9 +430,7 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     route: RouteLineOptions,
     onSuccess: (String?) -> Unit,
   ) {
-    layer.addRouteLine(route).let {
-      onSuccess.invoke(it?.lineId)
-    }
+    layer.addRouteLine(route).let { onSuccess.invoke(it?.lineId) }
   }
 
   override fun removeRoute(layer: RouteLineLayer, route: RouteLine, onSuccess: (Any?) -> Unit) {
@@ -588,18 +575,11 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-
-  override fun setTrackingRotation(
-    rotation: Boolean,
-    onSuccess: (Any?) -> Unit
-  ) {
+  override fun setTrackingRotation(rotation: Boolean, onSuccess: (Any?) -> Unit) {
     trackingManager?.setTrackingRotation(rotation)
   }
 
-  override fun startTracking(
-    label: Label,
-    onSuccess: (Any?) -> Unit
-  ) {
+  override fun startTracking(label: Label, onSuccess: (Any?) -> Unit) {
     trackingManager?.startTracking(label)
   }
 
@@ -617,36 +597,28 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun setDimCorver(
-    cover: DimScreenCover,
-    onSuccess: (Any?) -> Unit
-  ) {
+  override fun setDimCorver(cover: DimScreenCover, onSuccess: (Any?) -> Unit) {
     dimScreenLayer?.setDimScreenCover(cover)
     onSuccess.invoke(null)
   }
 
-  override fun addDimHighlightPolygonShape(
-    shape: PolygonOptions,
-    onSuccess: (String?) -> Unit
-  ) {
-    dimScreenLayer?.addPolygon(shape).let {
-      onSuccess.invoke(it?.id)
-    }
+  override fun addDimHighlightPolygonShape(shape: PolygonOptions, onSuccess: (String?) -> Unit) {
+    dimScreenLayer?.addPolygon(shape).let { onSuccess.invoke(it?.id) }
   }
 
-  override fun removeDimHighlightPolygonShape(
-    polygonId: String,
-    onSuccess: (Any?) -> Unit
-  ) {
+  override fun removeDimHighlightPolygonShape(polygonId: String, onSuccess: (Any?) -> Unit) {
     val polygon = dimScreenLayer?.getPolygon(polygonId)
     dimScreenLayer?.remove(polygon)
     onSuccess.invoke(null)
   }
 
-
-  override fun addPoiBadge(poi: Label, badgeOption: BadgeOptions, visible: Boolean, onSuccess: (String?) -> Unit) {
-    if (!poiBadges.containsKey(poi.layerId))
-      poiBadges[poi.layerId] = mutableMapOf()
+  override fun addPoiBadge(
+    poi: Label,
+    badgeOption: BadgeOptions,
+    visible: Boolean,
+    onSuccess: (String?) -> Unit,
+  ) {
+    if (!poiBadges.containsKey(poi.layerId)) poiBadges[poi.layerId] = mutableMapOf()
     if (!poiBadges[poi.layerId]!!.containsKey(poi.labelId))
       poiBadges[poi.layerId]!![poi.labelId] = mutableMapOf()
 
@@ -665,9 +637,13 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun addPoiBadge(poi: LodLabel, badgeOption: BadgeOptions, visible: Boolean, onSuccess: (String?) -> Unit) {
-    if (!poiBadges.containsKey(poi.layerId))
-      poiBadges[poi.layerId] = mutableMapOf()
+  override fun addPoiBadge(
+    poi: LodLabel,
+    badgeOption: BadgeOptions,
+    visible: Boolean,
+    onSuccess: (String?) -> Unit,
+  ) {
+    if (!poiBadges.containsKey(poi.layerId)) poiBadges[poi.layerId] = mutableMapOf()
     if (!poiBadges[poi.layerId]!!.containsKey(poi.labelId))
       poiBadges[poi.layerId]!![poi.labelId] = mutableMapOf()
 
@@ -686,7 +662,12 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun changePoiBadgeVisible(poi: Label, badgeId: String, visible: Boolean, onSuccess: (Any?) -> Unit) {
+  override fun changePoiBadgeVisible(
+    poi: Label,
+    badgeId: String,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
+  ) {
     val badge = poiBadges[poi.layerId]?.get(poi.labelId)?.get(badgeId)
     if (visible) {
       badge?.show()
@@ -696,7 +677,12 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun changePoiBadgeVisible(poi: LodLabel, badgeId: String, visible: Boolean, onSuccess: (Any?) -> Unit) {
+  override fun changePoiBadgeVisible(
+    poi: LodLabel,
+    badgeId: String,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
+  ) {
     val badge = lodPoiBadges[poi.layerId]?.get(poi.labelId)?.get(badgeId)
     if (visible) {
       badge?.show()
@@ -711,7 +697,12 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun addShareTransformPoi(poi: Label, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Unit) {
+  override fun addShareTransformPoi(
+    poi: Label,
+    targetShapeLayerId: String,
+    targetShapeId: String,
+    onSuccess: (Any?) -> Unit,
+  ) {
     shapeManager
       ?.getLayer(targetShapeLayerId)
       ?.getPolygon(targetShapeId)!!
@@ -724,7 +715,12 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess.invoke(null)
   }
 
-  override fun removeShareTransformPoi(poi: Label, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Unit) {
+  override fun removeShareTransformPoi(
+    poi: Label,
+    targetShapeLayerId: String,
+    targetShapeId: String,
+    onSuccess: (Any?) -> Unit,
+  ) {
     shapeManager
       ?.getLayer(targetShapeLayerId)
       ?.getPolygon(targetShapeId)!!

@@ -260,19 +260,39 @@ interface LabelControllerHandler {
 
   fun changeLabelLayerZOrder(layer: LabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit)
 
-  fun addPoiBadge(poi: Label, badgeOption: BadgeOptions, visible: Boolean, onSuccess: (String?) -> Unit)
+  fun addPoiBadge(
+    poi: Label,
+    badgeOption: BadgeOptions,
+    visible: Boolean,
+    onSuccess: (String?) -> Unit,
+  )
 
   fun removePoiBadge(poi: Label, badgeId: String, onSuccess: (Any?) -> Unit)
 
-  fun changePoiBadgeVisible(poi: Label, badgeId: String, visible: Boolean, onSuccess: (Any?) -> Unit)
+  fun changePoiBadgeVisible(
+    poi: Label,
+    badgeId: String,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
+  )
 
   fun addShareTransformPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit)
 
-  fun addShareTransformPoi(poi: Label, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Unit)
+  fun addShareTransformPoi(
+    poi: Label,
+    targetShapeLayerId: String,
+    targetShapeId: String,
+    onSuccess: (Any?) -> Unit,
+  )
 
   fun removeShareTransformPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit)
 
-  fun removeShareTransformPoi(poi: Label, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Unit)
+  fun removeShareTransformPoi(
+    poi: Label,
+    targetShapeLayerId: String,
+    targetShapeId: String,
+    onSuccess: (Any?) -> Unit,
+  )
 
   fun addSharePositionPoi(poi: Label, targetPoi: Label, onSuccess: (Any?) -> Unit)
 

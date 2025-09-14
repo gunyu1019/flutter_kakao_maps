@@ -193,10 +193,7 @@ object LabelTypeConverter {
     asMap<Any?>().let { rawPayload: Map<String, Any?> ->
       val image = rawPayload["image"]!!.asBitmap()
       BadgeOptions.from(image).apply {
-        setOffset(
-          rawPayload["offsetX"]!!.asFloat(),
-          rawPayload["offsetY"]!!.asFloat()
-        )
+        setOffset(rawPayload["offsetX"]!!.asFloat(), rawPayload["offsetY"]!!.asFloat())
         rawPayload["id"]?.asString()?.let(this@apply::setId)
         rawPayload["zOrder"]?.asInt()?.let(this@apply::setZOrder)
       }
@@ -204,11 +201,14 @@ object LabelTypeConverter {
 
   fun Any.asPathOptions(): PathOptions =
     asMap<Any?>().let { rawPayload: Map<String, Any?> ->
-      PathOptions.fromPath(rawPayload["path"]!!.asList<Map<String, Any>>().map { e -> e.asLatLng() }.toList()).apply {
-        rawPayload["millis"]!!.asInt().let(::setDuration)
-        rawPayload["baseRadian"]?.asFloat()?.let(::setBaseRadian)
-        rawPayload["cornerRadius"]?.asFloat()?.let(::setCornerRadius)
-        rawPayload["jumpThreshold"]?.asFloat()?.let(::setJumpThreshold)
-      }
+      PathOptions.fromPath(
+          rawPayload["path"]!!.asList<Map<String, Any>>().map { e -> e.asLatLng() }.toList()
+        )
+        .apply {
+          rawPayload["millis"]!!.asInt().let(::setDuration)
+          rawPayload["baseRadian"]?.asFloat()?.let(::setBaseRadian)
+          rawPayload["cornerRadius"]?.asFloat()?.let(::setCornerRadius)
+          rawPayload["jumpThreshold"]?.asFloat()?.let(::setJumpThreshold)
+        }
     }
 }

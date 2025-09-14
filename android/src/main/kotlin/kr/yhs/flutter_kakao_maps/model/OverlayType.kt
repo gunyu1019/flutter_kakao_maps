@@ -6,5 +6,5 @@ enum class OverlayType(val value: Int) {
   Shape(3),
   Route(4),
   DimScreen(5),
-  Tracking(6)
+  Tracking(6),
 }

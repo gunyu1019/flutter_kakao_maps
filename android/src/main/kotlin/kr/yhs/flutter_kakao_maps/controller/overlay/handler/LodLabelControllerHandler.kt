@@ -121,9 +121,19 @@ interface LodLabelControllerHandler {
 
   fun changeLabelLayerZOrder(layer: LodLabelLayer, zOrder: Int, onSuccess: (Any?) -> Unit)
 
-  fun addPoiBadge(poi: LodLabel, badgeOption: BadgeOptions, visible: Boolean, onSuccess: (String?) -> Unit)
+  fun addPoiBadge(
+    poi: LodLabel,
+    badgeOption: BadgeOptions,
+    visible: Boolean,
+    onSuccess: (String?) -> Unit,
+  )
 
   fun removePoiBadge(poi: LodLabel, badgeId: String, onSuccess: (Any?) -> Unit)
 
-  fun changePoiBadgeVisible(poi: LodLabel, badgeId: String, visible: Boolean, onSuccess: (Any?) -> Unit)
+  fun changePoiBadgeVisible(
+    poi: LodLabel,
+    badgeId: String,
+    visible: Boolean,
+    onSuccess: (Any?) -> Unit,
+  )
 }

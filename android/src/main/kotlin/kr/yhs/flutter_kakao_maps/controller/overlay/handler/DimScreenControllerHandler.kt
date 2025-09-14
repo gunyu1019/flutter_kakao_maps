@@ -1,10 +1,10 @@
 package kr.yhs.flutter_kakao_maps.controller.overlay.handler
 
+import com.kakao.vectormap.shape.DimScreenCover
+import com.kakao.vectormap.shape.DimScreenLayer
+import com.kakao.vectormap.shape.DimScreenManager
 import com.kakao.vectormap.shape.DotPoints
 import com.kakao.vectormap.shape.MapPoints
-import com.kakao.vectormap.shape.DimScreenManager
-import com.kakao.vectormap.shape.DimScreenLayer
-import com.kakao.vectormap.shape.DimScreenCover
 import com.kakao.vectormap.shape.Polygon
 import com.kakao.vectormap.shape.PolygonOptions
 import io.flutter.plugin.common.MethodCall
@@ -23,7 +23,7 @@ interface DimScreenControllerHandler {
 
   val dimScreenLayer: DimScreenLayer?
     get() = dimScreenManager?.getDimScreenLayer()
- 
+
   fun dimScreenHandle(call: MethodCall, result: MethodChannel.Result) {
     val arguments = call.arguments!!.asMap<Any?>()
     if (dimScreenManager == null || dimScreenLayer == null) {
@@ -35,16 +35,21 @@ interface DimScreenControllerHandler {
     when (call.method) {
       "setColor" -> setDimColor(arguments["color"]!!.asInt(), result::success)
       "setVisible" -> setDimVisible(arguments["visible"]!!.asBoolean(), result::success)
-      "setDimCover" -> setDimCorver(arguments["cover"]!!.asString().let { value: String ->
-          DimScreenCover.entries.first { it.name == value }
-      }, result::success)
+      "setDimCover" ->
+        setDimCorver(
+          arguments["cover"]!!.asString().let { value: String ->
+            DimScreenCover.entries.first { it.name == value }
+          },
+          result::success,
+        )
       "addHighlightPolygonShape" -> {
         val rawOption = arguments["polygon"]!!.asMap<Any>()
         val style = dimScreenManager!!.getPolygonStyles(rawOption["styleId"]!!.asString())
         val option = rawOption.asPolygonOption(style)
         addDimHighlightPolygonShape(option, result::success)
       }
-      "removeHighlightPolygonShape" -> removeDimHighlightPolygonShape(arguments["polygonId"]!!.toString(), result::success)
+      "removeHighlightPolygonShape" ->
+        removeDimHighlightPolygonShape(arguments["polygonId"]!!.toString(), result::success)
       "changePolygonVisible" -> {
         val visible = arguments["visible"]?.asBoolean()!!
         changePolygonVisible(polygonShape!!, visible, result::success)
@@ -63,18 +68,17 @@ interface DimScreenControllerHandler {
     }
   }
 
-  fun setDimColor(color: Int, onSuccess: (Any?) -> Unit);
+  fun setDimColor(color: Int, onSuccess: (Any?) -> Unit)
 
-  fun setDimVisible(visible: Boolean, onSuccess: (Any?) -> Unit);
+  fun setDimVisible(visible: Boolean, onSuccess: (Any?) -> Unit)
 
-  fun setDimCorver(cover: DimScreenCover, onSuccess: (Any?) -> Unit);
+  fun setDimCorver(cover: DimScreenCover, onSuccess: (Any?) -> Unit)
 
   fun addDimHighlightPolygonShape(shape: PolygonOptions, onSuccess: (String?) -> Unit)
 
-  fun removeDimHighlightPolygonShape(polygonId: String, onSuccess: (Any?) -> Unit);
+  fun removeDimHighlightPolygonShape(polygonId: String, onSuccess: (Any?) -> Unit)
 
   fun changePolygonVisible(shape: Polygon, visible: Boolean, onSuccess: (Any?) -> Unit)
-
 
   fun changePolygonFromMapPoints(
     shape: Polygon,

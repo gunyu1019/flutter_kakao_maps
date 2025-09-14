@@ -15,7 +15,6 @@ import com.kakao.vectormap.shape.PolylineStyles
 import com.kakao.vectormap.shape.PolylineStylesSet
 import com.kakao.vectormap.shape.ShapeLayerOptions
 import com.kakao.vectormap.shape.ShapeLayerPass
-import com.kakao.vectormap.shape.ShapeManager
 import com.kakao.vectormap.utils.MapUtils
 import java.util.Arrays
 import kr.yhs.flutter_kakao_maps.converter.CameraTypeConverter.asLatLng
