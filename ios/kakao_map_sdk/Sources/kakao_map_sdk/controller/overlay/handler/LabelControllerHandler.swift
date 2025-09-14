@@ -161,6 +161,73 @@ extension LabelControllerHandler {
                 visible: asBool(arguments!["visible"]!),
                 onSuccess: result
             )
+        case "addShareTransformPoi":
+            let targetLayerId: String = asString(arguments!["targetLabelLayerId"]!)
+            let targetLayer: LabelLayer? = labelManager.getLabelLayer(layerID: targetLayerId)
+
+            let targetPoiId: String = asString(arguments!["targetPoiId"]!)
+            let targetPoi: Poi? = targetLayer.flatMap { key in
+                key.getPoi(poiID: poiId)
+            }
+            addShareTransformPoi(poi: poi!, targetPoi: targetPoi!, onSuccess: result)
+        case "addShareTransformShape":
+            let targetLayerId: String = asString(arguments!["targetShapeLayerId"]!)
+            let targetShapeId: String = asString(arguments!["targetShapeId"]!)
+            addShareTransformShape(
+                poi: poi!,
+                targetShapeLayerId: targetLayerId,
+                targetShapeId: targetShapeId,
+                onSuccess: result
+            )
+        case "removeShareTransformPoi":
+            let targetLayerId: String = asString(arguments!["targetLabelLayerId"]!)
+            let targetLayer: LabelLayer? = labelManager.getLabelLayer(layerID: targetLayerId)
+
+            let targetPoiId: String = asString(arguments!["targetPoiId"]!)
+            let targetPoi: Poi? = targetLayer.flatMap { key in
+                key.getPoi(poiID: poiId)
+            }
+            removeShareTransformPoi(poi: poi!, targetPoi: targetPoi!, onSuccess: result)
+        case "removeShareTransformShape":
+            let targetLayerId: String = asString(arguments!["targetShapeLayerId"]!)
+            let targetShapeId: String = asString(arguments!["targetShapeId"]!)
+            removeShareTransformShape(
+                poi: poi!,
+                targetShapeLayerId: targetLayerId,
+                targetShapeId: targetShapeId,
+                onSuccess: result
+            )
+        case "addSharePositionPoi":
+            let targetLayerId: String = asString(arguments!["targetLabelLayerId"]!)
+            let targetLayer: LabelLayer? = labelManager.getLabelLayer(layerID: targetLayerId)
+
+            let targetPoiId: String = asString(arguments!["targetPoiId"]!)
+            let targetPoi: Poi? = targetLayer.flatMap { key in
+                key.getPoi(poiID: poiId)
+            }
+            addSharePositionPoi(poi: poi!, targetPoi: targetPoi!, onSuccess: result)
+        case "removeSharePositionPoi":
+            let targetLayerId: String = asString(arguments!["targetLabelLayerId"]!)
+            let targetLayer: LabelLayer? = labelManager.getLabelLayer(layerID: targetLayerId)
+
+            let targetPoiId: String = asString(arguments!["targetPoiId"]!)
+            let targetPoi: Poi? = targetLayer.flatMap { key in
+                key.getPoi(poiID: poiId)
+            }
+            removeSharePositionPoi(poi: poi!, targetPoi: targetPoi!, onSuccess: result)
+        case "movePathPoi":
+            let path = asArray(arguments!["path"]!, caster: {
+                MapPoint(payload: asDict($0))
+            })
+            movePathPoi(
+                poi: poi!,
+                path: path,
+                duration: asUInt(arguments!["millis"]!),
+                baseRadian: castSafty(arguments?["baseRadian"], caster: asFloat),
+                cornerRadius: asFloat(arguments!["cornerRadius"]!),
+                jumpThreshold: asFloat(arguments!["jumpThreshold"]!),
+                onSuccess: result
+            )
         default: result(FlutterMethodNotImplemented)
         }
     }
