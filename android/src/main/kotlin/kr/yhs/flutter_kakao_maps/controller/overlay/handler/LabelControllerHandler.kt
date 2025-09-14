@@ -158,8 +158,8 @@ interface LabelControllerHandler {
         addShareTransformPoi(poi!!, targetPoi, result::success)
       }
       "addShareTransformShape" -> {
-        val targetShapeLayerId = arguments["targetLabelLayerId"]?.asString()!!
-        val targetShapeId = arguments["targetPoiId"]?.asString()!!
+        val targetShapeLayerId = arguments["targetShapeLayerId"]?.asString()!!
+        val targetShapeId = arguments["targetShapeId"]?.asString()!!
         addShareTransformPoi(poi!!, targetShapeLayerId, targetShapeId, result::success)
       }
       "removeShareTransformPoi" -> {
@@ -169,8 +169,8 @@ interface LabelControllerHandler {
         removeShareTransformPoi(poi!!, targetPoi, result::success)
       }
       "removeShareTransformShape" -> {
-        val targetShapeLayerId = arguments["targetLabelLayerId"]?.asString()!!
-        val targetShapeId = arguments["targetPoiId"]?.asString()!!
+        val targetShapeLayerId = arguments["targetShapeLayerId"]?.asString()!!
+        val targetShapeId = arguments["targetShapeId"]?.asString()!!
         removeShareTransformPoi(poi!!, targetShapeLayerId, targetShapeId, result::success)
       }
       "addSharePositionPoi" -> {
