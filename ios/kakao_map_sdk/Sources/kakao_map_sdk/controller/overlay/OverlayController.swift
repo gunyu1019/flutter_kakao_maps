@@ -571,8 +571,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         let polygonShape: PolygonShape? = shapeLayer!.getPolygonShape(shapeID: targetShapeId)
         let shape: Shape? = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
 
-        let shape = shapeLayer!.getMapPolygonShape
-        poi.shareTransformWithShape(shape)
+        poi.shareTransformWithShape(shape!)
     }
 
     func removeShareTransformPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void) {
@@ -590,8 +589,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         let polygonShape: PolygonShape? = shapeLayer!.getPolygonShape(shapeID: targetShapeId)
         let shape: Shape? = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
 
-        let shape = shapeLayer!.getMapPolygonShape
-        poi.removeShareTransformWithShape(shape)
+        poi.removeShareTransformWithShape(shape!)
     }
 
     func addSharePositionPoi(poi: Poi, targetPoi: Poi, onSuccess: (Any?) -> Void) {
@@ -606,9 +604,9 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func movePathPoi(poi: Poi, path: [MapPoint], duration: UInt, baseRadian: Float?, cornerRadius: Float, jumpThreshold: Float, onSuccess: (Any?) -> Void) {
         if baseRadian == nil {
-            poi.moveOnPath(path, duration, cornerRadius, jumpThreshold)
+            poi.moveOnPath(path, duration: duration, cornerRadius: cornerRadius, jumpThreshold: jumpThreshold)
         } else {
-            poi.moveAndRotateOnPath(path, baseRadian, duration, cornerRadius, jumpThreshold)
+            poi.moveAndRotateOnPath(path, baseRadian: baseRadian!, duration: duration, cornerRadius: cornerRadius, jumpThreshold: jumpThreshold)
         }
         onSuccess(nil)
     }
