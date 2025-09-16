@@ -36,7 +36,7 @@ void main() async {
       <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
       <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     ```
-2. 애플리케이셥을 배포하는 경우, Kakao Map SDK는 코드 축소, 난독화, 최적화 대상에서 제외해야 합니다.<br/>
+2. 애플리케이션을 배포하는 경우, Kakao Map SDK는 코드 축소, 난독화, 최적화 대상에서 제외해야 합니다.<br/>
   `android > app > proguard-rules.pro` 파일을 아래와 같이 설정주십시요.
     ```pro
     -keep class com.kakao.vectormap.** { *; }
@@ -245,6 +245,6 @@ Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
 
 ## 6. Collaboration / Reqort Issue 
 Kakao Map SDK 플러그인에 기여는 항상 환영합니다. <br/>
-기능 개선, 버그 해결 등의 작업하신 내용은 `Pull Reuqest(PR)` 해주시면, 검증 후 병합 해드리겠습니다.
+기능 개선, 버그 해결 등의 작업하신 내용은 `Pull Reuqest(PR)` 해주시면, 검증 후 최대한 빠른 시간 내에 병합 해드리겠습니다.
 
 질문, 버그 제보도 언제든지 환영합니다.<br/> 이용 중에 문제를 겪으셨다면 `Issue`를 열어주세요. 빠른 시일 내에 도움드리도록 하겠습니다
