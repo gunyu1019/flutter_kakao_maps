@@ -72,7 +72,18 @@ mixin WebLabelControllerHandler {
             "changeVisibleAllPolylineText" ||
             "setLayerClickable" ||
             "setLayerZOrder" ||
-            "scalePoi":
+            "scalePoi" ||
+            "movePathPoi":
+        break;
+      case "addPoiBadge" ||
+            "removePoiBadge" ||
+            "changePoiBadgeVisible" ||
+            "addShareTransformPoi" ||
+            "addShareTransformShape" ||
+            "removeShareTransformPoi" ||
+            "removeShareTransformShape" ||
+            "addSharePositionPoi" ||
+            "removeSharePositionPoi":
         break;
       default:
         throw UnimplementedError();
