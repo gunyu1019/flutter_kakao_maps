@@ -1,4 +1,8 @@
 ## 1.2.0-beta.1 
+> This is a pre-release version for v1.2.0.
+> All new features have been implemented for Android and iOS platform, but new feature for web environment are currently in progress.
+> We'll release the stable version in the near future. 
+
 * Support SPM(Swift Package Manager) since v1.2
 * Add `DimScreenController` to cover the map with a specifc color.
   ```dart
