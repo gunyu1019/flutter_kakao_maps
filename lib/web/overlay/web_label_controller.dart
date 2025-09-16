@@ -188,5 +188,41 @@ class WebLabelController with WebLabelControllerHandler {
     }
   }
 
+
+  @override
+  Future<void> addPoiBadge(String poiId, String badgeId) async {
+
+  }
+
+  @override
+  Future<void> removePoiBadge(String poiId, String badgeId) async {
+
+  }
+
+  @override
+  Future<void> changePoiBadgeVisible(String poiId, String badgeId, bool visible) async {
+
+  }
+
+  @override
+  Future<void> addShareTransformPoi(String poiId, String targetLayerId, String targetPoiId) async {
+
+  }
+
+  @override
+  Future<void> addShareTransformPoiWithShape(String poiId, String targetLayerId, String targetShapeId) async {
+
+  }
+
+  @override
+  Future<void> removeShareTransformPoi(String poiId, String targetLayerId, String targetPoiId) async {
+
+  }
+
+  @override
+  Future<void> removeShareTransformPoiWithShape(String poiId, String targetLayerId, String targetShapeId) async {
+
+  }
+
   int get poiCount => _webPoi.length;
 }
