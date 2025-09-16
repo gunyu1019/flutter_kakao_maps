@@ -211,6 +211,40 @@ RouteStyle.withPattern(
 )
 ```
 
+### 3-4. DimScreen 
+`DimScreen`은 지도 전체를 특정 색으로 가리는 객체입니다. 
+`Polygon` 도형을 추가하여 특정 부분을 지정된 색상으로 출력할 수 있습니다.
+
+```dart
+// 지도를 투명도 80%를 가지고 있는 회색으로 덮습니다.
+await controller.dimScreen.setColor(Colors.grey.withAlpha(80));
+await controller.dimScreen.setVisible(true);
+
+// 특정 좌표를 표현하는 도형은 파란색 테두리로 강조하고, 도형 안 회색을 걷어냅니다.
+final polygonStyle = PolygonStyle(
+  Colors.white.withAlpha(0), 
+  strokeWidth = 3.0,
+  strokeColor = Colors.blue
+);
+await controller.dimScreen.addPolygonShape(
+  MapPoint(...), polygonStyle
+)
+```
+
+### 3-5. Tracking 
+Tracking은 지도에 나타난 `Poi`가 `Poi.move()` 함수 등에 의해 이동하게 되었을 때, 지도를 바라보고 있는 카메라가 이동하는 `Poi`를 이동하도록 하는 기능입니다.
+한 번에 하나의 `Poi`만 추적을 할 수 있으며, 다른 `Poi`를 추적하려면 `stop` 함수를 호출하여 추적을 멈춘 후 다른 `Poi`를 설정해주시면 됩니다.
+
+```dart
+// Label Controller를 이용하여 추적시킬 Poi를 하나 만든 다음, Tracking Controller에 추적할 Poi를 설정합니다.
+final poi = await controller.labelLayer.addPoi(...);
+controller.tracking.poi = poi;
+
+// start 함수를 이용하여 Poi를 추적할 수 있습니다. 
+// 반대로 멈추고 싶다면 stop 함수를 이용하시면 됩니다.
+await controller.tracking.start();
+```
+
 ## 4. Sample Project
 아래의 [샘플 프로젝트](https://github.com/gunyu1019/flutter_kakao_maps_sample)을 확인하여 카카오맵을 Flutter에 구현한 애플리케이션을 확인해보세요!
 
