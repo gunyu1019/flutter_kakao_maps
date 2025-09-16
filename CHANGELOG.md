@@ -1,3 +1,29 @@
+## 1.2.0-beta.1 
+* Support SPM(Swift Package Manager) since v1.2
+* Add `DimScreenController` to cover the map with a specifc color.
+  ```dart
+  await controller.dimScreen.setColor(Colors.grey.withAlpha(80));
+  await controller.dimScreen.setVisible(true);
+  ```
+* Add `TrackingController` to track Poi with the camera
+  ```dart
+  final poi = await controller.labelLayer.addPoi(...);
+  controller.tracking.poi = poi;
+  await controller.tracking.start();
+  ```
+* Add `OverlayRegistrationFailedError` and `OverlayStyleRegistrationFailedError` exception to prevent `NullPointerException` when overlay registration fails.
+* Add `Badge` to display another image near the Poi.
+  ```dart
+  final poi = await controller.labelLayer.addPoi(...);
+  final badge = await poi.addBadge(
+    KImage.fromAeest("ICON ASSET PATH"), 0.5, 0.5
+  );
+  ```
+* Add `Poi.addShareTransform` function to share transform data with other poi or shapes.
+* Add `Poi.addSharePosition` function to share location data with other poi.
+* Add `Poi.movePath` function to move poi following the defined path.
+* [Fix] Remove usused `duration` parameter in `LodPoi.show` function
+
 ## 1.1.4 
 * Update version of base SDK (to v2.12.14 in Android / to v2.12.5 in iOS)
 * [Fix] (Web Environment) Ignored Z-Index attribute Kakao Map View in canvas mode ([#23](https://github.com/gunyu1019/flutter_kakao_maps/issues/23))
