@@ -133,15 +133,20 @@ mixin WebLabelControllerHandler {
 
   Future<void> removePoiBadge(String poiId, String badgeId);
 
-  Future<void> changePoiBadgeVisible(String poiId, String badgeId, bool visible);
+  Future<void> changePoiBadgeVisible(
+      String poiId, String badgeId, bool visible);
 
-  Future<void> addShareTransformPoi(String poiId, String targetLayerId, String targetPoiId);
+  Future<void> addShareTransformPoi(
+      String poiId, String targetLayerId, String targetPoiId);
 
-  Future<void> addShareTransformPoiWithShape(String poiId, String targetLayerId, String targetShapeId);
+  Future<void> addShareTransformPoiWithShape(
+      String poiId, String targetLayerId, String targetShapeId);
 
-  Future<void> removeShareTransformPoi(String poiId, String targetLayerId, String targetPoiId);
+  Future<void> removeShareTransformPoi(
+      String poiId, String targetLayerId, String targetPoiId);
 
-  Future<void> removeShareTransformPoiWithShape(String poiId, String targetLayerId, String targetShapeId);
+  Future<void> removeShareTransformPoiWithShape(
+      String poiId, String targetLayerId, String targetShapeId);
 
   // Future<void> movePathPoi(String poiId, List<LatLng> path, int duration, double cornerRadius, double jumpThreshold);
 }
