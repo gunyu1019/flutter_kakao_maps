@@ -156,7 +156,7 @@ class Poi with BadgeablePoi {
   /// [Poi]를 [path]에 따라 [millis]밀리초 이내 이동합니다.
   /// [cornerRadius] 매개변수는 곡선 구간(코너)를 통과할 때 부드러운 이동 효과를 주기 위한 길이를 의미합니다.
   /// [jumpThreshold] 매개변수는 함수가 실행 중에 새로운 경로가 입력되었을 때, 현재위치~새 경로 시작점간에 거리에서 점프할 지에 대한 임계 값을 의미합니다.
-  Future<void> movePath(List<LatLng> path, double millis,
+  Future<void> movePath(List<LatLng> path, int millis,
       {double cornerRadius = 40.0, double jumpThreshold = 200.0}) async {
     if (path.isEmpty) {
       throw Exception("The Path parameter is empty.");
@@ -171,7 +171,7 @@ class Poi with BadgeablePoi {
   /// [cornerRadius] 매개변수는 곡선 구간(코너)를 통과할 때 부드러운 이동 효과를 주기 위한 길이를 의미합니다.
   /// [jumpThreshold] 매개변수는 함수가 실행 중에 새로운 경로가 입력되었을 때, 현재위치~새 경로 시작점간에 거리에서 점프할 지에 대한 임계 값을 의미합니다.
   Future<void> movePathWithRotate(
-      List<LatLng> path, double baseRadian, double millis,
+      List<LatLng> path, double baseRadian, int millis,
       {double cornerRadius = 40.0, double jumpThreshold = 200.0}) async {
     if (path.isEmpty) {
       throw Exception("The Path parameter is empty.");

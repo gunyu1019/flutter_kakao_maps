@@ -138,7 +138,7 @@ class LabelController extends BaseLabelController {
     await _invokeMethod("movePoi", payload);
   }
 
-  Future<void> _movePathPoi(String poiId, List<LatLng> path, double millis,
+  Future<void> _movePathPoi(String poiId, List<LatLng> path, int millis,
       {double? baseRadian,
       double cornerRadius = 40.0,
       double jumpThreshold = 200.0}) async {
