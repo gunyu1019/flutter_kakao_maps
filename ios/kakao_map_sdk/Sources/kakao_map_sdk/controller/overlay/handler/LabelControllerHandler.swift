@@ -167,7 +167,7 @@ extension LabelControllerHandler {
 
             let targetPoiId: String = asString(arguments!["targetPoiId"]!)
             let targetPoi: Poi? = targetLayer.flatMap { key in
-                key.getPoi(poiID: poiId)
+                key.getPoi(poiID: targetPoiId)
             }
             addShareTransformPoi(poi: poi!, targetPoi: targetPoi!, onSuccess: result)
         case "addShareTransformShape":
@@ -185,7 +185,7 @@ extension LabelControllerHandler {
 
             let targetPoiId: String = asString(arguments!["targetPoiId"]!)
             let targetPoi: Poi? = targetLayer.flatMap { key in
-                key.getPoi(poiID: poiId)
+                key.getPoi(poiID: targetPoiId)
             }
             removeShareTransformPoi(poi: poi!, targetPoi: targetPoi!, onSuccess: result)
         case "removeShareTransformShape":
@@ -203,7 +203,7 @@ extension LabelControllerHandler {
 
             let targetPoiId: String = asString(arguments!["targetPoiId"]!)
             let targetPoi: Poi? = targetLayer.flatMap { key in
-                key.getPoi(poiID: poiId)
+                key.getPoi(poiID: targetPoiId)
             }
             addSharePositionPoi(poi: poi!, targetPoi: targetPoi!, onSuccess: result)
         case "removeSharePositionPoi":
@@ -212,7 +212,7 @@ extension LabelControllerHandler {
 
             let targetPoiId: String = asString(arguments!["targetPoiId"]!)
             let targetPoi: Poi? = targetLayer.flatMap { key in
-                key.getPoi(poiID: poiId)
+                key.getPoi(poiID: targetPoiId)
             }
             removeSharePositionPoi(poi: poi!, targetPoi: targetPoi!, onSuccess: result)
         case "movePathPoi":
