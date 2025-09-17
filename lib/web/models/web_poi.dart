@@ -6,7 +6,11 @@ class WebPoi {
 
   int currentLevel;
 
-  Map<int, String> preEncodedImage = {};
+  final Map<int, String> preEncodedImage = {};
+  // final Map<String, ...> badge;
+  // final List<...> shareTransformPoi;
+  // final List<...> shareTransformShape;
+
   String? text;
   String styleId;
 
