@@ -3,8 +3,7 @@ part of '../kakao_map_sdk_web.dart';
 mixin WebLabelControllerHandler {
   WebOverlayController get manager;
 
-  Map<String, String?> get _poiText;
-  Map<String, String> get _poiStyleId;
+  final Map<String, WebPoi> _webPoi = {};
 
   Future<dynamic> labelHandle(MethodCall method) async {
     final arguments = method.arguments;
@@ -41,13 +40,13 @@ mixin WebLabelControllerHandler {
             poiId, arguments["styleId"], arguments["transition"]);
         break;
       case "changePoiText":
-        final styleId = arguments["styleId"] ?? _poiStyleId[poiId];
+        final styleId = arguments["styleId"] ?? _webPoi[poiId]?.styleId;
         await invalidatePoi(
             poiId, styleId, arguments["text"], arguments["transition"]);
         break;
       case "invalidatePoi":
-        final styleId = arguments["styleId"] ?? _poiStyleId[poiId];
-        final text = arguments["text"] ?? _poiText[poiId];
+        final styleId = arguments["styleId"] ?? _webPoi[poiId]?.styleId;
+        final text = arguments["text"] ?? _webPoi[poiId]?.text;
         await invalidatePoi(poiId, styleId, text, arguments["transition"]);
         break;
       case "movePoi":
