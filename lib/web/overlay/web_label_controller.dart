@@ -68,7 +68,7 @@ class WebLabelController with WebLabelControllerHandler {
     }
     _webPoi[poiId]?.styleId = styleId;
   }
-  
+
   /// 지도를 비추는 zoom level에 따라 적절한 Poi 스타일을 적용합니다.
   /// 다른 용도로는 Poi를 최신화하는 용도로 사용하기도 합니다.
   void _syncZoomLevel(String poiId, [bool forceUpdate = false]) {
@@ -84,11 +84,12 @@ class WebLabelController with WebLabelControllerHandler {
         style = style.getStyle(zoomLevel)!;
       }
     }
-    
+
     if (poi.currentLevel == currentZoomLevel && !forceUpdate) return;
     final encodedIcon = poi.preEncodedImage[currentZoomLevel];
     _webPoi[poiId]?.currentLevel = currentZoomLevel;
-    final element = poiElement(poiId, encodedIcon, style.icon, poi.text, style, () {
+    final element =
+        poiElement(poiId, encodedIcon, style.icon, poi.text, style, () {
       manager._onPoiClick(id, poiId, isLod);
     });
     _webPoi[poiId]?.setContent(element);
@@ -152,12 +153,8 @@ class WebLabelController with WebLabelControllerHandler {
         yAnchor: style.anchor.y.toDouble(),
         zIndex: rank ?? 10001);
     final overlay = WebCustomOverlay(options);
-    final poi = _webPoi[poiId] = WebPoi(
-      poiId, overlay,
-      currentLevel: style.zoomLevel,
-      text: text,
-      styleId: style.id!
-    );
+    final poi = _webPoi[poiId] = WebPoi(poiId, overlay,
+        currentLevel: style.zoomLevel, text: text, styleId: style.id!);
     poi.preEncodedImage.addAll(preEncodedImage);
 
     poi.setMap(controller);

@@ -14,7 +14,9 @@ class WebPoi {
   String? text;
   String styleId;
 
-  WebPoi(this.id, this.overlay, {
+  WebPoi(
+    this.id,
+    this.overlay, {
     required this.currentLevel,
     required this.text,
     required this.styleId,
