@@ -3,7 +3,7 @@ part of '../kakao_map_sdk_web.dart';
 mixin WebLabelControllerHandler {
   WebOverlayController get manager;
 
-  final Map<String, WebPoi> _webPoi = {};
+  Map<String, WebPoi> get _webPoi;
 
   Future<dynamic> labelHandle(MethodCall method) async {
     final arguments = method.arguments;
