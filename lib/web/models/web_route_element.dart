@@ -1,6 +1,6 @@
 part of '../kakao_map_sdk_web.dart';
 
-class WebRoute {
+class WebRouteElement {
   final WebPolyline bodyElement;
   WebPolyline? strokeElement;
   WebPolyline? patternElement;
@@ -9,7 +9,7 @@ class WebRoute {
   WebPolylineOption bodyElementOption;
   WebPolylineOption? patternElementOption;
 
-  WebRoute(
+  WebRouteElement(
     this.bodyElement,
     this.strokeElement,
     this.patternElement,

@@ -4,7 +4,7 @@ class WebRouteController with WebRouteControllerHandler {
   final String id;
   final WebMapController controller;
 
-  final Map<String, List<WebRoute>> _webRoute = {};
+  final Map<String, List<WebRouteElement>> _webRoute = {};
   final Map<String, List<int>> _currentRouteLevel = {};
 
   final Map<String, String> _routeStyleId = {};
@@ -172,7 +172,7 @@ class WebRouteController with WebRouteControllerHandler {
           strokeStyle: "longdash",
           zIndex: zOrder + 1);
 
-  WebRoute _addRouteElement(RouteStyle style, List<LatLng> points, int zOrder) {
+  WebRouteElement _addRouteElement(RouteStyle style, List<LatLng> points, int zOrder) {
     final interopedPoints = points.map(WebLatLng.fromLatLng).toList().toJS;
     final bodyElementOption =
         _getBodyElementOption(style, interopedPoints, zOrder);
@@ -192,7 +192,7 @@ class WebRouteController with WebRouteControllerHandler {
     strokeElement?.setMap(controller);
     bodyElement.setMap(controller);
     patternElement?.setMap(controller);
-    return WebRoute(bodyElement, strokeElement, patternElement,
+    return WebRouteElement(bodyElement, strokeElement, patternElement,
         bodyElementOption, strokeElementOption, patternElementOption);
   }
 
