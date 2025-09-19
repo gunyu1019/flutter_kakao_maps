@@ -10,12 +10,9 @@ class WebRoute {
 
   final List<int> currentLevel;
 
-  WebRoute(
-    this.id,
-    this.element, {
-    required this.currentLevel,
-    required this.styleIndex,
-    required this.styleId,
-        this.zOrder = 0
-  });
+  WebRoute(this.id, this.element,
+      {required this.currentLevel,
+      required this.styleIndex,
+      required this.styleId,
+      this.zOrder = 0});
 }

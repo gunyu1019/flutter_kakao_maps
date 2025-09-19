@@ -135,8 +135,8 @@ class KakaoMapWebController
 
   @override
   Future<dynamic> getCameraPosition() async {
-    return CameraPosition(
-            controller.getCenter().toLatLng(), _reverseCalculateZoomLevel(controller.getLevel()))
+    return CameraPosition(controller.getCenter().toLatLng(),
+            _reverseCalculateZoomLevel(controller.getLevel()))
         .toMessageable();
   }
 
