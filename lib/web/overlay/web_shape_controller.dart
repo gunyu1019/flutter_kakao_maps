@@ -4,22 +4,8 @@ class WebShapeController with WebShapeControllerHandler {
   final String id;
   final WebMapController controller;
 
-  final Map<String, WebPolygonShape> __webPolygon = {};
-  final Map<String, WebPolylineShape> __webPolyline = {};
-
-  // final Map<String, WebPolygon> _webPolygon = {};
-  // final Map<String, WebPolyline> _webPolyline = {};
-  // final Map<String, WebPolyline?> _webPolylineStroke = {};
-
-  // final Map<String, WebPolygonOption> _webPolygonOption = {};
-  // final Map<String, WebPolylineOption> _webPolylineOption = {};
-  // final Map<String, WebPolylineOption?> _webPolylineStrokeOption = {};
-
-  // final Map<String, int> _currentPolylineLevel = {};
-  // final Map<String, int> _currentPolygonLevel = {};
-
-  // final Map<String, PolylineStyle> _polylineStyle = {};
-  // final Map<String, PolygonStyle> _polygonStyle = {};
+  final Map<String, WebPolygonShape> _webPolygon = {};
+  final Map<String, WebPolylineShape> _webPolyline = {};
 
   @override
   final WebOverlayController manager;
@@ -35,26 +21,26 @@ class WebShapeController with WebShapeControllerHandler {
   Future<void> removeShapeLayer() async {
     removeEventListener(
         controller, "zoom_changed", _zoomChangedEventHandler.toJS);
-    for (var shape in __webPolygon.keys) {
+    for (var shape in _webPolygon.keys) {
       await removePolygonShape(shape);
     }
-    for (var shape in __webPolyline.keys) {
+    for (var shape in _webPolyline.keys) {
       await removePolylineShape(shape);
     }
   }
 
   void _zoomChangedEventHandler() {
-    for (var shape in __webPolygon.values) {
+    for (var shape in _webPolygon.values) {
       _syncPolygonZoomLevel(shape.id, shape.style);
     }
-    for (var shape in __webPolyline.values) {
+    for (var shape in _webPolyline.values) {
       _syncPolylineZoomLevel(shape.id, shape.style);
     }
   }
 
   void _syncPolylineZoomLevel(String shapeId, PolylineStyle style) {
     final mapZoomLevel = controller.getLevel();
-    final webPolyline = __webPolyline[shapeId]!;
+    final webPolyline = _webPolyline[shapeId]!;
 
     var currentStyle = style;
     var currentZoomLevel = style.zoomLevel;
@@ -67,28 +53,28 @@ class WebShapeController with WebShapeControllerHandler {
     }
 
     if (webPolyline.currentLevel == currentZoomLevel) return;
-    __webPolyline[shapeId]!.currentLevel = currentZoomLevel;
+    _webPolyline[shapeId]!.currentLevel = currentZoomLevel;
     if (currentStyle.strokeWidth > 0) {
-      final strokeOptions = __webPolyline[shapeId]!.strokeOption =
+      final strokeOptions = _webPolyline[shapeId]!.strokeOption =
           _getPolylineStrokeElementOption(currentStyle, webPolyline.option.path,
               webPolyline.element.getZIndex() - 1);
       final strokeElement =
-          __webPolyline[shapeId]!.strokeElement = WebPolyline(strokeOptions);
+          _webPolyline[shapeId]!.strokeElement = WebPolyline(strokeOptions);
       strokeElement.setMap(controller);
     } else {
       webPolyline.strokeElement?.setMap(null);
-      __webPolyline[shapeId]?.strokeElement = null;
-      __webPolyline[shapeId]?.strokeOption = null;
+      _webPolyline[shapeId]?.strokeElement = null;
+      _webPolyline[shapeId]?.strokeOption = null;
     }
 
-    __webPolyline[shapeId]!.option.strokeColor = _getColorCode(currentStyle.color);
-    __webPolyline[shapeId]!.option.strokeWeight = currentStyle.lineWidth * .5;
-    __webPolyline[shapeId]!.element.setOptions(__webPolyline[shapeId]!.option);
+    _webPolyline[shapeId]!.option.strokeColor = _getColorCode(currentStyle.color);
+    _webPolyline[shapeId]!.option.strokeWeight = currentStyle.lineWidth * .5;
+    _webPolyline[shapeId]!.element.setOptions(_webPolyline[shapeId]!.option);
   }
 
   void _syncPolygonZoomLevel(String shapeId, PolygonStyle style) {
     final mapZoomLevel = controller.getLevel();
-    final webPolygon = __webPolygon[shapeId]!;
+    final webPolygon = _webPolygon[shapeId]!;
 
     var currentStyle = style;
     var currentZoomLevel = style.zoomLevel;
@@ -101,31 +87,31 @@ class WebShapeController with WebShapeControllerHandler {
     }
 
     if (webPolygon.currentLevel == currentZoomLevel) return;
-    __webPolygon[shapeId]!.currentLevel = currentZoomLevel;
+    _webPolygon[shapeId]!.currentLevel = currentZoomLevel;
 
-    __webPolygon[shapeId]!.option.fillColor = _getColorCode(currentStyle.color);
-    __webPolygon[shapeId]!.option.strokeColor = _getColorCode(currentStyle.strokeColor);
-    __webPolygon[shapeId]!.option.strokeWeight = currentStyle.strokeWidth;
-    __webPolygon[shapeId]!.element.setOptions(__webPolygon[shapeId]!.option);
+    _webPolygon[shapeId]!.option.fillColor = _getColorCode(currentStyle.color);
+    _webPolygon[shapeId]!.option.strokeColor = _getColorCode(currentStyle.strokeColor);
+    _webPolygon[shapeId]!.option.strokeWeight = currentStyle.strokeWidth;
+    _webPolygon[shapeId]!.element.setOptions(_webPolygon[shapeId]!.option);
   }
 
   @override
   Future<void> changePolylineVisible(String shapeId, bool visible) async {
     if (visible) {
-      __webPolyline[shapeId]!.element.setMap(controller);
-      __webPolyline[shapeId]?.element.setMap(controller);
+      _webPolyline[shapeId]!.element.setMap(controller);
+      _webPolyline[shapeId]?.element.setMap(controller);
     } else {
-      __webPolyline[shapeId]!.element.setMap(null);
-      __webPolyline[shapeId]?.element.setMap(null);
+      _webPolyline[shapeId]!.element.setMap(null);
+      _webPolyline[shapeId]?.element.setMap(null);
     }
   }
 
   @override
   Future<void> changePolygonVisible(String shapeId, bool visible) async {
     if (visible) {
-      __webPolygon[shapeId]!.element.setMap(controller);
+      _webPolygon[shapeId]!.element.setMap(controller);
     } else {
-      __webPolygon[shapeId]!.element.setMap(null);
+      _webPolygon[shapeId]!.element.setMap(null);
     }
   }
 
@@ -133,32 +119,32 @@ class WebShapeController with WebShapeControllerHandler {
   Future<void> changePolyline(
       String shapeId, WebShapePoint point, String styleId) async {
     final style = manager._polylineStyles[styleId]![0];
-    final bodyOptions = __webPolyline[shapeId]!.option;
-    final strokeOptions = __webPolyline[shapeId]!.strokeOption;
+    final bodyOptions = _webPolyline[shapeId]!.option;
+    final strokeOptions = _webPolyline[shapeId]!.strokeOption;
 
     strokeOptions?.strokeColor = _getColorCode(style.strokeColor);
     bodyOptions.strokeColor = _getColorCode(style.color);
     strokeOptions?.strokeWeight = style.lineWidth * .5 + style.strokeWidth * .5;
     bodyOptions.strokeWeight = style.lineWidth * .5;
 
-    __webPolyline[shapeId]!.element.setOptions(bodyOptions);
-    __webPolyline[shapeId]!.strokeElement?.setOptions(strokeOptions!);
-    __webPolyline[shapeId]!.option = bodyOptions;
-    __webPolyline[shapeId]!.strokeOption = strokeOptions;
+    _webPolyline[shapeId]!.element.setOptions(bodyOptions);
+    _webPolyline[shapeId]!.strokeElement?.setOptions(strokeOptions!);
+    _webPolyline[shapeId]!.option = bodyOptions;
+    _webPolyline[shapeId]!.strokeOption = strokeOptions;
   }
 
   @override
   Future<void> changePolygon(
       String shapeId, WebShapePoint point, String styleId) async {
     final style = manager._polygonStyles[styleId]![0];
-    final options = __webPolygon[shapeId]!.option;
+    final options = _webPolygon[shapeId]!.option;
 
     options.fillColor = _getColorCode(style.color);
     options.strokeColor = _getColorCode(style.strokeColor);
     options.strokeWeight = style.strokeWidth;
 
-    __webPolygon[shapeId]!.element.setOptions(options);
-    __webPolygon[shapeId]!.option = options;
+    _webPolygon[shapeId]!.element.setOptions(options);
+    _webPolygon[shapeId]!.option = options;
   }
 
   WebPolylineOption _getPolylineElementOption(
@@ -210,7 +196,7 @@ class WebShapeController with WebShapeControllerHandler {
       polylineStroke.setMap(controller);
     }
 
-    __webPolyline[shapeId] = WebPolylineShape(
+    _webPolyline[shapeId] = WebPolylineShape(
         shapeId,
         polyline,
         polylineStroke,
@@ -231,48 +217,48 @@ class WebShapeController with WebShapeControllerHandler {
     final polygon = WebPolygon(polygonOption);
     polygon.setMap(controller);
 
-    __webPolygon[shapeId] = WebPolygonShape(shapeId, polygon, option: polygonOption, style: style);
+    _webPolygon[shapeId] = WebPolygonShape(shapeId, polygon, option: polygonOption, style: style);
     _syncPolygonZoomLevel(shapeId, style);
     return shapeId;
   }
 
   @override
   Future<void> removePolylineShape(String shapeId) async {
-    __webPolyline[shapeId]!.element.setMap(null);
-    __webPolyline[shapeId]!.strokeElement?.setMap(null);
-    __webPolyline.remove(shapeId);
+    _webPolyline[shapeId]!.element.setMap(null);
+    _webPolyline[shapeId]!.strokeElement?.setMap(null);
+    _webPolyline.remove(shapeId);
   }
 
   @override
   Future<void> removePolygonShape(String shapeId) async {
-    __webPolygon[shapeId]!.element.setMap(null);
-    __webPolygon.remove(shapeId);
+    _webPolygon[shapeId]!.element.setMap(null);
+    _webPolygon.remove(shapeId);
   }
 
   @override
   Future<void> showAllPolyline() async {
-    for (var shape in __webPolyline.keys) {
+    for (var shape in _webPolyline.keys) {
       await changePolylineVisible(shape, true);
     }
   }
 
   @override
   Future<void> hideAllPolyline() async {
-    for (var shape in __webPolyline.keys) {
+    for (var shape in _webPolyline.keys) {
       await changePolylineVisible(shape, false);
     }
   }
 
   @override
   Future<void> showAllPolygon() async {
-    for (var shape in __webPolyline.keys) {
+    for (var shape in _webPolyline.keys) {
       await changePolygonVisible(shape, true);
     }
   }
 
   @override
   Future<void> hideAllPolygon() async {
-    for (var shape in __webPolyline.keys) {
+    for (var shape in _webPolyline.keys) {
       await changePolygonVisible(shape, false);
     }
   }
