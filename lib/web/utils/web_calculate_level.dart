@@ -11,3 +11,10 @@ int _calculateZoomLevel(int level) => switch (level) {
       >= 18 => 1,
       int() => 3
     };
+
+int _reverseCalculateZoomLevel(int level) => switch (level) {
+      >= 14 => 6,
+      >= 4 && <= 13 => 20 - level,
+      >= 3 && <= 2 => 19 - level,
+      int() => 18
+    };
