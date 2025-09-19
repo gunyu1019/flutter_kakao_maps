@@ -98,9 +98,9 @@ class WebRouteController with WebRouteControllerHandler {
   Future<void> changeRoute(
       String routeId, String styleId, List<List<LatLng>> points) async {
     final route = _webRoute[routeId]!;
-    // final zOrder = _routeZOrder[routeId]!;
-    // final styleIndex = _routeStyleIndex[routeId]!;
     final styles = manager._routeStyles[styleId]!;
+
+    route.styleId = styleId;
 
     for (final webRoute in route.element) {
       for (final routeElement in webRoute.allElement) {

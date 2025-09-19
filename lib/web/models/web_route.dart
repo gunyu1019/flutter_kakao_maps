@@ -5,9 +5,9 @@ class WebRoute {
   final List<WebRouteElement> element;
 
   String styleId;
-  List<int> styleIndex;
   int zOrder;
 
+  final List<int> styleIndex;
   final List<int> currentLevel;
 
   WebRoute(this.id, this.element,
