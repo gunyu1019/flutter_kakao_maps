@@ -39,7 +39,7 @@ class Polygon<T extends BasePoint> extends Shape {
     _style = style;
   }
 
-  /// [Polygon]을 지도에서 삭제합니다..
+  @override
   Future<void> remove() async {
     await _controller.removePolygonShape(this);
   }

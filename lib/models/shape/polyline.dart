@@ -57,7 +57,7 @@ class Polyline<T extends BasePoint> extends Shape {
     _position = position;
   }
 
-  /// [Polyline]를 지도에서 삭제합니다..
+  @override
   Future<void> remove() async {
     await _controller.removePolylineShape(this);
   }
