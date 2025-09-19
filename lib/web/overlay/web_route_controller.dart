@@ -4,13 +4,7 @@ class WebRouteController with WebRouteControllerHandler {
   final String id;
   final WebMapController controller;
 
-  final Map<String, WebRoute> __webRoute = {};
-  // final Map<String, List<WebRouteElement>> _webRoute = {};
-  // final Map<String, List<int>> _currentRouteLevel = {};
-
-  // final Map<String, String> _routeStyleId = {};
-  // final Map<String, List<int>> _routeStyleIndex = {};
-  // final Map<String, int> _routeZOrder = {};
+  final Map<String, WebRoute> _webRoute = {};
 
   @override
   final WebOverlayController manager;
@@ -24,7 +18,7 @@ class WebRouteController with WebRouteControllerHandler {
 
   @override
   Future<void> removeRouteLayer() async {
-    for (final route in __webRoute.keys) {
+    for (final route in _webRoute.keys) {
       await removeRoute(route);
     }
     removeEventListener(
@@ -32,7 +26,7 @@ class WebRouteController with WebRouteControllerHandler {
   }
 
   void _zoomChangedEventHandler() {
-    for (final route in __webRoute.values) {
+    for (final route in _webRoute.values) {
       final styles = manager._routeStyles[route.styleId]!;
       _syncZoomLevel(route.id, styles);
     }
@@ -40,7 +34,7 @@ class WebRouteController with WebRouteControllerHandler {
 
   void _syncZoomLevel(String routeId, List<RouteStyle> styles) {
     final mapZoomLevel = controller.getLevel();
-    final webRoute = __webRoute[routeId]!;
+    final webRoute = _webRoute[routeId]!;
 
     var currentStyles = List.from(styles);
     var currentZoomLevel = List.from(styles.map((e) => e.zoomLevel));
@@ -95,14 +89,14 @@ class WebRouteController with WebRouteControllerHandler {
         routeElement.patternElement = null;
         routeElement.patternElementOption = null;
       }
-      __webRoute[routeId]!.currentLevel[index] = currentZoomLevel[index];
+      _webRoute[routeId]!.currentLevel[index] = currentZoomLevel[index];
     }
   }
 
   @override
   Future<void> changeRoute(
       String routeId, String styleId, List<List<LatLng>> points) async {
-    final route = __webRoute[routeId]!;
+    final route = _webRoute[routeId]!;
     // final zOrder = _routeZOrder[routeId]!;
     // final styleIndex = _routeStyleIndex[routeId]!;
     final styles = manager._routeStyles[styleId]!;
@@ -112,8 +106,8 @@ class WebRouteController with WebRouteControllerHandler {
         routeElement.setMap(null);
       }
     }
-    __webRoute[routeId]!.element.removeRange(0, route.element.length);
-    __webRoute[routeId]!.element.addAll(points
+    _webRoute[routeId]!.element.removeRange(0, route.element.length);
+    _webRoute[routeId]!.element.addAll(points
         .mapIndexed((index, point) => _addRouteElement(
             styles.elementAtOrNull(route.styleIndex.elementAtOrNull(index) ?? 0) ??
                 styles[0],
@@ -123,8 +117,8 @@ class WebRouteController with WebRouteControllerHandler {
 
   @override
   Future<void> changeRouteZOrder(String routeId, int zOrder) async {
-    __webRoute[routeId]!.zOrder = zOrder;
-    for (final webRoute in __webRoute[routeId]!.element) {
+    _webRoute[routeId]!.zOrder = zOrder;
+    for (final webRoute in _webRoute[routeId]!.element) {
       webRoute.bodyElement.setZIndex(zOrder);
       webRoute.strokeElement?.setZIndex(zOrder - 1);
       webRoute.patternElement?.setZIndex(zOrder + 1);
@@ -133,7 +127,7 @@ class WebRouteController with WebRouteControllerHandler {
 
   @override
   Future<void> changeRouteVisible(String routeId, bool visible) async {
-    for (final route in __webRoute[routeId]!.element) {
+    for (final route in _webRoute[routeId]!.element) {
       if (visible) {
         route.bodyElement.setMap(controller);
         route.strokeElement?.setMap(controller);
@@ -204,7 +198,7 @@ class WebRouteController with WebRouteControllerHandler {
       CurveType curveType = CurveType.none,
       int zOrder = 10000}) async {
     String routeId = manager._uuid.v4();
-    __webRoute[routeId] = WebRoute(
+    _webRoute[routeId] = WebRoute(
       routeId, 
         [_addRouteElement(style, points, zOrder)],
       styleId: style.id!,
@@ -220,7 +214,7 @@ class WebRouteController with WebRouteControllerHandler {
   @override
   Future<String> addMultipleRoute(MultipleRouteOption option) async {
     String routeId = manager._uuid.v4();
-    __webRoute[routeId] = WebRoute(
+    _webRoute[routeId] = WebRoute(
       routeId,
       option.segments
         .map((segment) =>
@@ -239,19 +233,19 @@ class WebRouteController with WebRouteControllerHandler {
   @override
   Future<void> removeRoute(String routeId) async {
     await changeRouteVisible(routeId, false);
-    __webRoute.remove(routeId);
+    _webRoute.remove(routeId);
   }
 
   @override
   Future<void> showAllRoute() async {
-    for (var route in __webRoute.keys) {
+    for (var route in _webRoute.keys) {
       await changeRouteVisible(route, true);
     }
   }
 
   @override
   Future<void> hideAllRoute() async {
-    for (var route in __webRoute.keys) {
+    for (var route in _webRoute.keys) {
       await changeRouteVisible(route, false);
     }
   }
