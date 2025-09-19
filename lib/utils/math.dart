@@ -3,9 +3,9 @@ part of '../kakao_map_sdk.dart';
 const double _pi = math.pi;
 const double _earthRadius = 6371.0088 * 1000.0;
 
-double _degreeToRadian(degree) => degree * (_pi / 180);
+double _degreeToRadian(double degree) => degree * (_pi / 180);
 
-double _radianToDegree(radian) => radian * (180 / _pi);
+double _radianToDegree(double radian) => radian * (180 / _pi);
 
 /// [point1]과 [point2]의 지점의 최단 거리를 구합니다.
 /// [Haversine Formula / 위키피디아](https://en.wikipedia.org/wiki/Haversine_formula) 공식을 이용하여 WGS84 좌표계의 두 사이의 거리를 계산합니다.
