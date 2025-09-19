@@ -140,7 +140,7 @@ class Poi with BadgeablePoi {
     await _controller._changePoiVisible(id, false);
   }
 
-  /// [Poi]에 새롭게 설정한 [Poi.style]와 [Poi.text]를 업데이트합니다..
+  /// [Poi]에 새롭게 설정한 [Poi.style]와 [Poi.text]를 업데이트합니다.
   Future<void> invalidate([bool transition = false]) async {
     final styleId = style.id ?? await _controller.manager.addPoiStyle(style);
     await _controller._invalidatePoi(id, styleId, text, transition);
