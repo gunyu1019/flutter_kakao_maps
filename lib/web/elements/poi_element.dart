@@ -5,8 +5,18 @@ web.HTMLElement poiElement(WebPoi poi, PoiStyle style) {
     ..id = poi.id
     ..style.display = "flex"
     ..style.alignItems = "center"
-    ..style.flexDirection = "column";
+    ..style.flexDirection = "column"
+    ..style.position = "relative";
 
+  if (poi.badge.isNotEmpty) {
+    poi.badge.values.map(
+            (badge) =>
+                imageElement(badge.preEncodedImage, badge.image.width, badge.image.height)
+                  ..style.top = ""
+                  ..style.left = ""
+                  ..style.position = "relative"
+    ).forEach(element.appendChild);
+  }
   if (style.icon != null && poi.preEncodedImage[style.zoomLevel] != null) {
     final preEncodedImage = poi.preEncodedImage[style.zoomLevel]!;
     element.appendChild(
