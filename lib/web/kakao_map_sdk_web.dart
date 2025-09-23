@@ -22,6 +22,7 @@ part 'models/web_custom_overlay_option.dart';
 part 'models/web_map_option.dart';
 part 'models/web_mouse_event.dart';
 part 'models/web_poi.dart';
+part 'models/web_poi_badge.dart';
 part 'models/web_polygon_shape.dart';
 part 'models/web_polygon_option.dart';
 part 'models/web_polyline_shape.dart';
