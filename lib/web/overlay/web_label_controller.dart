@@ -86,12 +86,8 @@ class WebLabelController with WebLabelControllerHandler {
     }
 
     if (poi.currentLevel == currentZoomLevel && !forceUpdate) return;
-    final encodedIcon = poi.preEncodedImage[currentZoomLevel];
     _webPoi[poiId]?.currentLevel = currentZoomLevel;
-    final element =
-        poiElement(poiId, encodedIcon, style.icon, poi.text, style, () {
-      manager._onPoiClick(id, poiId, isLod);
-    });
+    final element = poiElement(poi, style);
     _webPoi[poiId]?.setContent(element);
   }
 
@@ -142,19 +138,20 @@ class WebLabelController with WebLabelControllerHandler {
       preEncodedImage[inStyle.zoomLevel] =
           encodeImageToBase64(await inStyle.icon!.readBytes());
     }
-    final encodedIcon = preEncodedImage[style.zoomLevel];
+
+    final poi = _webPoi[poiId] = WebPoi(poiId,
+        currentLevel: style.zoomLevel, text: text, styleId: style.id!, onClick: () {
+      manager._onPoiClick(this.id, poiId, isLod);
+    });
+
     final options = WebCustomOverlayOption(
         clickable: true,
-        content: poiElement(poiId, encodedIcon, style.icon, text, style, () {
-          manager._onPoiClick(this.id, poiId, isLod);
-        }),
+        content: poiElement(poi, style),
         position: WebLatLng.fromLatLng(position),
         xAnchor: style.anchor.x.toDouble(),
         yAnchor: style.anchor.y.toDouble(),
         zIndex: rank ?? 10001);
-    final overlay = WebCustomOverlay(options);
-    final poi = _webPoi[poiId] = WebPoi(poiId, overlay,
-        currentLevel: style.zoomLevel, text: text, styleId: style.id!);
+    poi.overlay = WebCustomOverlay(options);
     poi.preEncodedImage.addAll(preEncodedImage);
 
     poi.setMap(controller);

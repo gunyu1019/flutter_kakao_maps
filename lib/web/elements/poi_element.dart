@@ -1,27 +1,28 @@
 part of '../kakao_map_sdk_web.dart';
 
-web.HTMLElement poiElement(String id, String? encodedIcon, KImage? icon,
-    String? text, PoiStyle style, void Function()? onClick) {
+web.HTMLElement poiElement(WebPoi poi, PoiStyle style) {
   final element = web.HTMLDivElement()
-    ..id = id
+    ..id = poi.id
     ..style.display = "flex"
     ..style.alignItems = "center"
     ..style.flexDirection = "column";
-  if (icon != null && encodedIcon != null) {
+
+  if (style.icon != null && poi.preEncodedImage[style.zoomLevel] != null) {
+    final preEncodedImage = poi.preEncodedImage[style.zoomLevel]!;
     element.appendChild(
-        imageElement(encodedIcon, icon.width, icon.height, onClick));
+        imageElement(preEncodedImage, style.icon!.width, style.icon!.height, poi.onClick));
   }
-  if (text != null) {
+  if (poi.text != null) {
     final textGroupElement = web.HTMLSpanElement();
     final iconAvailable = element.children.length > 0;
-    final splitedText = text.split("\n");
+    final splitedText = poi.text!.split("\n");
     final textStyles =
         style.textStyle.isEmpty ? const [PoiTextStyle()] : style.textStyle;
     var textStyleIndex = 0;
     splitedText.map((innerText) {
       final style = textStyles[textStyleIndex];
       if (textStyleIndex + 1 < textStyles.length) textStyleIndex++;
-      final element = textElement(innerText, style, onClick);
+      final element = textElement(innerText, style, poi.onClick);
       return element;
     }).forEach((e) => textGroupElement.appendChild(e));
     if (iconAvailable) textGroupElement.style.height = "0";
