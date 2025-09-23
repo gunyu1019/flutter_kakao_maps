@@ -9,12 +9,17 @@ web.HTMLElement poiElement(WebPoi poi, PoiStyle style) {
     ..style.position = "relative";
 
   if (poi.badge.isNotEmpty) {
-    poi.badge.values.map(
-            (badge) =>
+    String leftOffset(WebPoiBadge badge) => style.icon != null
+                    ? "calc((100% - ${style.icon!.width}px) / 2 + ${style.icon!.width}px * ${badge.offsetY})"
+                    : "calc(${badge.offsetX * 100}% - ${badge.image.width}px * ${badge.offsetX})";
+    String topOffset(WebPoiBadge badge) => "calc(${badge.offsetY * 100}% - ${badge.image.height}px * ${badge.offsetY})";
+    poi.badge.values.where((WebPoiBadge badge) => badge.visible).map(
+            (WebPoiBadge badge) =>
                 imageElement(badge.preEncodedImage, badge.image.width, badge.image.height)
-                  ..style.top = ""
-                  ..style.left = ""
+                  ..style.top = topOffset(badge)
+                  ..style.left = leftOffset(badge)
                   ..style.position = "relative"
+                  ..style.zIndex = badge.zOrder.toString()
     ).forEach(element.appendChild);
   }
   if (style.icon != null && poi.preEncodedImage[style.zoomLevel] != null) {
