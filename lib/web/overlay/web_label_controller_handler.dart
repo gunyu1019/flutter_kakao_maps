@@ -102,7 +102,6 @@ mixin WebLabelControllerHandler {
             "removeShareTransformShape" ||
             "movePathPoi":
         break;
-        break;
       default:
         throw UnimplementedError();
     }
