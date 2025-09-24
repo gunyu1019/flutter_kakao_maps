@@ -103,6 +103,7 @@ class WebLabelController with WebLabelControllerHandler {
   @override
   Future<void> movePoi(String poiId, LatLng position, [double? millis]) async {
     _webPoi[poiId]?.setPosition(WebLatLng.fromLatLng(position));
+    manager._onPoiMove(_webPoi[poiId]!, position);
   }
 
   @override
@@ -139,7 +140,7 @@ class WebLabelController with WebLabelControllerHandler {
           encodeImageToBase64(await inStyle.icon!.readBytes());
     }
 
-    final poi = _webPoi[poiId] = WebPoi(poiId,
+    final poi = _webPoi[poiId] = WebPoi(poiId, this.id,
         currentLevel: style.zoomLevel, text: text, styleId: style.id!, onClick: () {
       manager._onPoiClick(this.id, poiId, isLod);
     });
