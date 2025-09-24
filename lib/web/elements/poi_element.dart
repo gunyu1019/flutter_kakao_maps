@@ -22,7 +22,6 @@ web.HTMLElement poiElement(WebPoi poi, PoiStyle style) {
         ..style.left = leftOffset(badge)
         ..style.position = "absolute"
         ..style.zIndex = badge.zOrder.toString();
-      print("${leftOffset(badge)} ${topOffset(badge)}");
       element.appendChild(badgeElement);
     }
   }
