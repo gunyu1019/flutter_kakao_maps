@@ -71,13 +71,11 @@ mixin WebLabelControllerHandler {
       case "addPoiBadge":
         final badgeOption = arguments["badge"];
         final badgeImage = KImage.fromMessageable(badgeOption["image"]);
-        return await addPoiBadge(poiId, badgeImage,
-          badgeOption["offsetX"],
-          badgeOption["offsetY"],
-          badgeId: badgeOption["id"],
-          zOrder: badgeOption["zOrder"] ?? 1,
-          visible: badgeOption["visible"] ?? true
-        );
+        return await addPoiBadge(
+            poiId, badgeImage, badgeOption["offsetX"], badgeOption["offsetY"],
+            badgeId: badgeOption["id"],
+            zOrder: badgeOption["zOrder"] ?? 1,
+            visible: badgeOption["visible"] ?? true);
       case "removePoiBadge":
         removePoiBadge(poiId, badgeId);
         break;
@@ -149,13 +147,9 @@ mixin WebLabelControllerHandler {
 
   Future<void> hideAllPoi();
 
-  Future<String> addPoiBadge(String poiId, KImage image,
-    double offsetX,
-    double offsetY, {
-    String? badgeId,
-    int? zOrder,
-    bool visible = true
-  });
+  Future<String> addPoiBadge(
+      String poiId, KImage image, double offsetX, double offsetY,
+      {String? badgeId, int? zOrder, bool visible = true});
 
   Future<void> removePoiBadge(String poiId, String badgeId);
 

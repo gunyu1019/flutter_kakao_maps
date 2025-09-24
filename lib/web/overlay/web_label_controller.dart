@@ -141,7 +141,9 @@ class WebLabelController with WebLabelControllerHandler {
     }
 
     final poi = _webPoi[poiId] = WebPoi(poiId, this.id,
-        currentLevel: style.zoomLevel, text: text, styleId: style.id!, onClick: () {
+        currentLevel: style.zoomLevel,
+        text: text,
+        styleId: style.id!, onClick: () {
       manager._onPoiClick(this.id, poiId, isLod);
     });
 
@@ -183,21 +185,12 @@ class WebLabelController with WebLabelControllerHandler {
   }
 
   @override
-  Future<String> addPoiBadge(String poiId, KImage image,
-    double offsetX,
-    double offsetY, {
-    String? badgeId,
-    int? zOrder,
-    bool visible = true
-  }) async {
+  Future<String> addPoiBadge(
+      String poiId, KImage image, double offsetX, double offsetY,
+      {String? badgeId, int? zOrder, bool visible = true}) async {
     final tBadgeId = badgeId ?? manager._uuid.v4();
-    final badge = _webPoi[poiId]?.badge[tBadgeId] = WebPoiBadge(
-        tBadgeId,
-        offsetX,
-        offsetY,
-        image,
-        visible, zOrder ?? 0
-    );
+    final badge = _webPoi[poiId]?.badge[tBadgeId] =
+        WebPoiBadge(tBadgeId, offsetX, offsetY, image, visible, zOrder ?? 0);
     await badge!.encodeImage();
     _syncZoomLevel(poiId, true);
     return tBadgeId;
@@ -230,7 +223,8 @@ class WebLabelController with WebLabelControllerHandler {
   @override
   Future<void> removeShareTransformPoi(
       String poiId, String targetLayerId, String targetPoiId) async {
-    _webPoi[poiId]!.shareTransformPoi.removeWhere((poi) => poi.id == targetPoiId && poi.layerId == targetLayerId);
+    _webPoi[poiId]!.shareTransformPoi.removeWhere(
+        (poi) => poi.id == targetPoiId && poi.layerId == targetLayerId);
   }
 
   // @override
