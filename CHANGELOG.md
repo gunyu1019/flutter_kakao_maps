@@ -1,19 +1,4 @@
-## 1.2.0-beta.2 
-> This is a pre-release version for v1.2.0.
-> All new features have been implemented for Android and iOS platform, but new feature for web environment are currently in progress.
-> We'll release the stable version in the near future. 
-
-The v1.2.0-beta.2 improves the web environment.
-* Improved data structuring to overlay in web environment.
-* Support `TrackingController` to track Poi with the camera in web environment.
-* Support `Badge` to display another image near the Poi in web environment.
-* Support `Poi.addShareTransform` function and `Poi.addSharePosition` to share transform data with other poi or shapes.
-  (Sharing Transformations as shape had not yet been implemented. Probably implemented in the next minor update.)
-* [Fix] Invalid zoomLevel from `controller.getCameraPosition()` function in web environment.
-* [Fix] Not applicable to other poi icons on zoom level in web environment.
-* [Fix] Not applied the pre-specified ID of route in web environment.
-
-## 1.2.0-beta.1
+## 1.2.0
 * Support SPM(Swift Package Manager) since v1.2
 * Add `DimScreenController` to cover the map with a specifc color.
   ```dart
@@ -37,7 +22,11 @@ The v1.2.0-beta.2 improves the web environment.
 * Add `Poi.addShareTransform` function to share transform data with other poi or shapes.
 * Add `Poi.addSharePosition` function to share location data with other poi.
 * Add `Poi.movePath` function to move poi following the defined path.
+* Improved data structuring to overlay in web environment.
 * [Fix] Remove usused `duration` parameter in `LodPoi.show` function
+* [Fix] Invalid zoomLevel from `controller.getCameraPosition()` function in web environment.
+* [Fix] Not applicable to other poi icons on zoom level in web environment.
+* [Fix] Not applied the pre-specified ID of route in web environment.
 
 ## 1.1.4 
 * Update version of base SDK (to v2.12.14 in Android / to v2.12.5 in iOS)
