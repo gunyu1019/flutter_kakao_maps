@@ -220,7 +220,7 @@ RouteStyle.withPattern(
 await controller.dimScreen.setColor(Colors.grey.withAlpha(80));
 await controller.dimScreen.setVisible(true);
 
-// 특정 좌표를 표현하는 도형은 파란색 테두리로 강조하고, 도형 안 회색을 걷어냅니다.
+// 특정 좌표에 있는 도형은 파란 색상의 테두리를 강조하고, 도형 안 색상을 걷어냅니다.
 final polygonStyle = PolygonStyle(
   Colors.white.withAlpha(0), 
   strokeWidth = 3.0,
@@ -259,6 +259,7 @@ Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
 * **LOD(Level Of Detail) 기능**: 웹 환경에서 LOD 기능은 적용되지 않은 상태로 작동합니다. <br/>
   예를 들어 웹 환경에서 `LOD Poi`는 LOD가 적용되지 않은 `Poi`와 동일하게 작동합니다. 
 * 각 **컨트롤러(Layer) 기능**: 웹 환경에서 Layer에 적용한 설정은 적용되지 않습니다.
+* **Dim Screen**: 웹 환경에서 지도 전체를 특정 색상으로 덮는 Dim Screen 기능은 제공하지 않습니다.
 * **Polyline Text**: 웹 환경에서 휘어진 텍스트 오버레이는 지원하지 않습니다.
 * **Route Pattern**: 웹 환경에서 경로에 패턴을 찍는 기능은 지원하지 않습니다.<br/>
   `RouteStyle` 객체에 `pattern`가 입력되면 카카오맵 웹 환경과 동일한 점선으로 대체됩니다.
@@ -271,6 +272,7 @@ Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
 * 웹 환경에서 `canShowPosition` 함수의 `zoomLevel` 매개변수는 작동하지 않습니다.<br/>
   사용자에게 보여주는 시점에서 주어진 배열의 좌표만 보여지는 여부를 반환합니다.
 * 웹 환경에서 `buildingHeightScale` 개체는 항상 `0.0`이며 수정할 수 없습니다.
+* 웹 환경에서 Poi와 다른 도형 간 위치를 공유하는 `Poi.addShareTransfromWithShape`, `Poi.removeShareTransfromWithShape`는 지원하지 않습니다.
 
 기재한 기능 외에도 일부 기능은 지원하지 않을 수도 있습니다.<br/>
 네이티브 환경을 중점으로 개발된 플러그인이므로 양해부탁드립니다.
