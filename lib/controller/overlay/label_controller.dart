@@ -132,7 +132,7 @@ class LabelController extends BaseLabelController {
     });
   }
 
-  Future<void> _movePoi(String poiId, LatLng position, [double? millis]) async {
+  Future<void> _movePoi(String poiId, LatLng position, [int? millis]) async {
     final payload = {"poiId": poiId, "millis": millis};
     payload.addAll(position.toMessageable());
     await _invokeMethod("movePoi", payload);
