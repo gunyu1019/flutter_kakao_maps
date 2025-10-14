@@ -1,3 +1,6 @@
+## 1.2.1
+* [Fix] Invalid parameter type on Poi.move feature. ([#46](https://github.com/gunyu1019/flutter_kakao_maps/issues/46))
+
 ## 1.2.0
 * Support SPM(Swift Package Manager) since v1.2
 * Add `DimScreenController` to cover the map with a specifc color.
