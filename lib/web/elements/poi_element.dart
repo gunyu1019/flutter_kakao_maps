@@ -10,22 +10,25 @@ web.HTMLElement poiElement(WebPoi poi, PoiStyle style) {
 
   if (poi.badge.isNotEmpty) {
     String leftOffset(WebPoiBadge badge) => style.icon != null
-                    ? "calc((100% - ${style.icon!.width}px) / 2 + ${style.icon!.width}px * ${badge.offsetY})"
-                    : "calc(${badge.offsetX * 100}% - ${badge.image.width}px * ${badge.offsetX})";
-    String topOffset(WebPoiBadge badge) => "calc(${badge.offsetY * 100}% - ${badge.image.height}px * ${badge.offsetY})";
-    poi.badge.values.where((WebPoiBadge badge) => badge.visible).map(
-            (WebPoiBadge badge) =>
-                imageElement(badge.preEncodedImage, badge.image.width, badge.image.height)
-                  ..style.top = topOffset(badge)
-                  ..style.left = leftOffset(badge)
-                  ..style.position = "relative"
-                  ..style.zIndex = badge.zOrder.toString()
-    ).forEach(element.appendChild);
+        ? "calc((100% - ${style.icon!.width}px) / 2 + ${badge.image.width}px * ${badge.offsetY})"
+        : "calc(${badge.offsetX * 100}% - ${badge.image.width}px * ${badge.offsetX})";
+    String topOffset(WebPoiBadge badge) =>
+        "calc(${badge.offsetY * 100}% - ${badge.image.width}px * ${badge.offsetY})";
+    for (WebPoiBadge badge
+        in poi.badge.values.where((WebPoiBadge badge) => badge.visible)) {
+      web.HTMLElement badgeElement = imageElement(
+          badge.preEncodedImage, badge.image.width, badge.image.height)
+        ..style.top = topOffset(badge)
+        ..style.left = leftOffset(badge)
+        ..style.position = "absolute"
+        ..style.zIndex = badge.zOrder.toString();
+      element.appendChild(badgeElement);
+    }
   }
   if (style.icon != null && poi.preEncodedImage[style.zoomLevel] != null) {
     final preEncodedImage = poi.preEncodedImage[style.zoomLevel]!;
-    element.appendChild(
-        imageElement(preEncodedImage, style.icon!.width, style.icon!.height, poi.onClick));
+    element.appendChild(imageElement(
+        preEncodedImage, style.icon!.width, style.icon!.height, poi.onClick));
   }
   if (poi.text != null) {
     final textGroupElement = web.HTMLSpanElement();

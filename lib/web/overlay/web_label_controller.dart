@@ -103,6 +103,7 @@ class WebLabelController with WebLabelControllerHandler {
   @override
   Future<void> movePoi(String poiId, LatLng position, [double? millis]) async {
     _webPoi[poiId]?.setPosition(WebLatLng.fromLatLng(position));
+    manager._onPoiMove(_webPoi[poiId]!, position);
   }
 
   @override
@@ -139,8 +140,10 @@ class WebLabelController with WebLabelControllerHandler {
           encodeImageToBase64(await inStyle.icon!.readBytes());
     }
 
-    final poi = _webPoi[poiId] = WebPoi(poiId,
-        currentLevel: style.zoomLevel, text: text, styleId: style.id!, onClick: () {
+    final poi = _webPoi[poiId] = WebPoi(poiId, this.id,
+        currentLevel: style.zoomLevel,
+        text: text,
+        styleId: style.id!, onClick: () {
       manager._onPoiClick(this.id, poiId, isLod);
     });
 
@@ -182,30 +185,51 @@ class WebLabelController with WebLabelControllerHandler {
   }
 
   @override
-  Future<void> addPoiBadge(String poiId, String badgeId) async {}
+  Future<String> addPoiBadge(
+      String poiId, KImage image, double offsetX, double offsetY,
+      {String? badgeId, int? zOrder, bool visible = true}) async {
+    final tBadgeId = badgeId ?? manager._uuid.v4();
+    final badge = _webPoi[poiId]?.badge[tBadgeId] =
+        WebPoiBadge(tBadgeId, offsetX, offsetY, image, visible, zOrder ?? 0);
+    await badge!.encodeImage();
+    _syncZoomLevel(poiId, true);
+    return tBadgeId;
+  }
 
   @override
-  Future<void> removePoiBadge(String poiId, String badgeId) async {}
+  Future<void> removePoiBadge(String poiId, String badgeId) async {
+    _webPoi[poiId]?.badge.remove(badgeId);
+    _syncZoomLevel(poiId, true);
+  }
 
   @override
   Future<void> changePoiBadgeVisible(
-      String poiId, String badgeId, bool visible) async {}
+      String poiId, String badgeId, bool visible) async {
+    _webPoi[poiId]?.badge[badgeId]!.visible = visible;
+    _syncZoomLevel(poiId, true);
+  }
 
   @override
   Future<void> addShareTransformPoi(
-      String poiId, String targetLayerId, String targetPoiId) async {}
+      String poiId, String targetLayerId, String targetPoiId) async {
+    final targetPoi = manager._labelLayer[targetLayerId]?._webPoi[targetPoiId];
+    _webPoi[poiId]!.shareTransformPoi.add(targetPoi!);
+  }
 
-  @override
-  Future<void> addShareTransformPoiWithShape(
-      String poiId, String targetLayerId, String targetShapeId) async {}
+  // @override
+  // Future<void> addShareTransformPoiWithShape(
+  //     String poiId, String targetLayerId, String targetShapeId) async {}
 
   @override
   Future<void> removeShareTransformPoi(
-      String poiId, String targetLayerId, String targetPoiId) async {}
+      String poiId, String targetLayerId, String targetPoiId) async {
+    _webPoi[poiId]!.shareTransformPoi.removeWhere(
+        (poi) => poi.id == targetPoiId && poi.layerId == targetLayerId);
+  }
 
-  @override
-  Future<void> removeShareTransformPoiWithShape(
-      String poiId, String targetLayerId, String targetShapeId) async {}
+  // @override
+  // Future<void> removeShareTransformPoiWithShape(
+  //     String poiId, String targetLayerId, String targetShapeId) async {}
 
   int get poiCount => _webPoi.length;
 }

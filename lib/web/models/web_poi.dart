@@ -2,27 +2,27 @@ part of '../kakao_map_sdk_web.dart';
 
 class WebPoi {
   final String id;
+  final String layerId;
   late final WebCustomOverlay overlay;
 
   int currentLevel;
 
   final Map<int, String> preEncodedImage = {};
   final Map<String, WebPoiBadge> badge = {};
-  // final List<...> shareTransformPoi;
-  // final List<...> shareTransformShape;
+  final List<WebPoi> shareTransformPoi = [];
+  // final List<WebPolylineShape> shareTransformShape;
+  // final List<WebPolylineShape> shareTransformShape;
 
   String? text;
   String styleId;
 
   void Function()? onClick;
 
-  WebPoi(
-    this.id, {
-    required this.currentLevel,
-    required this.text,
-    required this.styleId,
-    this.onClick
-  });
+  WebPoi(this.id, this.layerId,
+      {required this.currentLevel,
+      required this.text,
+      required this.styleId,
+      this.onClick});
 
   void setMap(WebMapController? map) => overlay.setMap(map);
   WebMapController getMap() => overlay.getMap();

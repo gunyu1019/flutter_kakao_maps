@@ -67,7 +67,8 @@ class WebShapeController with WebShapeControllerHandler {
       _webPolyline[shapeId]?.strokeOption = null;
     }
 
-    _webPolyline[shapeId]!.option.strokeColor = _getColorCode(currentStyle.color);
+    _webPolyline[shapeId]!.option.strokeColor =
+        _getColorCode(currentStyle.color);
     _webPolyline[shapeId]!.option.strokeWeight = currentStyle.lineWidth * .5;
     _webPolyline[shapeId]!.element.setOptions(_webPolyline[shapeId]!.option);
   }
@@ -90,7 +91,8 @@ class WebShapeController with WebShapeControllerHandler {
     _webPolygon[shapeId]!.currentLevel = currentZoomLevel;
 
     _webPolygon[shapeId]!.option.fillColor = _getColorCode(currentStyle.color);
-    _webPolygon[shapeId]!.option.strokeColor = _getColorCode(currentStyle.strokeColor);
+    _webPolygon[shapeId]!.option.strokeColor =
+        _getColorCode(currentStyle.strokeColor);
     _webPolygon[shapeId]!.option.strokeWeight = currentStyle.strokeWidth;
     _webPolygon[shapeId]!.element.setOptions(_webPolygon[shapeId]!.option);
   }
@@ -191,19 +193,16 @@ class WebShapeController with WebShapeControllerHandler {
     WebPolyline? polylineStroke;
 
     if (style.strokeWidth > 0) {
-      polylineStrokeOption = _getPolylineStrokeElementOption(style, path, zOrder);
+      polylineStrokeOption =
+          _getPolylineStrokeElementOption(style, path, zOrder);
       polylineStroke = WebPolyline(polylineStrokeOption);
       polylineStroke.setMap(controller);
     }
 
-    _webPolyline[shapeId] = WebPolylineShape(
-        shapeId,
-        polyline,
-        polylineStroke,
+    _webPolyline[shapeId] = WebPolylineShape(shapeId, polyline, polylineStroke,
         option: polylineOption,
         strokeOption: polylineStrokeOption,
-        style: style
-    );
+        style: style);
     _syncPolylineZoomLevel(shapeId, style);
     return shapeId;
   }
@@ -213,11 +212,13 @@ class WebShapeController with WebShapeControllerHandler {
       {String? id, int zOrder = 10001}) async {
     final shapeId = manager._uuid.v4();
 
-    final polygonOption = _getPolygonElementOption(style, point.toPolygonPath(), zOrder);
+    final polygonOption =
+        _getPolygonElementOption(style, point.toPolygonPath(), zOrder);
     final polygon = WebPolygon(polygonOption);
     polygon.setMap(controller);
 
-    _webPolygon[shapeId] = WebPolygonShape(shapeId, polygon, option: polygonOption, style: style);
+    _webPolygon[shapeId] =
+        WebPolygonShape(shapeId, polygon, option: polygonOption, style: style);
     _syncPolygonZoomLevel(shapeId, style);
     return shapeId;
   }
