@@ -4,7 +4,7 @@
 ![Pub Points](https://img.shields.io/pub/points/kakao_map_sdk)
 ![Pub Popularity](https://img.shields.io/pub/popularity/kakao_map_sdk)
 
-네이티브 기반의 [카카오맵](https://map.kakao.com/)을 구동할 수 있는 Flutter 플러그인입니다.
+Kakao Map SDK는 Flutter 환경에서 [카카오 지도](https://map.kakao.com/)을 사용할 수 있도록 하는 패키지입니다!
 
 | Android                | iOS             | Web(Experimental)      |
 |------------------------|-----------------| ---------------------- |
@@ -14,10 +14,10 @@
 | 인터넷 권한 필요   |         |             |
 
 ## 1. Getting Started
-Flutter 환경에서 카카오지도를 이용하기 위해서는 [카카오 개발자 사이트](https://developers.kakao.com/)에서 앱 등록을 합니다.<br/>
-앱 등록을 마치면, **네이티브 앱 키(App Key)** 를 발급받을 수 있습니다.
+Flutter에서 카카오 지도를 이용하기 위해 [카카오 개발자 사이트](https://developers.kakao.com/)에서 앱 등록을 해야합니다.<br/>
+앱 등록을 마치면 카카오 지도를 사용할 수 있는 **네이티브 앱 키(App Key)** 를 발급받을 수 있습니다.
 
-앱 키는 아래와 같이 `KakaoMapSdk.instance.initialize` 함수를 호출하여 인증하실 수 있습니다.
+앱 키는 아래와 같이 `KakaoMapSdk.instance.initialize` 함수를 호출하여 클라이언트를 인증하실 수 있습니다.
 ```dart
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
@@ -67,7 +67,7 @@ void main() async {
 `<JavaScript 키>` 는 `<네이티브 키>`와 다른 키로 [카카오 개발자 사이트](https://developers.kakao.com/)에서 앱 등록을 마치면 발급받을 수 있습니다.
 
 ## 2. Add MapView Widget
-지도를 담고 있는 위젯(Widget)은 아래와 같이 호출하여 사용하실 수 있습니다.
+지도를 담고 있는 위젯(Widget)은 아래와 같이 `KakaoMap` 함수를 호출하여 사용할 수 있습니다.
 ```dart
 Widget build(BuildContext context) {
   return Scaffold(
@@ -88,11 +88,46 @@ option 매게변수에는 초기화 과정에서 기본 값([KakaoMapOption](htt
 아무 문제 없이 지도를 불러온다면, `onMapReady` 매개변수에 담긴 함수가 호출됩니다.<br/>
 함수 매개변수에는 지도를 관리하기 위한 컨트롤러([KakaoMapController](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController-class.html))가 입력됩니다.
 
-## 3. Write Overlay(Grapic Element) to Map
+## 3. Move the Camera to show the map
+Kakao Map SDK는 컨트롤러([KakaoMapController](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController-class.html))를 이용하여 카메라의 위치를 조회하거나, 카메라의 위치를 이동할 수 있습니다.
+카메라의 위치는 `getCameraPosition` 함수를 이용하여 불러올 수 있습니다.
+
+```dart
+Future<void> getCameraPosition(KakaoMapController controller) async {
+  final cameraPosition = await kakaoMap.getCameraPosition();
+  print(cameraPosition.zoomLevel); // 카메라의 축적비입니다. 값이 높을 수록 지도에 보여지는 건물은 줄어들지만, 건물을 상세히 확인하실 수 있습니다.  
+  print(cameraPosition.position); // 카메라의 위치입니다. WGS84(위도, 경도) 형식으로 불러옵니다. 
+  print(cameraPosition.rotationAngle); // 카메라의 회전 각도를 불러옵니다.
+}
+```
+
+카메라의 위치는 `moveCamera` 함수와 `CameraUpdate` 객체를 이용하여 움직일 수 있습니다.
+자세한 내용은 [CameraUpdate Reference](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/CameraUpdate-class.html)를 참고해주세요. 
+
+```dart
+Future<void> setCameraPosition(KakaoMapController controller) async {
+  final location = LatLng(37.394776, 127.11116);
+  final cameraUpdate = CameraUpdate.newCenterPosition(location);
+  await controller.moveCamera(cameraUpdate);
+}
+```
+
+`moveCamera` 함수에는 `animation` 인수를 제공할 수 있으며 지정된 밀리초(ms)동안 지도를 비추는 카메라가 이동합니다.
+
+```dart
+Future<void> setCameraPositionWithAnimation(KakaoMapController controller) async {
+  final location = LatLng(37.394776, 127.11116);
+  final cameraAnimation = const CameraAnimation(5000); // 5초
+  final cameraUpdate = CameraUpdate.newCenterPosition(location);
+  await controller.moveCamera(cameraUpdate, animation: cameraAnimation);
+}
+```
+
+## 4. Write Overlay(Grapic Element) to map
 Kakao Map SDK는 사용자에게 표현하기 위한 다양한 그래픽 요소(오버레이 기능)를 제공하고 있습니다.<br/>
 다양한 그래픽 요소는 `KakaoMapController`를 통해 제어하실 수 있습니다.
 
-### 3-1. Poi (Label)
+### 4-1. Poi (Label)
 <img src="https://github.com/user-attachments/assets/d979c662-64cb-4ced-a96a-f94b67baace3" width="35%" />
 
 특정 위치에 정보를 제공하기 위한 이미지 또는 텍스트를 제공합니다.<br/>
@@ -131,7 +166,7 @@ controller.labelLayer.addPolylineText(
 );
 ```
 
-### 3-2. Shape
+### 4-2. Shape
 <table>
   <thead>
     <th>Android</th>
@@ -170,7 +205,7 @@ controller.shapeLayer.addPolygonShape(
 );
 ```
 
-### 3-3. Route
+### 4-3. Route
 <table>
   <thead>
     <th>Android</th>
@@ -211,7 +246,7 @@ RouteStyle.withPattern(
 )
 ```
 
-### 3-4. DimScreen 
+### 4-4. DimScreen 
 `DimScreen`은 지도 전체를 특정 색으로 가리는 객체입니다. 
 `Polygon` 도형을 추가하여 특정 부분을 지정된 색상으로 출력할 수 있습니다.
 
@@ -231,7 +266,7 @@ await controller.dimScreen.addPolygonShape(
 )
 ```
 
-### 3-5. Tracking 
+### 4-5. Tracking 
 Tracking은 지도에 나타난 `Poi`가 `Poi.move()` 함수 등에 의해 이동하게 되었을 때, 지도를 바라보고 있는 카메라가 이동하는 `Poi`를 이동하도록 하는 기능입니다.
 한 번에 하나의 `Poi`만 추적을 할 수 있으며, 다른 `Poi`를 추적하려면 `stop` 함수를 호출하여 추적을 멈춘 후 다른 `Poi`를 설정해주시면 됩니다.
 
@@ -245,10 +280,10 @@ controller.tracking.poi = poi;
 await controller.tracking.start();
 ```
 
-## 4. Sample Project
+## 5. Sample Project
 아래의 [샘플 프로젝트](https://github.com/gunyu1019/flutter_kakao_maps_sample)을 확인하여 카카오맵을 Flutter에 구현한 애플리케이션을 확인해보세요!
 
-## 5. (Expermential) Web
+## 6. (Expermential) Web
 <img src="https://github.com/user-attachments/assets/4f20ddb0-e678-4cbe-b6ca-39be0f9e6b18" width="70%" /><br/>
 Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
 본 플러그인은 네이티브를 중심으로 개발되었기 때문에 웹 SDK도 네이티브 환경에 알맞게 포팅 작업을 진행하였습니다.
@@ -279,7 +314,7 @@ Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
 
 웹 환경 내 사용방법은 첫 번째 섹션(Getting Started) 부분을 확인해주세요.
 
-## 6. Collaboration / Reqort Issue 
+## 7. Collaboration / Reqort Issue 
 Kakao Map SDK 플러그인에 기여는 항상 환영합니다. <br/>
 기능 개선, 버그 해결 등의 작업하신 내용은 `Pull Reuqest(PR)` 해주시면, 검증 후 최대한 빠른 시간 내에 병합 해드리겠습니다.
 
