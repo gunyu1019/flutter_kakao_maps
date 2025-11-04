@@ -1,4 +1,7 @@
 ## 1.2.1
+* [Fix] Fix no implementation found for method exception ([#46](https://github.com/gunyu1019/flutter_kakao_maps/issues/49))
+
+## 1.2.1
 * [Fix] Invalid parameter type on Poi.move feature. ([#46](https://github.com/gunyu1019/flutter_kakao_maps/issues/46))
 
 ## 1.2.0
