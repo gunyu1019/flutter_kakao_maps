@@ -1,4 +1,4 @@
-## 1.2.1
+## 1.2.2
 * [Fix] Fix no implementation found for method exception ([#46](https://github.com/gunyu1019/flutter_kakao_maps/issues/49))
 
 ## 1.2.1
