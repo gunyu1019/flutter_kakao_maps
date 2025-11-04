@@ -148,7 +148,7 @@ class Poi with BadgeablePoi {
 
   /// [Poi]를 [position]으로 이동시킵니다.
   /// [millis] 매개변수를 설정하면 설정된 밀리초 이내로 이동하는 애니메이션을 적용합니다.
-  Future<void> move(LatLng position, [double? millis]) async {
+  Future<void> move(LatLng position, [int? millis]) async {
     _position = position;
     await _controller._movePoi(id, position, millis);
   }
