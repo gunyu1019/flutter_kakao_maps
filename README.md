@@ -280,10 +280,28 @@ controller.tracking.poi = poi;
 await controller.tracking.start();
 ```
 
-## 5. Sample Project
+## 5. Detect event on map.
+지도에서 발생한 이벤트는 대부분 `KakaoMap` 위젯 객체에 전달되며 함수 이벤트는 각 인수로 호출됩니다.
+각 인수별 이벤트 용도는 [KakaoMap Widget API Reference](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMap-class.html)를 확인해주세요.
+
+예를 들어 `onCameraMoveEnd` 인수에 함수를 제공하여 카메라가 이동을 마칠 때 메시지를 호출받을 수 있습니다.
+```dart
+KakaoMap(
+  option: const KakaoMapOption(...),
+  onMapReady: ... // 지도를 불러오면 함수가 호출됩니다.
+  onPoiClick: (LabelController labelController, Poi poi) {
+    print("Poi (${poi.id})가 눌렸습니다!");
+  },
+  onCameraMoveEnd: (CameraPosition position, GestureType gestureType) {
+    print("카메라가 위도 ${position.position.latitude}도, 경도 ${position.position.longitude}도로 이동하였습니다.");
+  },
+);
+```
+
+## 6. Sample Project
 아래의 [샘플 프로젝트](https://github.com/gunyu1019/flutter_kakao_maps_sample)을 확인하여 카카오맵을 Flutter에 구현한 애플리케이션을 확인해보세요!
 
-## 6. (Expermential) Web
+## 7. (Expermential) Web
 <img src="https://github.com/user-attachments/assets/4f20ddb0-e678-4cbe-b6ca-39be0f9e6b18" width="70%" /><br/>
 Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
 본 플러그인은 네이티브를 중심으로 개발되었기 때문에 웹 SDK도 네이티브 환경에 알맞게 포팅 작업을 진행하였습니다.
@@ -312,10 +330,10 @@ Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
 기재한 기능 외에도 일부 기능은 지원하지 않을 수도 있습니다.<br/>
 네이티브 환경을 중점으로 개발된 플러그인이므로 양해부탁드립니다.
 
-웹 환경 내 사용방법은 첫 번째 섹션(Getting Started) 부분을 확인해주세요.
+웹 환경 내 사용 방법은 첫 번째 섹션(Getting Started) 부분을 확인해주세요.
 
-## 7. Collaboration / Reqort Issue 
-Kakao Map SDK 플러그인에 기여는 항상 환영합니다. <br/>
-기능 개선, 버그 해결 등의 작업하신 내용은 `Pull Reuqest(PR)` 해주시면, 검증 후 최대한 빠른 시간 내에 병합 해드리겠습니다.
+## 8. Collaboration / Report Issue 
+Kakao Map SDK 패키지의 기여는 항상 환영합니다. <br/>
+기능 개선, 버그 해결 등의 작업하신 내용은 `Pull Reuqest(PR)` 해주시면, 최대한 빠른 시간 내에 검증을 진행하고 병합 해드리겠습니다.
 
-질문, 버그 제보도 언제든지 환영합니다.<br/> 이용 중에 문제를 겪으셨다면 `Issue`를 열어주세요. 빠른 시일 내에 도움드리도록 하겠습니다
+질문, 버그 제보도 언제든지 환영합니다.<br/> 이용 중에 문제를 겪으셨다면 `Issue`를 열어주세요. 내용을 확인하는 대로 도움드리도록 하겠습니다
