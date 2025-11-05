@@ -45,14 +45,18 @@ dependencies:
 iOS와 Web 플랫폼에서 지도를 사용하기 위해서 필요한 추가 설정은 없습니다.\
 다만 안드로이드 환경에서 일부 설정이 필요합니다.
 
-*   `AndroidManifest.xml`에 다음의 코드를 추가하여 인터넷과 위치 정보를 불러올 수 있도록 합니다.
+*   `AndroidManifest.xml`에 다음의 코드를 추가하여 인터넷과 위치 정보를 불러올 수 있도록 합니다.\
+
 
     ```xml
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     ```
-*   프로가드(Proguard) 이용하여 압축, 난독화하여 배포를 하는 경우, 패키지의 난독화, 압축은 제외해야 합니다.&#x20;
+*   프로가드(Proguard) 이용하여 코드 최적화, 난독화하여 배포를 하는 경우, 패키지 내용도 코드 최적화 및 압축이 적용되어 예상치 못한 오류를 초래할 수 있습니다.\
+    \
+    따라서 `android/app/proguard-rules.pro`에 아래의 내용을 추가해주세요.\
+
 
     ```properties
     -keep class com.kakao.vectormap.** { *; }
