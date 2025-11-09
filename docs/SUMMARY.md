@@ -4,4 +4,5 @@
 
 * [Kakao Map SDK for Flutter](README.md)
 * [패키지 설치하기](getting_started/installation.md)
-* [애플리케이션 인증하기](getting_started/authentic.md)
+* [애플리케이션 인증하기](getting_started/authentication.md)
+* [지도 구성하기](getting_started/configuration_map.md)

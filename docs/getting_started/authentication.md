@@ -77,3 +77,12 @@ Web 환경에는 다음의 소스 코드를 `index.html`에 추가하여 애플�
 ```html
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=JavaScript 키"></script>
 ```
+
+## 4. 인증 실패 에러&#x20;
+
+애플리케이션을 인증하는 과정에서 인터넷 문제 등의 여러 이유로 애플리케이션 인증에 실패할 수 있습니다. 이때 [KakaoMap.onMapError](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMap/onMapError.html) 인수로 [KakaoAuthError](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoAuthError-class.html) 예외 객체를 반환하며 code 인수를 통해 원인을 분석할 수 있습니다.
+
+<table><thead><tr><th width="90">Code</th><th>설명</th></tr></thead><tbody><tr><td>400</td><td>API 처리 과정에서 오류가 발생한 것입니다. </td></tr><tr><td>401</td><td>유효한 인증 자격 증명이 없어 발생한 것입니다. 올바른 키를 입력했는지 확인해주세요.</td></tr><tr><td>403</td><td>인증은 성공했지만, API를 호출할 권한이 없어 요청을 거절한 것입니다. </td></tr><tr><td>429</td><td>할당된 쿼터 또는 초당 요청 한도를 초과하여 API에서 요청을 거절된 상태입니다.</td></tr><tr><td>499</td><td>인터넷 통신을 실패하여 API와 통신을 주고 받지 못한 상태입니다. <br>인터넷 연결 상태를 확인해주세요.</td></tr></tbody></table>
+
+
+
