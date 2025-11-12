@@ -1,6 +1,6 @@
-# 지도 구성하기
+# 지도 그리기
 
-## 1. 지도 구성하기
+## 1. 지도 위젯 그리기
 
 [KakaoMap](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMap-class.html) 위젯 함수를 호출하여 지도를 애플리케이션에 그릴 수 있습니다.
 
