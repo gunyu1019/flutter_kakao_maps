@@ -3,7 +3,7 @@ import KakaoMapsSDK
 
 class OverlayController: LabelControllerHandler, LodLabelControllerHandler, ShapeControllerHandler, RouteControllerHandler, DimScreenControllerHandler, TrackingControllerHandler {
     private let channel: FlutterMethodChannel
-    private let kakaoMap: KakaoMap
+    private weak var kakaoMap: KakaoMap?
 
     let labelManager: LabelManager
     let shapeManager: ShapeManager
@@ -26,7 +26,13 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         trackingManager = kakaoMap.getTrackingManager()
 
         setupInitLayer()
-        channel.setMethodCallHandler(handle)
+        channel.setMethodCallHandler { [weak self] call, result in
+            self?.handle(call: call, result: result)
+        }
+    }
+    
+    deinit {
+        channel.setMethodCallHandler(nil)
     }
 
     func setupInitLayer() {
