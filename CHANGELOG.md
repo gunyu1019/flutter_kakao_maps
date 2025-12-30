@@ -1,5 +1,5 @@
 ## 1.2.3
-* [Fix] Improve leak memory situation in iOS Platform ([#51](https://github.com/gunyu1019/flutter_kakao_maps/issues/49))
+* [Fix] Improve leak memory situation in iOS Platform ([#51](https://github.com/gunyu1019/flutter_kakao_maps/issues/51))
 
 ## 1.2.2
 * [Fix] Fix no implementation found for method exception ([#46](https://github.com/gunyu1019/flutter_kakao_maps/issues/49))
