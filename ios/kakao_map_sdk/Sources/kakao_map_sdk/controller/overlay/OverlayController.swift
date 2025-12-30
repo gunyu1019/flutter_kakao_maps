@@ -30,7 +30,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
             self?.handle(call: call, result: result)
         }
     }
-    
+
     deinit {
         channel.setMethodCallHandler(nil)
     }
