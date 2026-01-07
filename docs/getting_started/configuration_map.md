@@ -42,8 +42,18 @@ final option = const KakaoMapOption(
 
 지도의 유형은 [MapType](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/MapType.html) 객체를 통해 설정할 수 있으며, [KakaoMapOption](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapOption-class.html) 객체에 `mapType` 인수를 제공하거나,   [KakaoMapController.changeMapType()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/changeMapType.html) 함수로 설정할 수 있습니다.
 
-| 일반 지도 (Normal)                                                                                              | 위성 지도 (Skyview)                                                                                                    |
-| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| <div><figure><img src="../.gitbook/assets/imageservice.png" alt=""><figcaption></figcaption></figure></div> | <div><figure><img src="../.gitbook/assets/skyviewimageservice.jpg" alt=""><figcaption></figcaption></figure></div> |
+| 일반 지도 (Normal)                                                                                                             | 위성 지도 (Skyview)                                                                                                                   |
+| -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| <div><figure><img src="../../doc/gitbook/.gitbook/assets/imageservice.png" alt=""><figcaption></figcaption></figure></div> | <div><figure><img src="../../doc/gitbook/.gitbook/assets/skyviewimageservice.jpg" alt=""><figcaption></figcaption></figure></div> |
 
-\##
+```dart
+Future<void> changeMapType(KakaoMapController controller) async {
+  // 지도 유형을 일반 지도로 전환합니다.
+  await controller.changeMapType(MapType.normal);
+}
+```
+
+## 3. 지도 오버레이 그리기
+
+
+
