@@ -127,7 +127,7 @@ class WebLabelController with WebLabelControllerHandler {
     int? rank,
     bool visible = true,
   }) async {
-    final poiId = manager._uuid.v4();
+    final poiId = id ?? manager._uuid.v4();
 
     final Map<int, String> preEncodedImage = {};
     if (style.icon != null) {

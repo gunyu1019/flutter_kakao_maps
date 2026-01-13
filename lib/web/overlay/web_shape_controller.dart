@@ -182,7 +182,7 @@ class WebShapeController with WebShapeControllerHandler {
   @override
   Future<String> addPolylineShape(WebShapePoint point, PolylineStyle style,
       {String? id, int zOrder = 10001}) async {
-    final shapeId = manager._uuid.v4();
+    final shapeId = id ?? manager._uuid.v4();
     final path = point.toPolylinePath();
 
     final polylineOption = _getPolylineElementOption(style, path, zOrder);
@@ -210,7 +210,7 @@ class WebShapeController with WebShapeControllerHandler {
   @override
   Future<String> addPolygonShape(WebShapePoint point, PolygonStyle style,
       {String? id, int zOrder = 10001}) async {
-    final shapeId = manager._uuid.v4();
+    final shapeId = id ?? manager._uuid.v4();
 
     final polygonOption =
         _getPolygonElementOption(style, point.toPolygonPath(), zOrder);
