@@ -25,7 +25,9 @@ mixin WebLabelControllerHandler {
             style: style,
             text: poi["text"],
             rank: poi["rank"],
-            visible: poi["visible"] ?? true);
+            visible: poi["visible"] ?? true,
+            id: poi["id"],
+        );
       case "removePoi" || "removeLodPoi":
         await removePoi(poiId!);
         break;
