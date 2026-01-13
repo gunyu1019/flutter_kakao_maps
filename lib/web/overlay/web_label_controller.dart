@@ -147,6 +147,7 @@ class WebLabelController with WebLabelControllerHandler {
       manager._onPoiClick(this.id, poiId, isLod);
     });
 
+    poi.preEncodedImage.addAll(preEncodedImage);
     final options = WebCustomOverlayOption(
         clickable: true,
         content: poiElement(poi, style),
@@ -155,7 +156,6 @@ class WebLabelController with WebLabelControllerHandler {
         yAnchor: style.anchor.y.toDouble(),
         zIndex: rank ?? 10001);
     poi.overlay = WebCustomOverlay(options);
-    poi.preEncodedImage.addAll(preEncodedImage);
 
     poi.setMap(controller);
     poi.setVisible(visible);
