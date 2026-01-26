@@ -56,6 +56,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
+    var bottomPadding = mediaQuery.padding.bottom;
     var children = <Widget>[];
 
     children.addAll([
@@ -64,12 +65,12 @@ class _DrawerComponentState extends State<DrawerComponent> {
           top: 0,
           left: 0,
           right: 0,
-          bottom: _drawerHeight.toDouble(),
+          bottom: _drawerHeight.toDouble() + bottomPadding,
           child: widget.body),
       Positioned(
           left: 0,
           right: 0,
-          bottom: 0,
+          bottom: bottomPadding,
           child: GestureDetector(
               onTap: () {},
               onVerticalDragUpdate: onVerticalDragUpdate,
