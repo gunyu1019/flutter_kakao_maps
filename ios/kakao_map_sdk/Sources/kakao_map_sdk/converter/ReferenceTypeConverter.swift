@@ -6,7 +6,7 @@ extension UIColor {
         self.init(red: CGFloat((value & 0x00FF_0000) >> 16) / 255.0,
                   green: CGFloat((value & 0x0000_FF00) >> 8) / 255.0,
                   blue: CGFloat(value & 0x0000_00FF) / 255.0,
-                  alpha: CGFloat(value & 0xFF00_0000) / 1.0)
+                  alpha: CGFloat((value & 0xFF00_0000) >> 24) / 255.0)
     }
 }
 
