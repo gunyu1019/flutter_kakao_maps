@@ -1,3 +1,9 @@
+## 1.2.4
+* [Fix] Missing alpha of color feature in iOS Platform ([#54](https://github.com/gunyu1019/flutter_kakao_maps/issue/54))
+* [Fix] Not apply specific id of overlay in web environment
+* [Fix] Missing poi icon in web environment
+* [Fix] (Example) Fix the bottom clipping issue in Android Platform.
+
 ## 1.2.3
 * [Fix] Improve leak memory situation in iOS Platform ([#51](https://github.com/gunyu1019/flutter_kakao_maps/issues/51))
 
