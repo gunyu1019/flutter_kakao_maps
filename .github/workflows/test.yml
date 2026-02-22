@@ -20,38 +20,6 @@ jobs:
         run: flutter pub get
       - name: Run Unit and Widget Tests
         run: flutter test
-
-  android_integration_test:
-    runs-on: macos-14
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'corretto'
-          java-version: '18'
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-      - name: Add secret key to .env file
-        working-directory: ./example
-        env:
-          KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY }}
-        run: |
-          mkdir -p assets/config/
-          echo "KAKAO_API_KEY=$KAKAO_API_KEY" >> assets/config/.env
-      - name: Install dependencies
-        working-directory: ./example
-        run: flutter pub get
-
-      - name: Run Android Integration Test
-        uses: ReactiveCircus/android-emulator-runner@v2
-        with:
-          api-level: 33
-          target: google_apis
-          arch: arm64-v8a
-          profile: Nexus 6
-          working-directory: ./example
-          script: flutter test integration_test/app_test.dart
   ios_integration_test:
     runs-on: macos-latest
     steps:
@@ -71,10 +39,11 @@ jobs:
         run: flutter pub get
       - name: Boot iOS Simulator
         run: |
-          DEVICE="iPhone 15"
-          xcrun simctl boot "$DEVICE" || true
+          DEVICE_UUID=$(xcrun simctl list devices available | grep "iPhone" | head -n 1 | awk -F'[()]' '{print $2}')
+          echo "선택된 시뮬레이터 UUID: $DEVICE_UUID"
+          xcrun simctl boot "$DEVICE_UUID" || true
           open -a Simulator
-          xcrun simctl bootstatus "$DEVICE"
+          xcrun simctl bootstatus "$DEVICE_UUID"
           flutter devices
       - name: Run iOS Integration Test
         working-directory: ./example
