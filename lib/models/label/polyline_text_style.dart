@@ -91,4 +91,50 @@ class PolylineTextStyle {
     }
     return payload;
   }
+
+  PolylineTextStyle copyWith({
+    int? size,
+    Color? color,
+    int? strokeSize,
+    Color? strokeColor,
+    bool? applyDpScale,
+    int? zoomLevel,
+  }) {
+    final style = PolylineTextStyle(
+      size ?? this.size,
+      color ?? this.color,
+      strokeSize: strokeSize ?? this.strokeSize,
+      strokeColor: strokeColor ?? this.strokeColor,
+      applyDpScale: applyDpScale ?? this.applyDpScale,
+      zoomLevel: zoomLevel ?? this.zoomLevel,
+    );
+    if (!_isSecondaryStyle) {
+      style._styles.addAll(_styles);
+    }
+    return style;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PolylineTextStyle &&
+        other.size == size &&
+        other.color == color &&
+        other.strokeSize == strokeSize &&
+        other.strokeColor == strokeColor &&
+        other.applyDpScale == applyDpScale &&
+        other.zoomLevel == zoomLevel &&
+        listEquals(other._styles, _styles);
+  }
+
+  @override
+  int get hashCode =>
+      size.hashCode ^
+      color.hashCode ^
+      strokeSize.hashCode ^
+      strokeColor.hashCode ^
+      applyDpScale.hashCode ^
+      zoomLevel.hashCode ^
+      _styles.hashCode;
 }

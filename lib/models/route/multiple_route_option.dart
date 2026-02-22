@@ -71,4 +71,34 @@ class MultipleRouteOption with BaseMultipleRoute, KMessageable {
   }
 
   bool _isStyleAdded() => !styles.any((e) => !e._isAdded);
+
+  MultipleRouteOption copyWith({
+    String? id,
+    int? zOrder,
+    List<RouteStyle>? styles,
+    List<RouteSegment>? segments,
+  }) {
+    final option = MultipleRouteOption(
+      styles ?? this.styles,
+      id: id ?? this.id,
+      zOrder: zOrder ?? this.zOrder,
+    );
+    option.segments.addAll(segments ?? this.segments);
+    return option;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MultipleRouteOption &&
+        other.id == id &&
+        other.zOrder == zOrder &&
+        listEquals(other.styles, styles) &&
+        listEquals(other.segments, segments);
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^ zOrder.hashCode ^ styles.hashCode ^ segments.hashCode;
 }

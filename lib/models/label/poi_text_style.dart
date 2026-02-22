@@ -64,4 +64,51 @@ class PoiTextStyle with KMessageable {
         stroke: payload['stroke'],
         strokeColor: Color(payload['strokeColor']),
       );
+
+  PoiTextStyle copyWith({
+    double? aspectRatio,
+    int? characterSpace,
+    Color? color,
+    String? font,
+    double? lineSpace,
+    int? size,
+    int? stroke,
+    Color? strokeColor,
+  }) =>
+      PoiTextStyle(
+        aspectRatio: aspectRatio ?? this.aspectRatio,
+        characterSpace: characterSpace ?? this.characterSpace,
+        color: color ?? this.color,
+        font: font ?? this.font,
+        lineSpace: lineSpace ?? this.lineSpace,
+        size: size ?? this.size,
+        stroke: stroke ?? this.stroke,
+        strokeColor: strokeColor ?? this.strokeColor,
+      );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PoiTextStyle &&
+        other.aspectRatio == aspectRatio &&
+        other.characterSpace == characterSpace &&
+        other.color == color &&
+        other.font == font &&
+        other.lineSpace == lineSpace &&
+        other.size == size &&
+        other.stroke == stroke &&
+        other.strokeColor == strokeColor;
+  }
+
+  @override
+  int get hashCode =>
+      aspectRatio.hashCode ^
+      characterSpace.hashCode ^
+      color.hashCode ^
+      font.hashCode ^
+      lineSpace.hashCode ^
+      size.hashCode ^
+      stroke.hashCode ^
+      strokeColor.hashCode;
 }

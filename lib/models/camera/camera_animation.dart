@@ -27,4 +27,28 @@ class CameraAnimation with KMessageable {
       CameraAnimation(payload["duration"],
           autoElevation: payload["autoElevation"] ?? false,
           isConsecutive: payload["isConsecutive"] ?? false);
+
+  CameraAnimation copyWith({
+    int? duration,
+    bool? autoElevation,
+    bool? isConsecutive,
+  }) =>
+      CameraAnimation(
+        duration ?? this.duration,
+        autoElevation: autoElevation ?? this.autoElevation,
+        isConsecutive: isConsecutive ?? this.isConsecutive,
+      );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CameraAnimation &&
+        other.duration == duration &&
+        other.autoElevation == autoElevation &&
+        other.isConsecutive == isConsecutive;
+  }
+
+  @override
+  int get hashCode =>
+      duration.hashCode ^ autoElevation.hashCode ^ isConsecutive.hashCode;
 }
