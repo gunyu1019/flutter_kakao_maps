@@ -69,6 +69,13 @@ jobs:
       - name: Install dependencies
         working-directory: ./example
         run: flutter pub get
+      - name: Boot iOS Simulator
+        run: |
+          DEVICE="iPhone 15"
+          xcrun simctl boot "$DEVICE" || true
+          open -a Simulator
+          xcrun simctl bootstatus "$DEVICE"
+          flutter devices
       - name: Run iOS Integration Test
         working-directory: ./example
         run: flutter test integration_test/app_test.dart -d "iPhone 15"
