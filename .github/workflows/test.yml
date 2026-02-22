@@ -52,4 +52,5 @@ jobs:
           flutter devices
       - name: Run iOS Integration Test
         working-directory: ./example
+        timeout-minutes: 10
         run: flutter test integration_test/app_test.dart -d ${{ env.SIMULATOR_ID }}
