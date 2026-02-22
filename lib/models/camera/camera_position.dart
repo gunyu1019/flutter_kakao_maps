@@ -51,4 +51,18 @@ class CameraPosition with KMessageable {
       tiltAngle: tiltAngle ?? this.tiltAngle,
       rotationAngle: rotationAngle ?? this.rotationAngle,
   );
+
+  @override
+  int get hashCode => position.hashCode ^ zoomLevel.hashCode ^ tiltAngle.hashCode ^ rotationAngle.hashCode ^ height.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CameraPosition &&
+        other.position == position &&
+        other.zoomLevel == zoomLevel &&
+        other.tiltAngle == tiltAngle &&
+        other.rotationAngle == rotationAngle &&
+        other.height == height;
+  }
 }
