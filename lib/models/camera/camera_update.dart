@@ -100,6 +100,7 @@ class CameraUpdate with KMessageable {
     switch (type) {
       case CameraUpdateType.newCenterPoint:
         payload.addAll(position!.toMessageable());
+        payload['zoomLevel'] = zoomLevel;
       case CameraUpdateType.zoomTo:
         payload['zoomLevel'] = zoomLevel;
         break;
