@@ -1,0 +1,74 @@
+name: Flutter Tests
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  unit_and_widget_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run Unit and Widget Tests
+        run: flutter test
+
+  android_integration_test:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '18'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Add secret key to .env file
+        working-directory: ./example
+        env:
+          KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY }}
+        run: |
+          mkdir -p assets/config/
+          echo "KAKAO_API_KEY=$KAKAO_API_KEY" >> assets/config/.env
+      - name: Install dependencies
+        working-directory: ./example
+        run: flutter pub get
+
+      - name: Run Android Integration Test
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: google_apis
+          arch: arm64-v8a
+          profile: Nexus 6
+          working-directory: ./example
+          script: flutter test integration_test/app_test.dart
+  ios_integration_test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Add secret key to .env file
+        working-directory: ./example
+        env:
+          KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY }}
+        run: |
+          mkdir -p assets/config/
+          echo "KAKAO_API_KEY=$KAKAO_API_KEY" >> assets/config/.env
+      - name: Install dependencies
+        working-directory: ./example
+        run: flutter pub get
+      - name: Run iOS Integration Test
+        working-directory: ./example
+        run: flutter test integration_test/app_test.dart -d "iPhone 15"
