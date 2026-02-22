@@ -14,7 +14,7 @@ Widget _createPlatformView(
         onPlatformViewCreated: onPlatformViewCreated);
   }
 
-  if (Platform.isAndroid) {
+  if (defaultTargetPlatform == TargetPlatform.android) {
     return PlatformViewLink(
         surfaceFactory: (context, controller) => AndroidViewSurface(
             controller: controller as AndroidViewController,
@@ -41,7 +41,7 @@ Widget _createPlatformView(
             ..create();
         },
         viewType: viewType);
-  } else if (Platform.isIOS) {
+  } else if (defaultTargetPlatform == TargetPlatform.iOS) {
     return UiKitView(
       viewType: viewType,
       layoutDirection: TextDirection.ltr,
