@@ -38,13 +38,18 @@ jobs:
         working-directory: ./example
         run: flutter pub get
       - name: Boot iOS Simulator
+        timeout-minutes: 10
         run: |
+          killall Simulator || true
           DEVICE_UUID=$(xcrun simctl list devices available | grep "iPhone" | head -n 1 | awk -F'[()]' '{print $2}')
-          echo "선택된 시뮬레이터 UUID: $DEVICE_UUID"
+          echo "SIMULATOR_ID=$DEVICE_UUID" >> $GITHUB_ENV
+          echo "Selected Simulator UUID: $DEVICE_UUID"
+          
           xcrun simctl boot "$DEVICE_UUID" || true
           open -a Simulator
+          
           xcrun simctl bootstatus "$DEVICE_UUID"
           flutter devices
       - name: Run iOS Integration Test
         working-directory: ./example
-        run: flutter test integration_test/app_test.dart -d "iPhone 15"
+        run: flutter test integration_test/app_test.dart -d ${{ env.SIMULATOR_ID }}
