@@ -39,4 +39,16 @@ class CameraPosition with KMessageable {
       "height": height ?? -1.0,
     };
   }
+
+  CameraPosition copyWith({
+    LatLng? position,
+    int? zoomLevel,
+    double? tiltAngle,
+    double? rotationAngle,
+  }) => CameraPosition(
+      position ?? this.position,
+      zoomLevel ?? this.zoomLevel,
+      tiltAngle: tiltAngle ?? this.tiltAngle,
+      rotationAngle: rotationAngle ?? this.rotationAngle,
+  );
 }
