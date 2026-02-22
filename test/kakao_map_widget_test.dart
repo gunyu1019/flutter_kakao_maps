@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +34,7 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  Widget _wrapApp(Widget child) {
+  Widget wrapApp(Widget child) {
     return MaterialApp(
       home: Scaffold(
         body: SizedBox.expand(child: child),
@@ -50,7 +48,7 @@ void main() {
 
     try {
       await tester.pumpWidget(
-        _wrapApp(
+        wrapApp(
           KakaoMap(
             key: UniqueKey(),
             onMapReady: (_) {},
@@ -72,7 +70,7 @@ void main() {
       debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
       await tester.pumpWidget(
-        _wrapApp(
+        wrapApp(
           KakaoMap(
             key: UniqueKey(),
             onMapReady: (_) {},
@@ -85,7 +83,7 @@ void main() {
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
       await tester.pumpWidget(
-        _wrapApp(
+        wrapApp(
           KakaoMap(
             key: UniqueKey(),
             onMapReady: (_) {},
@@ -117,7 +115,7 @@ void main() {
       debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
       await tester.pumpWidget(
-        _wrapApp(
+        wrapApp(
           KakaoMap(
             key: UniqueKey(),
             onMapReady: (_) {},
@@ -143,7 +141,7 @@ void main() {
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
       await tester.pumpWidget(
-        _wrapApp(
+        wrapApp(
           KakaoMap(
             key: UniqueKey(),
             onMapReady: (_) {},

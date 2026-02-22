@@ -1,6 +1,3 @@
-import 'dart:typed_data';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
@@ -14,7 +11,7 @@ void main() {
 
   late KakaoMapController controller;
 
-  String _orFallback(String? requested, String fallback) {
+  String orFallback(String? requested, String fallback) {
     return (requested != null && requested.isNotEmpty) ? requested : fallback;
   }
 
@@ -29,59 +26,59 @@ void main() {
 
       switch (call.method) {
         case 'addPoiStyle':
-          return _orFallback(args['styleId'] as String?, 'mock-poi-style-id');
+          return orFallback(args['styleId'] as String?, 'mock-poi-style-id');
 
         case 'addPoi':
           final poi = Map<String, dynamic>.from(args['poi'] as Map);
           final requested = poi['id'] as String?;
           if (type == OverlayType.lodLabel.value) {
-            return _orFallback(requested, 'mock-lod-poi-id');
+            return orFallback(requested, 'mock-lod-poi-id');
           }
-          return _orFallback(requested, 'mock-poi-id');
+          return orFallback(requested, 'mock-poi-id');
 
         case 'addLodPoi':
           final poi = Map<String, dynamic>.from(args['poi'] as Map);
-          return _orFallback(poi['id'] as String?, 'mock-lod-poi-id');
+          return orFallback(poi['id'] as String?, 'mock-lod-poi-id');
 
         case 'addPolylineText':
           final label = Map<String, dynamic>.from(args['label'] as Map);
-          return _orFallback(label['id'] as String?, 'mock-polyline-text-id');
+          return orFallback(label['id'] as String?, 'mock-polyline-text-id');
 
         case 'addPoiBadge':
           final badge = Map<String, dynamic>.from(args['badge'] as Map);
           final requestedBadgeId = badge['id'] as String?;
           final poiId = args['poiId'] as String?;
-          return _orFallback(requestedBadgeId, '${poiId ?? 'poi'}-badge-id');
+          return orFallback(requestedBadgeId, '${poiId ?? 'poi'}-badge-id');
 
         case 'addPolylineShapeStyle':
-          return _orFallback(
+            return orFallback(
               args['styleId'] as String?, 'mock-polyline-style-id');
 
         case 'addPolygonShapeStyle':
-          return _orFallback(
+            return orFallback(
               args['styleId'] as String?, 'mock-polygon-style-id');
 
         case 'addPolylineShape':
           final polyline = Map<String, dynamic>.from(args['polyline'] as Map);
-          return _orFallback(polyline['id'] as String?, 'mock-polyline-id');
+          return orFallback(polyline['id'] as String?, 'mock-polyline-id');
 
         case 'addPolygonShape':
           final polygon = Map<String, dynamic>.from(args['polygon'] as Map);
-          return _orFallback(polygon['id'] as String?, 'mock-polygon-id');
+          return orFallback(polygon['id'] as String?, 'mock-polygon-id');
 
         case 'addRouteStyle':
-          return _orFallback(args['styleId'] as String?, 'mock-route-style-id');
+          return orFallback(args['styleId'] as String?, 'mock-route-style-id');
 
         case 'addRoute':
         case 'addMultipleRoute':
           final route = Map<String, dynamic>.from(args['route'] as Map);
           final fallback =
               call.method == 'addRoute' ? 'mock-route-id' : 'mock-multi-route-id';
-          return _orFallback(route['id'] as String?, fallback);
+          return orFallback(route['id'] as String?, fallback);
 
         case 'addHighlightPolygonShape':
           final polygon = Map<String, dynamic>.from(args['polygon'] as Map);
-          return _orFallback(polygon['id'] as String?, 'mock-dim-polygon-id');
+          return orFallback(polygon['id'] as String?, 'mock-dim-polygon-id');
 
         default:
           return null;

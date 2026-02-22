@@ -4,7 +4,6 @@ library;
 import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:web/web.dart' as web;
@@ -26,7 +25,7 @@ void main() {
     } catch (_) {}
   });
 
-  Widget _wrapApp(Widget child) {
+  Widget wrapApp(Widget child) {
     return MaterialApp(
       home: Scaffold(
         body: SizedBox.expand(child: child),
@@ -37,7 +36,7 @@ void main() {
   testWidgets('should render KakaoMap as HtmlElementView on web',
       (tester) async {
     await tester.pumpWidget(
-      _wrapApp(
+      wrapApp(
         KakaoMap(
           onMapReady: (_) {},
         ),
@@ -63,7 +62,7 @@ void main() {
     );
 
     await tester.pumpWidget(
-      _wrapApp(
+      wrapApp(
         KakaoMap(
           onMapReady: (_) {},
           option: option,
