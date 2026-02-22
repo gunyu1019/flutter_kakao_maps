@@ -152,4 +152,54 @@ class RouteStyle with KMessageable {
     }
     return style;
   }
+
+  RouteStyle copyWith({
+    String? id,
+    Color? color,
+    double? lineWidth,
+    Color? strokeColor,
+    double? strokeWidth,
+    RoutePattern? pattern,
+    int? zoomLevel,
+  }) {
+    final style = RouteStyle(
+      color ?? this.color,
+      lineWidth ?? this.lineWidth,
+      id: id ?? this.id,
+      strokeColor: strokeColor ?? this.strokeColor,
+      strokeWidth: strokeWidth ?? this.strokeWidth,
+      pattern: pattern ?? this.pattern,
+      zoomLevel: zoomLevel ?? this.zoomLevel,
+    );
+    if (!_isSecondaryStyle) {
+      style._styles.addAll(_styles);
+    }
+    return style;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is RouteStyle &&
+        other.id == id &&
+        other.pattern == pattern &&
+        other.color == color &&
+        other.lineWidth == lineWidth &&
+        other.strokeColor == strokeColor &&
+        other.strokeWidth == strokeWidth &&
+        other.zoomLevel == zoomLevel &&
+        listEquals(other._styles, _styles);
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      pattern.hashCode ^
+      color.hashCode ^
+      lineWidth.hashCode ^
+      strokeColor.hashCode ^
+      strokeWidth.hashCode ^
+      zoomLevel.hashCode ^
+      _styles.hashCode;
 }

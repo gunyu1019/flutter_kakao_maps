@@ -132,4 +132,50 @@ class PolylineStyle with KMessageable {
     }
     return style;
   }
+
+  PolylineStyle copyWith({
+    String? id,
+    Color? color,
+    double? lineWidth,
+    double? strokeWidth,
+    Color? strokeColor,
+    int? zoomLevel,
+  }) {
+    final style = PolylineStyle(
+      color ?? this.color,
+      lineWidth ?? this.lineWidth,
+      id: id ?? this.id,
+      strokeWidth: strokeWidth ?? this.strokeWidth,
+      strokeColor: strokeColor ?? this.strokeColor,
+      zoomLevel: zoomLevel ?? this.zoomLevel,
+    );
+    if (!_isSecondaryStyle) {
+      style._styles.addAll(_styles);
+    }
+    return style;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PolylineStyle &&
+        other.id == id &&
+        other.color == color &&
+        other.lineWidth == lineWidth &&
+        other.strokeWidth == strokeWidth &&
+        other.strokeColor == strokeColor &&
+        other.zoomLevel == zoomLevel &&
+        listEquals(other._styles, _styles);
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      color.hashCode ^
+      lineWidth.hashCode ^
+      strokeWidth.hashCode ^
+      strokeColor.hashCode ^
+      zoomLevel.hashCode ^
+      _styles.hashCode;
 }

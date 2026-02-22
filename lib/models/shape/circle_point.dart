@@ -15,18 +15,41 @@ class CirclePoint extends _BaseDotPoint {
   CirclePoint(this.radius, super.basePoint,
       {this.clockwise = true, this.vertexCount});
 
-  @override
-  Map<String, dynamic> toMessageable([bool isHole = false]) {
-    final payload = <String, dynamic>{
-      "type": type,
-      "dotType": dotType.value,
-      "radius": radius,
-      "clockwise": clockwise,
-      "vertexCount": vertexCount,
-    };
-    payload.addAll(super.toMessageable(false));
-    return payload;
+  CirclePoint copyWith({
+    double? radius,
+    LatLng? basePoint,
+    bool? clockwise,
+    int? vertexCount,
+  }) {
+    final point = CirclePoint(
+      radius ?? this.radius,
+      basePoint ?? this.basePoint,
+      clockwise: clockwise ?? this.clockwise,
+      vertexCount: vertexCount ?? this.vertexCount,
+    );
+    point._holes.addAll(_holes);
+    return point;
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is CirclePoint &&
+        other.radius == radius &&
+        other.basePoint == basePoint &&
+        other.clockwise == clockwise &&
+        other.vertexCount == vertexCount &&
+        listEquals(other._holes, _holes);
+  }
+
+  @override
+  int get hashCode =>
+      radius.hashCode ^
+      basePoint.hashCode ^
+      clockwise.hashCode ^
+      vertexCount.hashCode ^
+      _holes.hashCode;
 
   @override
   int get type => 1;

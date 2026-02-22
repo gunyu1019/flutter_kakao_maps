@@ -121,4 +121,46 @@ class PolygonStyle with KMessageable {
     }
     return style;
   }
+
+  PolygonStyle copyWith({
+    String? id,
+    Color? color,
+    double? strokeWidth,
+    Color? strokeColor,
+    int? zoomLevel,
+  }) {
+    final style = PolygonStyle(
+      color ?? this.color,
+      id: id ?? this.id,
+      strokeWidth: strokeWidth ?? this.strokeWidth,
+      strokeColor: strokeColor ?? this.strokeColor,
+      zoomLevel: zoomLevel ?? this.zoomLevel,
+    );
+    if (!_isSecondaryStyle) {
+      style._styles.addAll(_styles);
+    }
+    return style;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PolygonStyle &&
+        other.id == id &&
+        other.color == color &&
+        other.strokeWidth == strokeWidth &&
+        other.strokeColor == strokeColor &&
+        other.zoomLevel == zoomLevel &&
+        listEquals(other._styles, _styles);
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      color.hashCode ^
+      strokeWidth.hashCode ^
+      strokeColor.hashCode ^
+      zoomLevel.hashCode ^
+      _styles.hashCode;
 }

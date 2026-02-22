@@ -8,6 +8,35 @@ class MapPoint extends BasePoint {
 
   MapPoint(this.points);
 
+  MapPoint copyWith({
+    List<LatLng>? points,
+    List<List<LatLng>>? holes,
+  }) {
+    final point = MapPoint(points ?? this.points);
+    point._holes.addAll(holes ?? _holes);
+    return point;
+  }
+
+  bool _holesEquals(List<List<LatLng>> other) {
+    if (_holes.length != other.length) return false;
+    for (var i = 0; i < _holes.length; i++) {
+      if (!listEquals(_holes[i], other[i])) return false;
+    }
+    return true;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MapPoint &&
+        listEquals(other.points, points) &&
+        _holesEquals(other._holes);
+  }
+
+  @override
+  int get hashCode => points.hashCode ^ _holes.hashCode;
+
   /// 도형에 구멍을 추가합니다.
   void addHole(List<LatLng> hole) => _holes.add(hole);
 

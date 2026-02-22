@@ -43,4 +43,39 @@ class RoutePattern with KMessageable {
           : null,
       pinStart: payload["pinStart"],
       pinEnd: payload["pinEnd"]);
+
+  RoutePattern copyWith({
+    KImage? patternImage,
+    KImage? symbolImage,
+    double? distance,
+    bool? pinStart,
+    bool? pinEnd,
+  }) =>
+      RoutePattern(
+        patternImage ?? this.patternImage,
+        distance ?? this.distance,
+        symbolImage: symbolImage ?? this.symbolImage,
+        pinStart: pinStart ?? this.pinStart,
+        pinEnd: pinEnd ?? this.pinEnd,
+      );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is RoutePattern &&
+        other.patternImage == patternImage &&
+        other.symbolImage == symbolImage &&
+        other.distance == distance &&
+        other.pinStart == pinStart &&
+        other.pinEnd == pinEnd;
+  }
+
+  @override
+  int get hashCode =>
+      patternImage.hashCode ^
+      symbolImage.hashCode ^
+      distance.hashCode ^
+      pinStart.hashCode ^
+      pinEnd.hashCode;
 }
