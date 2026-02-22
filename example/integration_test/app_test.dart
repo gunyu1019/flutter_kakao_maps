@@ -49,7 +49,7 @@ void main() {
       await _launchExampleApp(tester);
       final KakaoMapController controller = await _waitForController(tester);
 
-      final LatLng target = const LatLng(37.56664910407437, 126.97822134589721);
+      const LatLng target = LatLng(37.56664910407437, 126.97822134589721);
 
       final CameraPosition beforeMove = await controller.getCameraPosition();
 
