@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
   workflow_call:
   push:
-    branches: [ "develop", "main" ]
+    branches: [ "main" ]
   pull_request: 
-    branches: [ "develop", "main" ]
+    branches: [ "main" ]
     types: [opened, reopened, synchronize]
     
 jobs:
