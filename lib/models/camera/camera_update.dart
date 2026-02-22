@@ -21,7 +21,7 @@ class CameraUpdate with KMessageable {
     this.position,
     this.zoomLevel = -1,
     this.cameraPosition,
-    this.angle = 0.0,
+    this.angle = 1.0,
     this.fitPoints,
     this.padding,
   });
