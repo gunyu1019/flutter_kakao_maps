@@ -1,8 +1,7 @@
 import Flutter
+@testable import flutter_kakao_map
 import UIKit
 import XCTest
-
-@testable import flutter_kakao_map
 
 // This demonstrates a simple unit test of the Swift portion of this plugin's implementation.
 //

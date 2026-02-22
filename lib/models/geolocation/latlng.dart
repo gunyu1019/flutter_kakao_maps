@@ -26,12 +26,10 @@ class LatLng with KMessageable {
   LatLng offset(double distance, double degrees) =>
       _pointOffset(this, distance, degrees);
 
-  LatLng copyWith({
-    double? latitude,
-    double? longitude}) => LatLng(
-      latitude ?? this.latitude,
-      longitude ?? this.longitude,
-  );
+  LatLng copyWith({double? latitude, double? longitude}) => LatLng(
+        latitude ?? this.latitude,
+        longitude ?? this.longitude,
+      );
 
   @override
   bool operator ==(Object other) {
