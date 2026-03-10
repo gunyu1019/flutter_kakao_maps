@@ -36,7 +36,9 @@ mixin OverlayManager {
   /// [polylineCap] 매개변수는 Polyline 도형의 꼭지점을 설정합니다.
   /// 메소드를 사용하면 등록된 스타일의 고유ID가 반환됩니다.
   Future<String> addPolylineShapeStyle(
-      PolylineStyle style, PolylineCap polylineCap);
+    PolylineStyle style,
+    PolylineCap polylineCap,
+  );
 
   /// 고유 ID를 통해 Polygon Shape 스타일 객체를 불러옵니다.
   PolygonStyle? getPolygonShapeStyle(String id);
@@ -46,14 +48,18 @@ mixin OverlayManager {
 
   /// Multiple Polygon Shape의 스타일을 등록합니다. [style] 매개변수에는 다중 Polygon 도형에 사용될 스타일 객체를 배열 형태로 입력합니다.
   /// ID 값은 [id] 매개변수를 주어서 사전에 정의할 수 있지만, 입력하지 않으면 임의로 생성된 고유ID가 반환됩니다.
-  Future<String> addMultiplePolygonShapeStyle(List<PolygonStyle> style,
-      [String? id]);
+  Future<String> addMultiplePolygonShapeStyle(
+    List<PolygonStyle> style, [
+    String? id,
+  ]);
 
   /// Multiple Polyline Shape의 스타일을 등록합니다. [style] 매개변수에는 다중 Polyline 도형에 사용될 스타일 객체를 배열 형태로 입력합니다.
   /// ID 값은 [id] 매개변수를 주어서 사전에 정의할 수 있지만, 입력하지 않으면 임의로 생성된 고유ID가 반환됩니다.
   Future<String> addMultiplePolylineShapeStyle(
-      List<PolylineStyle> style, PolylineCap polylineCap,
-      [String? id]);
+    List<PolylineStyle> style,
+    PolylineCap polylineCap, [
+    String? id,
+  ]);
 
   /// 고유 ID를 통해 Multiple Polygon 스타일 객체를 불러옵니다.
   List<PolygonStyle>? getMultiplePolygonShapeStyle(String id);
@@ -79,49 +85,69 @@ mixin OverlayManager {
   List<RouteStyle>? getMultipleRotueStyle(String id);
 
   void _initalizeOverlayController() {
-    _labelController[LabelController.defaultId] =
-        LabelController._(overlayChannel, this, LabelController.defaultId);
+    _labelController[LabelController.defaultId] = LabelController._(
+      overlayChannel,
+      this,
+      LabelController.defaultId,
+    );
     _lodLabelController[LodLabelController.defaultId] = LodLabelController._(
-        overlayChannel, this, LodLabelController.defaultId);
-    _shapeController[ShapeController.defaultId] =
-        ShapeController._(overlayChannel, this, ShapeController.defaultId);
-    _routeController[RouteController.defaultId] =
-        RouteController._(overlayChannel, this, RouteController.defaultId);
+      overlayChannel,
+      this,
+      LodLabelController.defaultId,
+    );
+    _shapeController[ShapeController.defaultId] = ShapeController._(
+      overlayChannel,
+      this,
+      ShapeController.defaultId,
+    );
+    _routeController[RouteController.defaultId] = RouteController._(
+      overlayChannel,
+      this,
+      RouteController.defaultId,
+    );
     _dimController = DimScreenController._(overlayChannel, this);
     _trackingController = TrackingController._(overlayChannel, this);
   }
 
   /// 매개변수에 따라 설정된 LabelLayer([LabelController])를 추가합니다.
   /// LabelLayer는 Poi와 PolylineText를 관리하는 단위로 새로운 Poi 또는 PolylineText를 생성하거나 삭제할 수 있습니다.
-  Future<LabelController> addLabelLayer(String id,
-      {CompetitionType competitionType =
-          BaseLabelController.defaultCompetitionType,
-      CompetitionUnit competitionUnit =
-          BaseLabelController.defaultCompetitionUnit,
-      OrderingType orderingType = BaseLabelController.defaultOrderingType,
-      int zOrder = BaseLabelController.defaultZOrder});
+  Future<LabelController> addLabelLayer(
+    String id, {
+    CompetitionType competitionType =
+        BaseLabelController.defaultCompetitionType,
+    CompetitionUnit competitionUnit =
+        BaseLabelController.defaultCompetitionUnit,
+    OrderingType orderingType = BaseLabelController.defaultOrderingType,
+    int zOrder = BaseLabelController.defaultZOrder,
+  });
 
   /// 매개변수에 따라 설정된 LodLabelLayer([LodLabelController])를 추가합니다.
   /// LodLabellayer는 LodPoi를 관리하는 단위로 LodPoi를 생성하거나 삭제할 수 있습니다.
-  Future<LodLabelController> addLodLabelLayer(String id,
-      {CompetitionType competitionType =
-          BaseLabelController.defaultCompetitionType,
-      CompetitionUnit competitionUnit =
-          BaseLabelController.defaultCompetitionUnit,
-      OrderingType orderingType = BaseLabelController.defaultOrderingType,
-      double radius = LodLabelController.defaultRadius,
-      int zOrder = BaseLabelController.defaultZOrder});
+  Future<LodLabelController> addLodLabelLayer(
+    String id, {
+    CompetitionType competitionType =
+        BaseLabelController.defaultCompetitionType,
+    CompetitionUnit competitionUnit =
+        BaseLabelController.defaultCompetitionUnit,
+    OrderingType orderingType = BaseLabelController.defaultOrderingType,
+    double radius = LodLabelController.defaultRadius,
+    int zOrder = BaseLabelController.defaultZOrder,
+  });
 
   /// 매개변수에 따라 설정된 ShapeLayer([ShapeController])를 추가합니다.
   /// ShapeLayer는 [PolygonShape]와 [PolylineShape]를 관리하는 단위로 PolygonShape 또는 PolylineShape를 생성하거나 삭제할 수 있습니다.
-  Future<ShapeController> addShapeLayer(String id,
-      {ShapeLayerPass passType = ShapeController.defaultShapeLayerPass,
-      int zOrder = ShapeController.defaultZOrder});
+  Future<ShapeController> addShapeLayer(
+    String id, {
+    ShapeLayerPass passType = ShapeController.defaultShapeLayerPass,
+    int zOrder = ShapeController.defaultZOrder,
+  });
 
   /// 매개변수에 따라 설정된 RouteLayer([RouteController])를 추가합니다.
   /// RouteLayer는 [Route]와 [MultipleRoute]를 관리하는 단위로 Route 또는 MultipleROute를 생성하거나 삭제할 수 있습니다.
-  Future<RouteController> addRouteLayer(String id,
-      {int zOrder = RouteController.defaultZOrder});
+  Future<RouteController> addRouteLayer(
+    String id, {
+    int zOrder = RouteController.defaultZOrder,
+  });
 
   /// [id]에 해당되는 LabelLayer([LabelController])를 가져옵니다.
   /// [id]에 해당되는 LabelLayer가 없으면, [null]를 반환합니다.

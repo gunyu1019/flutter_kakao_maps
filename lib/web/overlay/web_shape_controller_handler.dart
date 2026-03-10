@@ -17,14 +17,22 @@ mixin WebShapeControllerHandler {
         final polyline = arguments["polyline"];
         final point = WebShapePoint.fromMessageable(polyline["position"]);
         final style = manager._polylineStyles[polyline["styleId"]!]![0];
-        return await addPolylineShape(point, style,
-            id: polyline["id"], zOrder: polyline["zOrder"] ?? 10001);
+        return await addPolylineShape(
+          point,
+          style,
+          id: polyline["id"],
+          zOrder: polyline["zOrder"] ?? 10001,
+        );
       case "addPolygonShape":
         final polygon = arguments["polygon"];
         final point = WebShapePoint.fromMessageable(polygon["position"]);
         final style = manager._polygonStyles[polygon["styleId"]!]![0];
-        return await addPolygonShape(point, style,
-            id: polygon["id"], zOrder: polygon["zOrder"] ?? 10001);
+        return await addPolygonShape(
+          point,
+          style,
+          id: polygon["id"],
+          zOrder: polygon["zOrder"] ?? 10001,
+        );
       case "removePolylineShape":
         final shapeId = arguments["polylineId"];
         await removePolylineShape(shapeId);
@@ -83,16 +91,30 @@ mixin WebShapeControllerHandler {
   Future<void> changePolygonVisible(String shapeId, bool visible);
 
   Future<void> changePolyline(
-      String shapeId, WebShapePoint point, String styleId);
+    String shapeId,
+    WebShapePoint point,
+    String styleId,
+  );
 
   Future<void> changePolygon(
-      String shapeId, WebShapePoint point, String styleId);
+    String shapeId,
+    WebShapePoint point,
+    String styleId,
+  );
 
-  Future<String> addPolylineShape(WebShapePoint point, PolylineStyle style,
-      {String? id, int zOrder = 10001});
+  Future<String> addPolylineShape(
+    WebShapePoint point,
+    PolylineStyle style, {
+    String? id,
+    int zOrder = 10001,
+  });
 
-  Future<String> addPolygonShape(WebShapePoint point, PolygonStyle style,
-      {String? id, int zOrder = 10001});
+  Future<String> addPolygonShape(
+    WebShapePoint point,
+    PolygonStyle style, {
+    String? id,
+    int zOrder = 10001,
+  });
 
   Future<void> removePolylineShape(String shapeId);
 

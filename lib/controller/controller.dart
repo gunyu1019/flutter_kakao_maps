@@ -58,7 +58,11 @@ abstract class KakaoMapController with OverlayManager {
   Future<void> _defaultGUIvisible(DefaultGUIType type, bool visible);
 
   Future<void> _defaultGUIposition(
-      DefaultGUIType type, MapGravity gravity, double x, double y);
+    DefaultGUIType type,
+    MapGravity gravity,
+    double x,
+    double y,
+  );
 
   Future<void> _scaleAutohide(bool autohide);
 

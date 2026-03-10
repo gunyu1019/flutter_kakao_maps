@@ -39,8 +39,8 @@ class PolygonStyle with KMessageable {
     this.strokeWidth = .0,
     this.strokeColor = Colors.black,
     this.zoomLevel = 0,
-  })  : _id = id,
-        _isSecondaryStyle = false;
+  }) : _id = id,
+       _isSecondaryStyle = false;
 
   PolygonStyle._(
     this.color, {
@@ -48,20 +48,26 @@ class PolygonStyle with KMessageable {
     this.strokeWidth = .0,
     this.strokeColor = Colors.black,
     this.zoomLevel = 0,
-  })  : _id = id,
-        _isSecondaryStyle = true;
+  }) : _id = id,
+       _isSecondaryStyle = true;
 
   /// [zoomLevel]에 따라 [Polygon]에 표시될 다른 스타일을 정의합니다.
   /// 메소드에서 사용된 [zoomLevel] 매개변수가 [CameraPosition.zoomLevel] 값보다 작으면
   /// [PolygonStyle.addStyle] 메소드로 정의한 새로운 스타일이 적용됩니다.
   /// 같은 [PolygonStyle] 객체에서 다른 스타일을 정의할 때, [zoomLevel] 매개변수의 값이 중복되서는 안됩니다.
-  void addStyle(int zoomLevel, Color? color,
-      {double? strokeWidth, Color? strokeColor}) {
+  void addStyle(
+    int zoomLevel,
+    Color? color, {
+    double? strokeWidth,
+    Color? strokeColor,
+  }) {
     if (_isSecondaryStyle) return;
-    final otherStyle = PolygonStyle._(color ?? this.color,
-        strokeColor: strokeColor ?? this.strokeColor,
-        strokeWidth: strokeWidth ?? this.strokeWidth,
-        zoomLevel: zoomLevel);
+    final otherStyle = PolygonStyle._(
+      color ?? this.color,
+      strokeColor: strokeColor ?? this.strokeColor,
+      strokeWidth: strokeWidth ?? this.strokeWidth,
+      zoomLevel: zoomLevel,
+    );
     _styles.add(otherStyle);
   }
 
@@ -96,7 +102,7 @@ class PolygonStyle with KMessageable {
       "strokeWidth": strokeWidth,
       // ignore: deprecated_member_use
       "strokeColor": strokeColor.value,
-      "zoomLevel": zoomLevel
+      "zoomLevel": zoomLevel,
     };
     if (!_isSecondaryStyle) {
       payload['otherStyle'] = _styles.map((e) => e.toMessageable()).toList();
@@ -105,18 +111,24 @@ class PolygonStyle with KMessageable {
   }
 
   factory PolygonStyle.fromMessageable(dynamic payload, [String? id]) {
-    final style = PolygonStyle(Color(payload["color"]),
-        id: id,
-        strokeColor: Color(payload["strokeColor"]),
-        strokeWidth: payload["strokeWidth"],
-        zoomLevel: payload["zoomLevel"]);
+    final style = PolygonStyle(
+      Color(payload["color"]),
+      id: id,
+      strokeColor: Color(payload["strokeColor"]),
+      strokeWidth: payload["strokeWidth"],
+      zoomLevel: payload["zoomLevel"],
+    );
     if (payload.containsKey("otherStyle") && payload["otherStyle"].length > 0) {
       payload["otherStyle"]
-          .map<PolygonStyle>((e) => PolygonStyle._(Color(e["color"]),
+          .map<PolygonStyle>(
+            (e) => PolygonStyle._(
+              Color(e["color"]),
               id: id,
               strokeColor: Color(e["strokeColor"]),
               strokeWidth: e["strokeWidth"],
-              zoomLevel: e["zoomLevel"]))
+              zoomLevel: e["zoomLevel"],
+            ),
+          )
           .forEach(style._styles.add);
     }
     return style;

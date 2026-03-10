@@ -69,17 +69,24 @@ class KakaoMapWebPlugin {
   static String mapElementId(int viewId) => "map_$viewId";
 
   static web.Element viewFactory(int viewId, {Object? params}) {
-    final channel =
-        ChannelType.view.channelWithParamAndId(viewId, codec, registrar);
-    final overlayChannel =
-        ChannelType.overlay.channelWithParamAndId(viewId, codec, registrar);
+    final channel = ChannelType.view.channelWithParamAndId(
+      viewId,
+      codec,
+      registrar,
+    );
+    final overlayChannel = ChannelType.overlay.channelWithParamAndId(
+      viewId,
+      codec,
+      registrar,
+    );
     final webMapOption = WebMapOption.fromMessageable(params!);
 
     getController(viewId, webMapOption).then((webController) {
       KakaoMapWebController(
-          controller: webController,
-          channel: channel,
-          overlayChannel: overlayChannel);
+        controller: webController,
+        channel: channel,
+        overlayChannel: overlayChannel,
+      );
     });
 
     return web.HTMLDivElement()
@@ -91,8 +98,10 @@ class KakaoMapWebPlugin {
 
   static void registerWith(Registrar registrar) {
     KakaoMapWebPlugin.registrar = registrar;
-    ui_web.platformViewRegistry
-        .registerViewFactory("plugin/kakao_map", viewFactory);
+    ui_web.platformViewRegistry.registerViewFactory(
+      "plugin/kakao_map",
+      viewFactory,
+    );
 
     // Unused in Web Environment
     final sdkChannel = ChannelType.sdk.channelWithParam(codec, registrar);
@@ -100,7 +109,9 @@ class KakaoMapWebPlugin {
   }
 
   static Future<WebMapController?> getController(
-      int viewId, WebMapOption option) async {
+    int viewId,
+    WebMapOption option,
+  ) async {
     for (int i = 0; i < maxAttempts; i++) {
       var element = web.document.getElementById("map_$viewId");
       if (element != null) {

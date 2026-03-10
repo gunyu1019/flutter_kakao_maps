@@ -26,8 +26,10 @@ class TrackingController extends OverlayController {
   /// [poi]가 지정되지 않았으면 반응하지 않습니다.
   Future<void> start() async {
     if (poi == null) return;
-    await _invokeMethod(
-        "startTracking", {"poiId": poi!.id, "layerId": poi!._controller.id});
+    await _invokeMethod("startTracking", {
+      "poiId": poi!.id,
+      "layerId": poi!._controller.id,
+    });
   }
 
   Future<void> stop() async {

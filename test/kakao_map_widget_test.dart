@@ -23,9 +23,9 @@ void main() {
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
-      SystemChannels.platform_views,
-      platformViewsHandler,
-    );
+          SystemChannels.platform_views,
+          platformViewsHandler,
+        );
   });
 
   tearDown(() {
@@ -36,9 +36,7 @@ void main() {
 
   Widget wrapApp(Widget child) {
     return MaterialApp(
-      home: Scaffold(
-        body: SizedBox.expand(child: child),
-      ),
+      home: Scaffold(body: SizedBox.expand(child: child)),
     );
   }
 
@@ -48,12 +46,7 @@ void main() {
 
     try {
       await tester.pumpWidget(
-        wrapApp(
-          KakaoMap(
-            key: UniqueKey(),
-            onMapReady: (_) {},
-          ),
-        ),
+        wrapApp(KakaoMap(key: UniqueKey(), onMapReady: (_) {})),
       );
 
       expect(find.byType(KakaoMap), findsOneWidget);
@@ -62,20 +55,16 @@ void main() {
     }
   });
 
-  testWidgets('should render platform-specific Platform View widget',
-      (tester) async {
+  testWidgets('should render platform-specific Platform View widget', (
+    tester,
+  ) async {
     final previous = debugDefaultTargetPlatformOverride;
 
     try {
       debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
       await tester.pumpWidget(
-        wrapApp(
-          KakaoMap(
-            key: UniqueKey(),
-            onMapReady: (_) {},
-          ),
-        ),
+        wrapApp(KakaoMap(key: UniqueKey(), onMapReady: (_) {})),
       );
 
       expect(find.byType(PlatformViewLink), findsOneWidget);
@@ -83,12 +72,7 @@ void main() {
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
       await tester.pumpWidget(
-        wrapApp(
-          KakaoMap(
-            key: UniqueKey(),
-            onMapReady: (_) {},
-          ),
-        ),
+        wrapApp(KakaoMap(key: UniqueKey(), onMapReady: (_) {})),
       );
 
       expect(find.byType(UiKitView), findsOneWidget);
@@ -115,19 +99,14 @@ void main() {
       debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
       await tester.pumpWidget(
-        wrapApp(
-          KakaoMap(
-            key: UniqueKey(),
-            onMapReady: (_) {},
-            option: option,
-          ),
-        ),
+        wrapApp(KakaoMap(key: UniqueKey(), onMapReady: (_) {}, option: option)),
       );
 
       expect(lastPlatformViewsCreateCall, isNotNull);
 
       final androidCreateArgs = Map<String, dynamic>.from(
-          lastPlatformViewsCreateCall!.arguments as Map);
+        lastPlatformViewsCreateCall!.arguments as Map,
+      );
       final encodedAndroidParams = androidCreateArgs['params'] as Uint8List?;
 
       expect(encodedAndroidParams, isNotNull);
@@ -141,18 +120,13 @@ void main() {
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
       await tester.pumpWidget(
-        wrapApp(
-          KakaoMap(
-            key: UniqueKey(),
-            onMapReady: (_) {},
-            option: option,
-          ),
-        ),
+        wrapApp(KakaoMap(key: UniqueKey(), onMapReady: (_) {}, option: option)),
       );
 
       final uiKitView = tester.widget<UiKitView>(find.byType(UiKitView));
-      final iosCreationParams =
-          Map<String, dynamic>.from(uiKitView.creationParams as Map);
+      final iosCreationParams = Map<String, dynamic>.from(
+        uiKitView.creationParams as Map,
+      );
 
       expect(iosCreationParams, equals(expectedParams));
     } finally {

@@ -5,10 +5,7 @@ class KPoint extends math.Point with KMessageable {
 
   @override
   Map<String, dynamic> toMessageable() {
-    final payload = <String, dynamic>{
-      "x": x,
-      "y": y,
-    };
+    final payload = <String, dynamic>{"x": x, "y": y};
     return payload;
   }
 

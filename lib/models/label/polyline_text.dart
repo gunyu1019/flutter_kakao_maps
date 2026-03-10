@@ -27,14 +27,16 @@ class PolylineText {
   /// [PolylineText]가 현재 지도에 그려지는 여부를 나타냅니다.
   bool get visible => _visible;
 
-  PolylineText._(this._controller, this.id,
-      {required PolylineTextStyle style,
-      required String text,
-      required this.points,
-      bool visible = true})
-      : _style = style,
-        _text = text,
-        _visible = visible;
+  PolylineText._(
+    this._controller,
+    this.id, {
+    required PolylineTextStyle style,
+    required String text,
+    required this.points,
+    bool visible = true,
+  }) : _style = style,
+       _text = text,
+       _visible = visible;
 
   /// [PolylineText.style]을 변경합니다.
   Future<void> changeStyles(PolylineTextStyle style) async {

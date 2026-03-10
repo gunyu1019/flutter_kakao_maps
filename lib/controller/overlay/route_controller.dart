@@ -19,8 +19,12 @@ class RouteController extends OverlayController {
 
   final Map<String, BaseRoute> _route = {};
 
-  RouteController._(this.channel, this.manager, this.id,
-      {this.zOrder = defaultZOrder});
+  RouteController._(
+    this.channel,
+    this.manager,
+    this.id, {
+    this.zOrder = defaultZOrder,
+  });
 
   Future<void> _createRouteLayer() async {
     await _invokeMethod("createRouteLayer", {"zOrder": zOrder});
@@ -31,7 +35,10 @@ class RouteController extends OverlayController {
   }
 
   Future<void> _changeMultipleRoute(
-      String routeId, String styleId, List<RouteSegment> segments) async {
+    String routeId,
+    String styleId,
+    List<RouteSegment> segments,
+  ) async {
     await _invokeMethod("changeRoute", {
       "routeId": routeId,
       "points": segments
@@ -42,24 +49,32 @@ class RouteController extends OverlayController {
     });
   }
 
-  Future<void> _changeRoute(String routeId, String styleId, CurveType curveType,
-      List<LatLng> points) async {
+  Future<void> _changeRoute(
+    String routeId,
+    String styleId,
+    CurveType curveType,
+    List<LatLng> points,
+  ) async {
     await _invokeMethod("changeRoute", {
       "routeId": routeId,
       "points": [points.map((e) => e.toMessageable()).toList()],
       "styleId": styleId,
-      "curveType": [curveType.value]
+      "curveType": [curveType.value],
     });
   }
 
   Future<void> _changeRouteZOrder(String routeId, int zOrder) async {
-    await _invokeMethod(
-        "changeRouteZOrder", {"routeId": routeId, "zOrder": zOrder});
+    await _invokeMethod("changeRouteZOrder", {
+      "routeId": routeId,
+      "zOrder": zOrder,
+    });
   }
 
   Future<void> _changeRouteVisible(String routeId, bool visible) async {
-    await _invokeMethod(
-        "changeRouteVisible", {"routeId": routeId, "visible": visible});
+    await _invokeMethod("changeRouteVisible", {
+      "routeId": routeId,
+      "visible": visible,
+    });
   }
 
   @override
@@ -71,10 +86,13 @@ class RouteController extends OverlayController {
   /// 지도에 새로운 단일 선형([Route])을 그립니다.
   /// [Route]를 그리기 위해서는 지점([points])과 스타일([style])이 필수로 입력되어야 합니다.
   /// Route에서 사용되는 [id]는 이미 등록된 [MultipleRoute.id]와 중복될 수 없습니다.
-  Future<Route> addRoute(List<LatLng> points, RouteStyle style,
-      {String? id,
-      CurveType curveType = CurveType.none,
-      int zOrder = 10000}) async {
+  Future<Route> addRoute(
+    List<LatLng> points,
+    RouteStyle style, {
+    String? id,
+    CurveType curveType = CurveType.none,
+    int zOrder = 10000,
+  }) async {
     if (id != null && _route.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
@@ -88,15 +106,21 @@ class RouteController extends OverlayController {
         "points": points.map((e) => e.toMessageable()).toList(),
         "styleId": style.id,
         "curveType": curveType.value,
-        "zOrder": zOrder
-      }
+        "zOrder": zOrder,
+      },
     };
     String? routeId = await _invokeMethod("addRoute", payload);
     if (routeId == null) {
       throw OverlayRegistrationFailedError(id, type);
     }
-    final route = Route._(this, routeId,
-        points: points, style: style, curveType: curveType, zOrder: zOrder);
+    final route = Route._(
+      this,
+      routeId,
+      points: points,
+      style: style,
+      curveType: curveType,
+      zOrder: zOrder,
+    );
     _route[routeId] = route;
     return route;
   }
@@ -115,10 +139,13 @@ class RouteController extends OverlayController {
     if (routeId == null) {
       throw OverlayRegistrationFailedError(option.id, type);
     }
-    final route = MultipleRoute._(this, routeId,
-        segments: option.segments,
-        styles: option.styles,
-        zOrder: option.zOrder);
+    final route = MultipleRoute._(
+      this,
+      routeId,
+      segments: option.segments,
+      styles: option.styles,
+      zOrder: option.zOrder,
+    );
     _route[routeId] = route;
     return route;
   }

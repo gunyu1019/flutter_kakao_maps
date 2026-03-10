@@ -43,7 +43,7 @@ class DimScreenController extends BaseShapeController {
     _color = color;
     await _invokeMethod("setColor", {
       // ignore: deprecated_member_use
-      "color": color.value
+      "color": color.value,
     });
   }
 
@@ -57,8 +57,10 @@ class DimScreenController extends BaseShapeController {
   /// [Polygon]을 그리기 위해서는 도형을 그릴 위치([position])과 스타일([style])이 필수로 입력되어야 합니다.
   /// [position]은 절대 위치([MapPoint])가 입력될 수 있고, 상대위치([CirclePoint], [RectanglePoint])가 입력될 수 있습니다.
   Future<Polygon> addPolygonShape<T extends BasePoint>(
-      T position, PolygonStyle style,
-      {String? id}) async {
+    T position,
+    PolygonStyle style, {
+    String? id,
+  }) async {
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
@@ -68,11 +70,15 @@ class DimScreenController extends BaseShapeController {
         "id": id,
         "position": position.toMessageable(),
         "styleId": styleId,
-      }
+      },
     };
     String shapeId = await _invokeMethod("addHighlightPolygonShape", payload);
-    final polygon =
-        Polygon<T>._(this, shapeId, position: position, style: style);
+    final polygon = Polygon<T>._(
+      this,
+      shapeId,
+      position: position,
+      style: style,
+    );
     _polygonShape[shapeId] = polygon;
     return polygon;
   }

@@ -24,38 +24,46 @@ class PolylineTextStyle {
   final List<PolylineTextStyle> _styles = [];
   final bool _isSecondaryStyle;
 
-  PolylineTextStyle(this.size, this.color,
-      {this.strokeSize,
-      this.strokeColor,
-      this.applyDpScale = true,
-      this.zoomLevel = 0})
-      : _isSecondaryStyle = false;
+  PolylineTextStyle(
+    this.size,
+    this.color, {
+    this.strokeSize,
+    this.strokeColor,
+    this.applyDpScale = true,
+    this.zoomLevel = 0,
+  }) : _isSecondaryStyle = false;
 
-  PolylineTextStyle._(this.size, this.color,
-      {this.strokeSize,
-      this.strokeColor,
-      this.applyDpScale = true,
-      this.zoomLevel = 0})
-      : _isSecondaryStyle = true;
+  PolylineTextStyle._(
+    this.size,
+    this.color, {
+    this.strokeSize,
+    this.strokeColor,
+    this.applyDpScale = true,
+    this.zoomLevel = 0,
+  }) : _isSecondaryStyle = true;
 
   /// [zoomLevel]에 따라 [PolylineTextStyle]에 표시될 다른 스타일을 정의합니다.
   /// 메소드에서 사용된 [zoomLevel] 매개변수가 [CameraPosition.zoomLevel] 값보다 작으면
   /// [PolylineTextStyle.addStyle] 메소드로 정의한 새로운 스타일이 적용됩니다.
   /// 같은 [PolylineTextStyle] 객체에서 다른 스타일을 정의할 때, [zoomLevel] 매개변수의 값이 중복되서는 안됩니다.
-  void addStyle(int zoomLevel,
-      {int? size,
-      Color? color,
-      bool? applyDpScale,
-      int? strokeSize,
-      Color? strokeColor}) {
+  void addStyle(
+    int zoomLevel, {
+    int? size,
+    Color? color,
+    bool? applyDpScale,
+    int? strokeSize,
+    Color? strokeColor,
+  }) {
     if (_isSecondaryStyle) return;
 
     final otherStyle = PolylineTextStyle._(
-        size ?? this.size, color ?? this.color,
-        applyDpScale: applyDpScale ?? this.applyDpScale,
-        strokeSize: strokeSize ?? this.strokeSize,
-        strokeColor: strokeColor ?? this.strokeColor,
-        zoomLevel: zoomLevel);
+      size ?? this.size,
+      color ?? this.color,
+      applyDpScale: applyDpScale ?? this.applyDpScale,
+      strokeSize: strokeSize ?? this.strokeSize,
+      strokeColor: strokeColor ?? this.strokeColor,
+      zoomLevel: zoomLevel,
+    );
     _styles.add(otherStyle);
   }
 

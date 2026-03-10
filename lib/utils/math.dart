@@ -18,7 +18,8 @@ double _haversine(LatLng point1, LatLng point2) {
   final deltaLatitude = (latitude1 - latitude2).abs();
   final deltaLongtitude = (longtitude1 - longtitude2).abs();
 
-  final distance = math.pow(math.sin(deltaLatitude * .5), 2) +
+  final distance =
+      math.pow(math.sin(deltaLatitude * .5), 2) +
       (math.cos(latitude1) *
           math.cos(latitude2) *
           math.pow(math.sin(deltaLongtitude * .5), 2));
@@ -32,11 +33,16 @@ LatLng _pointOffset(LatLng point, double distance, double degrees) {
   final bearing = _degreeToRadian(degrees);
   final distance0 = distance / _earthRadius;
 
-  final newLatitude = math.asin(math.sin(latitude) * math.cos(distance0) +
-      math.cos(latitude) * math.sin(distance0) * math.cos(bearing));
-  final newLongtitude = longtitude +
-      math.atan2(math.sin(bearing) * math.sin(distance0) * math.cos(latitude),
-          math.cos(distance0) - math.sin(latitude) * math.sin(newLatitude));
+  final newLatitude = math.asin(
+    math.sin(latitude) * math.cos(distance0) +
+        math.cos(latitude) * math.sin(distance0) * math.cos(bearing),
+  );
+  final newLongtitude =
+      longtitude +
+      math.atan2(
+        math.sin(bearing) * math.sin(distance0) * math.cos(latitude),
+        math.cos(distance0) - math.sin(latitude) * math.sin(newLatitude),
+      );
 
   return LatLng(_radianToDegree(newLatitude), _radianToDegree(newLongtitude));
 }

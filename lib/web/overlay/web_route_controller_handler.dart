@@ -16,13 +16,20 @@ mixin WebRouteControllerHandler {
         break;
       case "addRoute":
         final route = arguments["route"];
-        final points =
-            route["points"].map<LatLng>(LatLng.fromMessageable).toList();
+        final points = route["points"]
+            .map<LatLng>(LatLng.fromMessageable)
+            .toList();
         final style = manager._routeStyles[route["styleId"]!]![0];
-        final curveType =
-            CurveType.values.firstWhere((e) => e.value == route["curveType"]);
-        return await addRoute(points, style,
-            id: route["id"], curveType: curveType, zOrder: route["zOrder"]);
+        final curveType = CurveType.values.firstWhere(
+          (e) => e.value == route["curveType"],
+        );
+        return await addRoute(
+          points,
+          style,
+          id: route["id"],
+          curveType: curveType,
+          zOrder: route["zOrder"],
+        );
       case "addMultipleRoute":
         final route = arguments["route"];
         final styleId = route["routes"][0]["styleId"]!;
@@ -62,15 +69,23 @@ mixin WebRouteControllerHandler {
 
   Future<void> removeRouteLayer();
 
-  Future<String> addRoute(List<LatLng> points, RouteStyle style,
-      {String? id, CurveType curveType = CurveType.none, int zOrder = 10000});
+  Future<String> addRoute(
+    List<LatLng> points,
+    RouteStyle style, {
+    String? id,
+    CurveType curveType = CurveType.none,
+    int zOrder = 10000,
+  });
 
   Future<String> addMultipleRoute(MultipleRouteOption option);
 
   Future<void> removeRoute(String routeId);
 
   Future<void> changeRoute(
-      String routeId, String styleId, List<List<LatLng>> points);
+    String routeId,
+    String styleId,
+    List<List<LatLng>> points,
+  );
 
   Future<void> changeRouteVisible(String routeId, bool visible);
 

@@ -28,19 +28,23 @@ class Polyline<T extends BasePoint> extends Shape {
   /// [Polyline]에서 정의된 끝모양을 불러옵니다.
   PolylineCap get polylineCap => _polylineCap;
 
-  Polyline._(BaseShapeController controller, this.id,
-      {required T position,
-      required PolylineStyle style,
-      required PolylineCap polylineCap})
-      : _controller = controller,
-        _style = style,
-        _position = position,
-        _polylineCap = polylineCap,
-        _visible = true;
+  Polyline._(
+    BaseShapeController controller,
+    this.id, {
+    required T position,
+    required PolylineStyle style,
+    required PolylineCap polylineCap,
+  }) : _controller = controller,
+       _style = style,
+       _position = position,
+       _polylineCap = polylineCap,
+       _visible = true;
 
   /// 도형에 정의된 스타일([PolylineStyle])을 다시 정의합니다.
   Future<void> changeStyle(
-      PolylineStyle style, PolylineCap? polylineCap) async {
+    PolylineStyle style,
+    PolylineCap? polylineCap,
+  ) async {
     _polylineCap = polylineCap ?? _polylineCap;
     if (!style._isAdded) {
       await _controller.manager.addPolylineShapeStyle(style, _polylineCap);

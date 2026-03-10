@@ -8,10 +8,7 @@ class MapPoint extends BasePoint {
 
   MapPoint(this.points);
 
-  MapPoint copyWith({
-    List<LatLng>? points,
-    List<List<LatLng>>? holes,
-  }) {
+  MapPoint copyWith({List<LatLng>? points, List<List<LatLng>>? holes}) {
     final point = MapPoint(points ?? this.points);
     point._holes.addAll(holes ?? _holes);
     return point;
@@ -56,7 +53,7 @@ class MapPoint extends BasePoint {
       "points": points.map((e) => e.toMessageable()).toList(),
       "holes": _holes
           .map((e1) => e1.map((e2) => e2.toMessageable()).toList())
-          .toList()
+          .toList(),
     };
   }
 

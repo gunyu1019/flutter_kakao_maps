@@ -14,8 +14,14 @@ class WebPoiBadge {
 
   bool visible;
 
-  WebPoiBadge(this.id, this.offsetX, this.offsetY, this.image,
-      [this.visible = true, this.zOrder = 0]);
+  WebPoiBadge(
+    this.id,
+    this.offsetX,
+    this.offsetY,
+    this.image, [
+    this.visible = true,
+    this.zOrder = 0,
+  ]);
 
   Future<void> encodeImage() async =>
       preEncodedImage = encodeImageToBase64(await image.readBytes());

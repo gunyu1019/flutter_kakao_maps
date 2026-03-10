@@ -34,20 +34,35 @@ mixin WebLabelControllerHandler {
         break;
       case "changePoiOffsetPosition":
         await changePoiOffsetPosition(
-            poiId, arguments["x"], arguments["y"], arguments["forceDpScale"]);
+          poiId,
+          arguments["x"],
+          arguments["y"],
+          arguments["forceDpScale"],
+        );
         break;
       case "changePoiVisible":
-        await changePoiVisible(poiId, arguments["visible"],
-            autoMove: arguments["autoMove"], duration: arguments["millis"]);
+        await changePoiVisible(
+          poiId,
+          arguments["visible"],
+          autoMove: arguments["autoMove"],
+          duration: arguments["millis"],
+        );
         break;
       case "changePoiStyle":
         await changePoiStyle(
-            poiId, arguments["styleId"], arguments["transition"]);
+          poiId,
+          arguments["styleId"],
+          arguments["transition"],
+        );
         break;
       case "changePoiText":
         final styleId = arguments["styleId"] ?? _webPoi[poiId]?.styleId;
         await invalidatePoi(
-            poiId, styleId, arguments["text"], arguments["transition"]);
+          poiId,
+          styleId,
+          arguments["text"],
+          arguments["transition"],
+        );
         break;
       case "invalidatePoi":
         final styleId = arguments["styleId"] ?? _webPoi[poiId]?.styleId;
@@ -56,7 +71,10 @@ mixin WebLabelControllerHandler {
         break;
       case "movePoi":
         await movePoi(
-            poiId, LatLng.fromMessageable(arguments), arguments["millis"]);
+          poiId,
+          LatLng.fromMessageable(arguments),
+          arguments["millis"],
+        );
         break;
       case "rotatePoi":
         await rotatePoi(poiId, arguments["angle"], arguments["millis"]);
@@ -75,10 +93,14 @@ mixin WebLabelControllerHandler {
         final badgeOption = arguments["badge"];
         final badgeImage = KImage.fromMessageable(badgeOption["image"]);
         return await addPoiBadge(
-            poiId, badgeImage, badgeOption["offsetX"], badgeOption["offsetY"],
-            badgeId: badgeOption["id"],
-            zOrder: badgeOption["zOrder"] ?? 1,
-            visible: badgeOption["visible"] ?? true);
+          poiId,
+          badgeImage,
+          badgeOption["offsetX"],
+          badgeOption["offsetY"],
+          badgeId: badgeOption["id"],
+          zOrder: badgeOption["zOrder"] ?? 1,
+          visible: badgeOption["visible"] ?? true,
+        );
       case "removePoiBadge":
         removePoiBadge(poiId, badgeId);
         break;
@@ -96,14 +118,14 @@ mixin WebLabelControllerHandler {
         removeShareTransformPoi(poiId, targetLayerId, targetPoiId);
         break;
       case "changePolylineTextStyle" ||
-            "changePolylineTextVisible" ||
-            "changeVisibleAllPolylineText" ||
-            "setLayerClickable" ||
-            "setLayerZOrder" ||
-            "scalePoi" ||
-            "addShareTransformShape" ||
-            "removeShareTransformShape" ||
-            "movePathPoi":
+          "changePolylineTextVisible" ||
+          "changeVisibleAllPolylineText" ||
+          "setLayerClickable" ||
+          "setLayerZOrder" ||
+          "scalePoi" ||
+          "addShareTransformShape" ||
+          "removeShareTransformShape" ||
+          "movePathPoi":
         break;
       default:
         throw UnimplementedError();
@@ -115,16 +137,31 @@ mixin WebLabelControllerHandler {
   Future<void> removeLabelLayer();
 
   Future<void> changePoiOffsetPosition(
-      String poiId, double x, double y, bool forceDpScale);
+    String poiId,
+    double x,
+    double y,
+    bool forceDpScale,
+  );
 
-  Future<void> changePoiVisible(String poiId, bool visible,
-      {bool? autoMove, int? duration});
+  Future<void> changePoiVisible(
+    String poiId,
+    bool visible, {
+    bool? autoMove,
+    int? duration,
+  });
 
-  Future<void> changePoiStyle(String poiId, String styleId,
-      [bool transition = false]);
+  Future<void> changePoiStyle(
+    String poiId,
+    String styleId, [
+    bool transition = false,
+  ]);
 
-  Future<void> invalidatePoi(String poiId, String styleId, String? text,
-      [bool transition = false]);
+  Future<void> invalidatePoi(
+    String poiId,
+    String styleId,
+    String? text, [
+    bool transition = false,
+  ]);
 
   Future<void> movePoi(String poiId, LatLng position, [double? millis]);
 
@@ -150,22 +187,37 @@ mixin WebLabelControllerHandler {
   Future<void> hideAllPoi();
 
   Future<String> addPoiBadge(
-      String poiId, KImage image, double offsetX, double offsetY,
-      {String? badgeId, int? zOrder, bool visible = true});
+    String poiId,
+    KImage image,
+    double offsetX,
+    double offsetY, {
+    String? badgeId,
+    int? zOrder,
+    bool visible = true,
+  });
 
   Future<void> removePoiBadge(String poiId, String badgeId);
 
   Future<void> changePoiBadgeVisible(
-      String poiId, String badgeId, bool visible);
+    String poiId,
+    String badgeId,
+    bool visible,
+  );
 
   Future<void> addShareTransformPoi(
-      String poiId, String targetLayerId, String targetPoiId);
+    String poiId,
+    String targetLayerId,
+    String targetPoiId,
+  );
 
   // Future<void> addShareTransformPoiWithShape(
   //     String poiId, String targetLayerId, String targetShapeId);
 
   Future<void> removeShareTransformPoi(
-      String poiId, String targetLayerId, String targetPoiId);
+    String poiId,
+    String targetLayerId,
+    String targetPoiId,
+  );
 
   // Future<void> removeShareTransformPoiWithShape(
   //     String poiId, String targetLayerId, String targetShapeId);

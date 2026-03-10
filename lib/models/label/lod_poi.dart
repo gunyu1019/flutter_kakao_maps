@@ -44,18 +44,20 @@ class LodPoi with BadgeablePoi {
   /// [LodPoi]가 현재 지도에 그려지는지 여부를 나타냅니다.
   bool get visible => _visible;
 
-  LodPoi._(this._controller, this.id,
-      {required this.transform,
-      required this.position,
-      required PoiStyle style,
-      required String? text,
-      required int rank,
-      required bool visible,
-      this.onClick})
-      : _style = style,
-        _text = text,
-        _rank = rank,
-        _visible = visible;
+  LodPoi._(
+    this._controller,
+    this.id, {
+    required this.transform,
+    required this.position,
+    required PoiStyle style,
+    required String? text,
+    required int rank,
+    required bool visible,
+    this.onClick,
+  }) : _style = style,
+       _text = text,
+       _rank = rank,
+       _visible = visible;
 
   /// [LodPoi]의 [rank]를 즉시 변경합니다.
   Future<void> changeRank(int rank) async {

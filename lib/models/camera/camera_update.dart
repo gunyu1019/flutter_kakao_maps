@@ -31,15 +31,20 @@ class CameraUpdate with KMessageable {
   /// @params position 새롭게 이동할 카메라의 좌표 값입니다.
   /// @params zoomLevel 새롭게 지정할 확대/축솟 값입니다. (선택 값입니다.)
   factory CameraUpdate.newCenterPosition(LatLng position, {int? zoomLevel}) =>
-      CameraUpdate._(CameraUpdateType.newCenterPoint,
-          position: position, zoomLevel: zoomLevel ?? -1);
+      CameraUpdate._(
+        CameraUpdateType.newCenterPoint,
+        position: position,
+        zoomLevel: zoomLevel ?? -1,
+      );
 
   /// [CameraPosition] 객체로 카메라가 이동할 위치를 설정합니다.
   ///
   /// @params cameraPosition [CameraPosition] 카메라의 위치가 담긴 객체입니다.
   factory CameraUpdate.newCameraPos(CameraPosition cameraPosition) =>
-      CameraUpdate._(CameraUpdateType.newCameraPos,
-          cameraPosition: cameraPosition);
+      CameraUpdate._(
+        CameraUpdateType.newCameraPos,
+        cameraPosition: cameraPosition,
+      );
 
   /// 카메라의 줌레벨을 [zoomLevel]에 따라 확대 또는 축소를 합니다.
   factory CameraUpdate.zoomTo(int zoomLevel) =>
@@ -60,27 +65,36 @@ class CameraUpdate with KMessageable {
       CameraUpdate._(CameraUpdateType.tilt, angle: angle);
 
   /// [fitPoints]에 주어진 위치(좌표)들이 화면의 가장자리에 맞춰 보여지도록 카메라의 위치를 변경합니다.
-  factory CameraUpdate.fitMapPoints(List<LatLng> fitPoints,
-          {int? padding, int? zoomLevel}) =>
-      CameraUpdate._(CameraUpdateType.fitMapPoints,
-          fitPoints: fitPoints, padding: padding, zoomLevel: zoomLevel ?? -1);
+  factory CameraUpdate.fitMapPoints(
+    List<LatLng> fitPoints, {
+    int? padding,
+    int? zoomLevel,
+  }) => CameraUpdate._(
+    CameraUpdateType.fitMapPoints,
+    fitPoints: fitPoints,
+    padding: padding,
+    zoomLevel: zoomLevel ?? -1,
+  );
 
   factory CameraUpdate.fromMessageable(dynamic payload) {
-    final type =
-        CameraUpdateType.values.firstWhere((e) => e.value == payload['type']);
+    final type = CameraUpdateType.values.firstWhere(
+      (e) => e.value == payload['type'],
+    );
     final angle = payload["angle"];
     final zoomLevel = payload["zoomLevel"];
     final position =
         payload.containsKey("latitude") && payload.containsKey("longitude")
-            ? LatLng.fromMessageable(payload)
-            : null;
+        ? LatLng.fromMessageable(payload)
+        : null;
     return switch (type) {
-      CameraUpdateType.newCenterPoint =>
-        CameraUpdate.newCenterPosition(position!, zoomLevel: zoomLevel),
+      CameraUpdateType.newCenterPoint => CameraUpdate.newCenterPosition(
+        position!,
+        zoomLevel: zoomLevel,
+      ),
       CameraUpdateType.newCameraPos => () {
-          final cameraPosition = CameraPosition.fromMessageable(payload);
-          return CameraUpdate.newCameraPos(cameraPosition);
-        }(),
+        final cameraPosition = CameraPosition.fromMessageable(payload);
+        return CameraUpdate.newCameraPos(cameraPosition);
+      }(),
       CameraUpdateType.newCameraAngle => throw UnimplementedError(),
       CameraUpdateType.zoomTo => CameraUpdate.zoomTo(zoomLevel),
       CameraUpdateType.zoomIn => CameraUpdate.zoomIn(),
@@ -88,9 +102,10 @@ class CameraUpdate with KMessageable {
       CameraUpdateType.rotate => CameraUpdate.rotate(angle),
       CameraUpdateType.tilt => CameraUpdate.tilt(angle),
       CameraUpdateType.fitMapPoints => CameraUpdate.fitMapPoints(
-          payload['points'].map<LatLng>(LatLng.fromMessageable).toList(),
-          padding: payload["padding"],
-          zoomLevel: zoomLevel)
+        payload['points'].map<LatLng>(LatLng.fromMessageable).toList(),
+        padding: payload["padding"],
+        zoomLevel: zoomLevel,
+      ),
     };
   }
 
@@ -116,8 +131,9 @@ class CameraUpdate with KMessageable {
         payload['angle'] = angle;
         break;
       case CameraUpdateType.fitMapPoints:
-        payload['points'] =
-            fitPoints!.map((latlng) => latlng.toMessageable()).toList();
+        payload['points'] = fitPoints!
+            .map((latlng) => latlng.toMessageable())
+            .toList();
         payload['padding'] = padding ?? 0;
         payload['zoomLevel'] = zoomLevel;
         break;
@@ -133,16 +149,15 @@ class CameraUpdate with KMessageable {
     double? angle,
     List<LatLng>? fitPoints,
     int? padding,
-  }) =>
-      CameraUpdate._(
-        type ?? this.type,
-        position: position ?? this.position,
-        zoomLevel: zoomLevel ?? this.zoomLevel,
-        cameraPosition: cameraPosition ?? this.cameraPosition,
-        angle: angle ?? this.angle,
-        fitPoints: fitPoints ?? this.fitPoints,
-        padding: padding ?? this.padding,
-      );
+  }) => CameraUpdate._(
+    type ?? this.type,
+    position: position ?? this.position,
+    zoomLevel: zoomLevel ?? this.zoomLevel,
+    cameraPosition: cameraPosition ?? this.cameraPosition,
+    angle: angle ?? this.angle,
+    fitPoints: fitPoints ?? this.fitPoints,
+    padding: padding ?? this.padding,
+  );
 
   @override
   bool operator ==(Object other) {

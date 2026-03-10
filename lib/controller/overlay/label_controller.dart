@@ -17,15 +17,24 @@ class LabelController extends BaseLabelController {
   final Map<String, Poi> _poi = {};
   final Map<String, PolylineText> _polylineText = {};
 
-  LabelController._(this.channel, this.manager, this.id,
-      {competitionType = BaseLabelController.defaultCompetitionType,
-      competitionUnit = BaseLabelController.defaultCompetitionUnit,
-      orderingType = BaseLabelController.defaultOrderingType,
-      bool visible = true,
-      bool clickable = true,
-      int zOrder = BaseLabelController.defaultZOrder})
-      : super._(competitionType, competitionUnit, orderingType, visible,
-            clickable, zOrder);
+  LabelController._(
+    this.channel,
+    this.manager,
+    this.id, {
+    competitionType = BaseLabelController.defaultCompetitionType,
+    competitionUnit = BaseLabelController.defaultCompetitionUnit,
+    orderingType = BaseLabelController.defaultOrderingType,
+    bool visible = true,
+    bool clickable = true,
+    int zOrder = BaseLabelController.defaultZOrder,
+  }) : super._(
+         competitionType,
+         competitionUnit,
+         orderingType,
+         visible,
+         clickable,
+         zOrder,
+       );
 
   Future<void> _createLabelLayer() async {
     await _invokeMethod("createLabelLayer", {
@@ -91,44 +100,70 @@ class LabelController extends BaseLabelController {
   }
 
   Future<void> _changePoiOffsetPosition(
-      String poiId, double x, double y, bool forceDpScale) async {
-    await _invokeMethod("changePoiOffsetPosition",
-        {"poiId": poiId, "x": x, "y": y, "forceDpScale": forceDpScale});
+    String poiId,
+    double x,
+    double y,
+    bool forceDpScale,
+  ) async {
+    await _invokeMethod("changePoiOffsetPosition", {
+      "poiId": poiId,
+      "x": x,
+      "y": y,
+      "forceDpScale": forceDpScale,
+    });
   }
 
-  Future<void> _changePoiVisible(String poiId, bool visible,
-      {bool? autoMove, int? duration}) async {
+  Future<void> _changePoiVisible(
+    String poiId,
+    bool visible, {
+    bool? autoMove,
+    int? duration,
+  }) async {
     await _invokeMethod("changePoiVisible", {
       "poiId": poiId,
       "visible": visible,
       "autoMove": autoMove,
-      "duration": duration
+      "duration": duration,
     });
   }
 
-  Future<void> _changePoiStyle(String poiId, String styleId,
-      [bool transition = false]) async {
-    await _invokeMethod("changePoiStyle",
-        {"poiId": poiId, "styleId": styleId, "transition": transition});
+  Future<void> _changePoiStyle(
+    String poiId,
+    String styleId, [
+    bool transition = false,
+  ]) async {
+    await _invokeMethod("changePoiStyle", {
+      "poiId": poiId,
+      "styleId": styleId,
+      "transition": transition,
+    });
   }
 
-  Future<void> _changePoiText(String poiId, String text, String styleId,
-      [bool transition = false]) async {
+  Future<void> _changePoiText(
+    String poiId,
+    String text,
+    String styleId, [
+    bool transition = false,
+  ]) async {
     await _invokeMethod("changePoiText", {
       "poiId": poiId,
       "text": text,
       "styleId": styleId,
-      "transition": transition
+      "transition": transition,
     });
   }
 
-  Future<void> _invalidatePoi(String poiId, String styleId, String? text,
-      [bool transition = false]) async {
+  Future<void> _invalidatePoi(
+    String poiId,
+    String styleId,
+    String? text, [
+    bool transition = false,
+  ]) async {
     await _invokeMethod("invalidatePoi", {
       "poiId": poiId,
       "styleId": styleId,
       "text": text,
-      "transition": transition
+      "transition": transition,
     });
   }
 
@@ -138,45 +173,68 @@ class LabelController extends BaseLabelController {
     await _invokeMethod("movePoi", payload);
   }
 
-  Future<void> _movePathPoi(String poiId, List<LatLng> path, int millis,
-      {double? baseRadian,
-      double cornerRadius = 40.0,
-      double jumpThreshold = 200.0}) async {
+  Future<void> _movePathPoi(
+    String poiId,
+    List<LatLng> path,
+    int millis, {
+    double? baseRadian,
+    double cornerRadius = 40.0,
+    double jumpThreshold = 200.0,
+  }) async {
     final payload = {
       "poiId": poiId,
       "path": path.map((e) => e.toMessageable()).toList(),
       "millis": millis,
       "baseRadian": baseRadian,
       "cornerRadius": cornerRadius,
-      "jumpThreshold": jumpThreshold
+      "jumpThreshold": jumpThreshold,
     };
     await _invokeMethod("movePathPoi", payload);
   }
 
   Future<void> _rotatePoi(String poiId, double angle, [double? millis]) async {
-    await _invokeMethod(
-        "rotatePoi", {"poiId": poiId, "angle": angle, "millis": millis});
+    await _invokeMethod("rotatePoi", {
+      "poiId": poiId,
+      "angle": angle,
+      "millis": millis,
+    });
   }
 
-  Future<void> _scalePoi(String poiId, double x, double y,
-      [double? millis]) async {
-    await _invokeMethod(
-        "scalePoi", {"poiId": poiId, "x": x, "y": y, "millis": millis});
+  Future<void> _scalePoi(
+    String poiId,
+    double x,
+    double y, [
+    double? millis,
+  ]) async {
+    await _invokeMethod("scalePoi", {
+      "poiId": poiId,
+      "x": x,
+      "y": y,
+      "millis": millis,
+    });
   }
 
   Future<void> _rankPoi(String poiId, int rank) async {
     await _invokeMethod("rankPoi", {"poiId": poiId, "rank": rank});
   }
 
-  Future<void> _changePolylineTextStyle(String poiId, PolylineTextStyle style,
-      [String? text]) async {
-    await _invokeMethod("changePolylineTextStyle",
-        {"poiId": poiId, "styles": style.toMessageable(), "text": text});
+  Future<void> _changePolylineTextStyle(
+    String poiId,
+    PolylineTextStyle style, [
+    String? text,
+  ]) async {
+    await _invokeMethod("changePolylineTextStyle", {
+      "poiId": poiId,
+      "styles": style.toMessageable(),
+      "text": text,
+    });
   }
 
   Future<void> _changePolylineTextVisible(String labelId, bool visible) async {
-    await _invokeMethod(
-        "changePolylineTextVisible", {"labelId": labelId, "visible": visible});
+    await _invokeMethod("changePolylineTextVisible", {
+      "labelId": labelId,
+      "visible": visible,
+    });
   }
 
   /// 지도에 새로운 [Poi]를 그립니다.
@@ -206,21 +264,24 @@ class LabelController extends BaseLabelController {
         "styleId": style.id,
         "transform": transform?.value,
         "visible": visible,
-      }
+      },
     };
     payload["poi"].addAll(position.toMessageable());
     String? poiId = await _invokeMethod("addPoi", payload);
     if (poiId == null) {
       throw OverlayRegistrationFailedError(id, type);
     }
-    final poi = Poi._(this, poiId,
-        transform: transform,
-        position: position,
-        style: style,
-        text: text,
-        rank: rank ?? 0,
-        visible: visible,
-        onClick: onClick);
+    final poi = Poi._(
+      this,
+      poiId,
+      transform: transform,
+      position: position,
+      style: style,
+      text: text,
+      rank: rank ?? 0,
+      visible: visible,
+      onClick: onClick,
+    );
     _poi[poiId] = poi;
     return poi;
   }
@@ -232,9 +293,7 @@ class LabelController extends BaseLabelController {
 
   /// 입력된 [poi]에 따라 지도에 그려진 [Poi]를 삭제합니다.
   Future<void> removePoi(Poi poi) async {
-    await _invokeMethod("removePoi", {
-      "poiId": poi.id,
-    });
+    await _invokeMethod("removePoi", {"poiId": poi.id});
     _poi.remove(poi.id);
   }
 
@@ -268,15 +327,20 @@ class LabelController extends BaseLabelController {
         "style": style.toMessageable(),
         "id": id,
         "text": text,
-        "visible": visible
-      }
+        "visible": visible,
+      },
     };
     String? labelId = await _invokeMethod("addPolylineText", payload);
     if (labelId == null) {
       throw OverlayRegistrationFailedError(id, type);
     }
-    final label = PolylineText._(this, labelId,
-        style: style, text: text, points: position);
+    final label = PolylineText._(
+      this,
+      labelId,
+      style: style,
+      text: text,
+      points: position,
+    );
     _polylineText[labelId] = label;
     return label;
   }
@@ -288,9 +352,7 @@ class LabelController extends BaseLabelController {
 
   /// 입력된 [label]에 따라 지도에 그려진 [PolylineText]를 삭제합니다.
   Future<void> removePolylineText(PolylineText label) async {
-    await _invokeMethod("removePolylineText", {
-      "labelId": label.id,
-    });
+    await _invokeMethod("removePolylineText", {"labelId": label.id});
     _polylineText.remove(label.id);
   }
 

@@ -23,8 +23,12 @@ mixin BadgeablePoi {
     String? badgeId,
     int? zOrder,
   }) async {
-    String? badgeIdResult = await _controller._addPoiBadge(id,
-        image: image, offsetX: x, offsetY: y);
+    String? badgeIdResult = await _controller._addPoiBadge(
+      id,
+      image: image,
+      offsetX: x,
+      offsetY: y,
+    );
     if (badgeIdResult == null) {
       throw OverlayRegistrationFailedError(badgeId, _controller.type);
     }

@@ -7,9 +7,8 @@ class Compass extends DefaultGUI {
 
   final KakaoMapController _controller;
 
-  Compass._({
-    required KakaoMapController controller,
-  }) : _controller = controller;
+  Compass._({required KakaoMapController controller})
+    : _controller = controller;
 
   /// 지도에 표시된 나침판을 숨깁니다.
   Future<void> hide() async {

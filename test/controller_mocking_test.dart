@@ -22,10 +22,7 @@ void main() {
     'longitude': 127.5678,
   };
 
-  const dummyToScreenPointPayload = <String, dynamic>{
-    'x': 320.5,
-    'y': 640.25,
-  };
+  const dummyToScreenPointPayload = <String, dynamic>{'x': 320.5, 'y': 640.25};
 
   const dummyCanPositionVisiblePayload = true;
   const dummyBuildingHeightScalePayload = 1.75;
@@ -35,28 +32,30 @@ void main() {
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(viewChannel, (call) async {
-      switch (call.method) {
-        case 'getCameraPosition':
-          return dummyCameraPayload;
-        case 'fromScreenPoint':
-          return dummyFromScreenPointPayload;
-        case 'toScreenPoint':
-          return dummyToScreenPointPayload;
-        case 'canPositionVisible':
-        case 'canShowPosition':
-          return dummyCanPositionVisiblePayload;
-        case 'getBuildingHeightScale':
-          return dummyBuildingHeightScalePayload;
-        default:
-          return null;
-      }
-    });
+          switch (call.method) {
+            case 'getCameraPosition':
+              return dummyCameraPayload;
+            case 'fromScreenPoint':
+              return dummyFromScreenPointPayload;
+            case 'toScreenPoint':
+              return dummyToScreenPointPayload;
+            case 'canPositionVisible':
+            case 'canShowPosition':
+              return dummyCanPositionVisiblePayload;
+            case 'getBuildingHeightScale':
+              return dummyBuildingHeightScalePayload;
+            default:
+              return null;
+          }
+        });
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(overlayChannel, (call) async => null);
 
-    controller =
-        KakaoMapControllerImplement(viewChannel, overlayChannel: overlayChannel);
+    controller = KakaoMapControllerImplement(
+      viewChannel,
+      overlayChannel: overlayChannel,
+    );
   });
 
   tearDown(() {
@@ -66,17 +65,20 @@ void main() {
         .setMockMethodCallHandler(overlayChannel, null);
   });
 
-  test('getCameraPosition returns CameraPosition mapped from channel payload', () async {
-    final result = await controller.getCameraPosition();
+  test(
+    'getCameraPosition returns CameraPosition mapped from channel payload',
+    () async {
+      final result = await controller.getCameraPosition();
 
-    expect(result, isA<CameraPosition>());
-    expect(result.position.latitude, dummyCameraPayload['latitude']);
-    expect(result.position.longitude, dummyCameraPayload['longitude']);
-    expect(result.zoomLevel, dummyCameraPayload['zoomLevel']);
-    expect(result.tiltAngle, dummyCameraPayload['tiltAngle']);
-    expect(result.rotationAngle, dummyCameraPayload['rotationAngle']);
-    expect(result.height, dummyCameraPayload['height']);
-  });
+      expect(result, isA<CameraPosition>());
+      expect(result.position.latitude, dummyCameraPayload['latitude']);
+      expect(result.position.longitude, dummyCameraPayload['longitude']);
+      expect(result.zoomLevel, dummyCameraPayload['zoomLevel']);
+      expect(result.tiltAngle, dummyCameraPayload['tiltAngle']);
+      expect(result.rotationAngle, dummyCameraPayload['rotationAngle']);
+      expect(result.height, dummyCameraPayload['height']);
+    },
+  );
 
   test('fromScreenPoint returns LatLng mapped from channel payload', () async {
     final result = await controller.fromScreenPoint(100, 200);
@@ -97,20 +99,23 @@ void main() {
   });
 
   test('canShowPosition returns boolean from channel response', () async {
-    final result = await controller.canShowPosition(
-      10,
-      const [LatLng(37.1, 127.1), LatLng(37.2, 127.2)],
-    );
+    final result = await controller.canShowPosition(10, const [
+      LatLng(37.1, 127.1),
+      LatLng(37.2, 127.2),
+    ]);
 
     expect(result, isA<bool>());
     expect(result, dummyCanPositionVisiblePayload);
   });
 
-  test('fetchBuildingHeightScale returns double and updates cached property', () async {
-    final result = await controller.fetchBuildingHeightScale();
+  test(
+    'fetchBuildingHeightScale returns double and updates cached property',
+    () async {
+      final result = await controller.fetchBuildingHeightScale();
 
-    expect(result, isA<double>());
-    expect(result, dummyBuildingHeightScalePayload);
-    expect(controller.buildingHeightScale, dummyBuildingHeightScalePayload);
-  });
+      expect(result, isA<double>());
+      expect(result, dummyBuildingHeightScalePayload);
+      expect(controller.buildingHeightScale, dummyBuildingHeightScalePayload);
+    },
+  );
 }

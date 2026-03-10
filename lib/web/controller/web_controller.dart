@@ -14,13 +14,19 @@ class KakaoMapWebController
     required this.overlayChannel,
   }) {
     if (controller == null) {
-      final error = KakaoMapError("KAKAO_MAP_WEB_LOAD_FAILED",
-          "Timeout loading map elements. Please retry later.");
+      final error = KakaoMapError(
+        "KAKAO_MAP_WEB_LOAD_FAILED",
+        "Timeout loading map elements. Please retry later.",
+      );
       onMapError(error);
       return;
     }
     overlay = WebOverlayController(
-        overlayChannel, controller, onPoiClick, onLodPoiClick);
+      overlayChannel,
+      controller,
+      onPoiClick,
+      onLodPoiClick,
+    );
 
     // ignore: prefer_initializing_formals
     this.controller = controller;
@@ -36,61 +42,68 @@ class KakaoMapWebController
   Future<void> setEventTrigger(int event) async {
     if (EventType.onCameraMoveStart.compareTo(event)) {
       addEventListener(
-          controller,
-          "zoom_start",
-          (() {
-            onCameraMoveStart(GestureType.zoom);
-          }).toJS);
+        controller,
+        "zoom_start",
+        (() {
+          onCameraMoveStart(GestureType.zoom);
+        }).toJS,
+      );
       addEventListener(
-          controller,
-          "dragstart",
-          (() {
-            onCameraMoveStart(GestureType.pan);
-          }).toJS);
+        controller,
+        "dragstart",
+        (() {
+          onCameraMoveStart(GestureType.pan);
+        }).toJS,
+      );
     }
     if (EventType.onCameraMoveEnd.compareTo(event)) {
       addEventListener(
-          controller,
-          "dragend",
-          (() {
-            getCameraPosition().then((position) {
-              onCameraMoveEnd(position, GestureType.pan);
-            });
-          }).toJS);
+        controller,
+        "dragend",
+        (() {
+          getCameraPosition().then((position) {
+            onCameraMoveEnd(position, GestureType.pan);
+          });
+        }).toJS,
+      );
       addEventListener(
-          controller,
-          "zoom_changed",
-          (() {
-            getCameraPosition().then((position) {
-              onCameraMoveEnd(position, GestureType.zoom);
-            });
-          }).toJS);
+        controller,
+        "zoom_changed",
+        (() {
+          getCameraPosition().then((position) {
+            onCameraMoveEnd(position, GestureType.zoom);
+          });
+        }).toJS,
+      );
       addEventListener(
-          controller,
-          "dblclick",
-          (() {
-            getCameraPosition().then((position) {
-              onCameraMoveEnd(position, GestureType.oneFingerDoubleTap);
-            });
-          }).toJS);
+        controller,
+        "dblclick",
+        (() {
+          getCameraPosition().then((position) {
+            onCameraMoveEnd(position, GestureType.oneFingerDoubleTap);
+          });
+        }).toJS,
+      );
     }
     if (EventType.onMapClick.compareTo(event) ||
         EventType.onTerrainClick.compareTo(event)) {
       addEventListener(
-          controller,
-          "click",
-          ((WebMouseEvent mouse) {
-            onMapClick.call(mouse.getPoint(), mouse.getPosition());
-            onTerrainClick.call(mouse.getPoint(), mouse.getPosition());
-          }).toJS);
+        controller,
+        "click",
+        ((WebMouseEvent mouse) {
+          onMapClick.call(mouse.getPoint(), mouse.getPosition());
+          onTerrainClick.call(mouse.getPoint(), mouse.getPosition());
+        }).toJS,
+      );
     }
     if (EventType.onTerrainLongClick.compareTo(event)) {
       addEventListener(
-          controller,
-          "rightclick",
-          ((WebMouseEvent mouse) {
-            onTerrainLongClick.call(mouse.getPoint(), mouse.getPosition());
-          }).toJS);
+        controller,
+        "rightclick",
+        ((WebMouseEvent mouse) {
+          onTerrainLongClick.call(mouse.getPoint(), mouse.getPosition());
+        }).toJS,
+      );
     }
   }
 
@@ -99,11 +112,13 @@ class KakaoMapWebController
     final bound = controller.getBounds();
     final ne = bound.getNorthEast();
     final sw = bound.getSouthWest();
-    return !position.any((point) =>
-        point.latitude > ne.getLat() ||
-        point.latitude < sw.getLat() ||
-        point.longitude > ne.getLng() ||
-        point.longitude < sw.getLng());
+    return !position.any(
+      (point) =>
+          point.latitude > ne.getLat() ||
+          point.latitude < sw.getLat() ||
+          point.longitude > ne.getLng() ||
+          point.longitude < sw.getLng(),
+    );
   }
 
   @override
@@ -135,9 +150,10 @@ class KakaoMapWebController
 
   @override
   Future<dynamic> getCameraPosition() async {
-    return CameraPosition(controller.getCenter().toLatLng(),
-            _reverseCalculateZoomLevel(controller.getLevel()))
-        .toMessageable();
+    return CameraPosition(
+      controller.getCenter().toLatLng(),
+      _reverseCalculateZoomLevel(controller.getLevel()),
+    ).toMessageable();
   }
 
   @override
@@ -152,10 +168,12 @@ class KakaoMapWebController
   }
 
   @override
-  Future<void> moveCamera(CameraUpdate camera,
-      {CameraAnimation? animation}) async {
+  Future<void> moveCamera(
+    CameraUpdate camera, {
+    CameraAnimation? animation,
+  }) async {
     JSAny animationOption = {
-      "animate": animation == null ? false : {"duration": animation.duration}
+      "animate": animation == null ? false : {"duration": animation.duration},
     }.jsify()!;
     final level = controller.getLevel();
     switch (camera.type) {
@@ -164,14 +182,20 @@ class KakaoMapWebController
             ? level
             : _calculateZoomLevel(camera.zoomLevel);
         controller.jump(
-            WebLatLng.fromLatLng(camera.position!), zoomLevel, animationOption);
+          WebLatLng.fromLatLng(camera.position!),
+          zoomLevel,
+          animationOption,
+        );
         break;
       case CameraUpdateType.newCameraPos:
         final zoomLevel = camera.cameraPosition!.zoomLevel == -1
             ? level
             : _calculateZoomLevel(camera.cameraPosition!.zoomLevel);
-        controller.jump(WebLatLng.fromLatLng(camera.cameraPosition!.position),
-            zoomLevel, animationOption);
+        controller.jump(
+          WebLatLng.fromLatLng(camera.cameraPosition!.position),
+          zoomLevel,
+          animationOption,
+        );
         break;
       case CameraUpdateType.zoomTo:
         final zoomLevel = camera.zoomLevel == -1
@@ -194,8 +218,13 @@ class KakaoMapWebController
         camera.fitPoints!
             .map((e) => WebLatLng.fromLatLng(e))
             .forEach((e) => bounds.extend(e));
-        controller.setBounds(bounds, camera.padding ?? 0, camera.padding ?? 0,
-            camera.padding ?? 0, camera.padding ?? 0);
+        controller.setBounds(
+          bounds,
+          camera.padding ?? 0,
+          camera.padding ?? 0,
+          camera.padding ?? 0,
+          camera.padding ?? 0,
+        );
     }
   }
 
@@ -241,7 +270,11 @@ class KakaoMapWebController
 
   @override
   Future<void> defaultGUIposition(
-      DefaultGUIType type, MapGravity gravity, double x, double y) async {
+    DefaultGUIType type,
+    MapGravity gravity,
+    double x,
+    double y,
+  ) async {
     if (type != DefaultGUIType.compass &&
         gravity.verticalAlign == VerticalAlign.bottom) {
       final position = switch (gravity.horizontalAlign) {
@@ -257,8 +290,10 @@ class KakaoMapWebController
 
   @override
   void onCameraMoveEnd(CameraPosition position, GestureType gestureType) {
-    channel.invokeMethod("onCameraMoveEnd",
-        {"gesture": gestureType.value, "position": position.toMessageable()});
+    channel.invokeMethod("onCameraMoveEnd", {
+      "gesture": gestureType.value,
+      "position": position.toMessageable(),
+    });
   }
 
   @override
@@ -278,8 +313,10 @@ class KakaoMapWebController
 
   @override
   void onMapClick(KPoint point, LatLng position) {
-    channel.invokeMethod("onMapClick",
-        {"point": point.toMessageable(), "position": position.toMessageable()});
+    channel.invokeMethod("onMapClick", {
+      "point": point.toMessageable(),
+      "position": position.toMessageable(),
+    });
   }
 
   @override
@@ -325,13 +362,17 @@ class KakaoMapWebController
 
   @override
   void onTerrainClick(KPoint point, LatLng position) {
-    channel.invokeMethod("onMapClick",
-        {"point": point.toMessageable(), "position": position.toMessageable()});
+    channel.invokeMethod("onMapClick", {
+      "point": point.toMessageable(),
+      "position": position.toMessageable(),
+    });
   }
 
   @override
   void onTerrainLongClick(KPoint point, LatLng position) {
-    channel.invokeMethod("onMapClick",
-        {"point": point.toMessageable(), "position": position.toMessageable()});
+    channel.invokeMethod("onMapClick", {
+      "point": point.toMessageable(),
+      "position": position.toMessageable(),
+    });
   }
 }

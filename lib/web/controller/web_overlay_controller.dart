@@ -20,21 +20,38 @@ class WebOverlayController {
   final void Function(String layerId, String poiId)? onLodPoiClick;
 
   WebOverlayController(
-      this.channel, this.controller, this.onPoiClick, this.onLodPoiClick)
-      : _uuid = const Uuid() {
+    this.channel,
+    this.controller,
+    this.onPoiClick,
+    this.onLodPoiClick,
+  ) : _uuid = const Uuid() {
     initalizeOverlayLayer();
     channel.setMethodCallHandler(overlayHandle);
   }
 
   void initalizeOverlayLayer() {
     _labelLayer[LabelController.defaultId] = WebLabelController._(
-        LabelController.defaultId, controller, this, false);
+      LabelController.defaultId,
+      controller,
+      this,
+      false,
+    );
     _lodLabelLayer[LodLabelController.defaultId] = WebLabelController._(
-        LodLabelController.defaultId, controller, this, true);
-    _shapeLayer[ShapeController.defaultId] =
-        WebShapeController._(ShapeController.defaultId, controller, this);
-    _routeLayer[RouteController.defaultId] =
-        WebRouteController._(RouteController.defaultId, controller, this);
+      LodLabelController.defaultId,
+      controller,
+      this,
+      true,
+    );
+    _shapeLayer[ShapeController.defaultId] = WebShapeController._(
+      ShapeController.defaultId,
+      controller,
+      this,
+    );
+    _routeLayer[RouteController.defaultId] = WebRouteController._(
+      RouteController.defaultId,
+      controller,
+      this,
+    );
     _trackingLayer = WebTrackingController._(controller, this);
 
     _labelLayer[LabelController.defaultId]!.createLabelLayer();
@@ -70,27 +87,43 @@ class WebOverlayController {
 
   Future<dynamic> overlayHandle(MethodCall method) async {
     final argument = method.arguments;
-    final type =
-        OverlayType.values.firstWhere((e) => e.value == argument["type"]);
-    final layerId =
-        argument.containsKey("layerId") ? argument["layerId"] : null;
+    final type = OverlayType.values.firstWhere(
+      (e) => e.value == argument["type"],
+    );
+    final layerId = argument.containsKey("layerId")
+        ? argument["layerId"]
+        : null;
 
     switch (method.method) {
       case "createLabelLayer":
-        _labelLayer[layerId!] =
-            WebLabelController._(layerId!, controller, this, false);
+        _labelLayer[layerId!] = WebLabelController._(
+          layerId!,
+          controller,
+          this,
+          false,
+        );
         break;
       case "createLodLabelLayer":
-        _lodLabelLayer[layerId!] =
-            WebLabelController._(layerId!, controller, this, true);
+        _lodLabelLayer[layerId!] = WebLabelController._(
+          layerId!,
+          controller,
+          this,
+          true,
+        );
         break;
       case "createRouteLayer":
-        _routeLayer[layerId!] =
-            WebRouteController._(layerId!, controller, this);
+        _routeLayer[layerId!] = WebRouteController._(
+          layerId!,
+          controller,
+          this,
+        );
         break;
       case "createShapeLayer":
-        _shapeLayer[layerId!] =
-            WebShapeController._(layerId!, controller, this);
+        _shapeLayer[layerId!] = WebShapeController._(
+          layerId!,
+          controller,
+          this,
+        );
         break;
       case "removeLabelLayer":
         _labelLayer[layerId!]!.removeLabelLayer();
@@ -106,8 +139,10 @@ class WebOverlayController {
         return;
       case "addPoiStyle":
         final poiStyleId = argument["styleId"] ?? _uuid.v4();
-        _poiStyles[poiStyleId] =
-            PoiStyle.fromMessageable(argument["styles"], poiStyleId);
+        _poiStyles[poiStyleId] = PoiStyle.fromMessageable(
+          argument["styles"],
+          poiStyleId,
+        );
         return poiStyleId;
       case "addRouteStyle":
         final routeStyleId = argument["styleId"] ?? _uuid.v4();
@@ -118,15 +153,19 @@ class WebOverlayController {
       case "addPolylineShapeStyle":
         final polylineStyleId = argument["styleId"] ?? _uuid.v4();
         _polylineStyles[polylineStyleId] = argument["styles"]
-            .map<PolylineStyle>((payload) =>
-                PolylineStyle.fromMessageable(payload, polylineStyleId))
+            .map<PolylineStyle>(
+              (payload) =>
+                  PolylineStyle.fromMessageable(payload, polylineStyleId),
+            )
             .toList();
         return polylineStyleId;
       case "addPolygonShapeStyle":
         final polygonStyleId = argument["styleId"] ?? _uuid.v4();
         _polygonStyles[polygonStyleId] = argument["styles"]
-            .map<PolygonStyle>((payload) =>
-                PolygonStyle.fromMessageable(payload, polygonStyleId))
+            .map<PolygonStyle>(
+              (payload) =>
+                  PolygonStyle.fromMessageable(payload, polygonStyleId),
+            )
             .toList();
         return polygonStyleId;
     }

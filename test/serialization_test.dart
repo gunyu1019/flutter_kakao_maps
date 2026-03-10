@@ -89,7 +89,10 @@ void main() {
         expect(restoredOther.pattern, isNull);
       } else {
         expect(restoredOther.pattern, isNotNull);
-        expectRoutePatternEquals(originalOther.pattern!, restoredOther.pattern!);
+        expectRoutePatternEquals(
+          originalOther.pattern!,
+          restoredOther.pattern!,
+        );
       }
     }
   }
@@ -232,37 +235,42 @@ void main() {
     test(
       'round-trip preserves nested fields and other styles',
       () {
-        final original = PoiStyle(
-          id: 'poi-style-main',
-          applyDpScale: false,
-          anchor: const KPoint(0.25, 0.75),
-          padding: 8.0,
-          icon: KImage.fromData(Uint8List.fromList([11, 22, 33]), 20, 20),
-          iconTransition: const PoiTransition(
-            entrance: Transition.alpha,
-            exit: Transition.scale,
-          ),
-          textGravity:
-              const MapGravity(HorizontalAlign.right, VerticalAlign.bottom),
-          textStyle: const [
-            PoiTextStyle(font: 'A', size: 16, color: Color(0xFF111111)),
-            PoiTextStyle(font: 'B', size: 14, color: Color(0xFF222222)),
-          ],
-          textTransition: const PoiTransition(
-            entrance: Transition.scale,
-            exit: Transition.alpha,
-          ),
-          zoomLevel: 5,
-        )..addStyle(
-            zoomLevel: 9,
-            applyDpScale: true,
-            anchor: const KPoint(0.5, 1.0),
-            padding: 2,
-            icon: null,
-            textStyle: const [],
-            textTransition:
-                const PoiTransition(entrance: Transition.none, exit: Transition.none),
-          );
+        final original =
+            PoiStyle(
+              id: 'poi-style-main',
+              applyDpScale: false,
+              anchor: const KPoint(0.25, 0.75),
+              padding: 8.0,
+              icon: KImage.fromData(Uint8List.fromList([11, 22, 33]), 20, 20),
+              iconTransition: const PoiTransition(
+                entrance: Transition.alpha,
+                exit: Transition.scale,
+              ),
+              textGravity: const MapGravity(
+                HorizontalAlign.right,
+                VerticalAlign.bottom,
+              ),
+              textStyle: const [
+                PoiTextStyle(font: 'A', size: 16, color: Color(0xFF111111)),
+                PoiTextStyle(font: 'B', size: 14, color: Color(0xFF222222)),
+              ],
+              textTransition: const PoiTransition(
+                entrance: Transition.scale,
+                exit: Transition.alpha,
+              ),
+              zoomLevel: 5,
+            )..addStyle(
+              zoomLevel: 9,
+              applyDpScale: true,
+              anchor: const KPoint(0.5, 1.0),
+              padding: 2,
+              icon: null,
+              textStyle: const [],
+              textTransition: const PoiTransition(
+                entrance: Transition.none,
+                exit: Transition.none,
+              ),
+            );
 
         final payload = original.toMessageable();
         expect(payload, isA<Map<String, dynamic>>());
@@ -275,15 +283,29 @@ void main() {
         expect(restored.padding, original.padding);
         expect(restored.icon, isNotNull);
         expectKImageEquals(original.icon!, restored.icon!);
-        expectPoiTransitionEquals(original.iconTransition, restored.iconTransition);
-        expect(restored.textGravity.horizontalAlign,
-            original.textGravity.horizontalAlign);
-        expect(restored.textGravity.verticalAlign, original.textGravity.verticalAlign);
+        expectPoiTransitionEquals(
+          original.iconTransition,
+          restored.iconTransition,
+        );
+        expect(
+          restored.textGravity.horizontalAlign,
+          original.textGravity.horizontalAlign,
+        );
+        expect(
+          restored.textGravity.verticalAlign,
+          original.textGravity.verticalAlign,
+        );
         expect(restored.textStyle.length, original.textStyle.length);
         for (var i = 0; i < original.textStyle.length; i++) {
-          expectPoiTextStyleEquals(original.textStyle[i], restored.textStyle[i]);
+          expectPoiTextStyleEquals(
+            original.textStyle[i],
+            restored.textStyle[i],
+          );
         }
-        expectPoiTransitionEquals(original.textTransition, restored.textTransition);
+        expectPoiTransitionEquals(
+          original.textTransition,
+          restored.textTransition,
+        );
         expect(restored.zoomLevel, original.zoomLevel);
         expect(restored.otherStyleCount, original.otherStyleCount);
 
@@ -391,7 +413,10 @@ void main() {
       final restored = CameraUpdate.fromMessageable(payload);
       expect(restored.type, original.type);
       expect(restored.cameraPosition, isNotNull);
-      expectCameraPositionEquals(original.cameraPosition!, restored.cameraPosition!);
+      expectCameraPositionEquals(
+        original.cameraPosition!,
+        restored.cameraPosition!,
+      );
     });
 
     test('round-trip preserves zoomTo update', () {
@@ -416,31 +441,34 @@ void main() {
       expect(restored.angle, original.angle);
     });
 
-    test('round-trip preserves fitMapPoints update and empty list edge case', () {
-      final original = CameraUpdate.fitMapPoints(
-        const [LatLng(37.5, 126.9), LatLng(37.6, 127.0)],
-        padding: 20,
-        zoomLevel: 12,
-      );
+    test(
+      'round-trip preserves fitMapPoints update and empty list edge case',
+      () {
+        final original = CameraUpdate.fitMapPoints(
+          const [LatLng(37.5, 126.9), LatLng(37.6, 127.0)],
+          padding: 20,
+          zoomLevel: 12,
+        );
 
-      final payload = original.toMessageable();
-      expect(payload, isA<Map<String, dynamic>>());
+        final payload = original.toMessageable();
+        expect(payload, isA<Map<String, dynamic>>());
 
-      final restored = CameraUpdate.fromMessageable(payload);
-      expect(restored.type, original.type);
-      expect(restored.padding, original.padding);
-      expect(restored.zoomLevel, original.zoomLevel);
-      expect(restored.fitPoints, isNotNull);
-      expect(restored.fitPoints!.length, original.fitPoints!.length);
-      for (var i = 0; i < original.fitPoints!.length; i++) {
-        expectLatLngEquals(original.fitPoints![i], restored.fitPoints![i]);
-      }
+        final restored = CameraUpdate.fromMessageable(payload);
+        expect(restored.type, original.type);
+        expect(restored.padding, original.padding);
+        expect(restored.zoomLevel, original.zoomLevel);
+        expect(restored.fitPoints, isNotNull);
+        expect(restored.fitPoints!.length, original.fitPoints!.length);
+        for (var i = 0; i < original.fitPoints!.length; i++) {
+          expectLatLngEquals(original.fitPoints![i], restored.fitPoints![i]);
+        }
 
-      final emptyOriginal = CameraUpdate.fitMapPoints(const [], padding: 0);
-      final emptyPayload = emptyOriginal.toMessageable();
-      final emptyRestored = CameraUpdate.fromMessageable(emptyPayload);
-      expect(emptyRestored.fitPoints, isEmpty);
-    });
+        final emptyOriginal = CameraUpdate.fitMapPoints(const [], padding: 0);
+        final emptyPayload = emptyOriginal.toMessageable();
+        final emptyRestored = CameraUpdate.fromMessageable(emptyPayload);
+        expect(emptyRestored.fitPoints, isEmpty);
+      },
+    );
   });
 
   group('RoutePattern Serialization', () {
@@ -477,28 +505,28 @@ void main() {
 
   group('RouteStyle Serialization', () {
     test('round-trip preserves nested pattern and otherStyle', () {
-      final original = RouteStyle(
-        const Color(0xFF00AAFF),
-        6.5,
-        id: 'route-style-main',
-        strokeColor: const Color(0xFF005577),
-        strokeWidth: 1.5,
-        pattern: RoutePattern(
-          KImage.fromData(Uint8List.fromList([9, 8, 7]), 11, 11),
-          30,
-          symbolImage: null,
-          pinStart: false,
-          pinEnd: true,
-        ),
-        zoomLevel: 7,
-      )
-        ..addStyle(
-          10,
-          const Color(0xFFAA00FF),
-          4.0,
-          strokeColor: const Color(0xFF330055),
-          strokeWidth: 2.0,
-        );
+      final original =
+          RouteStyle(
+            const Color(0xFF00AAFF),
+            6.5,
+            id: 'route-style-main',
+            strokeColor: const Color(0xFF005577),
+            strokeWidth: 1.5,
+            pattern: RoutePattern(
+              KImage.fromData(Uint8List.fromList([9, 8, 7]), 11, 11),
+              30,
+              symbolImage: null,
+              pinStart: false,
+              pinEnd: true,
+            ),
+            zoomLevel: 7,
+          )..addStyle(
+            10,
+            const Color(0xFFAA00FF),
+            4.0,
+            strokeColor: const Color(0xFF330055),
+            strokeWidth: 2.0,
+          );
 
       final payload = original.toMessageable();
       expect(payload, isA<Map<String, dynamic>>());
@@ -524,20 +552,21 @@ void main() {
 
   group('PolylineStyle Serialization', () {
     test('round-trip preserves all fields and otherStyle', () {
-      final original = PolylineStyle(
-        const Color(0xFF123123),
-        5.0,
-        id: 'polyline-style-main',
-        strokeWidth: 1.0,
-        strokeColor: const Color(0xFF456456),
-        zoomLevel: 3,
-      )..addStyle(
-          8,
-          color: const Color(0xFFABCDEF),
-          lineWidth: 7.0,
-          strokeWidth: 2.5,
-          strokeColor: const Color(0xFFFEDCBA),
-        );
+      final original =
+          PolylineStyle(
+            const Color(0xFF123123),
+            5.0,
+            id: 'polyline-style-main',
+            strokeWidth: 1.0,
+            strokeColor: const Color(0xFF456456),
+            zoomLevel: 3,
+          )..addStyle(
+            8,
+            color: const Color(0xFFABCDEF),
+            lineWidth: 7.0,
+            strokeWidth: 2.5,
+            strokeColor: const Color(0xFFFEDCBA),
+          );
 
       final payload = original.toMessageable();
       expect(payload, isA<Map<String, dynamic>>());
@@ -562,18 +591,19 @@ void main() {
 
   group('PolygonStyle Serialization', () {
     test('round-trip preserves all fields and otherStyle', () {
-      final original = PolygonStyle(
-        const Color(0x33223344),
-        id: 'polygon-style-main',
-        strokeWidth: 1.3,
-        strokeColor: const Color(0xFF8899AA),
-        zoomLevel: 4,
-      )..addStyle(
-          9,
-          const Color(0x55445566),
-          strokeWidth: 2.2,
-          strokeColor: const Color(0xFFAA9988),
-        );
+      final original =
+          PolygonStyle(
+            const Color(0x33223344),
+            id: 'polygon-style-main',
+            strokeWidth: 1.3,
+            strokeColor: const Color(0xFF8899AA),
+            zoomLevel: 4,
+          )..addStyle(
+            9,
+            const Color(0x55445566),
+            strokeWidth: 2.2,
+            strokeColor: const Color(0xFFAA9988),
+          );
 
       final payload = original.toMessageable();
       expect(payload, isA<Map<String, dynamic>>());
@@ -597,7 +627,11 @@ void main() {
 
   group('RouteSegment Serialization', () {
     test('round-trip preserves points, styleIndex and curveType', () {
-      final style = RouteStyle(const Color(0xFF556677), 4.0, id: 'route-style-1');
+      final style = RouteStyle(
+        const Color(0xFF556677),
+        4.0,
+        id: 'route-style-1',
+      );
       final option = MultipleRouteOption([style], id: 'multi-1');
       option.addRouteWithIndex(
         const [LatLng(37.1, 127.1), LatLng(37.2, 127.2)],
@@ -614,7 +648,11 @@ void main() {
     });
 
     test('round-trip with empty points list', () {
-      final style = RouteStyle(const Color(0xFF000000), 2.0, id: 'route-style-2');
+      final style = RouteStyle(
+        const Color(0xFF000000),
+        2.0,
+        id: 'route-style-2',
+      );
       final option = MultipleRouteOption([style], id: 'multi-2');
       option.addRouteWithIndex(const [], 0, CurveType.none);
       final original = option.segments.first;
@@ -631,26 +669,26 @@ void main() {
     test('round-trip preserves id, zOrder, routes and styles mapping', () {
       final styleA = RouteStyle(const Color(0xFF001122), 3.0, id: 'style-a');
       final styleB = RouteStyle(const Color(0xFF334455), 5.0, id: 'style-b');
-      final original = MultipleRouteOption(
-        [styleA, styleB],
-        id: 'route-option-1',
-        zOrder: 77,
-      )
-        ..addRouteWithIndex(
-          const [LatLng(36.1, 127.1), LatLng(36.2, 127.2)],
-          0,
-          CurveType.left,
-        )
-        ..addRouteWithIndex(
-          const [LatLng(36.3, 127.3)],
-          1,
-          CurveType.none,
-        );
+      final original =
+          MultipleRouteOption(
+              [styleA, styleB],
+              id: 'route-option-1',
+              zOrder: 77,
+            )
+            ..addRouteWithIndex(
+              const [LatLng(36.1, 127.1), LatLng(36.2, 127.2)],
+              0,
+              CurveType.left,
+            )
+            ..addRouteWithIndex(const [LatLng(36.3, 127.3)], 1, CurveType.none);
 
       final payload = original.toMessageable();
       expect(payload, isA<Map<String, dynamic>>());
 
-      final restored = MultipleRouteOption.fromMessageable(payload, [styleA, styleB]);
+      final restored = MultipleRouteOption.fromMessageable(payload, [
+        styleA,
+        styleB,
+      ]);
 
       expect(restored.id, original.id);
       expect(restored.zOrder, original.zOrder);

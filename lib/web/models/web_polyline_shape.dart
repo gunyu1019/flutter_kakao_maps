@@ -13,8 +13,13 @@ class WebPolylineShape {
   PolylineStyle style;
   int currentLevel;
 
-  WebPolylineShape(this.id, this.element, this.strokeElement,
-      {required this.option, required this.strokeOption, required this.style})
-      : styleId = style.id!,
-        currentLevel = style.zoomLevel;
+  WebPolylineShape(
+    this.id,
+    this.element,
+    this.strokeElement, {
+    required this.option,
+    required this.strokeOption,
+    required this.style,
+  }) : styleId = style.id!,
+       currentLevel = style.zoomLevel;
 }
