@@ -2,11 +2,11 @@ name: Verify Lint
 
 on:
   workflow_dispatch:
+  workflow_call:
   push:
-    tags:
-    - 'v[0-9]+.[0-9]+.[0-9]+'
+    branches: [ "main" ]
   pull_request: 
-    branches: develop
+    branches: [ "main" ]
     types: [opened, reopened, synchronize]
     
 jobs:

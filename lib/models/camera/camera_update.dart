@@ -21,7 +21,7 @@ class CameraUpdate with KMessageable {
     this.position,
     this.zoomLevel = -1,
     this.cameraPosition,
-    this.angle = -1.0,
+    this.angle = 1.0,
     this.fitPoints,
     this.padding,
   });
@@ -100,6 +100,7 @@ class CameraUpdate with KMessageable {
     switch (type) {
       case CameraUpdateType.newCenterPoint:
         payload.addAll(position!.toMessageable());
+        payload['zoomLevel'] = zoomLevel;
       case CameraUpdateType.zoomTo:
         payload['zoomLevel'] = zoomLevel;
         break;
@@ -123,4 +124,47 @@ class CameraUpdate with KMessageable {
     }
     return payload;
   }
+
+  CameraUpdate copyWith({
+    CameraUpdateType? type,
+    LatLng? position,
+    int? zoomLevel,
+    CameraPosition? cameraPosition,
+    double? angle,
+    List<LatLng>? fitPoints,
+    int? padding,
+  }) =>
+      CameraUpdate._(
+        type ?? this.type,
+        position: position ?? this.position,
+        zoomLevel: zoomLevel ?? this.zoomLevel,
+        cameraPosition: cameraPosition ?? this.cameraPosition,
+        angle: angle ?? this.angle,
+        fitPoints: fitPoints ?? this.fitPoints,
+        padding: padding ?? this.padding,
+      );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is CameraUpdate &&
+        other.type == type &&
+        other.position == position &&
+        other.zoomLevel == zoomLevel &&
+        other.cameraPosition == cameraPosition &&
+        other.angle == angle &&
+        listEquals(other.fitPoints, fitPoints) &&
+        other.padding == padding;
+  }
+
+  @override
+  int get hashCode =>
+      type.hashCode ^
+      position.hashCode ^
+      zoomLevel.hashCode ^
+      cameraPosition.hashCode ^
+      angle.hashCode ^
+      fitPoints.hashCode ^
+      padding.hashCode;
 }

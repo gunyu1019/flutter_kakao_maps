@@ -21,12 +21,13 @@ mixin WebLabelControllerHandler {
         final poi = arguments["poi"];
         final position = LatLng.fromMessageable(poi);
         final style = manager._poiStyles[poi["styleId"]!]!;
-        return await addPoi(position,
-            style: style,
-            text: poi["text"],
-            rank: poi["rank"],
-            visible: poi["visible"] ?? true,
-            id: poi["id"],
+        return await addPoi(
+          position,
+          style: style,
+          text: poi["text"],
+          rank: poi["rank"],
+          visible: poi["visible"] ?? true,
+          id: poi["id"],
         );
       case "removePoi" || "removeLodPoi":
         await removePoi(poiId!);

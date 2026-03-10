@@ -9,16 +9,16 @@ class CameraPosition with KMessageable {
   final int zoomLevel;
 
   /// 지도를 비추고 있는 카메라의 기울기 각도를 가져옵니다.
-  final double? tiltAngle = null;
+  final double? tiltAngle;
 
   /// 지도를 비추고 있는 카메라의 회전 각도를 가져옵니다.
-  final double? rotationAngle = null;
+  final double? rotationAngle;
 
   /// 지도를 비추고 있는 카메라의 높이를 가져옵니다.
-  final double? height = null;
+  final double? height;
 
   const CameraPosition(this.position, this.zoomLevel,
-      {tiltAngle, rotationAngle, height});
+      {this.tiltAngle, this.rotationAngle, this.height});
 
   factory CameraPosition.fromMessageable(dynamic payload) => CameraPosition(
         LatLng.fromMessageable(payload),
@@ -34,9 +34,41 @@ class CameraPosition with KMessageable {
       "latitude": position.latitude,
       "longitude": position.longitude,
       "zoomLevel": zoomLevel,
-      "tiltAngle": tiltAngle ?? -1.0,
-      "rotationAngle": rotationAngle ?? -1.0,
+      "tiltAngle": tiltAngle ?? 0.0,
+      "rotationAngle": rotationAngle ?? 0.0,
       "height": height ?? -1.0,
     };
+  }
+
+  CameraPosition copyWith({
+    LatLng? position,
+    int? zoomLevel,
+    double? tiltAngle,
+    double? rotationAngle,
+  }) =>
+      CameraPosition(
+        position ?? this.position,
+        zoomLevel ?? this.zoomLevel,
+        tiltAngle: tiltAngle ?? this.tiltAngle,
+        rotationAngle: rotationAngle ?? this.rotationAngle,
+      );
+
+  @override
+  int get hashCode =>
+      position.hashCode ^
+      zoomLevel.hashCode ^
+      tiltAngle.hashCode ^
+      rotationAngle.hashCode ^
+      height.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CameraPosition &&
+        other.position == position &&
+        other.zoomLevel == zoomLevel &&
+        other.tiltAngle == tiltAngle &&
+        other.rotationAngle == rotationAngle &&
+        other.height == height;
   }
 }

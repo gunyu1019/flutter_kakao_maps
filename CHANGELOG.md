@@ -1,3 +1,14 @@
+## 1.2.5
+* Add `copyWith` function in user-defined object to copy the instance with modified parameters.
+* Override `==` operator and `hashCode` function in user-defined object. 
+* [Fix] Missing definition parameter for `tiltAngle`, `rotationAngle` and `height` in `CameraPosition` object. ([#55](https://github.com/gunyu1019/flutter_kakao_maps/issues/55))
+
+## 1.2.4
+* [Fix] Missing alpha of color feature in iOS Platform ([#54](https://github.com/gunyu1019/flutter_kakao_maps/issue/54))
+* [Fix] Not apply specific id of overlay in web environment
+* [Fix] Missing poi icon in web environment
+* [Fix] (Example) Fix the bottom clipping issue in Android Platform.
+
 ## 1.2.3
 * [Fix] Improve leak memory situation in iOS Platform ([#51](https://github.com/gunyu1019/flutter_kakao_maps/issues/51))
 

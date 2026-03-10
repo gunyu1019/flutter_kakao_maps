@@ -25,4 +25,20 @@ class LatLng with KMessageable {
   /// 현 좌표에서 [degrees] 방향으로 [distacne](m)만큼 떨어진 거리를 새로운 좌표를 구합니다.
   LatLng offset(double distance, double degrees) =>
       _pointOffset(this, distance, degrees);
+
+  LatLng copyWith({double? latitude, double? longitude}) => LatLng(
+        latitude ?? this.latitude,
+        longitude ?? this.longitude,
+      );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is LatLng &&
+        other.latitude == latitude &&
+        other.longitude == longitude;
+  }
+
+  @override
+  int get hashCode => latitude.hashCode ^ longitude.hashCode;
 }

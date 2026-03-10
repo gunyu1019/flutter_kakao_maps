@@ -1,0 +1,56 @@
+name: Flutter Tests
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  unit_and_widget_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run Unit and Widget Tests
+        run: flutter test
+  ios_integration_test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Add secret key to .env file
+        working-directory: ./example
+        env:
+          KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY }}
+        run: |
+          mkdir -p assets/config/
+          echo "KAKAO_API_KEY=$KAKAO_API_KEY" >> assets/config/.env
+      - name: Install dependencies
+        working-directory: ./example
+        run: flutter pub get
+      - name: Boot iOS Simulator
+        timeout-minutes: 10
+        run: |
+          killall Simulator || true
+          DEVICE_UUID=$(xcrun simctl list devices available | grep "iPhone" | head -n 1 | awk -F'[()]' '{print $2}')
+          echo "SIMULATOR_ID=$DEVICE_UUID" >> $GITHUB_ENV
+          echo "Selected Simulator UUID: $DEVICE_UUID"
+          
+          xcrun simctl boot "$DEVICE_UUID" || true
+          open -a Simulator
+          
+          xcrun simctl bootstatus "$DEVICE_UUID"
+          flutter devices
+      - name: Run iOS Integration Test
+        working-directory: ./example
+        timeout-minutes: 10
+        run: flutter test integration_test/app_test.dart -d ${{ env.SIMULATOR_ID }}

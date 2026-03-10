@@ -190,4 +190,66 @@ class PoiStyle with KMessageable {
     }
     return style;
   }
+
+  PoiStyle copyWith({
+    String? id,
+    bool? applyDpScale,
+    KPoint? anchor,
+    double? padding,
+    KImage? icon,
+    PoiTransition? iconTransition,
+    MapGravity? textGravity,
+    List<PoiTextStyle>? textStyle,
+    PoiTransition? textTransition,
+    int? zoomLevel,
+  }) {
+    final style = PoiStyle(
+      id: id ?? this.id,
+      applyDpScale: applyDpScale ?? this.applyDpScale,
+      anchor: anchor ?? this.anchor,
+      padding: padding ?? this.padding,
+      icon: icon ?? this.icon,
+      iconTransition: iconTransition ?? this.iconTransition,
+      textGravity: textGravity ?? this.textGravity,
+      textStyle: textStyle ?? this.textStyle,
+      textTransition: textTransition ?? this.textTransition,
+      zoomLevel: zoomLevel ?? this.zoomLevel,
+    );
+    if (!_isSecondaryStyle) {
+      style._styles.addAll(_styles);
+    }
+    return style;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PoiStyle &&
+        other.id == id &&
+        other.applyDpScale == applyDpScale &&
+        other.anchor == anchor &&
+        other.padding == padding &&
+        other.iconTransition == iconTransition &&
+        other.textGravity == textGravity &&
+        other.icon == icon &&
+        listEquals(other.textStyle, textStyle) &&
+        other.textTransition == textTransition &&
+        other.zoomLevel == zoomLevel &&
+        listEquals(other._styles, _styles);
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      applyDpScale.hashCode ^
+      anchor.hashCode ^
+      padding.hashCode ^
+      iconTransition.hashCode ^
+      textGravity.hashCode ^
+      icon.hashCode ^
+      textStyle.hashCode ^
+      textTransition.hashCode ^
+      zoomLevel.hashCode ^
+      _styles.hashCode;
 }

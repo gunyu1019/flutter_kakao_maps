@@ -16,18 +16,41 @@ class RectanglePoint extends _BaseDotPoint {
   RectanglePoint(this.width, this.height, super.basePoint,
       {this.clockwise = true});
 
-  @override
-  Map<String, dynamic> toMessageable([bool isHole = false]) {
-    final payload = <String, dynamic>{
-      "type": type,
-      "dotType": dotType.value,
-      "width": width,
-      "height": height,
-      "clockwise": clockwise,
-    };
-    payload.addAll(super.toMessageable(isHole));
-    return payload;
+  RectanglePoint copyWith({
+    double? width,
+    double? height,
+    LatLng? basePoint,
+    bool? clockwise,
+  }) {
+    final point = RectanglePoint(
+      width ?? this.width,
+      height ?? this.height,
+      basePoint ?? this.basePoint,
+      clockwise: clockwise ?? this.clockwise,
+    );
+    point._holes.addAll(_holes);
+    return point;
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is RectanglePoint &&
+        other.width == width &&
+        other.height == height &&
+        other.basePoint == basePoint &&
+        other.clockwise == clockwise &&
+        listEquals(other._holes, _holes);
+  }
+
+  @override
+  int get hashCode =>
+      width.hashCode ^
+      height.hashCode ^
+      basePoint.hashCode ^
+      clockwise.hashCode ^
+      _holes.hashCode;
 
   @override
   int get type => 1;
