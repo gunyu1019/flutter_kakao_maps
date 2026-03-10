@@ -24,7 +24,7 @@ class MapClickListener {
 
     func onTerrainTappedEvent(_ param: TerrainInteractionEventParam) {
         let point = convertMapPointToPoint(kakaoMap: param.kakaoMap, position: param.position)
-        channel.invokeMethod("onTerrainLongClick", arguments: [
+        channel.invokeMethod("onTerrainClick", arguments: [
             "point": point.toMessageable(),
             "position": param.position.toMessageable(),
         ])
