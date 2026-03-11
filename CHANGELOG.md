@@ -1,6 +1,6 @@
 ## 1.2.6
 * [Fix] Missing `zoomLevel` field in `CameraUpdate.newCenterPoint` factory function.
-* [Fix] Invalid event name of terrian clicked event on iOS Platform. ([#56](https://github.com/gunyu1019/flutter_kakao_maps/issues/56))
+* [Fix] Invalid event name of terrain clicked event on iOS Platform. ([#56](https://github.com/gunyu1019/flutter_kakao_maps/issues/56))
 
 ## 1.2.5
 * Add `copyWith` function in user-defined object to copy the instance with modified parameters.
