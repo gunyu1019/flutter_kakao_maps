@@ -29,15 +29,15 @@ Widget _createPlatformView({
             : PlatformViewsService.initAndroidView;
 
         return platformView.call(
-            id: params.id,
-            viewType: viewType,
-            layoutDirection: TextDirection.ltr,
-            creationParams: creationParams,
-            creationParamsCodec: creationParamsCodec,
-            onFocus: () {
-              params.onFocusChanged(true);
-            },
-          )
+          id: params.id,
+          viewType: viewType,
+          layoutDirection: TextDirection.ltr,
+          creationParams: creationParams,
+          creationParamsCodec: creationParamsCodec,
+          onFocus: () {
+            params.onFocusChanged(true);
+          },
+        )
           ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
           ..addOnPlatformViewCreatedListener(
             (viewId) => onPlatformViewCreated?.call(viewId),

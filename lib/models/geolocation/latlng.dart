@@ -15,9 +15,9 @@ class LatLng with KMessageable {
 
   @override
   Map<String, dynamic> toMessageable() => {
-    "latitude": latitude,
-    "longitude": longitude,
-  };
+        "latitude": latitude,
+        "longitude": longitude,
+      };
 
   /// [other]간 거리를 구합니다.
   /// Kakao Map SDK에서 두 지점간 거리를 구하는 방법은 성능을 고려하여 Haversine Formula를 이용합니다.

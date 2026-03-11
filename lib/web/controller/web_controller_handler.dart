@@ -10,8 +10,7 @@ mixin KakaoMapWebControllerHandler {
         final cameraUpdate = CameraUpdate.fromMessageable(
           arguments["cameraUpdate"],
         );
-        final animation =
-            (arguments.containsKey("cameraAnimation") &&
+        final animation = (arguments.containsKey("cameraAnimation") &&
                 arguments["cameraAnimation"] != null)
             ? CameraAnimation.fromMessageable(arguments["cameraAnimation"])
             : null;
@@ -32,9 +31,8 @@ mixin KakaoMapWebControllerHandler {
         return await toScreenPoint(LatLng.fromMessageable(arguments));
       case "canPositionVisible":
         final zoomLevel = arguments["zoomLevel"];
-        final position = arguments["position"]
-            .map(LatLng.fromMessageable)
-            .toList();
+        final position =
+            arguments["position"].map(LatLng.fromMessageable).toList();
         return await canShowPosition(zoomLevel, position);
       case "changeMapType":
         await changeMapType(
@@ -61,11 +59,11 @@ mixin KakaoMapWebControllerHandler {
         defaultGUIposition(gui, gravity, arguments["x"], arguments["y"]);
         break;
       case "clearCache" ||
-          "clearDiskCache" ||
-          "setBuildingHeightScale" ||
-          "defaultGUIvisible" ||
-          "scaleAutohide" ||
-          "scaleAnimationTime":
+            "clearDiskCache" ||
+            "setBuildingHeightScale" ||
+            "defaultGUIvisible" ||
+            "scaleAutohide" ||
+            "scaleAnimationTime":
         break;
       default:
         throw UnimplementedError();

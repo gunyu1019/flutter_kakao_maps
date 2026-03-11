@@ -16,8 +16,8 @@ class MultipleRouteOption with BaseMultipleRoute, KMessageable {
   final List<RouteSegment> segments;
 
   MultipleRouteOption(List<RouteStyle>? style, {this.zOrder = 10000, this.id})
-    : styles = style ?? [],
-      segments = [];
+      : styles = style ?? [],
+        segments = [];
 
   /// [MultipleRoute]에 구현할 선형을 추가합니다.
   /// [point] 매개변수에는 새롭게 추가할 선형의 지점과,

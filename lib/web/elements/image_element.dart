@@ -5,8 +5,9 @@ web.HTMLElement imageElement(
   int width,
   int height, [
   void Function()? onClick,
-]) => web.HTMLImageElement()
-  ..width = width
-  ..height = height
-  ..onclick = onClick?.toJS
-  ..src = source;
+]) =>
+    web.HTMLImageElement()
+      ..width = width
+      ..height = height
+      ..onclick = onClick?.toJS
+      ..src = source;

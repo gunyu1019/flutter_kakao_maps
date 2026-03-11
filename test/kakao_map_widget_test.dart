@@ -23,9 +23,9 @@ void main() {
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
-          SystemChannels.platform_views,
-          platformViewsHandler,
-        );
+      SystemChannels.platform_views,
+      platformViewsHandler,
+    );
   });
 
   tearDown(() {

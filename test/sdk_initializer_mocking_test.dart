@@ -22,19 +22,19 @@ void main() {
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(sdkChannel, (call) async {
-          switch (call.method) {
-            case 'hashKey':
-              hashKeyCallCount += 1;
-              return dummyHashKey;
-            case 'isInitialize':
-              isInitializeCallCount += 1;
-              return dummyIsInitialized;
-            case 'initialize':
-              return null;
-            default:
-              return null;
-          }
-        });
+      switch (call.method) {
+        case 'hashKey':
+          hashKeyCallCount += 1;
+          return dummyHashKey;
+        case 'isInitialize':
+          isInitializeCallCount += 1;
+          return dummyIsInitialized;
+        case 'initialize':
+          return null;
+        default:
+          return null;
+      }
+    });
   });
 
   tearDown(() {
@@ -94,16 +94,16 @@ void main() {
 
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(sdkChannel, (call) async {
-              if (call.method == 'hashKey') {
-                hashKeyCallCount += 1;
-                return null;
-              }
-              if (call.method == 'isInitialize') {
-                isInitializeCallCount += 1;
-                return dummyIsInitialized;
-              }
-              return null;
-            });
+          if (call.method == 'hashKey') {
+            hashKeyCallCount += 1;
+            return null;
+          }
+          if (call.method == 'isInitialize') {
+            isInitializeCallCount += 1;
+            return dummyIsInitialized;
+          }
+          return null;
+        });
 
         final result = await sdk.hashKey();
 

@@ -50,9 +50,8 @@ class WebRouteController with WebRouteControllerHandler {
         }
       }
     }
-    final points = webRoute.element
-        .map((e) => e.bodyElement.getPath())
-        .toList();
+    final points =
+        webRoute.element.map((e) => e.bodyElement.getPath()).toList();
 
     for (final (index, routeElement) in webRoute.element.indexed) {
       if (webRoute.currentLevel[index] == currentZoomLevel[index]) {
@@ -66,12 +65,12 @@ class WebRouteController with WebRouteControllerHandler {
       routeElement.bodyElement.setOptions(routeElement.bodyElementOption);
 
       if (currentStyles[index].strokeWidth > 0) {
-        final strokeElementOption = routeElement.strokeElementOption =
-            _getStrokeElementOption(
-              currentStyles[index],
-              points[index],
-              webRoute.zOrder,
-            );
+        final strokeElementOption =
+            routeElement.strokeElementOption = _getStrokeElementOption(
+          currentStyles[index],
+          points[index],
+          webRoute.zOrder,
+        );
         if (routeElement.strokeElement == null) {
           routeElement.strokeElement = WebPolyline(strokeElementOption);
           routeElement.strokeElement?.setMap(controller);
@@ -84,12 +83,12 @@ class WebRouteController with WebRouteControllerHandler {
         routeElement.strokeElementOption = null;
       }
       if (currentStyles[index].pattern != null) {
-        final patternElementOption = routeElement.patternElementOption =
-            _getPatternElementOption(
-              currentStyles[index],
-              points[index],
-              webRoute.zOrder,
-            );
+        final patternElementOption =
+            routeElement.patternElementOption = _getPatternElementOption(
+          currentStyles[index],
+          points[index],
+          webRoute.zOrder,
+        );
         if (routeElement.patternElement == null) {
           routeElement.patternElement = WebPolyline(patternElementOption);
           routeElement.patternElement?.setMap(controller);
@@ -123,17 +122,17 @@ class WebRouteController with WebRouteControllerHandler {
     }
     _webRoute[routeId]!.element.removeRange(0, route.element.length);
     _webRoute[routeId]!.element.addAll(
-      points.mapIndexed(
-        (index, point) => _addRouteElement(
-          styles.elementAtOrNull(
-                route.styleIndex.elementAtOrNull(index) ?? 0,
-              ) ??
-              styles[0],
-          point,
-          route.zOrder,
-        ),
-      ),
-    );
+          points.mapIndexed(
+            (index, point) => _addRouteElement(
+              styles.elementAtOrNull(
+                    route.styleIndex.elementAtOrNull(index) ?? 0,
+                  ) ??
+                  styles[0],
+              point,
+              route.zOrder,
+            ),
+          ),
+        );
   }
 
   @override
@@ -165,38 +164,41 @@ class WebRouteController with WebRouteControllerHandler {
     RouteStyle style,
     JSArray<WebLatLng> points,
     int zOrder,
-  ) => WebPolylineOption(
-    path: points,
-    strokeWeight: style.lineWidth * .5,
-    strokeColor: _getColorCode(style.color),
-    strokeOpacity: 1,
-    zIndex: zOrder,
-  );
+  ) =>
+      WebPolylineOption(
+        path: points,
+        strokeWeight: style.lineWidth * .5,
+        strokeColor: _getColorCode(style.color),
+        strokeOpacity: 1,
+        zIndex: zOrder,
+      );
 
   WebPolylineOption _getStrokeElementOption(
     RouteStyle style,
     JSArray<WebLatLng> points,
     int zOrder,
-  ) => WebPolylineOption(
-    path: points,
-    strokeWeight: style.lineWidth * .5 + style.strokeWidth * .5,
-    strokeColor: _getColorCode(style.strokeColor),
-    strokeOpacity: 1,
-    zIndex: zOrder - 1,
-  );
+  ) =>
+      WebPolylineOption(
+        path: points,
+        strokeWeight: style.lineWidth * .5 + style.strokeWidth * .5,
+        strokeColor: _getColorCode(style.strokeColor),
+        strokeOpacity: 1,
+        zIndex: zOrder - 1,
+      );
 
   WebPolylineOption _getPatternElementOption(
     RouteStyle style,
     JSArray<WebLatLng> points,
     int zOrder,
-  ) => WebPolylineOption(
-    path: points,
-    strokeWeight: 1,
-    strokeColor: _getColorCode(style.strokeColor),
-    strokeOpacity: 1,
-    strokeStyle: "longdash",
-    zIndex: zOrder + 1,
-  );
+  ) =>
+      WebPolylineOption(
+        path: points,
+        strokeWeight: 1,
+        strokeColor: _getColorCode(style.strokeColor),
+        strokeOpacity: 1,
+        strokeStyle: "longdash",
+        zIndex: zOrder + 1,
+      );
 
   WebRouteElement _addRouteElement(
     RouteStyle style,
@@ -217,12 +219,10 @@ class WebRouteController with WebRouteControllerHandler {
         : null;
 
     final bodyElement = WebPolyline(bodyElementOption);
-    final strokeElement = strokeElementOption != null
-        ? WebPolyline(strokeElementOption)
-        : null;
-    final patternElement = patternElementOption != null
-        ? WebPolyline(patternElementOption)
-        : null;
+    final strokeElement =
+        strokeElementOption != null ? WebPolyline(strokeElementOption) : null;
+    final patternElement =
+        patternElementOption != null ? WebPolyline(patternElementOption) : null;
 
     strokeElement?.setMap(controller);
     bodyElement.setMap(controller);

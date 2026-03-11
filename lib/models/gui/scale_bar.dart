@@ -8,7 +8,7 @@ class ScaleBar extends DefaultGUI {
   final KakaoMapController _controller;
 
   ScaleBar._({required KakaoMapController controller})
-    : _controller = controller;
+      : _controller = controller;
 
   /// 지도에 표시된 축적바를 숨깁니다.
   Future<void> hide() async {

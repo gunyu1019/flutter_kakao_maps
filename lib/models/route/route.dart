@@ -40,11 +40,11 @@ class Route extends BaseRoute {
     required RouteStyle style,
     required CurveType curveType,
     required int zOrder,
-  }) : _points = points,
-       _style = style,
-       _curveType = curveType,
-       _visible = true,
-       _zOrder = zOrder;
+  })  : _points = points,
+        _style = style,
+        _curveType = curveType,
+        _visible = true,
+        _zOrder = zOrder;
 
   /// 선형([Route]) 정의된 스타일([RouteStyle])을 다시 정의합니다.
   Future<void> changeStyle(RouteStyle style) async {

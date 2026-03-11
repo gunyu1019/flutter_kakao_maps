@@ -58,12 +58,12 @@ class WebShapeController with WebShapeControllerHandler {
     if (webPolyline.currentLevel == currentZoomLevel) return;
     _webPolyline[shapeId]!.currentLevel = currentZoomLevel;
     if (currentStyle.strokeWidth > 0) {
-      final strokeOptions = _webPolyline[shapeId]!.strokeOption =
-          _getPolylineStrokeElementOption(
-            currentStyle,
-            webPolyline.option.path,
-            webPolyline.element.getZIndex() - 1,
-          );
+      final strokeOptions =
+          _webPolyline[shapeId]!.strokeOption = _getPolylineStrokeElementOption(
+        currentStyle,
+        webPolyline.option.path,
+        webPolyline.element.getZIndex() - 1,
+      );
       final strokeElement = _webPolyline[shapeId]!.strokeElement = WebPolyline(
         strokeOptions,
       );
@@ -168,25 +168,27 @@ class WebShapeController with WebShapeControllerHandler {
     PolylineStyle style,
     JSArray<WebLatLng> points,
     int zOrder,
-  ) => WebPolylineOption(
-    path: points,
-    strokeWeight: style.lineWidth * .5,
-    strokeColor: _getColorCode(style.color),
-    strokeOpacity: 1,
-    zIndex: zOrder,
-  );
+  ) =>
+      WebPolylineOption(
+        path: points,
+        strokeWeight: style.lineWidth * .5,
+        strokeColor: _getColorCode(style.color),
+        strokeOpacity: 1,
+        zIndex: zOrder,
+      );
 
   WebPolylineOption _getPolylineStrokeElementOption(
     PolylineStyle style,
     JSArray<WebLatLng> points,
     int zOrder,
-  ) => WebPolylineOption(
-    path: points,
-    strokeWeight: style.lineWidth * .5 + style.strokeWidth * .5,
-    strokeColor: _getColorCode(style.strokeColor),
-    strokeOpacity: 1,
-    zIndex: zOrder - 1,
-  );
+  ) =>
+      WebPolylineOption(
+        path: points,
+        strokeWeight: style.lineWidth * .5 + style.strokeWidth * .5,
+        strokeColor: _getColorCode(style.strokeColor),
+        strokeOpacity: 1,
+        zIndex: zOrder - 1,
+      );
 
   WebPolygonOption _getPolygonElementOption(
     PolygonStyle style,

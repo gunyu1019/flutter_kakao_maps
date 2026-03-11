@@ -118,14 +118,14 @@ mixin WebLabelControllerHandler {
         removeShareTransformPoi(poiId, targetLayerId, targetPoiId);
         break;
       case "changePolylineTextStyle" ||
-          "changePolylineTextVisible" ||
-          "changeVisibleAllPolylineText" ||
-          "setLayerClickable" ||
-          "setLayerZOrder" ||
-          "scalePoi" ||
-          "addShareTransformShape" ||
-          "removeShareTransformShape" ||
-          "movePathPoi":
+            "changePolylineTextVisible" ||
+            "changeVisibleAllPolylineText" ||
+            "setLayerClickable" ||
+            "setLayerZOrder" ||
+            "scalePoi" ||
+            "addShareTransformShape" ||
+            "removeShareTransformShape" ||
+            "movePathPoi":
         break;
       default:
         throw UnimplementedError();

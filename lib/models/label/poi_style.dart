@@ -54,8 +54,8 @@ class PoiStyle with KMessageable {
     this.textStyle = const [],
     this.textTransition = const PoiTransition(),
     this.zoomLevel = 0,
-  }) : _isSecondaryStyle = false,
-       _id = id;
+  })  : _isSecondaryStyle = false,
+        _id = id;
 
   PoiStyle._({
     String? id,
@@ -71,8 +71,8 @@ class PoiStyle with KMessageable {
     this.textStyle = const [],
     this.textTransition = const PoiTransition(),
     this.zoomLevel = 0,
-  }) : _isSecondaryStyle = true,
-       _id = id;
+  })  : _isSecondaryStyle = true,
+        _id = id;
 
   void _setStyleId(String id) {
     _id = id;
@@ -180,9 +180,8 @@ class PoiStyle with KMessageable {
               applyDpScale: e["applyDpScale"],
               anchor: KPoint.fromMessageable(e["anchor"]),
               padding: e["padding"],
-              icon: e["icon"] != null
-                  ? KImage.fromMessageable(e["icon"])
-                  : null,
+              icon:
+                  e["icon"] != null ? KImage.fromMessageable(e["icon"]) : null,
               iconTransition: PoiTransition.fromMessageable(
                 e["iconTransition"],
               ),

@@ -69,12 +69,13 @@ class CameraUpdate with KMessageable {
     List<LatLng> fitPoints, {
     int? padding,
     int? zoomLevel,
-  }) => CameraUpdate._(
-    CameraUpdateType.fitMapPoints,
-    fitPoints: fitPoints,
-    padding: padding,
-    zoomLevel: zoomLevel ?? -1,
-  );
+  }) =>
+      CameraUpdate._(
+        CameraUpdateType.fitMapPoints,
+        fitPoints: fitPoints,
+        padding: padding,
+        zoomLevel: zoomLevel ?? -1,
+      );
 
   factory CameraUpdate.fromMessageable(dynamic payload) {
     final type = CameraUpdateType.values.firstWhere(
@@ -84,17 +85,17 @@ class CameraUpdate with KMessageable {
     final zoomLevel = payload["zoomLevel"];
     final position =
         payload.containsKey("latitude") && payload.containsKey("longitude")
-        ? LatLng.fromMessageable(payload)
-        : null;
+            ? LatLng.fromMessageable(payload)
+            : null;
     return switch (type) {
       CameraUpdateType.newCenterPoint => CameraUpdate.newCenterPosition(
-        position!,
-        zoomLevel: zoomLevel,
-      ),
+          position!,
+          zoomLevel: zoomLevel,
+        ),
       CameraUpdateType.newCameraPos => () {
-        final cameraPosition = CameraPosition.fromMessageable(payload);
-        return CameraUpdate.newCameraPos(cameraPosition);
-      }(),
+          final cameraPosition = CameraPosition.fromMessageable(payload);
+          return CameraUpdate.newCameraPos(cameraPosition);
+        }(),
       CameraUpdateType.newCameraAngle => throw UnimplementedError(),
       CameraUpdateType.zoomTo => CameraUpdate.zoomTo(zoomLevel),
       CameraUpdateType.zoomIn => CameraUpdate.zoomIn(),
@@ -102,10 +103,10 @@ class CameraUpdate with KMessageable {
       CameraUpdateType.rotate => CameraUpdate.rotate(angle),
       CameraUpdateType.tilt => CameraUpdate.tilt(angle),
       CameraUpdateType.fitMapPoints => CameraUpdate.fitMapPoints(
-        payload['points'].map<LatLng>(LatLng.fromMessageable).toList(),
-        padding: payload["padding"],
-        zoomLevel: zoomLevel,
-      ),
+          payload['points'].map<LatLng>(LatLng.fromMessageable).toList(),
+          padding: payload["padding"],
+          zoomLevel: zoomLevel,
+        ),
     };
   }
 
@@ -131,9 +132,8 @@ class CameraUpdate with KMessageable {
         payload['angle'] = angle;
         break;
       case CameraUpdateType.fitMapPoints:
-        payload['points'] = fitPoints!
-            .map((latlng) => latlng.toMessageable())
-            .toList();
+        payload['points'] =
+            fitPoints!.map((latlng) => latlng.toMessageable()).toList();
         payload['padding'] = padding ?? 0;
         payload['zoomLevel'] = zoomLevel;
         break;
@@ -149,15 +149,16 @@ class CameraUpdate with KMessageable {
     double? angle,
     List<LatLng>? fitPoints,
     int? padding,
-  }) => CameraUpdate._(
-    type ?? this.type,
-    position: position ?? this.position,
-    zoomLevel: zoomLevel ?? this.zoomLevel,
-    cameraPosition: cameraPosition ?? this.cameraPosition,
-    angle: angle ?? this.angle,
-    fitPoints: fitPoints ?? this.fitPoints,
-    padding: padding ?? this.padding,
-  );
+  }) =>
+      CameraUpdate._(
+        type ?? this.type,
+        position: position ?? this.position,
+        zoomLevel: zoomLevel ?? this.zoomLevel,
+        cameraPosition: cameraPosition ?? this.cameraPosition,
+        angle: angle ?? this.angle,
+        fitPoints: fitPoints ?? this.fitPoints,
+        padding: padding ?? this.padding,
+      );
 
   @override
   bool operator ==(Object other) {

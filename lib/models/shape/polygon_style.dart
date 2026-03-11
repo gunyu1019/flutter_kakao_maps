@@ -39,8 +39,8 @@ class PolygonStyle with KMessageable {
     this.strokeWidth = .0,
     this.strokeColor = Colors.black,
     this.zoomLevel = 0,
-  }) : _id = id,
-       _isSecondaryStyle = false;
+  })  : _id = id,
+        _isSecondaryStyle = false;
 
   PolygonStyle._(
     this.color, {
@@ -48,8 +48,8 @@ class PolygonStyle with KMessageable {
     this.strokeWidth = .0,
     this.strokeColor = Colors.black,
     this.zoomLevel = 0,
-  }) : _id = id,
-       _isSecondaryStyle = true;
+  })  : _id = id,
+        _isSecondaryStyle = true;
 
   /// [zoomLevel]에 따라 [Polygon]에 표시될 다른 스타일을 정의합니다.
   /// 메소드에서 사용된 [zoomLevel] 매개변수가 [CameraPosition.zoomLevel] 값보다 작으면

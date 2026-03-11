@@ -15,6 +15,6 @@ class WebPolygonShape {
     this.element, {
     required this.option,
     required this.style,
-  }) : styleId = style.id!,
-       currentLevel = style.zoomLevel;
+  })  : styleId = style.id!,
+        currentLevel = style.zoomLevel;
 }

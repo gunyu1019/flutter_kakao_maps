@@ -19,8 +19,8 @@ class KImage with KMessageable {
     required this.height,
     String? path,
     Uint8List? data,
-  }) : _path = path,
-       _data = data;
+  })  : _path = path,
+        _data = data;
 
   /// Assets으로 이미지 객체를 생성합니다.
   factory KImage.fromAsset(String asset, int width, int height) =>
@@ -45,9 +45,8 @@ class KImage with KMessageable {
     final repaintBoundary = RenderRepaintBoundary();
     final platformDispatcher = WidgetsBinding.instance.platformDispatcher;
     final fallBackView = platformDispatcher.views.first;
-    final view = context != null
-        ? View.maybeOf(context) ?? fallBackView
-        : fallBackView;
+    final view =
+        context != null ? View.maybeOf(context) ?? fallBackView : fallBackView;
 
     final renderPositionedBox = RenderPositionedBox(
       alignment: Alignment.center,
@@ -131,16 +130,17 @@ class KImage with KMessageable {
   }
 
   factory KImage.fromMessageable(dynamic payload) => KImage._(
-    ImageType.values.firstWhere((e) => e.value == payload["type"]),
-    width: payload["width"],
-    height: payload["height"],
-    path: payload["path"],
-    data: payload["data"],
-  );
+        ImageType.values.firstWhere((e) => e.value == payload["type"]),
+        width: payload["width"],
+        height: payload["height"],
+        path: payload["path"],
+        data: payload["data"],
+      );
 
   Future<Uint8List> readBytes() async => switch (type) {
-    ImageType.assets => (await rootBundle.load(_path!)).buffer.asUint8List(),
-    ImageType.file => await File(_path!).readAsBytes(),
-    ImageType.data => _data!,
-  };
+        ImageType.assets =>
+          (await rootBundle.load(_path!)).buffer.asUint8List(),
+        ImageType.file => await File(_path!).readAsBytes(),
+        ImageType.data => _data!,
+      };
 }

@@ -24,7 +24,7 @@ class KakaoMap extends StatefulWidget {
   /// [position] 매개변수에는 이동을 마친 최종 카메라의 위치가 입력됩니다.
   /// 사용자가 아닌 소스코드(프로그램)에 의해 이동되었다면, [GestureType.unknown]가 [gestureType]으로 입력됩니다.
   final void Function(CameraPosition position, GestureType gestureType)?
-  onCameraMoveEnd;
+      onCameraMoveEnd;
 
   /// 사용자에 의해 나침판이 클릭되었을 때, 호출되는 함수입니다.
   final void Function()? onCompassClick;
@@ -38,7 +38,7 @@ class KakaoMap extends StatefulWidget {
   /// [lodLabelController] 매개변수에는 [LodPoi]가 소속되어 있는 컨트롤러가 담긴 객체를 입력합니다.
   /// 사용자가 선택한 [LodPoi]는 [poi] 매게변수에 입력됩니다.
   final void Function(LodLabelController lodLabelController, LodPoi poi)?
-  onLodPoiClick;
+      onLodPoiClick;
 
   /// 사용자가 지도판을 클릭했을 때, 호출되는 함수입니다.
   /// [point] 매개변수는 지도를 기준으로 사용자가 클릭한 좌표가 입력됩니다.
@@ -93,8 +93,7 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> rawParams =
-        widget.option?.toMessageable() ??
+    Map<String, dynamic> rawParams = widget.option?.toMessageable() ??
         (const KakaoMapOption()).toMessageable();
 
     // GestureRecognizer

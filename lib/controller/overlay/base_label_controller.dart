@@ -39,8 +39,8 @@ abstract class BaseLabelController extends OverlayController {
     this.visible,
     bool clickable,
     int zOrder,
-  ) : _clickable = clickable,
-      _zOrder = zOrder;
+  )   : _clickable = clickable,
+        _zOrder = zOrder;
 
   @override
   Future<T> _invokeMethod<T>(String method, Map<String, dynamic> payload) {

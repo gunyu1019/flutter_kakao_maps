@@ -54,10 +54,10 @@ class LodPoi with BadgeablePoi {
     required int rank,
     required bool visible,
     this.onClick,
-  }) : _style = style,
-       _text = text,
-       _rank = rank,
-       _visible = visible;
+  })  : _style = style,
+        _text = text,
+        _rank = rank,
+        _visible = visible;
 
   /// [LodPoi]의 [rank]를 즉시 변경합니다.
   Future<void> changeRank(int rank) async {

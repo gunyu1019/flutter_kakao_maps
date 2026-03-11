@@ -235,42 +235,41 @@ void main() {
     test(
       'round-trip preserves nested fields and other styles',
       () {
-        final original =
-            PoiStyle(
-              id: 'poi-style-main',
-              applyDpScale: false,
-              anchor: const KPoint(0.25, 0.75),
-              padding: 8.0,
-              icon: KImage.fromData(Uint8List.fromList([11, 22, 33]), 20, 20),
-              iconTransition: const PoiTransition(
-                entrance: Transition.alpha,
-                exit: Transition.scale,
-              ),
-              textGravity: const MapGravity(
-                HorizontalAlign.right,
-                VerticalAlign.bottom,
-              ),
-              textStyle: const [
-                PoiTextStyle(font: 'A', size: 16, color: Color(0xFF111111)),
-                PoiTextStyle(font: 'B', size: 14, color: Color(0xFF222222)),
-              ],
-              textTransition: const PoiTransition(
-                entrance: Transition.scale,
-                exit: Transition.alpha,
-              ),
-              zoomLevel: 5,
-            )..addStyle(
-              zoomLevel: 9,
-              applyDpScale: true,
-              anchor: const KPoint(0.5, 1.0),
-              padding: 2,
-              icon: null,
-              textStyle: const [],
-              textTransition: const PoiTransition(
-                entrance: Transition.none,
-                exit: Transition.none,
-              ),
-            );
+        final original = PoiStyle(
+          id: 'poi-style-main',
+          applyDpScale: false,
+          anchor: const KPoint(0.25, 0.75),
+          padding: 8.0,
+          icon: KImage.fromData(Uint8List.fromList([11, 22, 33]), 20, 20),
+          iconTransition: const PoiTransition(
+            entrance: Transition.alpha,
+            exit: Transition.scale,
+          ),
+          textGravity: const MapGravity(
+            HorizontalAlign.right,
+            VerticalAlign.bottom,
+          ),
+          textStyle: const [
+            PoiTextStyle(font: 'A', size: 16, color: Color(0xFF111111)),
+            PoiTextStyle(font: 'B', size: 14, color: Color(0xFF222222)),
+          ],
+          textTransition: const PoiTransition(
+            entrance: Transition.scale,
+            exit: Transition.alpha,
+          ),
+          zoomLevel: 5,
+        )..addStyle(
+            zoomLevel: 9,
+            applyDpScale: true,
+            anchor: const KPoint(0.5, 1.0),
+            padding: 2,
+            icon: null,
+            textStyle: const [],
+            textTransition: const PoiTransition(
+              entrance: Transition.none,
+              exit: Transition.none,
+            ),
+          );
 
         final payload = original.toMessageable();
         expect(payload, isA<Map<String, dynamic>>());
@@ -505,28 +504,27 @@ void main() {
 
   group('RouteStyle Serialization', () {
     test('round-trip preserves nested pattern and otherStyle', () {
-      final original =
-          RouteStyle(
-            const Color(0xFF00AAFF),
-            6.5,
-            id: 'route-style-main',
-            strokeColor: const Color(0xFF005577),
-            strokeWidth: 1.5,
-            pattern: RoutePattern(
-              KImage.fromData(Uint8List.fromList([9, 8, 7]), 11, 11),
-              30,
-              symbolImage: null,
-              pinStart: false,
-              pinEnd: true,
-            ),
-            zoomLevel: 7,
-          )..addStyle(
-            10,
-            const Color(0xFFAA00FF),
-            4.0,
-            strokeColor: const Color(0xFF330055),
-            strokeWidth: 2.0,
-          );
+      final original = RouteStyle(
+        const Color(0xFF00AAFF),
+        6.5,
+        id: 'route-style-main',
+        strokeColor: const Color(0xFF005577),
+        strokeWidth: 1.5,
+        pattern: RoutePattern(
+          KImage.fromData(Uint8List.fromList([9, 8, 7]), 11, 11),
+          30,
+          symbolImage: null,
+          pinStart: false,
+          pinEnd: true,
+        ),
+        zoomLevel: 7,
+      )..addStyle(
+          10,
+          const Color(0xFFAA00FF),
+          4.0,
+          strokeColor: const Color(0xFF330055),
+          strokeWidth: 2.0,
+        );
 
       final payload = original.toMessageable();
       expect(payload, isA<Map<String, dynamic>>());
@@ -552,21 +550,20 @@ void main() {
 
   group('PolylineStyle Serialization', () {
     test('round-trip preserves all fields and otherStyle', () {
-      final original =
-          PolylineStyle(
-            const Color(0xFF123123),
-            5.0,
-            id: 'polyline-style-main',
-            strokeWidth: 1.0,
-            strokeColor: const Color(0xFF456456),
-            zoomLevel: 3,
-          )..addStyle(
-            8,
-            color: const Color(0xFFABCDEF),
-            lineWidth: 7.0,
-            strokeWidth: 2.5,
-            strokeColor: const Color(0xFFFEDCBA),
-          );
+      final original = PolylineStyle(
+        const Color(0xFF123123),
+        5.0,
+        id: 'polyline-style-main',
+        strokeWidth: 1.0,
+        strokeColor: const Color(0xFF456456),
+        zoomLevel: 3,
+      )..addStyle(
+          8,
+          color: const Color(0xFFABCDEF),
+          lineWidth: 7.0,
+          strokeWidth: 2.5,
+          strokeColor: const Color(0xFFFEDCBA),
+        );
 
       final payload = original.toMessageable();
       expect(payload, isA<Map<String, dynamic>>());
@@ -591,19 +588,18 @@ void main() {
 
   group('PolygonStyle Serialization', () {
     test('round-trip preserves all fields and otherStyle', () {
-      final original =
-          PolygonStyle(
-            const Color(0x33223344),
-            id: 'polygon-style-main',
-            strokeWidth: 1.3,
-            strokeColor: const Color(0xFF8899AA),
-            zoomLevel: 4,
-          )..addStyle(
-            9,
-            const Color(0x55445566),
-            strokeWidth: 2.2,
-            strokeColor: const Color(0xFFAA9988),
-          );
+      final original = PolygonStyle(
+        const Color(0x33223344),
+        id: 'polygon-style-main',
+        strokeWidth: 1.3,
+        strokeColor: const Color(0xFF8899AA),
+        zoomLevel: 4,
+      )..addStyle(
+          9,
+          const Color(0x55445566),
+          strokeWidth: 2.2,
+          strokeColor: const Color(0xFFAA9988),
+        );
 
       final payload = original.toMessageable();
       expect(payload, isA<Map<String, dynamic>>());
@@ -669,18 +665,17 @@ void main() {
     test('round-trip preserves id, zOrder, routes and styles mapping', () {
       final styleA = RouteStyle(const Color(0xFF001122), 3.0, id: 'style-a');
       final styleB = RouteStyle(const Color(0xFF334455), 5.0, id: 'style-b');
-      final original =
-          MultipleRouteOption(
-              [styleA, styleB],
-              id: 'route-option-1',
-              zOrder: 77,
-            )
-            ..addRouteWithIndex(
-              const [LatLng(36.1, 127.1), LatLng(36.2, 127.2)],
-              0,
-              CurveType.left,
-            )
-            ..addRouteWithIndex(const [LatLng(36.3, 127.3)], 1, CurveType.none);
+      final original = MultipleRouteOption(
+        [styleA, styleB],
+        id: 'route-option-1',
+        zOrder: 77,
+      )
+        ..addRouteWithIndex(
+          const [LatLng(36.1, 127.1), LatLng(36.2, 127.2)],
+          0,
+          CurveType.left,
+        )
+        ..addRouteWithIndex(const [LatLng(36.3, 127.3)], 1, CurveType.none);
 
       final payload = original.toMessageable();
       expect(payload, isA<Map<String, dynamic>>());

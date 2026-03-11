@@ -16,9 +16,8 @@ mixin WebRouteControllerHandler {
         break;
       case "addRoute":
         final route = arguments["route"];
-        final points = route["points"]
-            .map<LatLng>(LatLng.fromMessageable)
-            .toList();
+        final points =
+            route["points"].map<LatLng>(LatLng.fromMessageable).toList();
         final style = manager._routeStyles[route["styleId"]!]![0];
         final curveType = CurveType.values.firstWhere(
           (e) => e.value == route["curveType"],

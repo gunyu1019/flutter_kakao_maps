@@ -69,11 +69,11 @@ class Poi with BadgeablePoi {
     required int rank,
     required bool visible,
     this.onClick,
-  }) : _position = position,
-       _style = style,
-       _text = text,
-       _rank = rank,
-       _visible = visible;
+  })  : _position = position,
+        _style = style,
+        _text = text,
+        _rank = rank,
+        _visible = visible;
 
   Future<void> addSharePosition(Poi poi) async {
     _sharePositionPoi[poi.id] = poi;

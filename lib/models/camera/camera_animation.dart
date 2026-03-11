@@ -27,20 +27,21 @@ class CameraAnimation with KMessageable {
   }
 
   factory CameraAnimation.fromMessageable(dynamic payload) => CameraAnimation(
-    payload["duration"],
-    autoElevation: payload["autoElevation"] ?? false,
-    isConsecutive: payload["isConsecutive"] ?? false,
-  );
+        payload["duration"],
+        autoElevation: payload["autoElevation"] ?? false,
+        isConsecutive: payload["isConsecutive"] ?? false,
+      );
 
   CameraAnimation copyWith({
     int? duration,
     bool? autoElevation,
     bool? isConsecutive,
-  }) => CameraAnimation(
-    duration ?? this.duration,
-    autoElevation: autoElevation ?? this.autoElevation,
-    isConsecutive: isConsecutive ?? this.isConsecutive,
-  );
+  }) =>
+      CameraAnimation(
+        duration ?? this.duration,
+        autoElevation: autoElevation ?? this.autoElevation,
+        isConsecutive: isConsecutive ?? this.isConsecutive,
+      );
 
   @override
   bool operator ==(Object other) {

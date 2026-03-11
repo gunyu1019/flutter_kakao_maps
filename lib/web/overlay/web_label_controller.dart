@@ -275,8 +275,8 @@ class WebLabelController with WebLabelControllerHandler {
     String targetPoiId,
   ) async {
     _webPoi[poiId]!.shareTransformPoi.removeWhere(
-      (poi) => poi.id == targetPoiId && poi.layerId == targetLayerId,
-    );
+          (poi) => poi.id == targetPoiId && poi.layerId == targetLayerId,
+        );
   }
 
   // @override

@@ -38,16 +38,16 @@ class RouteStyle with KMessageable {
     this.strokeWidth = 0,
     this.pattern,
     this.zoomLevel = 0,
-  }) : _id = id,
-       _isSecondaryStyle = false;
+  })  : _id = id,
+        _isSecondaryStyle = false;
 
   RouteStyle.withPattern(this.pattern, {String? id, this.zoomLevel = 0})
-    : _id = id,
-      _isSecondaryStyle = false,
-      color = Colors.black,
-      lineWidth = 0,
-      strokeColor = Colors.black,
-      strokeWidth = 0;
+      : _id = id,
+        _isSecondaryStyle = false,
+        color = Colors.black,
+        lineWidth = 0,
+        strokeColor = Colors.black,
+        strokeWidth = 0;
 
   RouteStyle._(
     this.color,
@@ -57,8 +57,8 @@ class RouteStyle with KMessageable {
     this.strokeWidth = 0,
     this.pattern,
     this.zoomLevel = 0,
-  }) : _id = id,
-       _isSecondaryStyle = true;
+  })  : _id = id,
+        _isSecondaryStyle = true;
 
   void _setStyleId(String id) {
     _id = id;

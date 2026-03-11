@@ -26,12 +26,12 @@ class CameraPosition with KMessageable {
   });
 
   factory CameraPosition.fromMessageable(dynamic payload) => CameraPosition(
-    LatLng.fromMessageable(payload),
-    payload['zoomLevel'],
-    tiltAngle: payload['tiltAngle'],
-    rotationAngle: payload['rotationAngle'],
-    height: payload['height'],
-  );
+        LatLng.fromMessageable(payload),
+        payload['zoomLevel'],
+        tiltAngle: payload['tiltAngle'],
+        rotationAngle: payload['rotationAngle'],
+        height: payload['height'],
+      );
 
   @override
   Map<String, dynamic> toMessageable() {
@@ -50,12 +50,13 @@ class CameraPosition with KMessageable {
     int? zoomLevel,
     double? tiltAngle,
     double? rotationAngle,
-  }) => CameraPosition(
-    position ?? this.position,
-    zoomLevel ?? this.zoomLevel,
-    tiltAngle: tiltAngle ?? this.tiltAngle,
-    rotationAngle: rotationAngle ?? this.rotationAngle,
-  );
+  }) =>
+      CameraPosition(
+        position ?? this.position,
+        zoomLevel ?? this.zoomLevel,
+        tiltAngle: tiltAngle ?? this.tiltAngle,
+        rotationAngle: rotationAngle ?? this.rotationAngle,
+      );
 
   @override
   int get hashCode =>

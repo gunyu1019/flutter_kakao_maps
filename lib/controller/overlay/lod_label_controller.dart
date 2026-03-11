@@ -32,13 +32,13 @@ class LodLabelController extends BaseLabelController {
     bool clickable = true,
     int zOrder = BaseLabelController.defaultZOrder,
   }) : super._(
-         competitionType,
-         competitionUnit,
-         orderingType,
-         visible,
-         clickable,
-         zOrder,
-       );
+          competitionType,
+          competitionUnit,
+          orderingType,
+          visible,
+          clickable,
+          zOrder,
+        );
 
   Future<void> _createLodLabelLayer() async {
     await _invokeMethod("createLodLabelLayer", {

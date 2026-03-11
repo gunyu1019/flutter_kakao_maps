@@ -21,88 +21,88 @@ void main() {
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(overlayChannel, (call) async {
-          final args = Map<String, dynamic>.from(call.arguments as Map);
-          final type = args['type'] as int?;
+      final args = Map<String, dynamic>.from(call.arguments as Map);
+      final type = args['type'] as int?;
 
-          switch (call.method) {
-            case 'addPoiStyle':
-              return orFallback(
-                args['styleId'] as String?,
-                'mock-poi-style-id',
-              );
+      switch (call.method) {
+        case 'addPoiStyle':
+          return orFallback(
+            args['styleId'] as String?,
+            'mock-poi-style-id',
+          );
 
-            case 'addPoi':
-              final poi = Map<String, dynamic>.from(args['poi'] as Map);
-              final requested = poi['id'] as String?;
-              if (type == OverlayType.lodLabel.value) {
-                return orFallback(requested, 'mock-lod-poi-id');
-              }
-              return orFallback(requested, 'mock-poi-id');
-
-            case 'addLodPoi':
-              final poi = Map<String, dynamic>.from(args['poi'] as Map);
-              return orFallback(poi['id'] as String?, 'mock-lod-poi-id');
-
-            case 'addPolylineText':
-              final label = Map<String, dynamic>.from(args['label'] as Map);
-              return orFallback(
-                label['id'] as String?,
-                'mock-polyline-text-id',
-              );
-
-            case 'addPoiBadge':
-              final badge = Map<String, dynamic>.from(args['badge'] as Map);
-              final requestedBadgeId = badge['id'] as String?;
-              final poiId = args['poiId'] as String?;
-              return orFallback(requestedBadgeId, '${poiId ?? 'poi'}-badge-id');
-
-            case 'addPolylineShapeStyle':
-              return orFallback(
-                args['styleId'] as String?,
-                'mock-polyline-style-id',
-              );
-
-            case 'addPolygonShapeStyle':
-              return orFallback(
-                args['styleId'] as String?,
-                'mock-polygon-style-id',
-              );
-
-            case 'addPolylineShape':
-              final polyline = Map<String, dynamic>.from(
-                args['polyline'] as Map,
-              );
-              return orFallback(polyline['id'] as String?, 'mock-polyline-id');
-
-            case 'addPolygonShape':
-              final polygon = Map<String, dynamic>.from(args['polygon'] as Map);
-              return orFallback(polygon['id'] as String?, 'mock-polygon-id');
-
-            case 'addRouteStyle':
-              return orFallback(
-                args['styleId'] as String?,
-                'mock-route-style-id',
-              );
-
-            case 'addRoute':
-            case 'addMultipleRoute':
-              final route = Map<String, dynamic>.from(args['route'] as Map);
-              final fallback = call.method == 'addRoute'
-                  ? 'mock-route-id'
-                  : 'mock-multi-route-id';
-              return orFallback(route['id'] as String?, fallback);
-
-            case 'addHighlightPolygonShape':
-              final polygon = Map<String, dynamic>.from(args['polygon'] as Map);
-              return orFallback(
-                polygon['id'] as String?,
-                'mock-dim-polygon-id',
-              );
-
-            default:
-              return null;
+        case 'addPoi':
+          final poi = Map<String, dynamic>.from(args['poi'] as Map);
+          final requested = poi['id'] as String?;
+          if (type == OverlayType.lodLabel.value) {
+            return orFallback(requested, 'mock-lod-poi-id');
           }
-        });
+          return orFallback(requested, 'mock-poi-id');
+
+        case 'addLodPoi':
+          final poi = Map<String, dynamic>.from(args['poi'] as Map);
+          return orFallback(poi['id'] as String?, 'mock-lod-poi-id');
+
+        case 'addPolylineText':
+          final label = Map<String, dynamic>.from(args['label'] as Map);
+          return orFallback(
+            label['id'] as String?,
+            'mock-polyline-text-id',
+          );
+
+        case 'addPoiBadge':
+          final badge = Map<String, dynamic>.from(args['badge'] as Map);
+          final requestedBadgeId = badge['id'] as String?;
+          final poiId = args['poiId'] as String?;
+          return orFallback(requestedBadgeId, '${poiId ?? 'poi'}-badge-id');
+
+        case 'addPolylineShapeStyle':
+          return orFallback(
+            args['styleId'] as String?,
+            'mock-polyline-style-id',
+          );
+
+        case 'addPolygonShapeStyle':
+          return orFallback(
+            args['styleId'] as String?,
+            'mock-polygon-style-id',
+          );
+
+        case 'addPolylineShape':
+          final polyline = Map<String, dynamic>.from(
+            args['polyline'] as Map,
+          );
+          return orFallback(polyline['id'] as String?, 'mock-polyline-id');
+
+        case 'addPolygonShape':
+          final polygon = Map<String, dynamic>.from(args['polygon'] as Map);
+          return orFallback(polygon['id'] as String?, 'mock-polygon-id');
+
+        case 'addRouteStyle':
+          return orFallback(
+            args['styleId'] as String?,
+            'mock-route-style-id',
+          );
+
+        case 'addRoute':
+        case 'addMultipleRoute':
+          final route = Map<String, dynamic>.from(args['route'] as Map);
+          final fallback = call.method == 'addRoute'
+              ? 'mock-route-id'
+              : 'mock-multi-route-id';
+          return orFallback(route['id'] as String?, fallback);
+
+        case 'addHighlightPolygonShape':
+          final polygon = Map<String, dynamic>.from(args['polygon'] as Map);
+          return orFallback(
+            polygon['id'] as String?,
+            'mock-dim-polygon-id',
+          );
+
+        default:
+          return null;
+      }
+    });
 
     controller = KakaoMapControllerImplement(
       viewChannel,

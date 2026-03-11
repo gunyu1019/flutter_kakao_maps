@@ -33,10 +33,10 @@ class MultipleRoute extends BaseRoute with BaseMultipleRoute {
     required List<RouteStyle> styles,
     required List<RouteSegment> segments,
     required int zOrder,
-  }) : _segments = segments,
-       _styles = styles,
-       _visible = true,
-       _zOrder = zOrder {
+  })  : _segments = segments,
+        _styles = styles,
+        _visible = true,
+        _zOrder = zOrder {
     for (RouteSegment segment in _segments) {
       segment._setParent(this);
     }

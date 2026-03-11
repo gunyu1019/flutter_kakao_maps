@@ -17,16 +17,15 @@ web.HTMLElement poiElement(WebPoi poi, PoiStyle style) {
     for (WebPoiBadge badge in poi.badge.values.where(
       (WebPoiBadge badge) => badge.visible,
     )) {
-      web.HTMLElement badgeElement =
-          imageElement(
-              badge.preEncodedImage,
-              badge.image.width,
-              badge.image.height,
-            )
-            ..style.top = topOffset(badge)
-            ..style.left = leftOffset(badge)
-            ..style.position = "absolute"
-            ..style.zIndex = badge.zOrder.toString();
+      web.HTMLElement badgeElement = imageElement(
+        badge.preEncodedImage,
+        badge.image.width,
+        badge.image.height,
+      )
+        ..style.top = topOffset(badge)
+        ..style.left = leftOffset(badge)
+        ..style.position = "absolute"
+        ..style.zIndex = badge.zOrder.toString();
       element.appendChild(badgeElement);
     }
   }
@@ -45,18 +44,15 @@ web.HTMLElement poiElement(WebPoi poi, PoiStyle style) {
     final textGroupElement = web.HTMLSpanElement();
     final iconAvailable = element.children.length > 0;
     final splitedText = poi.text!.split("\n");
-    final textStyles = style.textStyle.isEmpty
-        ? const [PoiTextStyle()]
-        : style.textStyle;
+    final textStyles =
+        style.textStyle.isEmpty ? const [PoiTextStyle()] : style.textStyle;
     var textStyleIndex = 0;
-    splitedText
-        .map((innerText) {
-          final style = textStyles[textStyleIndex];
-          if (textStyleIndex + 1 < textStyles.length) textStyleIndex++;
-          final element = textElement(innerText, style, poi.onClick);
-          return element;
-        })
-        .forEach((e) => textGroupElement.appendChild(e));
+    splitedText.map((innerText) {
+      final style = textStyles[textStyleIndex];
+      if (textStyleIndex + 1 < textStyles.length) textStyleIndex++;
+      final element = textElement(innerText, style, poi.onClick);
+      return element;
+    }).forEach((e) => textGroupElement.appendChild(e));
     if (iconAvailable) textGroupElement.style.height = "0";
     element.appendChild(textGroupElement);
   }

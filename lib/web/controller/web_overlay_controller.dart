@@ -90,9 +90,8 @@ class WebOverlayController {
     final type = OverlayType.values.firstWhere(
       (e) => e.value == argument["type"],
     );
-    final layerId = argument.containsKey("layerId")
-        ? argument["layerId"]
-        : null;
+    final layerId =
+        argument.containsKey("layerId") ? argument["layerId"] : null;
 
     switch (method.method) {
       case "createLabelLayer":

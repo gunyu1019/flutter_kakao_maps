@@ -20,6 +20,6 @@ class WebPolylineShape {
     required this.option,
     required this.strokeOption,
     required this.style,
-  }) : styleId = style.id!,
-       currentLevel = style.zoomLevel;
+  })  : styleId = style.id!,
+        currentLevel = style.zoomLevel;
 }

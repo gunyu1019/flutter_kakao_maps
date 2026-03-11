@@ -26,9 +26,9 @@ class PoiTransition with KMessageable {
   }
 
   factory PoiTransition.fromMessageable(dynamic payload) => PoiTransition(
-    entrance: Transition.values.firstWhere(
-      (e) => e.value == payload['entrance'],
-    ),
-    exit: Transition.values.firstWhere((e) => e.value == payload['exit']),
-  );
+        entrance: Transition.values.firstWhere(
+          (e) => e.value == payload['entrance'],
+        ),
+        exit: Transition.values.firstWhere((e) => e.value == payload['exit']),
+      );
 }

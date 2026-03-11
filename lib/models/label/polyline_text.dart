@@ -34,9 +34,9 @@ class PolylineText {
     required String text,
     required this.points,
     bool visible = true,
-  }) : _style = style,
-       _text = text,
-       _visible = visible;
+  })  : _style = style,
+        _text = text,
+        _visible = visible;
 
   /// [PolylineText.style]을 변경합니다.
   Future<void> changeStyles(PolylineTextStyle style) async {

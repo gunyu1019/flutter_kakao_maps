@@ -28,13 +28,13 @@ class LabelController extends BaseLabelController {
     bool clickable = true,
     int zOrder = BaseLabelController.defaultZOrder,
   }) : super._(
-         competitionType,
-         competitionUnit,
-         orderingType,
-         visible,
-         clickable,
-         zOrder,
-       );
+          competitionType,
+          competitionUnit,
+          orderingType,
+          visible,
+          clickable,
+          zOrder,
+        );
 
   Future<void> _createLabelLayer() async {
     await _invokeMethod("createLabelLayer", {

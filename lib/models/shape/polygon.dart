@@ -28,10 +28,10 @@ class Polygon<T extends BasePoint> extends Shape {
     this.id, {
     required T position,
     required PolygonStyle style,
-  }) : _controller = controller,
-       _style = style,
-       _position = position,
-       _visible = true;
+  })  : _controller = controller,
+        _style = style,
+        _position = position,
+        _visible = true;
 
   /// 도형에 정의된 스타일([PolygonStyle])을 다시 정의합니다.
   Future<void> changeStyle(PolygonStyle style) async {

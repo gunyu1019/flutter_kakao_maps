@@ -56,15 +56,15 @@ class PoiTextStyle with KMessageable {
   }
 
   factory PoiTextStyle.fromMessageable(dynamic payload) => PoiTextStyle(
-    aspectRatio: payload['aspectRatio'],
-    characterSpace: payload['characterSpace'],
-    color: Color(payload['color']),
-    font: payload['font'],
-    lineSpace: payload['lineSpace'],
-    size: payload['size'],
-    stroke: payload['stroke'],
-    strokeColor: Color(payload['strokeColor']),
-  );
+        aspectRatio: payload['aspectRatio'],
+        characterSpace: payload['characterSpace'],
+        color: Color(payload['color']),
+        font: payload['font'],
+        lineSpace: payload['lineSpace'],
+        size: payload['size'],
+        stroke: payload['stroke'],
+        strokeColor: Color(payload['strokeColor']),
+      );
 
   PoiTextStyle copyWith({
     double? aspectRatio,
@@ -75,16 +75,17 @@ class PoiTextStyle with KMessageable {
     int? size,
     int? stroke,
     Color? strokeColor,
-  }) => PoiTextStyle(
-    aspectRatio: aspectRatio ?? this.aspectRatio,
-    characterSpace: characterSpace ?? this.characterSpace,
-    color: color ?? this.color,
-    font: font ?? this.font,
-    lineSpace: lineSpace ?? this.lineSpace,
-    size: size ?? this.size,
-    stroke: stroke ?? this.stroke,
-    strokeColor: strokeColor ?? this.strokeColor,
-  );
+  }) =>
+      PoiTextStyle(
+        aspectRatio: aspectRatio ?? this.aspectRatio,
+        characterSpace: characterSpace ?? this.characterSpace,
+        color: color ?? this.color,
+        font: font ?? this.font,
+        lineSpace: lineSpace ?? this.lineSpace,
+        size: size ?? this.size,
+        stroke: stroke ?? this.stroke,
+        strokeColor: strokeColor ?? this.strokeColor,
+      );
 
   @override
   bool operator ==(Object other) {

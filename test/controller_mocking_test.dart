@@ -32,22 +32,22 @@ void main() {
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(viewChannel, (call) async {
-          switch (call.method) {
-            case 'getCameraPosition':
-              return dummyCameraPayload;
-            case 'fromScreenPoint':
-              return dummyFromScreenPointPayload;
-            case 'toScreenPoint':
-              return dummyToScreenPointPayload;
-            case 'canPositionVisible':
-            case 'canShowPosition':
-              return dummyCanPositionVisiblePayload;
-            case 'getBuildingHeightScale':
-              return dummyBuildingHeightScalePayload;
-            default:
-              return null;
-          }
-        });
+      switch (call.method) {
+        case 'getCameraPosition':
+          return dummyCameraPayload;
+        case 'fromScreenPoint':
+          return dummyFromScreenPointPayload;
+        case 'toScreenPoint':
+          return dummyToScreenPointPayload;
+        case 'canPositionVisible':
+        case 'canShowPosition':
+          return dummyCanPositionVisiblePayload;
+        case 'getBuildingHeightScale':
+          return dummyBuildingHeightScalePayload;
+        default:
+          return null;
+      }
+    });
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(overlayChannel, (call) async => null);
