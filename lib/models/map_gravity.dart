@@ -9,8 +9,8 @@ class MapGravity {
 
   /// 지도의 중앙을 기준으로 합니다.
   const MapGravity.center()
-      : horizontalAlign = HorizontalAlign.center,
-        verticalAlign = VerticalAlign.center;
+    : horizontalAlign = HorizontalAlign.center,
+      verticalAlign = VerticalAlign.center;
 
   int get value {
     if (kIsWeb || Platform.isIOS) {
@@ -26,7 +26,7 @@ class MapGravity {
   }
 
   factory MapGravity.fromValue(int value) => MapGravity(
-      HorizontalAlign.values
-          .firstWhere((e) => e.iosValue == (value / 3).toInt()),
-      VerticalAlign.values.firstWhere((e) => e.iosValue == value % 3));
+    HorizontalAlign.values.firstWhere((e) => e.iosValue == (value / 3).toInt()),
+    VerticalAlign.values.firstWhere((e) => e.iosValue == value % 3),
+  );
 }

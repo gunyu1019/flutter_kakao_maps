@@ -41,23 +41,25 @@ enum GestureType {
 
   const GestureType({required this.value});
 
-  static GestureType fromValue(int value) => GestureType.values
-      .firstWhere((el) => value == el.value, orElse: () => GestureType.unknown);
+  static GestureType fromValue(int value) => GestureType.values.firstWhere(
+    (el) => value == el.value,
+    orElse: () => GestureType.unknown,
+  );
 
   // # Github Issue (#20)
   // iOS 환경에서 카메라 값은 GestureType이 아닌, MoveBy라는 특수한 열거형 클래스 형태로 반환됩니다.
   // MoveBy와 GestureType의 열거형 타입의 의도는 큰 차이가 없으나, 실제 내부 값의 차이가 존재하기
   // 의도와 다른 값을 반환받을 수 도 있습니다.
   static GestureType _fromMoveByValue(int value) => switch (value) {
-        0 => GestureType.oneFingerDoubleTap,
-        1 => GestureType.twoFingerSingleTap,
-        2 => GestureType.pan,
-        3 => GestureType.rotate,
-        4 => GestureType.zoom,
-        5 => GestureType.tilt,
-        6 => GestureType.longTapAndDrag,
-        7 => GestureType.rotateZoom,
-        8 => GestureType.oneFingerZoom,
-        int() => GestureType.unknown
-      };
+    0 => GestureType.oneFingerDoubleTap,
+    1 => GestureType.twoFingerSingleTap,
+    2 => GestureType.pan,
+    3 => GestureType.rotate,
+    4 => GestureType.zoom,
+    5 => GestureType.tilt,
+    6 => GestureType.longTapAndDrag,
+    7 => GestureType.rotateZoom,
+    8 => GestureType.oneFingerZoom,
+    int() => GestureType.unknown,
+  };
 }

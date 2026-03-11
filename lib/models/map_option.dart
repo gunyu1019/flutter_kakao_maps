@@ -21,13 +21,14 @@ class KakaoMapOption {
   final bool visible;
   final String? tag;
 
-  const KakaoMapOption(
-      {this.position = defaultPosition,
-      this.zoomLevel = defaultZoomLevel,
-      this.mapType = defaultMapType,
-      this.viewName,
-      this.visible = defaultVisible,
-      this.tag});
+  const KakaoMapOption({
+    this.position = defaultPosition,
+    this.zoomLevel = defaultZoomLevel,
+    this.mapType = defaultMapType,
+    this.viewName,
+    this.visible = defaultVisible,
+    this.tag,
+  });
 
   /* Default Type */
   static const LatLng defaultPosition = LatLng(37.402005, 127.108621);

@@ -33,16 +33,18 @@ class Route extends BaseRoute {
   /// [Route]의 곡선 유형을 불러옵니다.
   CurveType get curveType => _curveType;
 
-  Route._(this._controller, this.id,
-      {required List<LatLng> points,
-      required RouteStyle style,
-      required CurveType curveType,
-      required int zOrder})
-      : _points = points,
-        _style = style,
-        _curveType = curveType,
-        _visible = true,
-        _zOrder = zOrder;
+  Route._(
+    this._controller,
+    this.id, {
+    required List<LatLng> points,
+    required RouteStyle style,
+    required CurveType curveType,
+    required int zOrder,
+  }) : _points = points,
+       _style = style,
+       _curveType = curveType,
+       _visible = true,
+       _zOrder = zOrder;
 
   /// 선형([Route]) 정의된 스타일([RouteStyle])을 다시 정의합니다.
   Future<void> changeStyle(RouteStyle style) async {

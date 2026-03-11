@@ -30,31 +30,35 @@ class RouteStyle with KMessageable {
   final bool _isSecondaryStyle;
   bool _isAdded = false;
 
-  RouteStyle(this.color, this.lineWidth,
-      {String? id,
-      this.strokeColor = Colors.black,
-      this.strokeWidth = 0,
-      this.pattern,
-      this.zoomLevel = 0})
-      : _id = id,
-        _isSecondaryStyle = false;
+  RouteStyle(
+    this.color,
+    this.lineWidth, {
+    String? id,
+    this.strokeColor = Colors.black,
+    this.strokeWidth = 0,
+    this.pattern,
+    this.zoomLevel = 0,
+  }) : _id = id,
+       _isSecondaryStyle = false;
 
   RouteStyle.withPattern(this.pattern, {String? id, this.zoomLevel = 0})
-      : _id = id,
-        _isSecondaryStyle = false,
-        color = Colors.black,
-        lineWidth = 0,
-        strokeColor = Colors.black,
-        strokeWidth = 0;
+    : _id = id,
+      _isSecondaryStyle = false,
+      color = Colors.black,
+      lineWidth = 0,
+      strokeColor = Colors.black,
+      strokeWidth = 0;
 
-  RouteStyle._(this.color, this.lineWidth,
-      {String? id,
-      this.strokeColor = Colors.black,
-      this.strokeWidth = 0,
-      this.pattern,
-      this.zoomLevel = 0})
-      : _id = id,
-        _isSecondaryStyle = true;
+  RouteStyle._(
+    this.color,
+    this.lineWidth, {
+    String? id,
+    this.strokeColor = Colors.black,
+    this.strokeWidth = 0,
+    this.pattern,
+    this.zoomLevel = 0,
+  }) : _id = id,
+       _isSecondaryStyle = true;
 
   void _setStyleId(String id) {
     _id = id;
@@ -79,11 +83,13 @@ class RouteStyle with KMessageable {
   }) {
     if (_isSecondaryStyle) return;
     final otherStyle = RouteStyle._(
-        color ?? this.color, lineWidth ?? this.lineWidth,
-        strokeColor: strokeColor ?? this.strokeColor,
-        strokeWidth: strokeWidth ?? this.strokeWidth,
-        pattern: pattern ?? this.pattern,
-        zoomLevel: zoomLevel);
+      color ?? this.color,
+      lineWidth ?? this.lineWidth,
+      strokeColor: strokeColor ?? this.strokeColor,
+      strokeWidth: strokeWidth ?? this.strokeWidth,
+      pattern: pattern ?? this.pattern,
+      zoomLevel: zoomLevel,
+    );
     _styles.add(otherStyle);
   }
 
@@ -120,7 +126,7 @@ class RouteStyle with KMessageable {
       // ignore: deprecated_member_use
       "strokeColor": strokeColor.value,
       "pattern": pattern?.toMessageable(),
-      "zoomLevel": zoomLevel
+      "zoomLevel": zoomLevel,
     };
     if (!_isSecondaryStyle) {
       payload['otherStyle'] = _styles.map((e) => e.toMessageable()).toList();
@@ -129,25 +135,32 @@ class RouteStyle with KMessageable {
   }
 
   factory RouteStyle.fromMessageable(dynamic payload, [String? id]) {
-    final style = RouteStyle(Color(payload["color"]), payload["lineWidth"],
-        id: id,
-        strokeColor: Color(payload["strokeColor"]),
-        strokeWidth: payload["strokeWidth"],
-        pattern: payload["pattern"] != null
-            ? RoutePattern.fromMessageable(payload["pattern"])
-            : null,
-        zoomLevel: payload["zoomLevel"]);
+    final style = RouteStyle(
+      Color(payload["color"]),
+      payload["lineWidth"],
+      id: id,
+      strokeColor: Color(payload["strokeColor"]),
+      strokeWidth: payload["strokeWidth"],
+      pattern: payload["pattern"] != null
+          ? RoutePattern.fromMessageable(payload["pattern"])
+          : null,
+      zoomLevel: payload["zoomLevel"],
+    );
     if (payload.containsKey("otherStyle") && payload["otherStyle"].length > 0) {
       payload["otherStyle"]
-          .map<RouteStyle>((e) => RouteStyle._(
-              Color(e["color"]), e["lineWidth"],
+          .map<RouteStyle>(
+            (e) => RouteStyle._(
+              Color(e["color"]),
+              e["lineWidth"],
               id: id,
               strokeColor: Color(e["strokeColor"]),
               strokeWidth: e["strokeWidth"],
               pattern: e["pattern"] != null
                   ? RoutePattern.fromMessageable(e["pattern"])
                   : null,
-              zoomLevel: e["zoomLevel"]))
+              zoomLevel: e["zoomLevel"],
+            ),
+          )
           .forEach(style._styles.add);
     }
     return style;

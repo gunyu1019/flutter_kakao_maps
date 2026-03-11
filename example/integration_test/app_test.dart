@@ -36,7 +36,8 @@ void main() {
       expect(find.byType(KakaoMap), findsOneWidget);
     });
 
-    testWidgets('getCameraPosition should return initial center from native SDK',
+    testWidgets(
+        'getCameraPosition should return initial center from native SDK',
         (WidgetTester tester) async {
       await _launchExampleApp(tester);
       final KakaoMapController controller = await _waitForController(tester);
@@ -65,12 +66,12 @@ void main() {
 
       final CameraPosition afterMove = await controller.getCameraPosition();
 
-      expect(beforeMove.position.latitude != afterMove.position.latitude, isTrue);
-      expect(beforeMove.position.longitude != afterMove.position.longitude, isTrue);
-      expect(afterMove.position.latitude,
-          closeTo(target.latitude, 0.0005));
-      expect(afterMove.position.longitude,
-          closeTo(target.longitude, 0.0005));
+      expect(
+          beforeMove.position.latitude != afterMove.position.latitude, isTrue);
+      expect(beforeMove.position.longitude != afterMove.position.longitude,
+          isTrue);
+      expect(afterMove.position.latitude, closeTo(target.latitude, 0.0005));
+      expect(afterMove.position.longitude, closeTo(target.longitude, 0.0005));
     });
 
     testWidgets('addPoi should successfully add poi to the map',
@@ -159,7 +160,8 @@ void main() {
       );
     });
 
-    testWidgets('addMultipleRoute should successfully add multiple routes to the map',
+    testWidgets(
+        'addMultipleRoute should successfully add multiple routes to the map',
         (WidgetTester tester) async {
       await _launchExampleApp(tester);
       final KakaoMapController controller = await _waitForController(tester);
@@ -241,7 +243,8 @@ void main() {
       }, returnsNormally);
     });
 
-    testWidgets('addPolylineText should successfully add polyline text to the map',
+    testWidgets(
+        'addPolylineText should successfully add polyline text to the map',
         (WidgetTester tester) async {
       await _launchExampleApp(tester);
       final KakaoMapController controller = await _waitForController(tester);

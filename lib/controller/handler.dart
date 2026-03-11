@@ -23,8 +23,12 @@ mixin KakaoMapControllerHandler {
             onMapError(KakaoAuthError.fromMessageable(method.arguments));
             break;
           default:
-            onMapError(KakaoMapError(
-                method.arguments['className'], method.arguments['message']));
+            onMapError(
+              KakaoMapError(
+                method.arguments['className'],
+                method.arguments['message'],
+              ),
+            );
             break;
         }
         break;

@@ -7,17 +7,20 @@ mixin KakaoMapWebControllerHandler {
       case "getCameraPosition":
         return await getCameraPosition();
       case "moveCamera":
-        final cameraUpdate =
-            CameraUpdate.fromMessageable(arguments["cameraUpdate"]);
-        final animation = (arguments.containsKey("cameraAnimation") &&
+        final cameraUpdate = CameraUpdate.fromMessageable(
+          arguments["cameraUpdate"],
+        );
+        final animation =
+            (arguments.containsKey("cameraAnimation") &&
                 arguments["cameraAnimation"] != null)
             ? CameraAnimation.fromMessageable(arguments["cameraAnimation"])
             : null;
         await moveCamera(cameraUpdate, animation: animation);
         break;
       case "setGestureEnable":
-        final gesture = GestureType.values
-            .firstWhere((e) => e.value == arguments["gestureType"]);
+        final gesture = GestureType.values.firstWhere(
+          (e) => e.value == arguments["gestureType"],
+        );
         await setGesture(gesture, arguments["enable"]);
         break;
       case "setEventHandler":
@@ -29,16 +32,19 @@ mixin KakaoMapWebControllerHandler {
         return await toScreenPoint(LatLng.fromMessageable(arguments));
       case "canPositionVisible":
         final zoomLevel = arguments["zoomLevel"];
-        final position =
-            arguments["position"].map(LatLng.fromMessageable).toList();
+        final position = arguments["position"]
+            .map(LatLng.fromMessageable)
+            .toList();
         return await canShowPosition(zoomLevel, position);
       case "changeMapType":
         await changeMapType(
-            MapType.values.firstWhere((e) => e.value == arguments["mapType"]));
+          MapType.values.firstWhere((e) => e.value == arguments["mapType"]),
+        );
         break;
       case "overlayVisible":
-        final overlay = MapOverlay.values
-            .firstWhere((e) => e.value == arguments["overlayType"]);
+        final overlay = MapOverlay.values.firstWhere(
+          (e) => e.value == arguments["overlayType"],
+        );
         if (arguments["visible"]) {
           await showOverlay(overlay);
         } else {
@@ -48,17 +54,18 @@ mixin KakaoMapWebControllerHandler {
       case "getBuildingHeightScale":
         return 0.0;
       case "defaultGUIposition":
-        final gui = DefaultGUIType.values
-            .firstWhere((e) => e.value == arguments["type"]);
+        final gui = DefaultGUIType.values.firstWhere(
+          (e) => e.value == arguments["type"],
+        );
         final gravity = MapGravity.fromValue(arguments["gravity"]);
         defaultGUIposition(gui, gravity, arguments["x"], arguments["y"]);
         break;
       case "clearCache" ||
-            "clearDiskCache" ||
-            "setBuildingHeightScale" ||
-            "defaultGUIvisible" ||
-            "scaleAutohide" ||
-            "scaleAnimationTime":
+          "clearDiskCache" ||
+          "setBuildingHeightScale" ||
+          "defaultGUIvisible" ||
+          "scaleAutohide" ||
+          "scaleAnimationTime":
         break;
       default:
         throw UnimplementedError();
@@ -96,7 +103,11 @@ mixin KakaoMapWebControllerHandler {
   // Future<void> defaultGUIvisible(DefaultGUIType type, bool visible);
 
   Future<void> defaultGUIposition(
-      DefaultGUIType type, MapGravity gravity, double x, double y);
+    DefaultGUIType type,
+    MapGravity gravity,
+    double x,
+    double y,
+  );
 
   // Future<void> scaleAutohide(bool autohide);
 

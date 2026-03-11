@@ -27,14 +27,16 @@ class MultipleRoute extends BaseRoute with BaseMultipleRoute {
   @override
   bool get multiple => true;
 
-  MultipleRoute._(this._controller, this.id,
-      {required List<RouteStyle> styles,
-      required List<RouteSegment> segments,
-      required int zOrder})
-      : _segments = segments,
-        _styles = styles,
-        _visible = true,
-        _zOrder = zOrder {
+  MultipleRoute._(
+    this._controller,
+    this.id, {
+    required List<RouteStyle> styles,
+    required List<RouteSegment> segments,
+    required int zOrder,
+  }) : _segments = segments,
+       _styles = styles,
+       _visible = true,
+       _zOrder = zOrder {
     for (RouteSegment segment in _segments) {
       segment._setParent(this);
     }

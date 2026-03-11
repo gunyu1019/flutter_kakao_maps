@@ -32,10 +32,15 @@ abstract class BaseLabelController extends OverlayController {
   /// 렌더링의 우선순위를 정의합니다.
   int get zOrder => _zOrder;
 
-  BaseLabelController._(this.competitionType, this.competitionUnit,
-      this.orderingType, this.visible, bool clickable, int zOrder)
-      : _clickable = clickable,
-        _zOrder = zOrder;
+  BaseLabelController._(
+    this.competitionType,
+    this.competitionUnit,
+    this.orderingType,
+    this.visible,
+    bool clickable,
+    int zOrder,
+  ) : _clickable = clickable,
+      _zOrder = zOrder;
 
   @override
   Future<T> _invokeMethod<T>(String method, Map<String, dynamic> payload) {
@@ -56,13 +61,15 @@ abstract class BaseLabelController extends OverlayController {
     _zOrder = zOrder;
   }
 
-  Future<String?> _addPoiBadge(String poiId,
-      {String? badgeId,
-      required KImage image,
-      required double offsetX,
-      required double offsetY,
-      bool visible = true,
-      int? zOrder}) async {
+  Future<String?> _addPoiBadge(
+    String poiId, {
+    String? badgeId,
+    required KImage image,
+    required double offsetX,
+    required double offsetY,
+    bool visible = true,
+    int? zOrder,
+  }) async {
     var payload = {
       "poiId": poiId,
       "badge": {
@@ -71,8 +78,8 @@ abstract class BaseLabelController extends OverlayController {
         "offsetX": offsetX,
         "offsetY": offsetY,
         "visible": visible,
-        "zOrder": zOrder
-      }
+        "zOrder": zOrder,
+      },
     };
     return await _invokeMethod("addPoiBadge", payload);
   }
@@ -86,8 +93,11 @@ abstract class BaseLabelController extends OverlayController {
     String badgeId,
     bool visible,
   ) async {
-    await _invokeMethod("changePoiBadgeVisible",
-        {"poiId": poiId, "badgeId": badgeId, "visible": visible});
+    await _invokeMethod("changePoiBadgeVisible", {
+      "poiId": poiId,
+      "badgeId": badgeId,
+      "visible": visible,
+    });
   }
 
   static const int defaultZOrder = 10001;

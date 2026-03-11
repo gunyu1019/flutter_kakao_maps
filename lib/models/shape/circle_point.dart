@@ -12,8 +12,12 @@ class CirclePoint extends _BaseDotPoint {
 
   final int? vertexCount;
 
-  CirclePoint(this.radius, super.basePoint,
-      {this.clockwise = true, this.vertexCount});
+  CirclePoint(
+    this.radius,
+    super.basePoint, {
+    this.clockwise = true,
+    this.vertexCount,
+  });
 
   CirclePoint copyWith({
     double? radius,

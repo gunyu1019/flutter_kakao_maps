@@ -13,8 +13,12 @@ class RectanglePoint extends _BaseDotPoint {
   /// [clockwise]의 값을 false로 정의해야 합니다.
   final bool clockwise;
 
-  RectanglePoint(this.width, this.height, super.basePoint,
-      {this.clockwise = true});
+  RectanglePoint(
+    this.width,
+    this.height,
+    super.basePoint, {
+    this.clockwise = true,
+  });
 
   RectanglePoint copyWith({
     double? width,

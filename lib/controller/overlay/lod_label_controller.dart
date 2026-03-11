@@ -31,8 +31,14 @@ class LodLabelController extends BaseLabelController {
     bool visible = true,
     bool clickable = true,
     int zOrder = BaseLabelController.defaultZOrder,
-  }) : super._(competitionType, competitionUnit, orderingType, visible,
-            clickable, zOrder);
+  }) : super._(
+         competitionType,
+         competitionUnit,
+         orderingType,
+         visible,
+         clickable,
+         zOrder,
+       );
 
   Future<void> _createLodLabelLayer() async {
     await _invokeMethod("createLodLabelLayer", {
@@ -50,25 +56,41 @@ class LodLabelController extends BaseLabelController {
     await _invokeMethod("removeLodLabelLayer", {});
   }
 
-  Future<void> _changePoiVisible(String poiId, bool visible,
-      {bool? autoMove}) async {
-    await _invokeMethod("changePoiVisible",
-        {"poiId": poiId, "visible": visible, "autoMove": autoMove});
+  Future<void> _changePoiVisible(
+    String poiId,
+    bool visible, {
+    bool? autoMove,
+  }) async {
+    await _invokeMethod("changePoiVisible", {
+      "poiId": poiId,
+      "visible": visible,
+      "autoMove": autoMove,
+    });
   }
 
-  Future<void> _changePoiStyle(String poiId, String styleId,
-      [bool transition = false]) async {
-    await _invokeMethod("changePoiStyle",
-        {"poiId": poiId, "styleId": styleId, "transition": transition});
+  Future<void> _changePoiStyle(
+    String poiId,
+    String styleId, [
+    bool transition = false,
+  ]) async {
+    await _invokeMethod("changePoiStyle", {
+      "poiId": poiId,
+      "styleId": styleId,
+      "transition": transition,
+    });
   }
 
-  Future<void> _changePoiText(String poiId, String text, String styleId,
-      [bool transition = false]) async {
+  Future<void> _changePoiText(
+    String poiId,
+    String text,
+    String styleId, [
+    bool transition = false,
+  ]) async {
     await _invokeMethod("changePoiText", {
       "poiId": poiId,
       "text": text,
       "styleId": styleId,
-      "transition": transition
+      "transition": transition,
     });
   }
 
@@ -103,21 +125,24 @@ class LodLabelController extends BaseLabelController {
         "styleId": style.id,
         "transform": transform?.value,
         "visible": visible,
-      }
+      },
     };
     payload["poi"].addAll(position.toMessageable());
     String? poiId = await _invokeMethod("addLodPoi", payload);
     if (poiId == null) {
       throw OverlayRegistrationFailedError(id, type);
     }
-    final poi = LodPoi._(this, poiId,
-        transform: transform,
-        position: position,
-        style: style,
-        text: text,
-        rank: rank ?? 0,
-        visible: visible,
-        onClick: onClick);
+    final poi = LodPoi._(
+      this,
+      poiId,
+      transform: transform,
+      position: position,
+      style: style,
+      text: text,
+      rank: rank ?? 0,
+      visible: visible,
+      onClick: onClick,
+    );
     _poi[poiId] = poi;
     return poi;
   }
@@ -129,9 +154,7 @@ class LodLabelController extends BaseLabelController {
 
   /// 입력된 [poi]에 따라 지도에 그려진 [LodPoi]를 삭제합니다.
   Future<void> removeLodPoi(LodPoi poi) async {
-    await _invokeMethod("removeLodPoi", {
-      "poiId": poi.id,
-    });
+    await _invokeMethod("removeLodPoi", {"poiId": poi.id});
     _poi.remove(poi.id);
   }
 

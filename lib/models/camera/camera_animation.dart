@@ -11,8 +11,11 @@ class CameraAnimation with KMessageable {
   /// 이동 중인 애니메이션 효과가 있을 때, 이어서 애니매이션 효과를 표현할지 선택합니다.
   final bool isConsecutive;
 
-  const CameraAnimation(this.duration,
-      {this.autoElevation = false, this.isConsecutive = false});
+  const CameraAnimation(
+    this.duration, {
+    this.autoElevation = false,
+    this.isConsecutive = false,
+  });
 
   @override
   Map<String, dynamic> toMessageable() {
@@ -23,21 +26,21 @@ class CameraAnimation with KMessageable {
     };
   }
 
-  factory CameraAnimation.fromMessageable(dynamic payload) =>
-      CameraAnimation(payload["duration"],
-          autoElevation: payload["autoElevation"] ?? false,
-          isConsecutive: payload["isConsecutive"] ?? false);
+  factory CameraAnimation.fromMessageable(dynamic payload) => CameraAnimation(
+    payload["duration"],
+    autoElevation: payload["autoElevation"] ?? false,
+    isConsecutive: payload["isConsecutive"] ?? false,
+  );
 
   CameraAnimation copyWith({
     int? duration,
     bool? autoElevation,
     bool? isConsecutive,
-  }) =>
-      CameraAnimation(
-        duration ?? this.duration,
-        autoElevation: autoElevation ?? this.autoElevation,
-        isConsecutive: isConsecutive ?? this.isConsecutive,
-      );
+  }) => CameraAnimation(
+    duration ?? this.duration,
+    autoElevation: autoElevation ?? this.autoElevation,
+    isConsecutive: isConsecutive ?? this.isConsecutive,
+  );
 
   @override
   bool operator ==(Object other) {

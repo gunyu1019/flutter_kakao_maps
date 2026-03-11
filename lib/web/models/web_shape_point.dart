@@ -31,19 +31,23 @@ class WebShapePoint {
     if (payload.containsKey("holes") && payload["holes"].length > 0) {
       payload["holes"]
           .map<List<LatLng>>(
-              (e1) => e1.map<LatLng>((e2) => LatLng.fromMessageable).toList())
+            (e1) => e1.map<LatLng>((e2) => LatLng.fromMessageable).toList(),
+          )
           .forEach(point.holes.add);
     }
     return point;
   }
 
-  static List<LatLng> _getPointFromDotPoint(dynamic payload,
-      [LatLng? basePoint]) {
+  static List<LatLng> _getPointFromDotPoint(
+    dynamic payload, [
+    LatLng? basePoint,
+  ]) {
     List<LatLng> absolutePoint = <LatLng>[];
     final basePoint0 =
         basePoint ?? LatLng.fromMessageable(payload["basePoint"]);
-    final dotType =
-        PointShapeType.values.firstWhere((e) => e.value == payload["dotType"]);
+    final dotType = PointShapeType.values.firstWhere(
+      (e) => e.value == payload["dotType"],
+    );
     final clockwise = payload["clockwise"];
 
     switch (dotType) {

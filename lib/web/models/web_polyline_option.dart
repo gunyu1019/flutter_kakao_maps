@@ -1,14 +1,15 @@
 part of '../kakao_map_sdk_web.dart';
 
 extension type WebPolylineOption._(JSObject _) implements JSObject {
-  external WebPolylineOption(
-      {bool endArrow,
-      JSArray<WebLatLng> path,
-      double strokeWeight = 3,
-      String strokeColor,
-      double strokeOpacity = 0.6,
-      String strokeStyle = "solid",
-      int zIndex = 10000});
+  external WebPolylineOption({
+    bool endArrow,
+    JSArray<WebLatLng> path,
+    double strokeWeight = 3,
+    String strokeColor,
+    double strokeOpacity = 0.6,
+    String strokeStyle = "solid",
+    int zIndex = 10000,
+  });
 
   external bool get endArrow;
   external JSArray<WebLatLng> get path;

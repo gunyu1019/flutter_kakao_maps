@@ -40,35 +40,39 @@ class PoiStyle with KMessageable {
   final bool _isSecondaryStyle;
   bool _isAdded = false;
 
-  PoiStyle(
-      {String? id,
-      this.applyDpScale = true,
-      this.anchor = const KPoint(0.5, 1.0),
-      this.padding = 0.0,
-      this.icon,
-      this.iconTransition = const PoiTransition(),
-      this.textGravity =
-          const MapGravity(HorizontalAlign.center, VerticalAlign.bottom),
-      this.textStyle = const [],
-      this.textTransition = const PoiTransition(),
-      this.zoomLevel = 0})
-      : _isSecondaryStyle = false,
-        _id = id;
+  PoiStyle({
+    String? id,
+    this.applyDpScale = true,
+    this.anchor = const KPoint(0.5, 1.0),
+    this.padding = 0.0,
+    this.icon,
+    this.iconTransition = const PoiTransition(),
+    this.textGravity = const MapGravity(
+      HorizontalAlign.center,
+      VerticalAlign.bottom,
+    ),
+    this.textStyle = const [],
+    this.textTransition = const PoiTransition(),
+    this.zoomLevel = 0,
+  }) : _isSecondaryStyle = false,
+       _id = id;
 
-  PoiStyle._(
-      {String? id,
-      this.applyDpScale = true,
-      this.anchor = const KPoint(0.5, 1.0),
-      this.padding = 0.0,
-      this.icon,
-      this.iconTransition = const PoiTransition(),
-      this.textGravity =
-          const MapGravity(HorizontalAlign.center, VerticalAlign.bottom),
-      this.textStyle = const [],
-      this.textTransition = const PoiTransition(),
-      this.zoomLevel = 0})
-      : _isSecondaryStyle = true,
-        _id = id;
+  PoiStyle._({
+    String? id,
+    this.applyDpScale = true,
+    this.anchor = const KPoint(0.5, 1.0),
+    this.padding = 0.0,
+    this.icon,
+    this.iconTransition = const PoiTransition(),
+    this.textGravity = const MapGravity(
+      HorizontalAlign.center,
+      VerticalAlign.bottom,
+    ),
+    this.textStyle = const [],
+    this.textTransition = const PoiTransition(),
+    this.zoomLevel = 0,
+  }) : _isSecondaryStyle = true,
+       _id = id;
 
   void _setStyleId(String id) {
     _id = id;
@@ -96,16 +100,17 @@ class PoiStyle with KMessageable {
   }) {
     if (_isSecondaryStyle) return;
     final otherStyle = PoiStyle._(
-        id: id,
-        applyDpScale: applyDpScale ?? this.applyDpScale,
-        anchor: anchor ?? this.anchor,
-        padding: padding ?? this.padding,
-        icon: icon ?? this.icon,
-        iconTransition: iconTransition ?? this.iconTransition,
-        textGravity: textGravity ?? this.textGravity,
-        textStyle: textStyle ?? this.textStyle,
-        textTransition: textTransition ?? this.textTransition,
-        zoomLevel: zoomLevel);
+      id: id,
+      applyDpScale: applyDpScale ?? this.applyDpScale,
+      anchor: anchor ?? this.anchor,
+      padding: padding ?? this.padding,
+      icon: icon ?? this.icon,
+      iconTransition: iconTransition ?? this.iconTransition,
+      textGravity: textGravity ?? this.textGravity,
+      textStyle: textStyle ?? this.textStyle,
+      textTransition: textTransition ?? this.textTransition,
+      zoomLevel: zoomLevel,
+    );
     _styles.add(otherStyle);
   }
 
@@ -142,7 +147,7 @@ class PoiStyle with KMessageable {
       "textGravity": textGravity.value,
       "textTransition": textTransition.toMessageable(),
       "textStyle": textStyle.map((e) => e.toMessageable()).toList(),
-      "zoomLevel": zoomLevel
+      "zoomLevel": zoomLevel,
     };
     if (!_isSecondaryStyle) {
       payload['otherStyle'] = _styles.map((e) => e.toMessageable()).toList();
@@ -152,40 +157,45 @@ class PoiStyle with KMessageable {
 
   factory PoiStyle.fromMessageable(dynamic payload, [String? id]) {
     final style = PoiStyle(
-        id: id,
-        applyDpScale: payload["applyDpScale"],
-        anchor: KPoint.fromMessageable(payload["anchor"]),
-        padding: payload["padding"],
-        icon: payload["icon"] != null
-            ? KImage.fromMessageable(payload["icon"])
-            : null,
-        iconTransition:
-            PoiTransition.fromMessageable(payload["iconTransition"]),
-        textGravity: MapGravity.fromValue(payload["textGravity"]),
-        textStyle: payload["textStyle"]
-            .map<PoiTextStyle>(PoiTextStyle.fromMessageable)
-            .toList(),
-        textTransition:
-            PoiTransition.fromMessageable(payload["textTransition"]),
-        zoomLevel: payload["zoomLevel"]);
+      id: id,
+      applyDpScale: payload["applyDpScale"],
+      anchor: KPoint.fromMessageable(payload["anchor"]),
+      padding: payload["padding"],
+      icon: payload["icon"] != null
+          ? KImage.fromMessageable(payload["icon"])
+          : null,
+      iconTransition: PoiTransition.fromMessageable(payload["iconTransition"]),
+      textGravity: MapGravity.fromValue(payload["textGravity"]),
+      textStyle: payload["textStyle"]
+          .map<PoiTextStyle>(PoiTextStyle.fromMessageable)
+          .toList(),
+      textTransition: PoiTransition.fromMessageable(payload["textTransition"]),
+      zoomLevel: payload["zoomLevel"],
+    );
     if (payload.containsKey("otherStyle") && payload["otherStyle"].length > 0) {
       payload["otherStyle"]
-          .map<PoiStyle>((e) => PoiStyle._(
+          .map<PoiStyle>(
+            (e) => PoiStyle._(
               id: id,
               applyDpScale: e["applyDpScale"],
               anchor: KPoint.fromMessageable(e["anchor"]),
               padding: e["padding"],
-              icon:
-                  e["icon"] != null ? KImage.fromMessageable(e["icon"]) : null,
-              iconTransition:
-                  PoiTransition.fromMessageable(e["iconTransition"]),
+              icon: e["icon"] != null
+                  ? KImage.fromMessageable(e["icon"])
+                  : null,
+              iconTransition: PoiTransition.fromMessageable(
+                e["iconTransition"],
+              ),
               textGravity: MapGravity.fromValue(e["textGravity"]),
               textStyle: e["textStyle"]
                   .map<PoiTextStyle>(PoiTextStyle.fromMessageable)
                   .toList(),
-              textTransition:
-                  PoiTransition.fromMessageable(e["textTransition"]),
-              zoomLevel: e["zoomLevel"]))
+              textTransition: PoiTransition.fromMessageable(
+                e["textTransition"],
+              ),
+              zoomLevel: e["zoomLevel"],
+            ),
+          )
           .forEach(style._styles.add);
     }
     return style;

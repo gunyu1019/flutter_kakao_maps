@@ -15,26 +15,29 @@ class MultipleRouteOption with BaseMultipleRoute, KMessageable {
   @override
   final List<RouteSegment> segments;
 
-  MultipleRouteOption(
-    List<RouteStyle>? style, {
-    this.zOrder = 10000,
-    this.id,
-  })  : styles = style ?? [],
-        segments = [];
+  MultipleRouteOption(List<RouteStyle>? style, {this.zOrder = 10000, this.id})
+    : styles = style ?? [],
+      segments = [];
 
   /// [MultipleRoute]에 구현할 선형을 추가합니다.
   /// [point] 매개변수에는 새롭게 추가할 선형의 지점과,
   /// [style] 매개변수에는 새롭게 구현할 선형의 스타일을 입력받습니다.
-  void addRouteWithStyle(List<LatLng> point, RouteStyle style,
-      [CurveType curveType = CurveType.none]) {
+  void addRouteWithStyle(
+    List<LatLng> point,
+    RouteStyle style, [
+    CurveType curveType = CurveType.none,
+  ]) {
     styles.add(style);
     segments.add(RouteSegment._(point, styles.length, curveType, this));
   }
 
   /// [MultipleRoute]에 구현할 선형을 추가합니다.
   /// MultipleRouteOption.styles 배열 [styleIndex]에 따라 스타일으로 정의합니다.
-  void addRouteWithIndex(List<LatLng> point, int styleIndex,
-      [CurveType curveType = CurveType.none]) {
+  void addRouteWithIndex(
+    List<LatLng> point,
+    int styleIndex, [
+    CurveType curveType = CurveType.none,
+  ]) {
     segments.add(RouteSegment._(point, styleIndex, curveType, this));
   }
 
@@ -54,14 +57,19 @@ class MultipleRouteOption with BaseMultipleRoute, KMessageable {
         var parsedRoute = segment.toMessageable();
         parsedRoute["styleId"] = styles[segment.styleIndex].id;
         return parsedRoute;
-      }).toList()
+      }).toList(),
     };
   }
 
   factory MultipleRouteOption.fromMessageable(
-      dynamic payload, List<RouteStyle> styles) {
-    final option =
-        MultipleRouteOption([], id: payload["id"], zOrder: payload["zOrder"]);
+    dynamic payload,
+    List<RouteStyle> styles,
+  ) {
+    final option = MultipleRouteOption(
+      [],
+      id: payload["id"],
+      zOrder: payload["zOrder"],
+    );
     payload["routes"]
         .map((e) => RouteSegment.fromMessageable(e, option))
         .forEach(option.segments.add);

@@ -13,41 +13,35 @@ void main() {
 
   setUpAll(() {
     try {
-      ui_web.platformViewRegistry.registerViewFactory(
-        'plugin/kakao_map',
-        (int viewId, {Object? params}) {
-          return web.HTMLDivElement()
-            ..id = 'test_map_$viewId'
-            ..style.width = '100%'
-            ..style.height = '100%';
-        },
-      );
+      ui_web.platformViewRegistry.registerViewFactory('plugin/kakao_map', (
+        int viewId, {
+        Object? params,
+      }) {
+        return web.HTMLDivElement()
+          ..id = 'test_map_$viewId'
+          ..style.width = '100%'
+          ..style.height = '100%';
+      });
     } catch (_) {}
   });
 
   Widget wrapApp(Widget child) {
     return MaterialApp(
-      home: Scaffold(
-        body: SizedBox.expand(child: child),
-      ),
+      home: Scaffold(body: SizedBox.expand(child: child)),
     );
   }
 
-  testWidgets('should render KakaoMap as HtmlElementView on web',
-      (tester) async {
-    await tester.pumpWidget(
-      wrapApp(
-        KakaoMap(
-          onMapReady: (_) {},
-        ),
-      ),
-    );
+  testWidgets('should render KakaoMap as HtmlElementView on web', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrapApp(KakaoMap(onMapReady: (_) {})));
 
     expect(find.byType(KakaoMap), findsOneWidget);
     expect(find.byType(HtmlElementView), findsOneWidget);
 
-    final htmlElementView =
-        tester.widget<HtmlElementView>(find.byType(HtmlElementView));
+    final htmlElementView = tester.widget<HtmlElementView>(
+      find.byType(HtmlElementView),
+    );
     expect(htmlElementView.viewType, 'plugin/kakao_map');
   });
 
@@ -62,18 +56,15 @@ void main() {
     );
 
     await tester.pumpWidget(
-      wrapApp(
-        KakaoMap(
-          onMapReady: (_) {},
-          option: option,
-        ),
-      ),
+      wrapApp(KakaoMap(onMapReady: (_) {}, option: option)),
     );
 
-    final htmlElementView =
-        tester.widget<HtmlElementView>(find.byType(HtmlElementView));
-    final creationParams =
-        Map<String, dynamic>.from(htmlElementView.creationParams as Map);
+    final htmlElementView = tester.widget<HtmlElementView>(
+      find.byType(HtmlElementView),
+    );
+    final creationParams = Map<String, dynamic>.from(
+      htmlElementView.creationParams as Map,
+    );
 
     expect(creationParams, equals(option.toMessageable()));
   });

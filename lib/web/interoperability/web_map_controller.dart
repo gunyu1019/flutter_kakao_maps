@@ -13,8 +13,13 @@ extension type WebMapController._(JSObject _) implements JSObject {
   external void setLevel(int level, [JSAny? options]);
   external int getLevel();
 
-  external void setBounds(WebLatLngBound bounds,
-      [int paddingTop, int paddingRight, int paddingBottom, int paddingLeft]);
+  external void setBounds(
+    WebLatLngBound bounds, [
+    int paddingTop,
+    int paddingRight,
+    int paddingBottom,
+    int paddingLeft,
+  ]);
   external WebLatLngBound getBounds();
 
   external void setMinLevel(int minLevel);

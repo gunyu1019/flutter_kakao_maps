@@ -18,11 +18,14 @@ class WebPoi {
 
   void Function()? onClick;
 
-  WebPoi(this.id, this.layerId,
-      {required this.currentLevel,
-      required this.text,
-      required this.styleId,
-      this.onClick});
+  WebPoi(
+    this.id,
+    this.layerId, {
+    required this.currentLevel,
+    required this.text,
+    required this.styleId,
+    this.onClick,
+  });
 
   void setMap(WebMapController? map) => overlay.setMap(map);
   WebMapController getMap() => overlay.getMap();

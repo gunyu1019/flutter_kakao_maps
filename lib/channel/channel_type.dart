@@ -10,15 +10,16 @@ enum ChannelType {
   MethodChannel get channel => MethodChannel(id);
   MethodChannel channelWithId(int id) => MethodChannel("${this.id}#$id");
 
-  MethodChannel channelWithParam(
-          [StandardMethodCodec codec = const StandardMethodCodec(),
-          BinaryMessenger? binaryMessenger]) =>
-      MethodChannel(id, codec, binaryMessenger);
+  MethodChannel channelWithParam([
+    StandardMethodCodec codec = const StandardMethodCodec(),
+    BinaryMessenger? binaryMessenger,
+  ]) => MethodChannel(id, codec, binaryMessenger);
 
-  MethodChannel channelWithParamAndId(int id,
-          [StandardMethodCodec codec = const StandardMethodCodec(),
-          BinaryMessenger? binaryMessenger]) =>
-      MethodChannel("${this.id}#$id", codec, binaryMessenger);
+  MethodChannel channelWithParamAndId(
+    int id, [
+    StandardMethodCodec codec = const StandardMethodCodec(),
+    BinaryMessenger? binaryMessenger,
+  ]) => MethodChannel("${this.id}#$id", codec, binaryMessenger);
 
   const ChannelType(this.id);
 

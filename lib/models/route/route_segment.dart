@@ -44,26 +44,34 @@ class RouteSegment with KMessageable {
   }
 
   factory RouteSegment.fromMessageable(
-          dynamic payload, BaseMultipleRoute parent) =>
-      RouteSegment._(
-          payload["points"].map<LatLng>(LatLng.fromMessageable).toList(),
-          payload["styleIndex"],
-          CurveType.values.firstWhere((e) => e.value == payload["curveType"]),
-          parent);
+    dynamic payload,
+    BaseMultipleRoute parent,
+  ) => RouteSegment._(
+    payload["points"].map<LatLng>(LatLng.fromMessageable).toList(),
+    payload["styleIndex"],
+    CurveType.values.firstWhere((e) => e.value == payload["curveType"]),
+    parent,
+  );
 
   /// 선형의 지점([points])을 다시 정의합니다.
   Future<void> changePoint(List<LatLng> points) async {
     if (!_isAdded()) return;
     this.points = points;
-    await _controller!
-        ._changeMultipleRoute(id!, parent.styles[0].id!, parent.segments);
+    await _controller!._changeMultipleRoute(
+      id!,
+      parent.styles[0].id!,
+      parent.segments,
+    );
   }
 
   /// 선형의 곡선 유형([curveType])을 다시 정의합니다.
   Future<void> changeCurveType(int index, CurveType curveType) async {
     if (!_isAdded()) return;
     this.curveType = curveType;
-    await _controller!
-        ._changeMultipleRoute(id!, parent.styles[0].id!, parent.segments);
+    await _controller!._changeMultipleRoute(
+      id!,
+      parent.styles[0].id!,
+      parent.segments,
+    );
   }
 }

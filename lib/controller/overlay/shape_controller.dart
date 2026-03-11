@@ -24,13 +24,19 @@ class ShapeController extends BaseShapeController {
   final Map<String, Polyline> _polylineShape = {};
   final Map<String, Polygon> _polygonShape = {};
 
-  ShapeController._(this.channel, this.manager, this.id,
-      {this.passType = defaultShapeLayerPass, this.zOrder = defaultZOrder})
-      : super._();
+  ShapeController._(
+    this.channel,
+    this.manager,
+    this.id, {
+    this.passType = defaultShapeLayerPass,
+    this.zOrder = defaultZOrder,
+  }) : super._();
 
   Future<void> _createShapeLayer() async {
-    await _invokeMethod(
-        "createShapeLayer", {"passType": passType.value, "zOrder": zOrder});
+    await _invokeMethod("createShapeLayer", {
+      "passType": passType.value,
+      "zOrder": zOrder,
+    });
   }
 
   Future<void> _removeShapeLayer() async {
@@ -47,8 +53,12 @@ class ShapeController extends BaseShapeController {
   /// [Polygon]을 그리기 위해서는 도형을 그릴 위치([position])과 스타일([style]), [polylineCap]이 필수로 입력되어야 합니다.
   /// [position]은 절대 위치([MapPoint])가 입력될 수 있고, 상대위치([CirclePoint], [RectanglePoint])가 입력될 수 있습니다.
   Future<Polyline> addPolylineShape<T extends BasePoint>(
-      T position, PolylineStyle style, PolylineCap polylineCap,
-      {String? id, int zOrder = 10001}) async {
+    T position,
+    PolylineStyle style,
+    PolylineCap polylineCap, {
+    String? id,
+    int zOrder = 10001,
+  }) async {
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
@@ -61,15 +71,20 @@ class ShapeController extends BaseShapeController {
         "id": id,
         "position": position.toMessageable(),
         "styleId": style.id,
-        "zOrder": zOrder
-      }
+        "zOrder": zOrder,
+      },
     };
     String? shapeId = await _invokeMethod("addPolylineShape", payload);
     if (shapeId == null) {
       throw OverlayRegistrationFailedError(id, type);
     }
-    final polyline = Polyline<T>._(this, shapeId,
-        position: position, style: style, polylineCap: polylineCap);
+    final polyline = Polyline<T>._(
+      this,
+      shapeId,
+      position: position,
+      style: style,
+      polylineCap: polylineCap,
+    );
     _polylineShape[shapeId] = polyline;
     return polyline;
   }
@@ -78,8 +93,11 @@ class ShapeController extends BaseShapeController {
   /// [Polygon]을 그리기 위해서는 도형을 그릴 위치([position])과 스타일([style])이 필수로 입력되어야 합니다.
   /// [position]은 절대 위치([MapPoint])가 입력될 수 있고, 상대위치([CirclePoint], [RectanglePoint])가 입력될 수 있습니다.
   Future<Polygon> addPolygonShape<T extends BasePoint>(
-      T position, PolygonStyle style,
-      {String? id, int zOrder = 10001}) async {
+    T position,
+    PolygonStyle style, {
+    String? id,
+    int zOrder = 10001,
+  }) async {
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
     }
@@ -89,15 +107,19 @@ class ShapeController extends BaseShapeController {
         "id": id,
         "position": position.toMessageable(),
         "styleId": styleId,
-        "zOrder": zOrder
-      }
+        "zOrder": zOrder,
+      },
     };
     String? shapeId = await _invokeMethod("addPolygonShape", payload);
     if (shapeId == null) {
       throw OverlayRegistrationFailedError(id, type);
     }
-    final polygon =
-        Polygon<T>._(this, shapeId, position: position, style: style);
+    final polygon = Polygon<T>._(
+      this,
+      shapeId,
+      position: position,
+      style: style,
+    );
     _polygonShape[shapeId] = polygon;
     return polygon;
   }

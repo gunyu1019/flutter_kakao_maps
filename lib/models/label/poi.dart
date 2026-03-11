@@ -59,19 +59,21 @@ class Poi with BadgeablePoi {
   List<Shape> get shareTransformShape =>
       List.unmodifiable(_shareTransformShape.values);
 
-  Poi._(this._controller, this.id,
-      {required this.transform,
-      required LatLng position,
-      required PoiStyle style,
-      required String? text,
-      required int rank,
-      required bool visible,
-      this.onClick})
-      : _position = position,
-        _style = style,
-        _text = text,
-        _rank = rank,
-        _visible = visible;
+  Poi._(
+    this._controller,
+    this.id, {
+    required this.transform,
+    required LatLng position,
+    required PoiStyle style,
+    required String? text,
+    required int rank,
+    required bool visible,
+    this.onClick,
+  }) : _position = position,
+       _style = style,
+       _text = text,
+       _rank = rank,
+       _visible = visible;
 
   Future<void> addSharePosition(Poi poi) async {
     _sharePositionPoi[poi.id] = poi;
@@ -104,8 +106,11 @@ class Poi with BadgeablePoi {
   }
 
   /// [Poi]가 [x]와 [y]에 따라 픽셀만큼 높여서 그립니다.
-  Future<void> changeOffsetPosition(double x, double y,
-      [bool forceDpScale = false]) async {
+  Future<void> changeOffsetPosition(
+    double x,
+    double y, [
+    bool forceDpScale = false,
+  ]) async {
     final prePosition = _position;
     _position = LatLng(prePosition.latitude + x, prePosition.longitude + y);
     await _controller._changePoiOffsetPosition(id, x, y, forceDpScale);
@@ -156,14 +161,23 @@ class Poi with BadgeablePoi {
   /// [Poi]를 [path]에 따라 [millis]밀리초 이내 이동합니다.
   /// [cornerRadius] 매개변수는 곡선 구간(코너)를 통과할 때 부드러운 이동 효과를 주기 위한 길이를 의미합니다.
   /// [jumpThreshold] 매개변수는 함수가 실행 중에 새로운 경로가 입력되었을 때, 현재위치~새 경로 시작점간에 거리에서 점프할 지에 대한 임계 값을 의미합니다.
-  Future<void> movePath(List<LatLng> path, int millis,
-      {double cornerRadius = 40.0, double jumpThreshold = 200.0}) async {
+  Future<void> movePath(
+    List<LatLng> path,
+    int millis, {
+    double cornerRadius = 40.0,
+    double jumpThreshold = 200.0,
+  }) async {
     if (path.isEmpty) {
       throw Exception("The Path parameter is empty.");
     }
     _position = path.last;
-    await _controller._movePathPoi(id, path, millis,
-        cornerRadius: cornerRadius, jumpThreshold: jumpThreshold);
+    await _controller._movePathPoi(
+      id,
+      path,
+      millis,
+      cornerRadius: cornerRadius,
+      jumpThreshold: jumpThreshold,
+    );
   }
 
   /// [Poi]를 [path]에 따라 [millis]밀리초 이내 이동합니다.
@@ -171,16 +185,24 @@ class Poi with BadgeablePoi {
   /// [cornerRadius] 매개변수는 곡선 구간(코너)를 통과할 때 부드러운 이동 효과를 주기 위한 길이를 의미합니다.
   /// [jumpThreshold] 매개변수는 함수가 실행 중에 새로운 경로가 입력되었을 때, 현재위치~새 경로 시작점간에 거리에서 점프할 지에 대한 임계 값을 의미합니다.
   Future<void> movePathWithRotate(
-      List<LatLng> path, double baseRadian, int millis,
-      {double cornerRadius = 40.0, double jumpThreshold = 200.0}) async {
+    List<LatLng> path,
+    double baseRadian,
+    int millis, {
+    double cornerRadius = 40.0,
+    double jumpThreshold = 200.0,
+  }) async {
     if (path.isEmpty) {
       throw Exception("The Path parameter is empty.");
     }
     _position = path.last;
-    await _controller._movePathPoi(id, path, millis,
-        baseRadian: baseRadian,
-        cornerRadius: cornerRadius,
-        jumpThreshold: jumpThreshold);
+    await _controller._movePathPoi(
+      id,
+      path,
+      millis,
+      baseRadian: baseRadian,
+      cornerRadius: cornerRadius,
+      jumpThreshold: jumpThreshold,
+    );
   }
 
   /// [Poi] 개체를 삭제합니다.
@@ -215,7 +237,11 @@ class Poi with BadgeablePoi {
   /// (Android 한정) [autoMove]가 참이고, [duration]이 부여되면 지정된 시간 이내로 카메라를 이동시킵니다.
   Future<void> show([bool? autoMove, int? duration]) async {
     _visible = true;
-    await _controller._changePoiVisible(id, true,
-        autoMove: autoMove, duration: duration);
+    await _controller._changePoiVisible(
+      id,
+      true,
+      autoMove: autoMove,
+      duration: duration,
+    );
   }
 }

@@ -14,8 +14,10 @@ class LatLng with KMessageable {
       LatLng(payload['latitude'], payload['longitude']);
 
   @override
-  Map<String, dynamic> toMessageable() =>
-      {"latitude": latitude, "longitude": longitude};
+  Map<String, dynamic> toMessageable() => {
+    "latitude": latitude,
+    "longitude": longitude,
+  };
 
   /// [other]간 거리를 구합니다.
   /// Kakao Map SDK에서 두 지점간 거리를 구하는 방법은 성능을 고려하여 Haversine Formula를 이용합니다.
@@ -26,10 +28,8 @@ class LatLng with KMessageable {
   LatLng offset(double distance, double degrees) =>
       _pointOffset(this, distance, degrees);
 
-  LatLng copyWith({double? latitude, double? longitude}) => LatLng(
-        latitude ?? this.latitude,
-        longitude ?? this.longitude,
-      );
+  LatLng copyWith({double? latitude, double? longitude}) =>
+      LatLng(latitude ?? this.latitude, longitude ?? this.longitude);
 
   @override
   bool operator ==(Object other) {

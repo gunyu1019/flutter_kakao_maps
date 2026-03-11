@@ -23,12 +23,15 @@ class Polygon<T extends BasePoint> extends Shape {
   /// [Polygon]가 현재 지도에 그려지는지 여부를 나타냅니다.
   bool get visible => _visible;
 
-  Polygon._(BaseShapeController controller, this.id,
-      {required T position, required PolygonStyle style})
-      : _controller = controller,
-        _style = style,
-        _position = position,
-        _visible = true;
+  Polygon._(
+    BaseShapeController controller,
+    this.id, {
+    required T position,
+    required PolygonStyle style,
+  }) : _controller = controller,
+       _style = style,
+       _position = position,
+       _visible = true;
 
   /// 도형에 정의된 스타일([PolygonStyle])을 다시 정의합니다.
   Future<void> changeStyle(PolygonStyle style) async {

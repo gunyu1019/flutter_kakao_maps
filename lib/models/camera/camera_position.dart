@@ -17,16 +17,21 @@ class CameraPosition with KMessageable {
   /// 지도를 비추고 있는 카메라의 높이를 가져옵니다.
   final double? height;
 
-  const CameraPosition(this.position, this.zoomLevel,
-      {this.tiltAngle, this.rotationAngle, this.height});
+  const CameraPosition(
+    this.position,
+    this.zoomLevel, {
+    this.tiltAngle,
+    this.rotationAngle,
+    this.height,
+  });
 
   factory CameraPosition.fromMessageable(dynamic payload) => CameraPosition(
-        LatLng.fromMessageable(payload),
-        payload['zoomLevel'],
-        tiltAngle: payload['tiltAngle'],
-        rotationAngle: payload['rotationAngle'],
-        height: payload['height'],
-      );
+    LatLng.fromMessageable(payload),
+    payload['zoomLevel'],
+    tiltAngle: payload['tiltAngle'],
+    rotationAngle: payload['rotationAngle'],
+    height: payload['height'],
+  );
 
   @override
   Map<String, dynamic> toMessageable() {
@@ -45,13 +50,12 @@ class CameraPosition with KMessageable {
     int? zoomLevel,
     double? tiltAngle,
     double? rotationAngle,
-  }) =>
-      CameraPosition(
-        position ?? this.position,
-        zoomLevel ?? this.zoomLevel,
-        tiltAngle: tiltAngle ?? this.tiltAngle,
-        rotationAngle: rotationAngle ?? this.rotationAngle,
-      );
+  }) => CameraPosition(
+    position ?? this.position,
+    zoomLevel ?? this.zoomLevel,
+    tiltAngle: tiltAngle ?? this.tiltAngle,
+    rotationAngle: rotationAngle ?? this.rotationAngle,
+  );
 
   @override
   int get hashCode =>

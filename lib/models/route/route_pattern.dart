@@ -32,17 +32,19 @@ class RoutePattern with KMessageable {
       "symbolImage": symbolImage?.toMessageable(),
       "distance": distance,
       "pinStart": pinStart,
-      "pinEnd": pinEnd
+      "pinEnd": pinEnd,
     };
   }
 
   factory RoutePattern.fromMessageable(dynamic payload) => RoutePattern(
-      KImage.fromMessageable(payload["patternImage"]), payload["distance"],
-      symbolImage: payload["symbolImage"] != null
-          ? KImage.fromMessageable(payload["symbolImage"])
-          : null,
-      pinStart: payload["pinStart"],
-      pinEnd: payload["pinEnd"]);
+    KImage.fromMessageable(payload["patternImage"]),
+    payload["distance"],
+    symbolImage: payload["symbolImage"] != null
+        ? KImage.fromMessageable(payload["symbolImage"])
+        : null,
+    pinStart: payload["pinStart"],
+    pinEnd: payload["pinEnd"],
+  );
 
   RoutePattern copyWith({
     KImage? patternImage,
@@ -50,14 +52,13 @@ class RoutePattern with KMessageable {
     double? distance,
     bool? pinStart,
     bool? pinEnd,
-  }) =>
-      RoutePattern(
-        patternImage ?? this.patternImage,
-        distance ?? this.distance,
-        symbolImage: symbolImage ?? this.symbolImage,
-        pinStart: pinStart ?? this.pinStart,
-        pinEnd: pinEnd ?? this.pinEnd,
-      );
+  }) => RoutePattern(
+    patternImage ?? this.patternImage,
+    distance ?? this.distance,
+    symbolImage: symbolImage ?? this.symbolImage,
+    pinStart: pinStart ?? this.pinStart,
+    pinEnd: pinEnd ?? this.pinEnd,
+  );
 
   @override
   bool operator ==(Object other) {

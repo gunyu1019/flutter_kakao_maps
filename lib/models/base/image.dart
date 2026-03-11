@@ -19,8 +19,8 @@ class KImage with KMessageable {
     required this.height,
     String? path,
     Uint8List? data,
-  })  : _path = path,
-        _data = data;
+  }) : _path = path,
+       _data = data;
 
   /// Assets으로 이미지 객체를 생성합니다.
   factory KImage.fromAsset(String asset, int width, int height) =>
@@ -36,22 +36,30 @@ class KImage with KMessageable {
 
   /// Widget을 이미지로 만들어 사용합니다.
   /// 위젯을 이미지로 만드는 것이기에 Widget 요소 중에 버튼 등의 상호작용 기능이 있더라도 작용하지 않습니다.
-  static Future<KImage> fromWidget(Widget child, Size size,
-      {double? pixelRatio, BuildContext? context}) async {
+  static Future<KImage> fromWidget(
+    Widget child,
+    Size size, {
+    double? pixelRatio,
+    BuildContext? context,
+  }) async {
     final repaintBoundary = RenderRepaintBoundary();
     final platformDispatcher = WidgetsBinding.instance.platformDispatcher;
     final fallBackView = platformDispatcher.views.first;
-    final view =
-        context != null ? View.maybeOf(context) ?? fallBackView : fallBackView;
+    final view = context != null
+        ? View.maybeOf(context) ?? fallBackView
+        : fallBackView;
 
     final renderPositionedBox = RenderPositionedBox(
-        alignment: Alignment.center, child: repaintBoundary);
+      alignment: Alignment.center,
+      child: repaintBoundary,
+    );
     final renderView = RenderView(
       view: view,
       child: renderPositionedBox,
       configuration: ViewConfiguration(
-          logicalConstraints: BoxConstraints.tight(size),
-          devicePixelRatio: pixelRatio ?? view.devicePixelRatio),
+        logicalConstraints: BoxConstraints.tight(size),
+        devicePixelRatio: pixelRatio ?? view.devicePixelRatio,
+      ),
     );
 
     final pipelineOwner = PipelineOwner()..rootNode = renderView;
@@ -59,14 +67,13 @@ class KImage with KMessageable {
 
     final buildOwner = BuildOwner(focusManager: FocusManager());
     final rootElement = RenderObjectToWidgetAdapter<RenderBox>(
-        container: repaintBoundary,
-        child: SizedBox(
-            width: size.width,
-            height: size.height,
-            child: Directionality(
-              textDirection: TextDirection.ltr,
-              child: child,
-            ))).attachToRenderTree(buildOwner);
+      container: repaintBoundary,
+      child: SizedBox(
+        width: size.width,
+        height: size.height,
+        child: Directionality(textDirection: TextDirection.ltr, child: child),
+      ),
+    ).attachToRenderTree(buildOwner);
 
     buildOwner
       ..buildScope(rootElement)
@@ -79,7 +86,8 @@ class KImage with KMessageable {
 
     try {
       final image = await repaintBoundary.toImage(
-          pixelRatio: pixelRatio ?? view.devicePixelRatio);
+        pixelRatio: pixelRatio ?? view.devicePixelRatio,
+      );
       final data = await image
           .toByteData(format: ui.ImageByteFormat.png)
           .then((b) => b!.buffer.asUint8List());
@@ -107,7 +115,7 @@ class KImage with KMessageable {
     final payload = <String, dynamic>{
       "type": type.value,
       "width": width,
-      "height": height
+      "height": height,
     };
 
     switch (type) {
@@ -122,17 +130,17 @@ class KImage with KMessageable {
     return payload;
   }
 
-  factory KImage.fromMessageable(dynamic payload) =>
-      KImage._(ImageType.values.firstWhere((e) => e.value == payload["type"]),
-          width: payload["width"],
-          height: payload["height"],
-          path: payload["path"],
-          data: payload["data"]);
+  factory KImage.fromMessageable(dynamic payload) => KImage._(
+    ImageType.values.firstWhere((e) => e.value == payload["type"]),
+    width: payload["width"],
+    height: payload["height"],
+    path: payload["path"],
+    data: payload["data"],
+  );
 
   Future<Uint8List> readBytes() async => switch (type) {
-        ImageType.assets =>
-          (await rootBundle.load(_path!)).buffer.asUint8List(),
-        ImageType.file => await File(_path!).readAsBytes(),
-        ImageType.data => _data!,
-      };
+    ImageType.assets => (await rootBundle.load(_path!)).buffer.asUint8List(),
+    ImageType.file => await File(_path!).readAsBytes(),
+    ImageType.data => _data!,
+  };
 }
