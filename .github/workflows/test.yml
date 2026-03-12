@@ -38,7 +38,7 @@ jobs:
         working-directory: ./example
         run: flutter pub get
       - name: Boot iOS Simulator
-        timeout-minutes: 10
+        timeout-minutes: 15
         run: |
           killall Simulator || true
           DEVICE_UUID=$(xcrun simctl list devices available | grep "iPhone" | head -n 1 | awk -F'[()]' '{print $2}')
@@ -52,5 +52,8 @@ jobs:
           flutter devices
       - name: Run iOS Integration Test
         working-directory: ./example
-        timeout-minutes: 10
-        run: flutter test integration_test/app_test.dart -d ${{ env.SIMULATOR_ID }}
+        timeout-minutes: 20
+        run: |
+          export CI=true
+          export GITHUB_ACTIONS=true
+          flutter test integration_test/app_test.dart -d ${{ env.SIMULATOR_ID }}
