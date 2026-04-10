@@ -55,5 +55,33 @@ Future<void> changeMapType(KakaoMapController controller) async {
 
 ## 3. 지도 오버레이 그리기
 
+지도 위에 교통정보, 자전거도로 등 추가적인 정보를 덧씌워 표시할 수 있습니다.\
+[MapOverlay](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/MapOverlay.html) 열거형으로 오버레이 종류를 지정하며, [KakaoMapController](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController-class.html)의 `showOverlay()` / `hideOverlay()` 함수로 표시 여부를 제어합니다.
 
+### 3-1. 오버레이 종류
+
+지도에 표시할 수 있는 오버레이의 종류는 다음과 같습니다.
+
+| 오버레이               | 열거형 값                      | 설명                          |
+| ------------------ | -------------------------- | --------------------------- |
+| 자전거도로              | `MapOverlay.bicycleRoad`   | 자전거 도로를 지도 위에 표시합니다.        |
+| 로드뷰 라인             | `MapOverlay.roadviewLine`  | 로드뷰 촬영 경로를 지도 위에 표시합니다.     |
+| 힐쉐이딩               | `MapOverlay.hillshading`   | 지형 음영을 지도 위에 표시합니다.         |
+| 하이브리드 (스카이뷰 레이블)   | `MapOverlay.hybrid`        | 스카이뷰 위에 도로명·지명 레이블을 표시합니다.  |
+
+> 교통정보(traffic\_info) 오버레이는 별도 협의가 필요하며 기본 제공되지 않습니다.
+
+### 3-2. 오버레이 표시/숨기기
+
+`showOverlay()` 함수에 [MapOverlay](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/MapOverlay.html) 값을 전달하면 해당 오버레이가 지도에 표시되고, `hideOverlay()` 함수를 호출하면 숨길 수 있습니다.
+
+```dart
+Future<void> toggleOverlay(KakaoMapController controller) async {
+  // 자전거도로 오버레이를 표시합니다.
+  await controller.showOverlay(MapOverlay.bicycleRoad);
+
+  // 자전거도로 오버레이를 숨깁니다.
+  await controller.hideOverlay(MapOverlay.bicycleRoad);
+}
+```
 
