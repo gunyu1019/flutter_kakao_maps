@@ -50,7 +50,7 @@ class ExampleApplication with KakaoMapLifecycle {
 
 ## 2. 카메라 이동
 
-[카메라 조작 함수](../../../docs/map_element/camera.md#id-2) 또는 사용자의 조작에 의해 지도에 보여지는 카메라가 움직일 경우 호출되는 이벤트로 `onCameraMoveStart`와 `onCameraMoveEnd`가 있습니다.
+[카메라 조작 함수](camera.md#id-2) 또는 사용자의 조작에 의해 지도에 보여지는 카메라가 움직일 경우 호출되는 이벤트로 `onCameraMoveStart`와 `onCameraMoveEnd`가 있습니다.
 
 ```dart
 Widget mapWidget(BuildContext context) => KakaoMap(
@@ -62,7 +62,7 @@ Widget mapWidget(BuildContext context) => KakaoMap(
 ```
 
 두 이벤트 모두 [GestureType](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/GestureType.html) 형태의 인수가 제공되며, 카메라를 이동한 방법을 의미합니다. \
-[카메라 조작 함수](../../../docs/map_element/camera.md#id-2)에 의해 카메라의 위치가 변경되었다면 `GestureType.unknown`이 인수로 제공됩니다.
+[카메라 조작 함수](camera.md#id-2)에 의해 카메라의 위치가 변경되었다면 `GestureType.unknown`이 인수로 제공됩니다.
 
 `onCameraMoveEnd` 함수에는 최종 카메라의 위치를 담은 [CameraPosition](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/CameraPosition-class.html) 형태의 인수도 제공됩니다.
 
