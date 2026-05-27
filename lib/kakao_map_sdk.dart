@@ -28,6 +28,8 @@ part 'controller/overlay/route_controller.dart';
 part 'controller/overlay/shape_controller.dart';
 part 'controller/overlay/tracking_controller.dart';
 
+part 'controller/extensions/bounds.dart';
+
 /* exception */
 part 'exception/duplicated_overlay_exception.dart';
 part 'exception/overlay_style_registration_failed_error.dart';
@@ -49,6 +51,7 @@ part 'models/base/messageable.dart';
 part 'models/camera/camera_animation.dart';
 part 'models/camera/camera_position.dart';
 part 'models/camera/camera_update.dart';
+part 'models/camera/lat_lng_bounds.dart';
 part 'models/geolocation/latlng.dart';
 
 part 'models/label/badge.dart';
