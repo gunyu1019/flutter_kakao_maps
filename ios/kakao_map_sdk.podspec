@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'kakao_map_sdk'
-  s.version          = '1.2.3'
+  s.version          = '1.2.7'
   s.summary          = 'A Flutter plugin that provides a native platform-based Kakao Map(Korean Map Service).'
   s.description      = <<-DESC
 An unoffical kakao maps plugin.
