@@ -39,7 +39,7 @@ part 'exception/kakao_map_error.dart';
 
 /* initalizer */
 part 'initializer/sdk_initalizer.dart';
-part 'initializer/sdk_initiializer_implement.dart';
+part 'initializer/sdk_initializer_implement.dart';
 
 /* models */
 part 'models/map_option.dart';
