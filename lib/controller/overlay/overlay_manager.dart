@@ -73,7 +73,7 @@ mixin OverlayManager {
   Future<String> addRouteStyle(RouteStyle style);
 
   /// 고유 ID를 통해 Route 스타일 객체를 불러옵니다.
-  RouteStyle? getRotueStyle(String id);
+  RouteStyle? getRouteStyle(String id);
 
   /// 다중 Route 스타일을 등록합니다. [style] 매개변수에는 경로선 스타일에 사용되는 스타일 객체([RouteStyle])가 배열 형태로 입력됩니다.
   /// 등록된 Route Style은 [MultipleRoute]에서 사용됩니다.

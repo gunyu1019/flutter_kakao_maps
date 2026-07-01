@@ -303,7 +303,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
       _polylineStyle[id];
 
   @override
-  RouteStyle? getRotueStyle(String id) => _routeStyle[id]?[0];
+  RouteStyle? getRouteStyle(String id) => _routeStyle[id]?[0];
 
   @override
   List<RouteStyle>? getMultipleRotueStyle(String id) => _routeStyle[id];
