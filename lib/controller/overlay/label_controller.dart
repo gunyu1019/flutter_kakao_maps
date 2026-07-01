@@ -42,7 +42,7 @@ class LabelController extends BaseLabelController {
       "competitionUnit": competitionUnit.value,
       "orderingType": orderingType.value,
       "zOrder": zOrder,
-      "visable": visible,
+      "visible": visible,
       "clickable": _clickable,
     });
   }
