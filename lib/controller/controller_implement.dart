@@ -466,4 +466,36 @@ class KakaoMapControllerImplement extends KakaoMapController {
   Future<void> resume() async {
     await channel.invokeMethod("resume");
   }
+
+  void _resetAfterNativeMapRecreation() {
+    for (final style in _poiStyle.values) {
+      style._isAdded = false;
+    }
+    for (final styles in _polygonStyle.values) {
+      for (final style in styles) {
+        style._isAdded = false;
+      }
+    }
+    for (final styles in _polylineStyle.values) {
+      for (final style in styles) {
+        style._isAdded = false;
+      }
+    }
+    for (final styles in _routeStyle.values) {
+      for (final style in styles) {
+        style._isAdded = false;
+      }
+    }
+
+    _labelController.clear();
+    _lodLabelController.clear();
+    _shapeController.clear();
+    _routeController.clear();
+    _poiStyle.clear();
+    _polygonStyle.clear();
+    _polylineStyle.clear();
+    _routeStyle.clear();
+    buildingHeightScale = null;
+    _initalizeOverlayController();
+  }
 }
