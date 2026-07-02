@@ -111,11 +111,17 @@ void main() {
 
       expect(encodedAndroidParams, isNotNull);
 
-      final decodedAndroidParams = const StandardMessageCodec().decodeMessage(
-        ByteData.sublistView(encodedAndroidParams!),
+      final decodedAndroidParams = Map<String, dynamic>.from(
+        const StandardMessageCodec().decodeMessage(
+          ByteData.sublistView(encodedAndroidParams!),
+        ) as Map,
       );
 
-      expect(decodedAndroidParams, equals(expectedParams));
+      // Android always injects recoverAndroidGLSurfaceViewOnResume; strip it before comparing
+      // to the platform-agnostic expectedParams derived from KakaoMapOption.toMessageable().
+      final androidParamsWithoutRecovery = Map<String, dynamic>.from(decodedAndroidParams)
+        ..remove('recoverAndroidGLSurfaceViewOnResume');
+      expect(androidParamsWithoutRecovery, equals(expectedParams));
 
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
@@ -129,6 +135,47 @@ void main() {
       );
 
       expect(iosCreationParams, equals(expectedParams));
+    } finally {
+      debugDefaultTargetPlatformOverride = previous;
+    }
+  });
+
+  testWidgets('should pass Android MapView recreation params when enabled', (
+    tester,
+  ) async {
+    final previous = debugDefaultTargetPlatformOverride;
+
+    try {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+
+      await tester.pumpWidget(
+        wrapApp(
+          KakaoMap(
+            key: UniqueKey(),
+            onMapReady: (_) {},
+            recreateAndroidMapViewOnResume: true,
+            androidMapViewRecreationDelay: const Duration(milliseconds: 120),
+          ),
+        ),
+      );
+
+      expect(lastPlatformViewsCreateCall, isNotNull);
+
+      final androidCreateArgs = Map<String, dynamic>.from(
+        lastPlatformViewsCreateCall!.arguments as Map,
+      );
+      final encodedAndroidParams = androidCreateArgs['params'] as Uint8List?;
+
+      expect(encodedAndroidParams, isNotNull);
+
+      final decodedAndroidParams = Map<String, dynamic>.from(
+        const StandardMessageCodec().decodeMessage(
+          ByteData.sublistView(encodedAndroidParams!),
+        ) as Map,
+      );
+
+      expect(decodedAndroidParams['recreateAndroidMapViewOnResume'], isTrue);
+      expect(decodedAndroidParams['androidMapViewRecreationDelayMillis'], 120);
     } finally {
       debugDefaultTargetPlatformOverride = previous;
     }
