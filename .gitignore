@@ -33,3 +33,7 @@ build/
 
 .build/
 .swiftpm/
+
+# Local Android engine debugging artifacts
+engine_patches/
+example/android/engine_patch_repo/
