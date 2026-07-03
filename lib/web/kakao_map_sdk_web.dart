@@ -19,6 +19,7 @@ part 'elements/poi_element.dart';
 part 'elements/text_element.dart';
 
 part 'models/web_custom_overlay_option.dart';
+part 'models/web_dim_highlight_shape.dart';
 part 'models/web_map_option.dart';
 part 'models/web_mouse_event.dart';
 part 'models/web_poi.dart';
@@ -31,11 +32,13 @@ part 'models/web_route.dart';
 part 'models/web_route_element.dart';
 part 'models/web_shape_point.dart';
 
+part 'overlay/web_dim_screen_controller.dart';
 part 'overlay/web_label_controller.dart';
 part 'overlay/web_route_controller.dart';
 part 'overlay/web_shape_controller.dart';
 part 'overlay/web_tracking_controller.dart';
 
+part 'overlay/web_dim_screen_controller_handler.dart';
 part 'overlay/web_label_controller_handler.dart';
 part 'overlay/web_route_controller_handler.dart';
 part 'overlay/web_shape_controller_handler.dart';
