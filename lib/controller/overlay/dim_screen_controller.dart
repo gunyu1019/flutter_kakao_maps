@@ -35,7 +35,7 @@ class DimScreenController extends BaseShapeController {
   /// 지도를 덮을 범위를 설정합니다.
   Future<void> setCover(DimScreenCover cover) async {
     _cover = cover;
-    await _invokeMethod("setCover", {"cover": cover.value});
+    await _invokeMethod("setDimCover", {"cover": cover.value});
   }
 
   /// DimScreen의 색상을 설정합니다.
