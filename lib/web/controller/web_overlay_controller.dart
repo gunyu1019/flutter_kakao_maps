@@ -15,6 +15,7 @@ class WebOverlayController {
   final Map<String, WebShapeController> _shapeLayer = {};
   final Map<String, WebRouteController> _routeLayer = {};
   late final WebTrackingController _trackingLayer;
+  late final WebDimScreenController _dimScreenLayer;
 
   final void Function(String layerId, String poiId)? onPoiClick;
   final void Function(String layerId, String poiId)? onLodPoiClick;
@@ -53,11 +54,13 @@ class WebOverlayController {
       this,
     );
     _trackingLayer = WebTrackingController._(controller, this);
+    _dimScreenLayer = WebDimScreenController._(controller, this);
 
     _labelLayer[LabelController.defaultId]!.createLabelLayer();
     _lodLabelLayer[LodLabelController.defaultId]!.createLabelLayer();
     _shapeLayer[ShapeController.defaultId]!.createShapeLayer();
     _routeLayer[RouteController.defaultId]!.createRouteLayer();
+    _dimScreenLayer.createDimScreenLayer();
   }
 
   void _onPoiClick(String layerId, String poiId, bool isLod) {
@@ -179,7 +182,7 @@ class WebOverlayController {
       case OverlayType.route:
         return await _routeLayer[layerId!]?.routeHandle(method);
       case OverlayType.dimScreen:
-        return null;
+        return await _dimScreenLayer.dimScreenHandle(method);
       case OverlayType.tracking:
         return await _trackingLayer.trackingHandle(method);
     }
