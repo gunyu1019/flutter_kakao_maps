@@ -61,4 +61,13 @@ class RectanglePoint extends _BaseDotPoint {
 
   @override
   PointShapeType get dotType => PointShapeType.rectangle;
+
+  @override
+  Map<String, dynamic> toMessageable([bool isHole = false]) {
+    final payload = super.toMessageable(isHole);
+    payload["width"] = width;
+    payload["height"] = height;
+    payload["clockwise"] = clockwise;
+    return payload;
+  }
 }
