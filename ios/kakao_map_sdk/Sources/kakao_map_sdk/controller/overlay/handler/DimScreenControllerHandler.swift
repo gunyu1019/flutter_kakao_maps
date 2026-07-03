@@ -43,7 +43,18 @@ extension DimScreenControllerHandler {
             let color = UIColor(value: asUInt(arguments!["color"]!))
             setDimColor(color: color, onSuccess: result)
         case "setVisible": setDimVisible(visible: asBool(arguments!["visible"]!), onSuccess: result)
-        case "setDimCover": setDimCover(cover: DimScreenCover(rawValue: asInt(arguments!["cover"]!))!, onSuccess: result)
+        case "setDimCover":
+            // Dart의 DimScreenCover 순서(all=0, map=1, mapAndLabel=2)는
+            // 네이티브 SDK의 순서(map=0, mapAndLabels=1, all=2)와 다르므로 값으로 직접 매핑합니다.
+            let coverValue = asInt(arguments!["cover"]!)
+            let cover: DimScreenCover
+            switch coverValue {
+            case 0: cover = .all
+            case 1: cover = .map
+            case 2: cover = .mapAndLabels
+            default: fatalError("Unknown DimScreenCover value: \(coverValue)")
+            }
+            setDimCover(cover: cover, onSuccess: result)
         case "addHighlightPolygonShape":
             let polygon = asDict(arguments!["polygon"]!)
             let position = asDict(polygon["position"]!)
