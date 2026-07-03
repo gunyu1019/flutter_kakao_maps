@@ -6,7 +6,7 @@ class KakaoMapSdkImplement implements KakaoMapSdk {
 
   @override
   Future<String?> hashKey() async {
-    if (!Platform.isAndroid) {
+    if (defaultTargetPlatform != TargetPlatform.android) {
       return null;
     }
     return await channel.invokeMethod("hashKey");
