@@ -14,6 +14,9 @@ class WebLabelController with WebLabelControllerHandler {
   final Map<String, WebPoi> _webPoi = {};
 
   @override
+  final Map<String, WebPolylineText> _webPolylineText = {};
+
+  @override
   Future<void> createLabelLayer() async {
     addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
   }
@@ -22,6 +25,9 @@ class WebLabelController with WebLabelControllerHandler {
   Future<void> removeLabelLayer() async {
     for (final poi in _webPoi.keys) {
       await removePoi(poi);
+    }
+    for (final textId in _webPolylineText.keys.toList()) {
+      await removePolylineText(textId);
     }
     removeEventListener(
       controller,
@@ -33,6 +39,9 @@ class WebLabelController with WebLabelControllerHandler {
   void _zoomChangedEventHandler() {
     for (var poiId in _webPoi.keys) {
       _syncZoomLevel(poiId);
+    }
+    for (var textId in _webPolylineText.keys) {
+      _syncPolylineTextZoomLevel(textId);
     }
   }
 
@@ -198,6 +207,107 @@ class WebLabelController with WebLabelControllerHandler {
   Future<void> removePoi(String poiId) async {
     _webPoi[poiId]?.setMap(null);
     _webPoi.remove(poiId);
+  }
+
+  @override
+  Future<String> addPolylineText(
+    List<LatLng> points,
+    String text,
+    PolylineTextStyle style, {
+    String? id,
+    bool visible = true,
+  }) async {
+    final textId = id ?? manager._uuid.v4();
+    final pathId = "kms-plt-$textId";
+
+    final pathElement = svgPathElement(pathId, svgPathRoute(points, controller));
+    final textElement = polylineTextElement(pathId, text, style);
+    final svgElement = svgRootElement()
+      ..append(pathElement)
+      ..append(textElement);
+
+    final options = WebCustomOverlayOption(
+      clickable: false,
+      content: svgElement,
+      position: WebLatLng.fromLatLng(points[0]),
+      xAnchor: 0.0,
+      yAnchor: 0.0,
+      zIndex: 10001,
+    );
+
+    final webPolylineText = _webPolylineText[textId] =
+        WebPolylineText(textId, points, text, style)
+          ..pathElement = pathElement
+          ..textElement = textElement
+          ..overlay = WebCustomOverlay(options)
+          ..setMap(controller)
+          ..setVisibility(visible);
+    _webPolylineText[textId] = webPolylineText;
+    return textId;
+  }
+
+  @override
+  Future<void> removePolylineText(String textId) async {
+    _webPolylineText.remove(textId)?.setMap(null);
+  }
+
+  @override
+  Future<void> changePolylineTextStyle(
+    String textId, {
+    PolylineTextStyle? style,
+    String? text,
+  }) async {
+    final webPolylineText = _webPolylineText[textId];
+    if (webPolylineText == null) return;
+    if (text != null) webPolylineText.updateText(text);
+    if (style != null) {
+      webPolylineText
+        ..style = style
+        ..applyStyle(style);
+    }
+    webPolylineText.setVisibility(webPolylineText.visible);
+  }
+
+  @override
+  Future<void> changePolylineTextVisible(String textId, bool visible) async {
+    final webPolylineText = _webPolylineText[textId];
+    webPolylineText?.setVisibility(visible);
+  }
+
+  @override
+  Future<void> showAllPolylineText() async {
+    for (final polylineText in _webPolylineText.values) {
+      polylineText.setVisibility(true);
+    }
+  }
+
+  @override
+  Future<void> hideAllPolylineText() async {
+    for (final polylineText in _webPolylineText.values) {
+      polylineText.setVisibility(false);
+    }
+  }
+
+  void _syncPolylineTextZoomLevel(String textId) {
+    final webPolylineText = _webPolylineText[textId]!;
+    final mapZoomLevel = controller.getLevel();
+
+    var style = webPolylineText.style;
+    var currentZoomLevel = style.zoomLevel;
+    for (final zoomLevel in style.otherStyleLevel) {
+      if (_calculateZoomLevel(zoomLevel) >= mapZoomLevel && zoomLevel >= currentZoomLevel) {
+        currentZoomLevel = zoomLevel;
+        style = style.getStyle(zoomLevel) ?? style;
+      }
+    }
+
+    webPolylineText.updatePath(svgPathRoute(webPolylineText.points, controller));
+
+    if (webPolylineText.currentLevel != currentZoomLevel) {
+      webPolylineText.currentLevel = currentZoomLevel;
+      webPolylineText.applyStyle(style);
+    }
+    webPolylineText.setVisibility(webPolylineText.visible);
   }
 
   @override
