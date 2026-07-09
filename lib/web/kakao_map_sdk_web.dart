@@ -16,6 +16,7 @@ part 'controller/web_controller_handler.dart';
 
 part 'elements/image_element.dart';
 part 'elements/poi_element.dart';
+part 'elements/polyline_text_element.dart';
 part 'elements/text_element.dart';
 
 part 'models/web_custom_overlay_option.dart';
@@ -27,6 +28,7 @@ part 'models/web_polygon_shape.dart';
 part 'models/web_polygon_option.dart';
 part 'models/web_polyline_shape.dart';
 part 'models/web_polyline_option.dart';
+part 'models/web_polyline_text.dart';
 part 'models/web_route.dart';
 part 'models/web_route_element.dart';
 part 'models/web_shape_point.dart';
@@ -55,6 +57,7 @@ part 'interoperability/web_polyline.dart';
 part 'utils/web_calculate_level.dart';
 part 'utils/web_image_source.dart';
 part 'utils/web_color.dart';
+part 'utils/web_svg_path_route.dart';
 
 class KakaoMapWebPlugin {
   // ignore: constant_identifier_names
