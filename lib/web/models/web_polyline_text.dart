@@ -26,7 +26,11 @@ class WebPolylineText {
     }
     final pathLength = pathElement.getTotalLength();
     final textLength = textElement.getComputedTextLength();
-    if (pathLength == 0 || textLength == 0) return;
+    if (pathLength == 0 || textLength == 0) {
+      // SVG not yet in DOM; default to visible so zoom_changed can re-evaluate later.
+      textElement.setAttribute("visibility", "visible");
+      return;
+    }
     textElement.setAttribute("visibility", isTooShort ? "hidden" : "visible");
   }
 
@@ -47,7 +51,7 @@ class WebPolylineText {
 
   void applyStyle(PolylineTextStyle style) {
     textElement
-      ..setAttribute("font-size", "${style.size}px")
+      ..setAttribute("font-size", "${style.size / 2}px")
       ..setAttribute("fill", _getColorCode(style.color));
     if (style.strokeSize != null && style.strokeSize! > 0) {
       textElement
