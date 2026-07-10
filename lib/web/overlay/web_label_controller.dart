@@ -235,14 +235,13 @@ class WebLabelController with WebLabelControllerHandler {
       zIndex: 10001,
     );
 
-    final webPolylineText = _webPolylineText[textId] =
+    _webPolylineText[textId] =
         WebPolylineText(textId, points, text, style)
           ..pathElement = pathElement
           ..textElement = textElement
           ..overlay = WebCustomOverlay(options)
           ..setMap(controller)
           ..setVisibility(visible);
-    _webPolylineText[textId] = webPolylineText;
     return textId;
   }
 
