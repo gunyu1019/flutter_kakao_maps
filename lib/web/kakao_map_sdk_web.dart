@@ -60,6 +60,7 @@ part 'utils/web_calculate_level.dart';
 part 'utils/web_image_source.dart';
 part 'utils/web_color.dart';
 part 'utils/web_svg_path_route.dart';
+part 'utils/web_polyline_text_style.dart';
 
 class KakaoMapWebPlugin {
   // ignore: constant_identifier_names

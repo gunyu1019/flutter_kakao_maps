@@ -33,7 +33,7 @@ class WebPolylineText {
       textElement.setAttribute("visibility", "visible");
       return;
     }
-    textElement.setAttribute("visibility", isTooShort ? "hidden" : "visible");
+    textElement.setAttribute("visibility", pathLength < textLength ? "hidden" : "visible");
   }
 
   void _updateGeometry(WebSvgPathRouteGeometry geometry) {
@@ -53,27 +53,7 @@ class WebPolylineText {
     textElement.querySelector("textPath")?.textContent = text;
   }
 
-  bool get isTooShort {
-    final pathLength = pathElement.getTotalLength();
-    final textLength = textElement.getComputedTextLength();
-    if (pathLength == 0 || textLength == 0) return false;
-    return pathLength < textLength;
-  }
-
   void applyStyle(PolylineTextStyle style) {
-    textElement
-      ..setAttribute("font-size", "${style.size / 2}px")
-      ..setAttribute("fill", _getColorCode(style.color));
-    if (style.strokeSize != null && style.strokeSize! > 0) {
-      textElement
-        ..setAttribute("stroke", _getColorCode(style.strokeColor!))
-        ..setAttribute("stroke-width", "${style.strokeSize}px")
-        ..setAttribute("paint-order", "stroke");
-    } else {
-      textElement
-        ..removeAttribute("stroke")
-        ..removeAttribute("stroke-width")
-        ..removeAttribute("paint-order");
-    }
+    applyPolylineTextStyle(textElement, style);
   }
 }
