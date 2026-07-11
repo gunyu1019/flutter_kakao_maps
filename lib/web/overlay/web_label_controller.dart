@@ -219,29 +219,36 @@ class WebLabelController with WebLabelControllerHandler {
   }) async {
     final textId = id ?? manager._uuid.v4();
     final pathId = "kms-plt-$textId";
+    final geometry = svgPathRoute(points, controller);
 
-    final pathElement = svgPathElement(pathId, svgPathRoute(points, controller));
+    final pathElement = svgPathElement(pathId, geometry.pathData);
     final textElement = polylineTextElement(pathId, text, style);
-    final svgElement = svgRootElement()
+    final svgElement = svgRootElement(
+      minX: geometry.minX,
+      minY: geometry.minY,
+      width: geometry.width,
+      height: geometry.height,
+    )
       ..append(pathElement)
       ..append(textElement);
 
     final options = WebCustomOverlayOption(
       clickable: false,
       content: svgElement,
-      position: WebLatLng.fromLatLng(points[0]),
+      position: WebLatLng.fromLatLng(geometry.anchor),
       xAnchor: 0.0,
       yAnchor: 0.0,
       zIndex: 10001,
     );
 
-    _webPolylineText[textId] =
-        WebPolylineText(textId, points, text, style)
-          ..pathElement = pathElement
-          ..textElement = textElement
-          ..overlay = WebCustomOverlay(options)
-          ..setMap(controller)
-          ..setVisibility(visible);
+    _webPolylineText[textId] = WebPolylineText(textId, points, text, style)
+      ..anchor = geometry.anchor
+      ..rootElement = svgElement
+      ..pathElement = pathElement
+      ..textElement = textElement
+      ..overlay = WebCustomOverlay(options)
+      ..setMap(controller)
+      ..setVisibility(visible);
     return textId;
   }
 
@@ -294,13 +301,20 @@ class WebLabelController with WebLabelControllerHandler {
     var style = webPolylineText.style;
     var currentZoomLevel = style.zoomLevel;
     for (final zoomLevel in style.otherStyleLevel) {
-      if (_calculateZoomLevel(zoomLevel) >= mapZoomLevel && zoomLevel >= currentZoomLevel) {
+      if (_calculateZoomLevel(zoomLevel) >= mapZoomLevel &&
+          zoomLevel >= currentZoomLevel) {
         currentZoomLevel = zoomLevel;
         style = style.getStyle(zoomLevel) ?? style;
       }
     }
 
-    webPolylineText.updatePath(svgPathRoute(webPolylineText.points, controller));
+    webPolylineText._updateGeometry(
+      svgPathRoute(
+        webPolylineText.points,
+        controller,
+        anchor: webPolylineText.anchor,
+      ),
+    );
 
     if (webPolylineText.currentLevel != currentZoomLevel) {
       webPolylineText.currentLevel = currentZoomLevel;

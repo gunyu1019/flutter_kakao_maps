@@ -32,6 +32,7 @@ part 'models/web_polyline_text.dart';
 part 'models/web_route.dart';
 part 'models/web_route_element.dart';
 part 'models/web_shape_point.dart';
+part 'models/web_svg_path_route_geometry.dart';
 
 part 'overlay/web_label_controller.dart';
 part 'overlay/web_route_controller.dart';
