@@ -9,6 +9,8 @@ class WebPolylineText {
   bool visible;
 
   late final WebCustomOverlay overlay;
+  late final LatLng anchor;
+  late final web.SVGSVGElement rootElement;
   late final web.SVGPathElement pathElement;
   late final web.SVGTextElement textElement;
 
@@ -34,8 +36,17 @@ class WebPolylineText {
     textElement.setAttribute("visibility", isTooShort ? "hidden" : "visible");
   }
 
-  void updatePath(String pathData) =>
-      pathElement.setAttribute("d", pathData);
+  void _updateGeometry(WebSvgPathRouteGeometry geometry) {
+    rootElement
+      ..setAttribute("width", "${geometry.width}")
+      ..setAttribute("height", "${geometry.height}")
+      ..setAttribute(
+        "viewBox",
+        "${geometry.minX} ${geometry.minY} ${geometry.width} ${geometry.height}",
+      )
+      ..style.transform = "translate(${geometry.minX}px, ${geometry.minY}px)";
+    pathElement.setAttribute("d", geometry.pathData);
+  }
 
   void updateText(String text) {
     this.text = text;
