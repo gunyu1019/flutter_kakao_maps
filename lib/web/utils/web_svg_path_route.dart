@@ -20,24 +20,36 @@ WebSvgPathRouteGeometry svgPathRoute(
   if (anchor != null) {
     anchorPosition = anchor;
   } else {
-    var absoluteMinX = projected.first.x;
-    var absoluteMaxX = absoluteMinX;
-    var absoluteMinY = projected.first.y;
-    var absoluteMaxY = absoluteMinY;
-    for (final point in projected.skip(1)) {
-      if (point.x < absoluteMinX) absoluteMinX = point.x;
-      if (point.x > absoluteMaxX) absoluteMaxX = point.x;
-      if (point.y < absoluteMinY) absoluteMinY = point.y;
-      if (point.y > absoluteMaxY) absoluteMaxY = point.y;
+    var totalLength = 0.0;
+    final segmentLengths = <double>[];
+    for (var index = 1; index < projected.length; index++) {
+      final dx = projected[index].x - projected[index - 1].x;
+      final dy = projected[index].y - projected[index - 1].y;
+      final length = math.sqrt(dx * dx + dy * dy);
+      segmentLengths.add(length);
+      totalLength += length;
     }
-    anchorPosition = projection
-        .coordsFromContainerPoint(
-          WebPoint(
-            (absoluteMinX + absoluteMaxX) / 2,
-            (absoluteMinY + absoluteMaxY) / 2,
-          ),
-        )
-        .toLatLng();
+
+    var remainingLength = totalLength / 2;
+    var anchorPoint = projected.first;
+    for (var index = 0; index < segmentLengths.length; index++) {
+      final length = segmentLengths[index];
+      if (length == 0 || remainingLength > length) {
+        remainingLength -= length;
+        continue;
+      }
+      final start = projected[index];
+      final end = projected[index + 1];
+      final ratio = remainingLength / length;
+      anchorPoint = WebPoint(
+        start.x + (end.x - start.x) * ratio,
+        start.y + (end.y - start.y) * ratio,
+      );
+      break;
+    }
+
+    anchorPosition =
+        projection.coordsFromContainerPoint(anchorPoint).toLatLng();
   }
   final anchorPoint = projection.containerPointFromCoords(
     WebLatLng.fromLatLng(anchorPosition),
