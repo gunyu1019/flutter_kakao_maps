@@ -33,3 +33,8 @@ build/
 
 .build/
 .swiftpm/
+
+# Debugging Resources
+artifacts/
+engine_patches/
+example/android/engine_patch_repo/
