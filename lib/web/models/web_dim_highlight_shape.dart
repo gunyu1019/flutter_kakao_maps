@@ -5,7 +5,11 @@ class WebDimHighlightShape {
   final String id;
 
   WebShapePoint point;
+  PolygonStyle style;
   bool visible = true;
 
-  WebDimHighlightShape(this.point, this.id);
+  WebPolygon? element;
+  WebPolygonOption? option;
+
+  WebDimHighlightShape(this.point, this.style, this.id);
 }

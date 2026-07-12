@@ -49,6 +49,9 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     _element?.setMap(null);
     _element = null;
     _option = null;
+    for (final shape in _highlightPolygon.values) {
+      shape.element?.setMap(null);
+    }
     _highlightPolygon.clear();
   }
 
@@ -114,6 +117,52 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     _element!.setOptions(_option!);
   }
 
+  WebPolygonOption _getHighlightElementOption(
+    PolygonStyle style,
+    JSArray<JSArray<WebLatLng>> path,
+  ) {
+    return WebPolygonOption(
+      path: path,
+      fillColor: _getColorCode(style.color),
+      fillOpacity: style.color.a,
+      strokeColor: _getColorCode(style.strokeColor),
+      strokeWeight: style.strokeWidth,
+      strokeOpacity: style.strokeColor.a,
+      zIndex: _zIndex + 1,
+    );
+  }
+
+  void _syncHighlightElement(WebDimHighlightShape shape) {
+    if (!shape.visible || !_visible) {
+      shape.element?.setMap(null);
+      return;
+    }
+
+    final path = shape.point.toPolygonPath();
+    if (shape.element == null) {
+      shape.option = _getHighlightElementOption(shape.style, path);
+      shape.element = WebPolygon(shape.option!);
+      shape.element!.setMap(controller);
+      return;
+    }
+
+    shape.option!.path = path;
+    shape.option!.fillColor = _getColorCode(shape.style.color);
+    shape.option!.fillOpacity = shape.style.color.a;
+    shape.option!.strokeColor = _getColorCode(shape.style.strokeColor);
+    shape.option!.strokeWeight = shape.style.strokeWidth;
+    shape.option!.strokeOpacity = shape.style.strokeColor.a;
+    shape.option!.zIndex = _zIndex + 1;
+    shape.element!.setOptions(shape.option!);
+    shape.element!.setMap(controller);
+  }
+
+  void _syncAllHighlightElements() {
+    for (final shape in _highlightPolygon.values) {
+      _syncHighlightElement(shape);
+    }
+  }
+
   @override
   Future<void> setDimColor(int color) async {
     // ignore: deprecated_member_use
@@ -130,27 +179,33 @@ class WebDimScreenController with WebDimScreenControllerHandler {
       _redraw();
     }
     _element?.setMap(visible ? controller : null);
+    _syncAllHighlightElements();
   }
 
   @override
   Future<void> setDimCover(DimScreenCover cover) async {
     _cover = cover;
     _redraw();
+    _syncAllHighlightElements();
   }
 
   @override
   Future<String> addHighlightPolygonShape(
-    WebShapePoint point, {
+    WebShapePoint point,
+    PolygonStyle style, {
     String? id,
   }) async {
     final shapeId = id ?? manager._uuid.v4();
-    _highlightPolygon[shapeId] = WebDimHighlightShape(point, shapeId);
+    final shape = WebDimHighlightShape(point, style, shapeId);
+    _highlightPolygon[shapeId] = shape;
     _redraw();
+    _syncHighlightElement(shape);
     return shapeId;
   }
 
   @override
   Future<void> removeHighlightPolygonShape(String shapeId) async {
+    _highlightPolygon[shapeId]?.element?.setMap(null);
     _highlightPolygon.remove(shapeId);
     _redraw();
   }
@@ -161,13 +216,20 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     if (shape == null) return;
     shape.visible = visible;
     _redraw();
+    _syncHighlightElement(shape);
   }
 
   @override
-  Future<void> changePolygon(String shapeId, WebShapePoint point) async {
+  Future<void> changePolygon(
+    String shapeId,
+    WebShapePoint point,
+    PolygonStyle style,
+  ) async {
     final shape = _highlightPolygon[shapeId];
     if (shape == null) return;
     shape.point = point;
+    shape.style = style;
     _redraw();
+    _syncHighlightElement(shape);
   }
 }
