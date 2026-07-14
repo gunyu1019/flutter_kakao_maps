@@ -7,9 +7,11 @@ class KakaoMapWebController
   late WebOverlayController overlay;
   final MethodChannel channel;
   final MethodChannel overlayChannel;
+  web.ResizeObserver? _resizeObserver;
 
   KakaoMapWebController({
     WebMapController? controller,
+    web.Element? mapElement,
     required this.channel,
     required this.overlayChannel,
   }) {
@@ -31,12 +33,26 @@ class KakaoMapWebController
     // ignore: prefer_initializing_formals
     this.controller = controller;
 
+    if (mapElement != null) {
+      _resizeObserver = web.ResizeObserver(
+        ((JSArray<web.ResizeObserverEntry> _, web.ResizeObserver __) {
+          _relayoutPreservingCenter();
+        }).toJS,
+      );
+      _resizeObserver!.observe(mapElement);
+    }
     web.window.addEventListener('resize', _resizedEvent.toJS);
     channel.setMethodCallHandler(webHandle);
     onMapReady();
   }
 
-  void _resizedEvent() => controller.relayout();
+  void _resizedEvent() => _relayoutPreservingCenter();
+
+  void _relayoutPreservingCenter() {
+    final center = controller.getCenter();
+    controller.relayout();
+    controller.setCenter(center);
+  }
 
   @override
   Future<void> setEventTrigger(int event) async {

@@ -87,6 +87,7 @@ class KakaoMapWebPlugin {
     getController(viewId, webMapOption).then((webController) {
       KakaoMapWebController(
         controller: webController,
+        mapElement: web.document.getElementById(mapElementId(viewId)),
         channel: channel,
         overlayChannel: overlayChannel,
       );
