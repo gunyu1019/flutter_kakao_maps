@@ -7,6 +7,7 @@ class WebOverlayController {
 
   final Map<String, PoiStyle> _poiStyles = {};
   final Map<String, List<PolygonStyle>> _polygonStyles = {};
+  final Map<String, List<PolygonStyle>> _dimPolygonStyles = {};
   final Map<String, List<PolylineStyle>> _polylineStyles = {};
   final Map<String, List<RouteStyle>> _routeStyles = {};
 
@@ -163,7 +164,14 @@ class WebOverlayController {
         return polylineStyleId;
       case "addPolygonShapeStyle":
         final polygonStyleId = argument["styleId"] ?? _uuid.v4();
-        _polygonStyles[polygonStyleId] = argument["styles"]
+        final rawStyles = argument["styles"] as Iterable;
+        _polygonStyles[polygonStyleId] = rawStyles
+            .map<PolygonStyle>(
+              (payload) =>
+                  PolygonStyle.fromMessageable(payload, polygonStyleId),
+            )
+            .toList();
+        _dimPolygonStyles[polygonStyleId] = rawStyles
             .map<PolygonStyle>(
               (payload) =>
                   PolygonStyle.fromMessageable(payload, polygonStyleId),

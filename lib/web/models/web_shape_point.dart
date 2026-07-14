@@ -6,12 +6,16 @@ class WebShapePoint {
 
   WebShapePoint([List<LatLng>? path]) : path = path ?? [];
 
+  Iterable<List<LatLng>> get rings sync* {
+    yield path;
+    yield* holes;
+  }
+
   JSArray<JSArray<WebLatLng>> toPolygonPath() {
-    final path = [this.path.map(WebLatLng.fromLatLng).toList().toJS];
-    holes
-        .map((e) => e.map(WebLatLng.fromLatLng).toList().toJS)
-        .forEach(path.add);
-    return path.toJS;
+    return rings
+        .map((ring) => ring.map(WebLatLng.fromLatLng).toList().toJS)
+        .toList()
+        .toJS;
   }
 
   JSArray<WebLatLng> toPolylinePath() =>
@@ -25,15 +29,20 @@ class WebShapePoint {
       };
 
   factory WebShapePoint.fromMapPoint(dynamic payload) {
-    final path = payload["points"].map<LatLng>(LatLng.fromMessageable).toList();
+    final path = <LatLng>[];
+    for (final rawPoint in payload["points"] as Iterable) {
+      path.add(LatLng.fromMessageable(rawPoint));
+    }
     final point = WebShapePoint(path);
 
-    if (payload.containsKey("holes") && payload["holes"].length > 0) {
-      payload["holes"]
-          .map<List<LatLng>>(
-            (e1) => e1.map<LatLng>((e2) => LatLng.fromMessageable).toList(),
-          )
-          .forEach(point.holes.add);
+    if (payload.containsKey("holes")) {
+      for (final rawHole in payload["holes"] as Iterable) {
+        final hole = <LatLng>[];
+        for (final rawPoint in rawHole as Iterable) {
+          hole.add(LatLng.fromMessageable(rawPoint));
+        }
+        point.holes.add(hole);
+      }
     }
     return point;
   }

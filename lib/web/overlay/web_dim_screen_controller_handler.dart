@@ -28,11 +28,12 @@ mixin WebDimScreenControllerHandler {
       case "addHighlightPolygonShape":
         final polygon = arguments["polygon"];
         final point = WebShapePoint.fromMessageable(polygon["position"]);
-        final style = manager._polygonStyles[polygon["styleId"]!]![0];
+        final style = manager._dimPolygonStyles[polygon["styleId"]!]![0];
         return await addHighlightPolygonShape(
           point,
           style,
           id: polygon["id"],
+          zOrder: polygon["zOrder"] ?? 10001,
         );
       case "removeHighlightPolygonShape":
         final shapeId = arguments["polygonId"];
@@ -46,7 +47,7 @@ mixin WebDimScreenControllerHandler {
       case "changePolygon":
         final shapeId = arguments["polygonId"];
         final point = WebShapePoint.fromMessageable(arguments["position"]);
-        final style = manager._polygonStyles[arguments["styleId"]!]![0];
+        final style = manager._dimPolygonStyles[arguments["styleId"]!]![0];
         await changePolygon(shapeId, point, style);
         return;
       default:
@@ -68,6 +69,7 @@ mixin WebDimScreenControllerHandler {
     WebShapePoint point,
     PolygonStyle style, {
     String? id,
+    int zOrder = 10001,
   });
 
   Future<void> removeHighlightPolygonShape(String shapeId);

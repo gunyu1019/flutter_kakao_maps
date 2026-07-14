@@ -1,6 +1,5 @@
 part of '../kakao_map_sdk_web.dart';
 
-
 class WebDimScreenController with WebDimScreenControllerHandler {
   final WebMapController controller;
 
@@ -19,6 +18,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
   bool _visible = false;
 
   final Map<String, WebDimHighlightShape> _highlightPolygon = {};
+  int _nextHighlightOrder = 0;
 
   static const int _mapZIndex = 1;
   static const int _mapAndLabelZIndex = 10002;
@@ -37,6 +37,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
       "bounds_changed",
       _boundsChangedEventHandler.toJS,
     );
+    addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
   }
 
   @override
@@ -45,6 +46,11 @@ class WebDimScreenController with WebDimScreenControllerHandler {
       controller,
       "bounds_changed",
       _boundsChangedEventHandler.toJS,
+    );
+    removeEventListener(
+      controller,
+      "zoom_changed",
+      _zoomChangedEventHandler.toJS,
     );
     _element?.setMap(null);
     _element = null;
@@ -59,6 +65,8 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     if (_element == null) return;
     _redraw();
   }
+
+  void _zoomChangedEventHandler() => _syncAllHighlightElements();
 
   JSArray<WebLatLng> _outerRing() {
     final bound = controller.getBounds();
@@ -88,7 +96,9 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     final path = [_outerRing()];
     for (final shape in _highlightPolygon.values) {
       if (!shape.visible) continue;
-      path.add(shape.point.path.map(WebLatLng.fromLatLng).toList().toJS);
+      for (final ring in shape.point.rings) {
+        path.add(ring.map(WebLatLng.fromLatLng).toList().toJS);
+      }
     }
     return path.toJS;
   }
@@ -132,6 +142,20 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     );
   }
 
+  PolygonStyle _styleForCurrentZoom(PolygonStyle style) {
+    final mapZoomLevel = controller.getLevel();
+    var currentStyle = style;
+    var currentZoomLevel = style.zoomLevel;
+    for (final secondaryStyle in style.otherStyles) {
+      if (_calculateZoomLevel(secondaryStyle.zoomLevel) >= mapZoomLevel &&
+          secondaryStyle.zoomLevel >= currentZoomLevel) {
+        currentZoomLevel = secondaryStyle.zoomLevel;
+        currentStyle = secondaryStyle;
+      }
+    }
+    return currentStyle;
+  }
+
   void _syncHighlightElement(WebDimHighlightShape shape) {
     if (!shape.visible || !_visible) {
       shape.element?.setMap(null);
@@ -139,20 +163,23 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     }
 
     final path = shape.point.toPolygonPath();
+    final style = _styleForCurrentZoom(shape.style);
+    final zIndex = _highlightZIndex(shape);
     if (shape.element == null) {
-      shape.option = _getHighlightElementOption(shape.style, path);
+      shape.option = _getHighlightElementOption(style, path);
+      shape.option!.zIndex = zIndex;
       shape.element = WebPolygon(shape.option!);
       shape.element!.setMap(controller);
       return;
     }
 
     shape.option!.path = path;
-    shape.option!.fillColor = _getColorCode(shape.style.color);
-    shape.option!.fillOpacity = shape.style.color.a;
-    shape.option!.strokeColor = _getColorCode(shape.style.strokeColor);
-    shape.option!.strokeWeight = shape.style.strokeWidth;
-    shape.option!.strokeOpacity = shape.style.strokeColor.a;
-    shape.option!.zIndex = _zIndex + 1;
+    shape.option!.fillColor = _getColorCode(style.color);
+    shape.option!.fillOpacity = style.color.a;
+    shape.option!.strokeColor = _getColorCode(style.strokeColor);
+    shape.option!.strokeWeight = style.strokeWidth;
+    shape.option!.strokeOpacity = style.strokeColor.a;
+    shape.option!.zIndex = zIndex;
     shape.element!.setOptions(shape.option!);
     shape.element!.setMap(controller);
   }
@@ -161,6 +188,17 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     for (final shape in _highlightPolygon.values) {
       _syncHighlightElement(shape);
     }
+  }
+
+  int _highlightZIndex(WebDimHighlightShape shape) {
+    final orderedShapes = _highlightPolygon.values.toList()
+      ..sort((first, second) {
+        final zOrderComparison = first.zOrder.compareTo(second.zOrder);
+        return zOrderComparison != 0
+            ? zOrderComparison
+            : first.insertionOrder.compareTo(second.insertionOrder);
+      });
+    return _zIndex + 1 + orderedShapes.indexOf(shape);
   }
 
   @override
@@ -194,12 +232,19 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     WebShapePoint point,
     PolygonStyle style, {
     String? id,
+    int zOrder = 10001,
   }) async {
     final shapeId = id ?? manager._uuid.v4();
-    final shape = WebDimHighlightShape(point, style, shapeId);
+    final shape = WebDimHighlightShape(
+      point,
+      style,
+      shapeId,
+      zOrder,
+      _nextHighlightOrder++,
+    );
     _highlightPolygon[shapeId] = shape;
     _redraw();
-    _syncHighlightElement(shape);
+    _syncAllHighlightElements();
     return shapeId;
   }
 

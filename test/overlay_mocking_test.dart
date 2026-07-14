@@ -10,12 +10,14 @@ void main() {
   final overlayChannel = ChannelType.overlay.channelWithId(viewId);
 
   late KakaoMapController controller;
+  MethodCall? lastDimScreenCall;
 
   String orFallback(String? requested, String fallback) {
     return (requested != null && requested.isNotEmpty) ? requested : fallback;
   }
 
   setUp(() {
+    lastDimScreenCall = null;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(viewChannel, (call) async => null);
 
@@ -93,6 +95,7 @@ void main() {
           return orFallback(route['id'] as String?, fallback);
 
         case 'addHighlightPolygonShape':
+          lastDimScreenCall = call;
           final polygon = Map<String, dynamic>.from(args['polygon'] as Map);
           return orFallback(
             polygon['id'] as String?,
@@ -421,12 +424,18 @@ void main() {
         ]),
         style,
         id: 'dim-polygon-explicit-id',
+        zOrder: 42,
       );
       final polygonPoint = polygon.position as MapPoint;
 
       expect(polygon.id, 'dim-polygon-explicit-id');
       expect(polygonPoint.points.length, 3);
       expect(polygon.style.id, 'dim-polygon-style');
+      final arguments = Map<String, dynamic>.from(
+        lastDimScreenCall!.arguments as Map,
+      );
+      final payload = Map<String, dynamic>.from(arguments['polygon'] as Map);
+      expect(payload['zOrder'], 42);
     });
   });
 }
