@@ -72,6 +72,10 @@ class WebOverlayController {
     }
   }
 
+  void dispose() {
+    _dimScreenLayer.removeDimScreenLayer();
+  }
+
   void _onPoiMove(WebPoi poi, LatLng position) {
     final trackPoi = _trackingLayer._trackPoi;
     final webPosition = WebLatLng.fromLatLng(position);
