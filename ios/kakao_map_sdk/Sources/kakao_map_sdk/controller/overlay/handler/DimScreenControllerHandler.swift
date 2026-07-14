@@ -70,10 +70,14 @@ extension DimScreenControllerHandler {
                 result(FlutterMethodNotImplemented)
             }
         case "removeHighlightPolygonShape":
-            if polygonShape == nil {
-                removeDimHighlightPolygonShape(shapeId: polygonId!, onSuccess: result)
+            guard let id = polygonId else {
+                result(FlutterMethodNotImplemented)
+                return
+            }
+            if mapPolygonShape != nil {
+                removeDimHighlightMapPolygonShape(shapeId: id, onSuccess: result)
             } else {
-                removeDimHighlightMapPolygonShape(shapeId: polygonId!, onSuccess: result)
+                removeDimHighlightPolygonShape(shapeId: id, onSuccess: result)
             }
         case "changePolygonVisible":
             let visible = asBool(arguments!["visible"]!)
