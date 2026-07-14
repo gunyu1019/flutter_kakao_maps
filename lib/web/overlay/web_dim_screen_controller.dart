@@ -20,6 +20,9 @@ class WebDimScreenController with WebDimScreenControllerHandler {
   final Map<String, WebDimHighlightShape> _highlightPolygon = {};
   int _nextHighlightOrder = 0;
 
+  JSFunction? _boundsChangedCallbackRef;
+  JSFunction? _zoomChangedCallbackRef;
+
   static const int _mapZIndex = 1;
   static const int _mapAndLabelZIndex = 10002;
   static const int _allZIndex = 10003;
@@ -32,26 +35,30 @@ class WebDimScreenController with WebDimScreenControllerHandler {
 
   @override
   Future<void> createDimScreenLayer() async {
-    addEventListener(
-      controller,
-      "bounds_changed",
-      _boundsChangedEventHandler.toJS,
-    );
-    addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
+    _boundsChangedCallbackRef = _boundsChangedEventHandler.toJS;
+    _zoomChangedCallbackRef = _zoomChangedEventHandler.toJS;
+    addEventListener(controller, "bounds_changed", _boundsChangedCallbackRef!);
+    addEventListener(controller, "zoom_changed", _zoomChangedCallbackRef!);
   }
 
   @override
   Future<void> removeDimScreenLayer() async {
-    removeEventListener(
-      controller,
-      "bounds_changed",
-      _boundsChangedEventHandler.toJS,
-    );
-    removeEventListener(
-      controller,
-      "zoom_changed",
-      _zoomChangedEventHandler.toJS,
-    );
+    if (_boundsChangedCallbackRef != null) {
+      removeEventListener(
+        controller,
+        "bounds_changed",
+        _boundsChangedCallbackRef!,
+      );
+      _boundsChangedCallbackRef = null;
+    }
+    if (_zoomChangedCallbackRef != null) {
+      removeEventListener(
+        controller,
+        "zoom_changed",
+        _zoomChangedCallbackRef!,
+      );
+      _zoomChangedCallbackRef = null;
+    }
     _element?.setMap(null);
     _element = null;
     _option = null;
