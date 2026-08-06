@@ -9,7 +9,7 @@ void applyPolylineTextStyle(
     ..setAttribute("fill", _getColorCode(style.color));
   if (style.strokeSize != null && style.strokeSize! > 0) {
     textElement
-      ..setAttribute("stroke", _getColorCode(style.strokeColor!))
+      ..setAttribute("stroke", _getColorCode(style.strokeColor ?? style.color))
       ..setAttribute("stroke-width", "${style.strokeSize}px")
       ..setAttribute("paint-order", "stroke");
   } else {
