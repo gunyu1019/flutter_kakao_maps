@@ -57,11 +57,9 @@ class KakaoMapView(
 
   override fun onActivityResumed(activity: Activity) {
     if (activity != this.activity) return
-    val pendingRecreate = recreateMapViewOnResume && wasActivityPaused
-    val recoveryActive = recoverGLSurfaceViewOnResume && !recreateMapViewOnResume && wasActivityPaused
-    isActivityResumed = true
     if (pendingRecreate) {
       wasActivityPaused = false
+      mapView.resume()
       scheduleMapViewRecreation()
       return
     }
