@@ -184,6 +184,25 @@ class _KakaoMapViewState extends State<KakaoMapView> {
     await controller.routeLayer
         .addRoute(routes.map((e) => LatLng(e[0], e[1])).toList(), routeStyle);
 
+    // PolylineText 테스트 — 판교 근처 경로
+    final polylineTextStyle = PolylineTextStyle(
+      16,
+      Colors.white,
+      strokeSize: 3,
+      strokeColor: Colors.deepOrange,
+    );
+    await controller.labelLayer.addPolylineText(
+      "카카오 판교캠퍼스 경로 테스트",
+      [
+        const LatLng(37.3945, 127.1105),
+        const LatLng(37.3950, 127.1115),
+        const LatLng(37.3955, 127.1130),
+        const LatLng(37.3960, 127.1148),
+        const LatLng(37.3965, 127.1160),
+      ],
+      style: polylineTextStyle,
+    );
+
     poiVisible
         ? await controller.labelLayer.showAllPoi()
         : await controller.labelLayer.hideAllPoi();
