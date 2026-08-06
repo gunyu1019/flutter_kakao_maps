@@ -63,6 +63,20 @@ class KakaoMap extends StatefulWidget {
   /// 자세한 내용은 [Platform View](https://docs.flutter.dev/platform-integration/android/platform-views#texture-layer-or-texture-layer-hybrid-composition)을 참고해주세요.
   final bool forceHybridComposition;
 
+  /// Android에서 Activity resume 후 Flutter 엔진의 VirtualDisplay rehost 시 Kakao GLSurfaceView의
+  /// GL 스레드를 비파괴적으로 재개하는 복구 옵션입니다.
+  /// [recreateAndroidMapViewOnResume]가 true인 경우 이 옵션은 비활성화되며, 파괴적 재생성이 우선합니다.
+  final bool recoverAndroidGLSurfaceViewOnResume;
+
+  /// Android에서 앱이 백그라운드에서 복귀할 때 native MapView를 재생성합니다.
+  /// 이 옵션은 파괴적 비상 복구 수단입니다. [recoverAndroidGLSurfaceViewOnResume]가 비파괴적 기본 복구 경로입니다.
+  /// 이 옵션을 사용하면 복귀 시 [onMapReady]가 다시 호출되며, native 지도에 등록된 오버레이는 다시 구성해야 합니다.
+  final bool recreateAndroidMapViewOnResume;
+
+  /// [recreateAndroidMapViewOnResume]가 활성화된 경우, Activity resume 이후 MapView 재생성을 지연할 시간입니다.
+  /// Flutter 엔진이 PlatformView의 Surface를 다시 연결한 뒤 재생성하기 위해 짧은 지연을 둡니다.
+  final Duration androidMapViewRecreationDelay;
+
   const KakaoMap({
     super.key,
     required this.onMapReady,
@@ -79,6 +93,9 @@ class KakaoMap extends StatefulWidget {
     this.onTerrainLongClick,
     this.onMapError,
     this.forceHybridComposition = false,
+    this.recoverAndroidGLSurfaceViewOnResume = true,
+    this.recreateAndroidMapViewOnResume = false,
+    this.androidMapViewRecreationDelay = const Duration(milliseconds: 300),
   });
 
   @override
@@ -90,11 +107,21 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
   static const VIEW_TYPE = "plugin/kakao_map";
   late final MethodChannel channel;
   late final KakaoMapController controller;
+  bool _hasNativeMapReady = false;
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> rawParams = widget.option?.toMessageable() ??
+    final Map<String, dynamic> rawParams = widget.option?.toMessageable() ??
         (const KakaoMapOption()).toMessageable();
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      rawParams['recoverAndroidGLSurfaceViewOnResume'] =
+          widget.recoverAndroidGLSurfaceViewOnResume;
+      if (widget.recreateAndroidMapViewOnResume) {
+        rawParams['recreateAndroidMapViewOnResume'] = true;
+        rawParams['androidMapViewRecreationDelayMillis'] =
+            widget.androidMapViewRecreationDelay.inMilliseconds;
+      }
+    }
 
     // GestureRecognizer
     final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {};
@@ -162,6 +189,11 @@ class _KakaoMapState extends State<KakaoMap> with KakaoMapControllerHandler {
 
   @override
   void onMapReady() {
+    final mapController = controller;
+    if (_hasNativeMapReady && mapController is KakaoMapControllerImplement) {
+      mapController._resetAfterNativeMapRecreation();
+    }
+    _hasNativeMapReady = true;
     _setEventHandler();
     controller.fetchBuildingHeightScale();
     widget.onMapReady.call(controller);
