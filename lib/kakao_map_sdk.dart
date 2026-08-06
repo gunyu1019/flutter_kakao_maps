@@ -29,8 +29,6 @@ part 'controller/overlay/route_controller.dart';
 part 'controller/overlay/shape_controller.dart';
 part 'controller/overlay/tracking_controller.dart';
 
-part 'controller/extensions/bounds.dart';
-
 /* exception */
 part 'exception/duplicated_overlay_exception.dart';
 part 'exception/overlay_style_registration_failed_error.dart';
