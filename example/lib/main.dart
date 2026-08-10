@@ -194,8 +194,13 @@ class _KakaoMapViewState extends State<KakaoMapView> {
         .addRoute(routes.map((e) => LatLng(e[0], e[1])).toList(), routeStyle);
 
     // 카카오 판교캠퍼스 주변을 사각형으로 강조하는 DimScreen을 구성합니다.
-    await controller.dimScreen.setColor(Colors.black.withOpacity(0.6));
-    final highlightStyle = PolygonStyle(Colors.transparent);
+    await controller.dimScreen.setColor(Colors.black.withValues(alpha: 0.6));
+    // Highlight 영역에는 지도도 보이면서 스타일도 함께 표시됩니다.
+    final highlightStyle = PolygonStyle(
+      Colors.lightBlueAccent.withValues(alpha: 0.25),
+      strokeColor: Colors.yellowAccent,
+      strokeWidth: 6,
+    );
     await controller.addPolygonShapeStyle(highlightStyle);
     await controller.dimScreen.addPolygonShape(
       MapPoint([
