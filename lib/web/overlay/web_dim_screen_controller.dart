@@ -64,6 +64,9 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     _option = null;
     for (final shape in _highlightPolygon.values) {
       shape.element?.setMap(null);
+      for (final strokeElement in shape.strokeElements) {
+        strokeElement.setMap(null);
+      }
     }
     _highlightPolygon.clear();
   }
@@ -143,9 +146,24 @@ class WebDimScreenController with WebDimScreenControllerHandler {
       fillColor: _getColorCode(style.color),
       fillOpacity: style.color.a,
       strokeColor: _getColorCode(style.strokeColor),
+      strokeWeight: 0,
+      strokeOpacity: 0,
+      zIndex: _zIndex + 1,
+    );
+  }
+
+  WebPolylineOption _getHighlightStrokeElementOption(
+    PolygonStyle style,
+    JSArray<WebLatLng> path,
+    int zIndex,
+  ) {
+    return WebPolylineOption(
+      endArrow: false,
+      path: path,
+      strokeColor: _getColorCode(style.strokeColor),
       strokeWeight: style.strokeWidth,
       strokeOpacity: style.strokeColor.a,
-      zIndex: _zIndex + 1,
+      zIndex: zIndex,
     );
   }
 
@@ -166,6 +184,9 @@ class WebDimScreenController with WebDimScreenControllerHandler {
   void _syncHighlightElement(WebDimHighlightShape shape) {
     if (!shape.visible || !_visible) {
       shape.element?.setMap(null);
+      for (final strokeElement in shape.strokeElements) {
+        strokeElement.setMap(null);
+      }
       return;
     }
 
@@ -177,18 +198,61 @@ class WebDimScreenController with WebDimScreenControllerHandler {
       shape.option!.zIndex = zIndex;
       shape.element = WebPolygon(shape.option!);
       shape.element!.setMap(controller);
-      return;
+    } else {
+      shape.option!.path = path;
+      shape.option!.fillColor = _getColorCode(style.color);
+      shape.option!.fillOpacity = style.color.a;
+      shape.option!.strokeColor = _getColorCode(style.strokeColor);
+      shape.option!.strokeWeight = 0;
+      shape.option!.strokeOpacity = 0;
+      shape.option!.zIndex = zIndex;
+      shape.element!.setOptions(shape.option!);
+      shape.element!.setMap(controller);
     }
 
-    shape.option!.path = path;
-    shape.option!.fillColor = _getColorCode(style.color);
-    shape.option!.fillOpacity = style.color.a;
-    shape.option!.strokeColor = _getColorCode(style.strokeColor);
-    shape.option!.strokeWeight = style.strokeWidth;
-    shape.option!.strokeOpacity = style.strokeColor.a;
-    shape.option!.zIndex = zIndex;
-    shape.element!.setOptions(shape.option!);
-    shape.element!.setMap(controller);
+    _syncHighlightStrokeElements(shape, style, zIndex);
+  }
+
+  void _syncHighlightStrokeElements(
+    WebDimHighlightShape shape,
+    PolygonStyle style,
+    int zIndex,
+  ) {
+    final paths = style.strokeWidth > 0 && style.strokeColor.a > 0
+        ? shape.point.strokeRings
+            .map((ring) => ring.map(WebLatLng.fromLatLng).toList().toJS)
+            .toList()
+        : <JSArray<WebLatLng>>[];
+
+    while (shape.strokeElements.length > paths.length) {
+      shape.strokeElements.removeLast().setMap(null);
+      shape.strokeOptions.removeLast();
+    }
+
+    for (var index = 0; index < paths.length; index++) {
+      final path = paths[index];
+      if (index == shape.strokeElements.length) {
+        final option = _getHighlightStrokeElementOption(
+          style,
+          path,
+          zIndex,
+        );
+        final element = WebPolyline(option)..setMap(controller);
+        shape.strokeOptions.add(option);
+        shape.strokeElements.add(element);
+        continue;
+      }
+
+      final option = shape.strokeOptions[index]
+        ..path = path
+        ..strokeColor = _getColorCode(style.strokeColor)
+        ..strokeWeight = style.strokeWidth
+        ..strokeOpacity = style.strokeColor.a
+        ..zIndex = zIndex;
+      shape.strokeElements[index]
+        ..setOptions(option)
+        ..setMap(controller);
+    }
   }
 
   void _syncAllHighlightElements() {
@@ -257,7 +321,11 @@ class WebDimScreenController with WebDimScreenControllerHandler {
 
   @override
   Future<void> removeHighlightPolygonShape(String shapeId) async {
-    _highlightPolygon[shapeId]?.element?.setMap(null);
+    final shape = _highlightPolygon[shapeId];
+    shape?.element?.setMap(null);
+    for (final strokeElement in shape?.strokeElements ?? <WebPolyline>[]) {
+      strokeElement.setMap(null);
+    }
     _highlightPolygon.remove(shapeId);
     _redraw();
   }

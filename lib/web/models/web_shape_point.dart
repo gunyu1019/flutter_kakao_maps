@@ -11,6 +11,13 @@ class WebShapePoint {
     yield* holes;
   }
 
+  /// Polygon fill paths are closed by the Kakao Web SDK, but Android draws
+  /// the polygon stroke only between the points supplied by the caller.
+  /// Keep those paths open unless the caller explicitly repeats the first
+  /// point at the end.
+  Iterable<List<LatLng>> get strokeRings =>
+      rings.where((ring) => ring.length >= 2);
+
   JSArray<JSArray<WebLatLng>> toPolygonPath() {
     return rings
         .map((ring) => ring.map(WebLatLng.fromLatLng).toList().toJS)

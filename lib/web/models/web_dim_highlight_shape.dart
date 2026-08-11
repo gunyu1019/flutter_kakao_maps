@@ -11,6 +11,8 @@ class WebDimHighlightShape {
 
   WebPolygon? element;
   WebPolygonOption? option;
+  final List<WebPolyline> strokeElements = [];
+  final List<WebPolylineOption> strokeOptions = [];
 
   WebDimHighlightShape(
     this.point,
