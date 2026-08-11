@@ -14,6 +14,9 @@ class WebDimScreenController with WebDimScreenControllerHandler {
   // 기본값: 반투명 검정(Colors.black.withAlpha(128))에 대응되는 값입니다.
   String _colorCode = "#000000";
   double _fillOpacity = 128 / 255;
+  double _fillRed = 0;
+  double _fillGreen = 0;
+  double _fillBlue = 0;
   DimScreenCover _cover = DimScreenCover.all;
   bool _visible = false;
 
@@ -22,6 +25,9 @@ class WebDimScreenController with WebDimScreenControllerHandler {
 
   JSFunction? _boundsChangedCallbackRef;
   JSFunction? _zoomChangedCallbackRef;
+  web.Element? _labelFilterRoot;
+  web.Element? _labelColorMatrix;
+  String? _labelFilterId;
 
   static const int _mapZIndex = 1;
   static const int _mapAndLabelZIndex = 10002;
@@ -35,6 +41,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
 
   @override
   Future<void> createDimScreenLayer() async {
+    _createLabelColorFilter();
     _boundsChangedCallbackRef = _boundsChangedEventHandler.toJS;
     _zoomChangedCallbackRef = _zoomChangedEventHandler.toJS;
     addEventListener(controller, "bounds_changed", _boundsChangedCallbackRef!);
@@ -71,6 +78,52 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     _highlightPolygon.clear();
     _visible = false;
     _syncAllLabelElements();
+    _labelFilterRoot?.remove();
+    _labelFilterRoot = null;
+    _labelColorMatrix = null;
+    _labelFilterId = null;
+  }
+
+  void _createLabelColorFilter() {
+    if (_labelFilterRoot != null) return;
+    const svgNamespace = 'http://www.w3.org/2000/svg';
+    final filterId =
+        'kakao-map-dim-label-${manager._uuid.v4().replaceAll('-', '')}';
+    final root = web.document.createElementNS(svgNamespace, 'svg')
+      ..setAttribute('width', '0')
+      ..setAttribute('height', '0')
+      ..setAttribute('aria-hidden', 'true')
+      ..setAttribute('style', 'position:absolute;overflow:hidden');
+    final definitions = web.document.createElementNS(svgNamespace, 'defs');
+    final filter = web.document.createElementNS(svgNamespace, 'filter')
+      ..setAttribute('id', filterId)
+      ..setAttribute('color-interpolation-filters', 'sRGB');
+    final matrix = web.document.createElementNS(svgNamespace, 'feColorMatrix')
+      ..setAttribute('type', 'matrix');
+
+    filter.appendChild(matrix);
+    definitions.appendChild(filter);
+    root.appendChild(definitions);
+    web.document.body?.appendChild(root);
+
+    _labelFilterRoot = root;
+    _labelColorMatrix = matrix;
+    _labelFilterId = filterId;
+    _updateLabelColorFilter();
+  }
+
+  void _updateLabelColorFilter() {
+    final retained = 1 - _fillOpacity;
+    final red = _fillRed * _fillOpacity;
+    final green = _fillGreen * _fillOpacity;
+    final blue = _fillBlue * _fillOpacity;
+    _labelColorMatrix?.setAttribute(
+      'values',
+      '$retained 0 0 0 $red '
+          '0 $retained 0 0 $green '
+          '0 0 $retained 0 $blue '
+          '0 0 0 1 0',
+    );
   }
 
   void _boundsChangedEventHandler() {
@@ -276,9 +329,8 @@ class WebDimScreenController with WebDimScreenControllerHandler {
       (shape) =>
           shape.visible && shape.point.contains(poi.getPosition().toLatLng()),
     );
-    final opacity =
-        _visible && coversLabels && !highlighted ? 1 - _fillOpacity : 1.0;
-    poi.setDimScreenOpacity(opacity);
+    final filtered = _visible && coversLabels && !highlighted;
+    poi.setDimScreenFilter(filtered ? 'url(#$_labelFilterId)' : null);
   }
 
   void _syncAllLabelElements() {
@@ -310,6 +362,10 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     final flutterColor = Color(color);
     _colorCode = _getColorCode(flutterColor);
     _fillOpacity = flutterColor.a;
+    _fillRed = flutterColor.r;
+    _fillGreen = flutterColor.g;
+    _fillBlue = flutterColor.b;
+    _updateLabelColorFilter();
     _redraw();
     _syncAllLabelElements();
   }
