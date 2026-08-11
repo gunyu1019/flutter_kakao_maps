@@ -36,7 +36,7 @@ void main() {
     expect(rings.expand((ring) => ring), everyElement(isA<LatLng>()));
   });
 
-  test('DimScreen stroke rings stay open unless explicitly closed', () {
+  test('DimScreen stroke rings match native automatic closure', () {
     const southWest = LatLng(37.0, 127.0);
     const southEast = LatLng(37.0, 128.0);
     const northEast = LatLng(38.0, 128.0);
@@ -50,10 +50,10 @@ void main() {
     ]);
     final openStroke = openPoint.strokeRings.single;
 
-    expect(openStroke, hasLength(4));
+    expect(openStroke, hasLength(5));
     expect(openStroke.first, southWest);
-    expect(openStroke.last, northWest);
-    expect(openStroke.last, isNot(openStroke.first));
+    expect(openStroke[3], northWest);
+    expect(openStroke.last, openStroke.first);
 
     final closedPoint = WebShapePoint([
       southWest,

@@ -11,12 +11,12 @@ class WebShapePoint {
     yield* holes;
   }
 
-  /// Polygon fill paths are closed by the Kakao Web SDK, but Android draws
-  /// the polygon stroke only between the points supplied by the caller.
-  /// Keep those paths open unless the caller explicitly repeats the first
-  /// point at the end.
-  Iterable<List<LatLng>> get strokeRings =>
-      rings.where((ring) => ring.length >= 2);
+  /// Native DimScreen polygon strokes are closed even when the serialized
+  /// ring does not repeat its first point. Kakao Web draws the stroke with a
+  /// separate Polyline, so close each usable ring explicitly.
+  Iterable<List<LatLng>> get strokeRings => rings
+      .where((ring) => ring.length >= 2)
+      .map((ring) => ring.first == ring.last ? ring : [...ring, ring.first]);
 
   JSArray<JSArray<WebLatLng>> toPolygonPath() {
     return rings
