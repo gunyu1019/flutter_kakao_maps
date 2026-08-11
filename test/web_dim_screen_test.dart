@@ -34,6 +34,9 @@ void main() {
     expect(rings.first, exterior);
     expect(rings.last, hole);
     expect(rings.expand((ring) => ring), everyElement(isA<LatLng>()));
+    expect(decoded.contains(const LatLng(37.1, 127.1)), isTrue);
+    expect(decoded.contains(const LatLng(37.5, 127.5)), isFalse);
+    expect(decoded.contains(const LatLng(39.0, 129.0)), isFalse);
   });
 
   test('DimScreen stroke rings match native automatic closure', () {

@@ -41,4 +41,11 @@ class WebPoi {
 
   void setZIndex(int zIndex) => overlay.setZIndex(zIndex);
   int getZIndex() => overlay.getZIndex();
+
+  void setDimScreenOpacity(double opacity) {
+    final content = getContent();
+    if (content is web.HTMLElement) {
+      content.style.opacity = opacity.clamp(0.0, 1.0).toString();
+    }
+  }
 }

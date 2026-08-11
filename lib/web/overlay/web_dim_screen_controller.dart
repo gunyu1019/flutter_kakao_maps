@@ -69,6 +69,8 @@ class WebDimScreenController with WebDimScreenControllerHandler {
       }
     }
     _highlightPolygon.clear();
+    _visible = false;
+    _syncAllLabelElements();
   }
 
   void _boundsChangedEventHandler() {
@@ -261,6 +263,30 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     }
   }
 
+  void _syncLabelElement(WebPoi poi) {
+    final coversLabels =
+        _cover == DimScreenCover.mapAndLabel || _cover == DimScreenCover.all;
+    final highlighted = _highlightPolygon.values.any(
+      (shape) =>
+          shape.visible && shape.point.contains(poi.getPosition().toLatLng()),
+    );
+    final opacity =
+        _visible && coversLabels && !highlighted ? 1 - _fillOpacity : 1.0;
+    poi.setDimScreenOpacity(opacity);
+  }
+
+  void _syncAllLabelElements() {
+    final layers = [
+      ...manager._labelLayer.values,
+      ...manager._lodLabelLayer.values
+    ];
+    for (final layer in layers) {
+      for (final poi in layer._webPoi.values) {
+        _syncLabelElement(poi);
+      }
+    }
+  }
+
   int _highlightZIndex(WebDimHighlightShape shape) {
     final orderedShapes = _highlightPolygon.values.toList()
       ..sort((first, second) {
@@ -279,6 +305,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     _colorCode = _getColorCode(flutterColor);
     _fillOpacity = flutterColor.a;
     _redraw();
+    _syncAllLabelElements();
   }
 
   @override
@@ -289,6 +316,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     }
     _element?.setMap(visible ? controller : null);
     _syncAllHighlightElements();
+    _syncAllLabelElements();
   }
 
   @override
@@ -296,6 +324,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     _cover = cover;
     _redraw();
     _syncAllHighlightElements();
+    _syncAllLabelElements();
   }
 
   @override
@@ -316,6 +345,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     _highlightPolygon[shapeId] = shape;
     _redraw();
     _syncAllHighlightElements();
+    _syncAllLabelElements();
     return shapeId;
   }
 
@@ -328,6 +358,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     }
     _highlightPolygon.remove(shapeId);
     _redraw();
+    _syncAllLabelElements();
   }
 
   @override
@@ -337,6 +368,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     shape.visible = visible;
     _redraw();
     _syncHighlightElement(shape);
+    _syncAllLabelElements();
   }
 
   @override
@@ -351,5 +383,6 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     shape.style = style;
     _redraw();
     _syncHighlightElement(shape);
+    _syncAllLabelElements();
   }
 }

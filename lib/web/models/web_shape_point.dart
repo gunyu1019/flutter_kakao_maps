@@ -11,6 +11,32 @@ class WebShapePoint {
     yield* holes;
   }
 
+  bool contains(LatLng point) {
+    if (!_ringContains(path, point)) return false;
+    return holes.every((hole) => !_ringContains(hole, point));
+  }
+
+  static bool _ringContains(List<LatLng> ring, LatLng point) {
+    if (ring.length < 3) return false;
+    var inside = false;
+    for (var current = 0, previous = ring.length - 1;
+        current < ring.length;
+        previous = current++) {
+      final currentPoint = ring[current];
+      final previousPoint = ring[previous];
+      final crossesLatitude = (currentPoint.latitude > point.latitude) !=
+          (previousPoint.latitude > point.latitude);
+      if (!crossesLatitude) continue;
+      final intersectionLongitude =
+          (previousPoint.longitude - currentPoint.longitude) *
+                  (point.latitude - currentPoint.latitude) /
+                  (previousPoint.latitude - currentPoint.latitude) +
+              currentPoint.longitude;
+      if (point.longitude < intersectionLongitude) inside = !inside;
+    }
+    return inside;
+  }
+
   /// Native DimScreen polygon strokes are closed even when the serialized
   /// ring does not repeat its first point. Kakao Web draws the stroke with a
   /// separate Polyline, so close each usable ring explicitly.

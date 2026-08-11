@@ -108,6 +108,7 @@ class WebLabelController with WebLabelControllerHandler {
     _webPoi[poiId]?.currentLevel = currentZoomLevel;
     final element = poiElement(poi, style);
     _webPoi[poiId]?.setContent(element);
+    manager._dimScreenLayer._syncLabelElement(poi);
   }
 
   @override
@@ -127,6 +128,7 @@ class WebLabelController with WebLabelControllerHandler {
   Future<void> movePoi(String poiId, LatLng position, [double? millis]) async {
     _webPoi[poiId]?.setPosition(WebLatLng.fromLatLng(position));
     manager._onPoiMove(_webPoi[poiId]!, position);
+    manager._dimScreenLayer._syncLabelElement(_webPoi[poiId]!);
   }
 
   @override
@@ -191,6 +193,7 @@ class WebLabelController with WebLabelControllerHandler {
     poi.setVisible(visible);
 
     _syncZoomLevel(poiId);
+    manager._dimScreenLayer._syncLabelElement(poi);
     return poiId;
   }
 
