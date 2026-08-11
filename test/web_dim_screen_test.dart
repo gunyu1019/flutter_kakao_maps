@@ -104,4 +104,48 @@ void main() {
     expect(offsets.map((point) => point.x).toSet(), {-110, 110});
     expect(offsets.map((point) => point.y).toSet(), {-60, 60});
   });
+
+  test('CirclePoint hole uses relative radius and opposite winding', () {
+    final point = CirclePoint(
+      160,
+      const LatLng(37.5665, 126.9780),
+      vertexCount: 72,
+    )..addCircleHole(60);
+    final payload = point.toMessageable();
+    final exterior = WebShapePoint.relativeOffsets(payload);
+    final hole = WebShapePoint.relativeOffsets(payload["holes"].single);
+
+    expect(exterior, hasLength(72));
+    expect(hole, hasLength(360));
+    for (final offset in hole) {
+      expect(
+        math.sqrt(offset.x * offset.x + offset.y * offset.y),
+        closeTo(60, 1e-9),
+      );
+    }
+    expect(_signedArea(exterior).sign, isNot(_signedArea(hole).sign));
+  });
+
+  test('RectanglePoint hole uses relative width and height', () {
+    final point = RectanglePoint(
+      260,
+      180,
+      const LatLng(37.5665, 126.9780),
+    )..addRetangleHole(100, 60);
+    final payload = point.toMessageable();
+    final hole = WebShapePoint.relativeOffsets(payload["holes"].single);
+
+    expect(hole.map((offset) => offset.x).toSet(), {-50, 50});
+    expect(hole.map((offset) => offset.y).toSet(), {-30, 30});
+  });
+}
+
+double _signedArea(List<KPoint> points) {
+  var area = 0.0;
+  for (var index = 0; index < points.length; index++) {
+    final current = points[index];
+    final next = points[(index + 1) % points.length];
+    area += current.x * next.y - next.x * current.y;
+  }
+  return area / 2;
 }

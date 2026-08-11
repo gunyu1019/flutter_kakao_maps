@@ -22,11 +22,10 @@ class WebShapePoint {
     if (_relativePayload == null) return _absoluteHoles;
     final rawHoles = _relativePayload["holes"] as Iterable?;
     if (rawHoles == null) return [];
-
-    // S13 changes the exterior to native screen-relative units. Relative
-    // holes remain on the legacy path until S16 is migrated separately.
     return rawHoles
-        .map<List<LatLng>>((hole) => _getLegacyHoleFromDotPoint(hole))
+        .map<List<LatLng>>(
+          (hole) => _getRelativePoint(hole, _projection!),
+        )
         .toList();
   }
 
@@ -164,38 +163,6 @@ class WebShapePoint {
       );
       return projection.coordsFromContainerPoint(containerPoint).toLatLng();
     }).toList();
-  }
-
-  static List<LatLng> _getLegacyHoleFromDotPoint(dynamic payload) {
-    final basePoint = LatLng.fromMessageable(payload["basePoint"]);
-    final clockwise = payload["clockwise"] as bool? ?? true;
-    final dotType = PointShapeType.values.firstWhere(
-      (type) => type.value == payload["dotType"],
-    );
-    late List<LatLng> points;
-
-    switch (dotType) {
-      case PointShapeType.circle:
-        final radius = (payload["radius"] as num).toDouble();
-        points = List.generate(
-          360,
-          (degree) => basePoint.offset(radius, degree.toDouble()),
-        );
-      case PointShapeType.rectangle:
-        final width = (payload["width"] as num).toDouble();
-        final height = (payload["height"] as num).toDouble();
-        points = [
-          basePoint.offset(-width * .5, 90).offset(height * .5, 0),
-          basePoint.offset(height * .5, 0).offset(width * .5, 90),
-          basePoint.offset(width * .5, 90).offset(-height * .5, 0),
-          basePoint.offset(-height * .5, 0).offset(-width * .5, 90),
-        ];
-      case PointShapeType.points:
-      case PointShapeType.none:
-        throw UnimplementedError();
-    }
-
-    return clockwise ? points : points.reversed.toList();
   }
 
   factory WebShapePoint.fromDotPoint(
