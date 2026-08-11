@@ -60,12 +60,16 @@ class WebShapePoint {
     return inside;
   }
 
-  /// Native DimScreen polygon strokes are closed even when the serialized
-  /// ring does not repeat its first point. Kakao Web draws the stroke with a
-  /// separate Polyline, so close each usable ring explicitly.
-  Iterable<List<LatLng>> get strokeRings => rings
-      .where((ring) => ring.length >= 2)
-      .map((ring) => ring.first == ring.last ? ring : [...ring, ring.first]);
+  /// MapPoint stroke paths preserve the caller's open/closed input, matching
+  /// the native SDKs. Relative CirclePoint and RectanglePoint paths represent
+  /// closed shapes, so close their generated Web Polyline rings explicitly.
+  Iterable<List<LatLng>> get strokeRings {
+    final usableRings = rings.where((ring) => ring.length >= 2);
+    if (_relativePayload == null) return usableRings;
+    return usableRings.map(
+      (ring) => ring.first == ring.last ? ring : [...ring, ring.first],
+    );
+  }
 
   JSArray<JSArray<WebLatLng>> toPolygonPath() {
     return rings
