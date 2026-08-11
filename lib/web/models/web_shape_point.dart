@@ -1,10 +1,34 @@
 part of '../kakao_map_sdk_web.dart';
 
 class WebShapePoint {
-  final List<LatLng> path;
-  final List<List<LatLng>> holes = [];
+  final List<LatLng>? _absolutePath;
+  final List<List<LatLng>> _absoluteHoles = [];
+  final dynamic _relativePayload;
+  final WebMapProjection? _projection;
 
-  WebShapePoint([List<LatLng>? path]) : path = path ?? [];
+  WebShapePoint([List<LatLng>? path])
+      : _absolutePath = path ?? [],
+        _relativePayload = null,
+        _projection = null;
+
+  WebShapePoint._relative(this._relativePayload, this._projection)
+      : _absolutePath = null;
+
+  List<LatLng> get path => _relativePayload == null
+      ? _absolutePath!
+      : _getRelativePoint(_relativePayload, _projection!);
+
+  List<List<LatLng>> get holes {
+    if (_relativePayload == null) return _absoluteHoles;
+    final rawHoles = _relativePayload["holes"] as Iterable?;
+    if (rawHoles == null) return [];
+
+    // S13 changes the exterior to native screen-relative units. Relative
+    // holes remain on the legacy path until S16 is migrated separately.
+    return rawHoles
+        .map<List<LatLng>>((hole) => _getLegacyHoleFromDotPoint(hole))
+        .toList();
+  }
 
   Iterable<List<LatLng>> get rings sync* {
     yield path;
@@ -54,10 +78,13 @@ class WebShapePoint {
   JSArray<WebLatLng> toPolylinePath() =>
       path.map(WebLatLng.fromLatLng).toList().toJS;
 
-  factory WebShapePoint.fromMessageable(dynamic payload) =>
+  factory WebShapePoint.fromMessageable(
+    dynamic payload, [
+    WebMapProjection? projection,
+  ]) =>
       switch (payload["type"]) {
         0 => WebShapePoint.fromMapPoint(payload),
-        1 => WebShapePoint.fromDotPoint(payload),
+        1 => WebShapePoint.fromDotPoint(payload, projection),
         Object() || null => throw UnimplementedError(),
       };
 
@@ -74,54 +101,110 @@ class WebShapePoint {
         for (final rawPoint in rawHole as Iterable) {
           hole.add(LatLng.fromMessageable(rawPoint));
         }
-        point.holes.add(hole);
+        point._absoluteHoles.add(hole);
       }
     }
     return point;
   }
 
-  static List<LatLng> _getPointFromDotPoint(
-    dynamic payload, [
-    LatLng? basePoint,
-  ]) {
-    List<LatLng> absolutePoint = <LatLng>[];
-    final basePoint0 =
-        basePoint ?? LatLng.fromMessageable(payload["basePoint"]);
+  static List<KPoint> relativeOffsets(dynamic payload) {
     final dotType = PointShapeType.values.firstWhere(
       (e) => e.value == payload["dotType"],
     );
-    final clockwise = payload["clockwise"];
+    final clockwise = payload["clockwise"] as bool? ?? true;
+    late List<KPoint> offsets;
 
     switch (dotType) {
       case PointShapeType.circle:
-        final radius = payload["radius"];
-        Iterable.generate(360)
-            .map<LatLng>((deg) => basePoint0.offset(radius, deg.toDouble()))
-            .forEach(absolutePoint.add);
+        final radius = (payload["radius"] as num).toDouble();
+        final vertexCount = (payload["vertexCount"] as num?)?.toInt() ?? 360;
+        if (vertexCount < 3) {
+          throw ArgumentError.value(
+            vertexCount,
+            "vertexCount",
+            "CirclePoint requires at least 3 vertices",
+          );
+        }
+        offsets = List.generate(vertexCount, (index) {
+          final angle = 2 * math.pi * index / vertexCount;
+          return KPoint(
+            radius * math.sin(angle),
+            -radius * math.cos(angle),
+          );
+        });
       case PointShapeType.rectangle:
-        final width = payload["width"];
-        final height = payload["height"];
-        absolutePoint.addAll([
-          basePoint0.offset(-width * .5, 90).offset(height * .5, 0),
-          basePoint0.offset(height * .5, 0).offset(width * .5, 90),
-          basePoint0.offset(width * .5, 90).offset(-height * .5, 0),
-          basePoint0.offset(-height * .5, 0).offset(-width * .5, 90),
-          basePoint0.offset(-width * .5, 90).offset(height * .5, 0),
-        ]);
+        final halfWidth = (payload["width"] as num).toDouble() / 2;
+        final halfHeight = (payload["height"] as num).toDouble() / 2;
+        offsets = [
+          KPoint(-halfWidth, -halfHeight),
+          KPoint(halfWidth, -halfHeight),
+          KPoint(halfWidth, halfHeight),
+          KPoint(-halfWidth, halfHeight),
+        ];
       case PointShapeType.points:
       case PointShapeType.none:
         throw UnimplementedError();
     }
 
-    if (clockwise) absolutePoint = absolutePoint.reversed.toList();
-    return absolutePoint;
+    return clockwise ? offsets : offsets.reversed.toList();
   }
 
-  factory WebShapePoint.fromDotPoint(dynamic payload) {
-    final point = WebShapePoint(_getPointFromDotPoint(payload));
-    if (payload.containsKey("holes") && payload["holes"].length > 0) {
-      payload["holes"].map(_getPointFromDotPoint).forEach(point.holes.add);
+  static List<LatLng> _getRelativePoint(
+    dynamic payload,
+    WebMapProjection projection,
+  ) {
+    final basePoint = LatLng.fromMessageable(payload["basePoint"]);
+    final baseContainerPoint = projection.containerPointFromCoords(
+      WebLatLng.fromLatLng(basePoint),
+    );
+    return relativeOffsets(payload).map((offset) {
+      final containerPoint = WebPoint(
+        baseContainerPoint.x + offset.x.toDouble(),
+        baseContainerPoint.y + offset.y.toDouble(),
+      );
+      return projection.coordsFromContainerPoint(containerPoint).toLatLng();
+    }).toList();
+  }
+
+  static List<LatLng> _getLegacyHoleFromDotPoint(dynamic payload) {
+    final basePoint = LatLng.fromMessageable(payload["basePoint"]);
+    final clockwise = payload["clockwise"] as bool? ?? true;
+    final dotType = PointShapeType.values.firstWhere(
+      (type) => type.value == payload["dotType"],
+    );
+    late List<LatLng> points;
+
+    switch (dotType) {
+      case PointShapeType.circle:
+        final radius = (payload["radius"] as num).toDouble();
+        points = List.generate(
+          360,
+          (degree) => basePoint.offset(radius, degree.toDouble()),
+        );
+      case PointShapeType.rectangle:
+        final width = (payload["width"] as num).toDouble();
+        final height = (payload["height"] as num).toDouble();
+        points = [
+          basePoint.offset(-width * .5, 90).offset(height * .5, 0),
+          basePoint.offset(height * .5, 0).offset(width * .5, 90),
+          basePoint.offset(width * .5, 90).offset(-height * .5, 0),
+          basePoint.offset(-height * .5, 0).offset(-width * .5, 90),
+        ];
+      case PointShapeType.points:
+      case PointShapeType.none:
+        throw UnimplementedError();
     }
-    return point;
+
+    return clockwise ? points : points.reversed.toList();
+  }
+
+  factory WebShapePoint.fromDotPoint(
+    dynamic payload, [
+    WebMapProjection? projection,
+  ]) {
+    if (projection == null) {
+      throw ArgumentError.notNull("projection");
+    }
+    return WebShapePoint._relative(payload, projection);
   }
 }

@@ -27,7 +27,10 @@ mixin WebDimScreenControllerHandler {
         return;
       case "addHighlightPolygonShape":
         final polygon = arguments["polygon"];
-        final point = WebShapePoint.fromMessageable(polygon["position"]);
+        final point = WebShapePoint.fromMessageable(
+          polygon["position"],
+          manager.controller.getProjection(),
+        );
         final style = manager._dimPolygonStyles[polygon["styleId"]!]![0];
         return await addHighlightPolygonShape(
           point,
@@ -46,7 +49,10 @@ mixin WebDimScreenControllerHandler {
         return;
       case "changePolygon":
         final shapeId = arguments["polygonId"];
-        final point = WebShapePoint.fromMessageable(arguments["position"]);
+        final point = WebShapePoint.fromMessageable(
+          arguments["position"],
+          manager.controller.getProjection(),
+        );
         final style = manager._dimPolygonStyles[arguments["styleId"]!]![0];
         await changePolygon(shapeId, point, style);
         return;

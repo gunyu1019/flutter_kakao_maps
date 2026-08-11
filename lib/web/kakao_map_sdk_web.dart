@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:js_interop';
+import 'dart:math' as math;
 import 'dart:ui_web' as ui_web;
 
 import 'package:collection/collection.dart';

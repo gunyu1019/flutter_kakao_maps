@@ -1,6 +1,8 @@
 @TestOn('browser')
 library;
 
+import 'dart:math' as math;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:kakao_map_sdk/web/kakao_map_sdk_web.dart';
@@ -69,5 +71,37 @@ void main() {
 
     expect(closedStroke, hasLength(5));
     expect(closedStroke.last, closedStroke.first);
+  });
+
+  test('CirclePoint exterior uses native-relative units and vertex count', () {
+    final payload = CirclePoint(
+      100,
+      const LatLng(37.5665, 126.9780),
+      vertexCount: 36,
+    ).toMessageable();
+    final offsets = WebShapePoint.relativeOffsets(payload);
+
+    expect(offsets, hasLength(36));
+    expect(offsets.first.x, closeTo(0, 1e-9));
+    expect(offsets.first.y, closeTo(-100, 1e-9));
+    for (final point in offsets) {
+      expect(
+        math.sqrt(point.x * point.x + point.y * point.y),
+        closeTo(100, 1e-9),
+      );
+    }
+  });
+
+  test('RectanglePoint exterior uses native-relative width and height', () {
+    final payload = RectanglePoint(
+      220,
+      120,
+      const LatLng(37.5665, 126.9780),
+    ).toMessageable();
+    final offsets = WebShapePoint.relativeOffsets(payload);
+
+    expect(offsets, hasLength(4));
+    expect(offsets.map((point) => point.x).toSet(), {-110, 110});
+    expect(offsets.map((point) => point.y).toSet(), {-60, 60});
   });
 }

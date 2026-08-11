@@ -76,9 +76,15 @@ class WebDimScreenController with WebDimScreenControllerHandler {
   void _boundsChangedEventHandler() {
     if (_element == null) return;
     _redraw();
+    _syncAllHighlightElements();
+    _syncAllLabelElements();
   }
 
-  void _zoomChangedEventHandler() => _syncAllHighlightElements();
+  void _zoomChangedEventHandler() {
+    _redraw();
+    _syncAllHighlightElements();
+    _syncAllLabelElements();
+  }
 
   JSArray<WebLatLng> _outerRing() {
     final bound = controller.getBounds();
