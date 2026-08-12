@@ -48,7 +48,7 @@ extension PoiTextStyle {
 extension PoiIconStyle {
     convenience init(payload: [String: Any]) {
         let transition = asPoiTransition(payload: castSafty(payload["iconTransition"], caster: asDict))
-        let symbol = payload["icon"].flatMap(asDict).flatMap(asImage)
+        let symbol = castSafty(payload["icon"], caster: asDict).flatMap(asImage)
 
         self.init(
             symbol: symbol,
@@ -198,7 +198,7 @@ extension WaveTextOptions {
 extension PoiBadge {
     convenience init(payload: [String: Any]) {
         let id = castSafty(payload["id"], caster: asString) ?? UUID().uuidString
-        let image = payload["image"].flatMap(asDict).flatMap(asImage)
+        let image = castSafty(payload["image"], caster: asDict).flatMap(asImage)
         let offset = CGPoint(x: asDouble(payload["offsetX"]!), y: asDouble(payload["offsetY"]!))
         let zOrder = castSafty(payload["zOrder"], caster: asInt) ?? 0
         self.init(badgeID: id, image: image, offset: offset, zOrder: zOrder)

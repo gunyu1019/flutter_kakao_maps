@@ -9,8 +9,8 @@ mixin OverlayManager {
   final Map<String, LodLabelController> _lodLabelController = {};
   final Map<String, ShapeController> _shapeController = {};
   final Map<String, RouteController> _routeController = {};
-  late final DimScreenController _dimController;
-  late final TrackingController _trackingController;
+  late DimScreenController _dimController;
+  late TrackingController _trackingController;
 
   // Overlay Style
   final Map<String, PoiStyle> _poiStyle = {};

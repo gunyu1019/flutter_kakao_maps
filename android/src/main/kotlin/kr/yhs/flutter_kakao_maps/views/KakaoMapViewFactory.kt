@@ -24,13 +24,20 @@ class KakaoMapViewFactory(private val activity: Activity, private val messenger:
 
     val controller = KakaoMapController(viewId, context, channel, overlayChannel)
     val option = KakaoMapOption.fromMessageable(controller::onMapReady, convertedArgs)
+    val recreateMapViewOnResume =
+      convertedArgs["recreateAndroidMapViewOnResume"] as Boolean? ?: false
+    val recreateMapViewDelayMillis =
+      (convertedArgs["androidMapViewRecreationDelayMillis"] as Number?)?.toLong() ?: 300L
+    val recoverGLSurfaceViewOnResume =
+      convertedArgs["recoverAndroidGLSurfaceViewOnResume"] as Boolean? ?: true
     return KakaoMapView(
       activity = activity,
       context = context,
       controller = controller,
-      viewId = viewId,
       option = option,
-      channel = channel,
+      recreateMapViewOnResume = recreateMapViewOnResume,
+      recreateMapViewDelayMillis = recreateMapViewDelayMillis,
+      recoverGLSurfaceViewOnResume = recoverGLSurfaceViewOnResume,
     )
   }
 }

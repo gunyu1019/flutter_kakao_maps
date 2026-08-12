@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -8,6 +7,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+
+import 'models/base/platform_file.dart';
 
 /* chnnael */
 part 'channel/channel_type.dart';
@@ -27,8 +28,6 @@ part 'controller/overlay/lod_label_controller.dart';
 part 'controller/overlay/route_controller.dart';
 part 'controller/overlay/shape_controller.dart';
 part 'controller/overlay/tracking_controller.dart';
-
-part 'controller/extensions/bounds.dart';
 
 /* exception */
 part 'exception/duplicated_overlay_exception.dart';

@@ -83,4 +83,7 @@ abstract class KakaoMapController with OverlayManager {
   /// 지도를 종료합니다.
   /// 이 메소드는 상태관리(Lifecycle)를 관리하기 위해 사용됩니다.
   Future<void> finish();
+
+  /// 화면에 보이는 지도 영역의 경계를 가져오는 함수입니다
+  Future<LatLngBounds?> getBounds(BuildContext context);
 }
