@@ -445,12 +445,16 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     points: List<List<LatLng>>,
     onSuccess: (Any?) -> Unit,
   ) {
+    val stylesSet = routeManager!!.addStylesSet(RouteLineStylesSet.from(styleId, listOf()))
+
     points
       .mapIndexed { index, element ->
-        RouteLineSegment.from(element).apply { curveType[index].let(::setCurveType) }
+        RouteLineSegment.from(element, stylesSet.styles[0]).apply {
+          curveType[index].let(::setCurveType)
+        }
       }
       .let(route::changeSegments)
-    routeManager!!.addStylesSet(RouteLineStylesSet.from(styleId, listOf())).let(route::changeStyle)
+    route.changeStyle(stylesSet)
     onSuccess.invoke(null)
   }
 
