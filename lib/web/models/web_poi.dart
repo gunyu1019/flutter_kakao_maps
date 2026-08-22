@@ -41,4 +41,11 @@ class WebPoi {
 
   void setZIndex(int zIndex) => overlay.setZIndex(zIndex);
   int getZIndex() => overlay.getZIndex();
+
+  void setDimScreenFilter(String? filter) {
+    final content = getContent();
+    if (content is web.HTMLElement) {
+      content.style.filter = filter ?? 'none';
+    }
+  }
 }

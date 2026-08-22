@@ -15,7 +15,10 @@ mixin WebShapeControllerHandler {
         break;
       case "addPolylineShape":
         final polyline = arguments["polyline"];
-        final point = WebShapePoint.fromMessageable(polyline["position"]);
+        final point = WebShapePoint.fromMessageable(
+          polyline["position"],
+          manager.controller.getProjection(),
+        );
         final style = manager._polylineStyles[polyline["styleId"]!]![0];
         return await addPolylineShape(
           point,
@@ -25,7 +28,10 @@ mixin WebShapeControllerHandler {
         );
       case "addPolygonShape":
         final polygon = arguments["polygon"];
-        final point = WebShapePoint.fromMessageable(polygon["position"]);
+        final point = WebShapePoint.fromMessageable(
+          polygon["position"],
+          manager.controller.getProjection(),
+        );
         final style = manager._polygonStyles[polygon["styleId"]!]![0];
         return await addPolygonShape(
           point,
@@ -53,13 +59,19 @@ mixin WebShapeControllerHandler {
         break;
       case "changePolyline":
         final shapeId = arguments["polylineId"];
-        final point = WebShapePoint.fromMessageable(arguments["position"]);
+        final point = WebShapePoint.fromMessageable(
+          arguments["position"],
+          manager.controller.getProjection(),
+        );
         final styleId = arguments["styleId"]!;
         await changePolyline(shapeId, point, styleId);
         break;
       case "changePolygon":
         final shapeId = arguments["polygonId"];
-        final point = WebShapePoint.fromMessageable(arguments["position"]);
+        final point = WebShapePoint.fromMessageable(
+          arguments["position"],
+          manager.controller.getProjection(),
+        );
         final styleId = arguments["styleId"]!;
         await changePolygon(shapeId, point, styleId);
         break;
