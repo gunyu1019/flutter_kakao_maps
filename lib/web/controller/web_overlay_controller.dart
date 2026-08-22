@@ -74,6 +74,19 @@ class WebOverlayController {
 
   void dispose() {
     _dimScreenLayer.removeDimScreenLayer();
+
+    for (final layer in _shapeLayer.values) {
+      layer.removeShapeLayer();
+    }
+    for (final layer in _routeLayer.values) {
+      layer.removeRouteLayer();
+    }
+    for (final layer in _labelLayer.values) {
+      layer.removeLabelLayer();
+    }
+    for (final layer in _lodLabelLayer.values) {
+      layer.removeLabelLayer();
+    }
   }
 
   void _onPoiMove(WebPoi poi, LatLng position) {
