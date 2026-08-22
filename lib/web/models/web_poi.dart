@@ -45,7 +45,6 @@ class WebPoi {
   void setDimScreenFilter(String? filter) {
     final content = getContent();
     if (content is web.HTMLElement) {
-      content.style.opacity = '1';
       content.style.filter = filter ?? 'none';
     }
   }
