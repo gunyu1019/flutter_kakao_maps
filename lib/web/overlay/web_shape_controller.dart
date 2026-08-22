@@ -45,7 +45,7 @@ class WebShapeController with WebShapeControllerHandler {
       );
       _zoomChangedCallbackRef = null;
     }
-    for (var shape in _webPolygon.keys) {
+    for (final shape in _webPolygon.keys.toList()) {
       await removePolygonShape(shape);
     }
     for (var shape in _webPolyline.keys) {
