@@ -359,6 +359,21 @@ void main() {
       expect(style.id, 'route-style-explicit-id');
     });
 
+    test('supports corrected and deprecated RouteStyle getters', () async {
+      const styleId = 'route-style-getter-id';
+      final style = RouteStyle(
+        const Color(0xFF123456),
+        5,
+        id: styleId,
+      );
+
+      await controller.addRouteStyle(style);
+
+      expect(controller.getRouteStyle(styleId), same(style));
+      // ignore: deprecated_member_use_from_same_package
+      expect(controller.getRotueStyle(styleId), same(style));
+    });
+
     test('addRoute returns Route with id from channel response', () async {
       final style = RouteStyle(
         const Color(0xFF446688),

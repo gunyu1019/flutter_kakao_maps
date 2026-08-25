@@ -75,6 +75,12 @@ mixin OverlayManager {
   /// 고유 ID를 통해 Route 스타일 객체를 불러옵니다.
   RouteStyle? getRouteStyle(String id);
 
+  /// 고유 ID를 통해 Route 스타일 객체를 불러옵니다.
+  ///
+  /// 철자가 수정된 [getRouteStyle]을 사용하세요.
+  @Deprecated('Use getRouteStyle instead.')
+  RouteStyle? getRotueStyle(String id) => getRouteStyle(id);
+
   /// 다중 Route 스타일을 등록합니다. [style] 매개변수에는 경로선 스타일에 사용되는 스타일 객체([RouteStyle])가 배열 형태로 입력됩니다.
   /// 등록된 Route Style은 [MultipleRoute]에서 사용됩니다.
   /// ID 값은 [id] 매개변수를 주어서 사전에 정의할 수 있지만, 입력하지 않으면 임의로 생성된 고유ID가 반환됩니다.
@@ -82,7 +88,14 @@ mixin OverlayManager {
   Future<String> addMultipleRouteStyle(List<RouteStyle> styles, [String? id]);
 
   /// 고유 ID를 통해 Multiple Route 스타일 객체를 불러옵니다.
-  List<RouteStyle>? getMultipleRotueStyle(String id);
+  List<RouteStyle>? getMultipleRouteStyle(String id);
+
+  /// 고유 ID를 통해 Multiple Route 스타일 객체를 불러옵니다.
+  ///
+  /// 철자가 수정된 [getMultipleRouteStyle]을 사용하세요.
+  @Deprecated('Use getMultipleRouteStyle instead.')
+  List<RouteStyle>? getMultipleRotueStyle(String id) =>
+      getMultipleRouteStyle(id);
 
   void _initalizeOverlayController() {
     _labelController[LabelController.defaultId] = LabelController._(

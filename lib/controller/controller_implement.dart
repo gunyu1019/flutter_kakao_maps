@@ -306,7 +306,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
   RouteStyle? getRouteStyle(String id) => _routeStyle[id]?[0];
 
   @override
-  List<RouteStyle>? getMultipleRotueStyle(String id) => _routeStyle[id];
+  List<RouteStyle>? getMultipleRouteStyle(String id) => _routeStyle[id];
 
   @override
   Future<LabelController> addLabelLayer(
