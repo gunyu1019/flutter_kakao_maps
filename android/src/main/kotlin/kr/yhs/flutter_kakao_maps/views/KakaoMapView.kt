@@ -111,20 +111,23 @@ class KakaoMapView(
     val wrappedOption = startOption.also { it.setOnReady(::onMapReady) }
     controller.mapView = mapView
 
-    mapView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-      override fun onViewAttachedToWindow(v: View) {
-        if (pendingRecovery) {
-          cancelPendingRecoveryTimeout()
-          val recoveryRunnable = Runnable {
-            pendingRecoveryRunnable = null
-            executeGLSurfaceViewRecovery()
+    mapView.addOnAttachStateChangeListener(
+      object : View.OnAttachStateChangeListener {
+        override fun onViewAttachedToWindow(v: View) {
+          if (pendingRecovery) {
+            cancelPendingRecoveryTimeout()
+            val recoveryRunnable = Runnable {
+              pendingRecoveryRunnable = null
+              executeGLSurfaceViewRecovery()
+            }
+            pendingRecoveryRunnable = recoveryRunnable
+            container.post(recoveryRunnable)
           }
-          pendingRecoveryRunnable = recoveryRunnable
-          container.post(recoveryRunnable)
         }
+
+        override fun onViewDetachedFromWindow(v: View) = Unit
       }
-      override fun onViewDetachedFromWindow(v: View) = Unit
-    })
+    )
 
     mapView.start(controller, wrappedOption)
     return mapView
@@ -136,9 +139,7 @@ class KakaoMapView(
       map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
       lastCameraPosition = cameraPosition
       pendingCameraPosition = null
-    } ?: run {
-      captureCameraPosition()
-    }
+    } ?: run { captureCameraPosition() }
     controller.onMapReady(map)
   }
 
@@ -174,28 +175,24 @@ class KakaoMapView(
     val surfaceView = runCatching { mapView.getSurfaceView() }.getOrNull()
 
     // Primary: cast to Kakao fork GLSurfaceView and call onResume()
-    val castResult = runCatching {
-      val glSurfaceView = surfaceView as? com.kakao.vectormap.graphics.gl.GLSurfaceView
-      if (glSurfaceView != null) {
-        glSurfaceView.onResume()
-        true
-      } else {
-        false
-      }
-    }.getOrElse {
-      false
-    }
+    val castResult =
+      runCatching {
+          val glSurfaceView = surfaceView as? com.kakao.vectormap.graphics.gl.GLSurfaceView
+          if (glSurfaceView != null) {
+            glSurfaceView.onResume()
+            true
+          } else {
+            false
+          }
+        }
+        .getOrElse { false }
 
     // Fallback: reflection if cast yielded null (e.g. Vulkan surface view)
     if (!castResult && surfaceView != null) {
-      runCatching {
-        surfaceView.javaClass.getMethod("onResume").invoke(surfaceView)
-      }
+      runCatching { surfaceView.javaClass.getMethod("onResume").invoke(surfaceView) }
     }
 
-    runCatching {
-      mapView.resume()
-    }
+    runCatching { mapView.resume() }
 
     pendingRecovery = false
   }
@@ -218,8 +215,7 @@ class KakaoMapView(
 
   private fun captureCameraPosition(): CameraPosition? {
     if (!::kakaoMap.isInitialized) return lastCameraPosition
-    lastCameraPosition =
-      runCatching { kakaoMap.cameraPosition }.getOrElse { lastCameraPosition }
+    lastCameraPosition = runCatching { kakaoMap.cameraPosition }.getOrElse { lastCameraPosition }
     return lastCameraPosition
   }
 
