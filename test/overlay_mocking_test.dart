@@ -11,6 +11,7 @@ void main() {
 
   late KakaoMapController controller;
   MethodCall? lastDimScreenCall;
+  MethodCall? lastPolylineTextCall;
 
   String orFallback(String? requested, String fallback) {
     return (requested != null && requested.isNotEmpty) ? requested : fallback;
@@ -18,6 +19,7 @@ void main() {
 
   setUp(() {
     lastDimScreenCall = null;
+    lastPolylineTextCall = null;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(viewChannel, (call) async => null);
 
@@ -46,11 +48,18 @@ void main() {
           return orFallback(poi['id'] as String?, 'mock-lod-poi-id');
 
         case 'addPolylineText':
+          lastPolylineTextCall = call;
           final label = Map<String, dynamic>.from(args['label'] as Map);
           return orFallback(
             label['id'] as String?,
             'mock-polyline-text-id',
           );
+
+        case 'changePolylineTextStyle':
+        case 'changePolylineTextVisible':
+        case 'removePolylineText':
+          lastPolylineTextCall = call;
+          return null;
 
         case 'addPoiBadge':
           final badge = Map<String, dynamic>.from(args['badge'] as Map);
@@ -208,6 +217,49 @@ void main() {
       expect(text.points.length, 2);
       expect(text.points.first.latitude, 37.1);
       expect(text.points.last.longitude, 127.2);
+    });
+
+    test('uses the labelId contract throughout the lifecycle', () async {
+      final initialStyle = PolylineTextStyle(16, const Color(0xFF111111));
+      final text = await controller.labelLayer.addPolylineText(
+        'initial',
+        const [LatLng(37.1, 127.1), LatLng(37.2, 127.2)],
+        style: initialStyle,
+        id: 'polyline-text-lifecycle',
+        visible: false,
+      );
+
+      var arguments = Map<String, dynamic>.from(
+        lastPolylineTextCall!.arguments as Map,
+      );
+      final label = Map<String, dynamic>.from(arguments['label'] as Map);
+      expect(label['visible'], isFalse);
+      expect(text.visible, isFalse);
+
+      final changedStyle = PolylineTextStyle(20, const Color(0xFF222222));
+      await text.changeTextAndStyles('changed', changedStyle);
+      arguments = Map<String, dynamic>.from(
+        lastPolylineTextCall!.arguments as Map,
+      );
+      expect(lastPolylineTextCall!.method, 'changePolylineTextStyle');
+      expect(arguments['labelId'], text.id);
+      expect(arguments.containsKey('poiId'), isFalse);
+
+      await text.show();
+      arguments = Map<String, dynamic>.from(
+        lastPolylineTextCall!.arguments as Map,
+      );
+      expect(lastPolylineTextCall!.method, 'changePolylineTextVisible');
+      expect(arguments['labelId'], text.id);
+      expect(text.visible, isTrue);
+
+      await text.remove();
+      arguments = Map<String, dynamic>.from(
+        lastPolylineTextCall!.arguments as Map,
+      );
+      expect(lastPolylineTextCall!.method, 'removePolylineText');
+      expect(arguments['labelId'], text.id);
+      expect(controller.labelLayer.getPolylineText(text.id), isNull);
     });
   });
 

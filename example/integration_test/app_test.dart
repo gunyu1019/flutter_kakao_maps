@@ -513,6 +513,65 @@ void main() {
       }
     });
 
+    testWidgets('PolylineText lifecycle should stay in sync with native SDKs',
+        (WidgetTester tester) async {
+      try {
+        await _launchExampleApp(tester);
+        final KakaoMapController controller = await _waitForController(tester);
+        final initialStyle = PolylineTextStyle(
+          20,
+          Colors.deepOrange,
+          strokeSize: 2,
+          strokeColor: Colors.white,
+        );
+        final polylineText = await controller.labelLayer.addPolylineText(
+          'initial lifecycle text',
+          const [
+            LatLng(37.394776, 127.11116),
+            LatLng(37.395776, 127.11216),
+          ],
+          style: initialStyle,
+          id: 'polyline-text-lifecycle',
+          visible: false,
+        );
+
+        expect(polylineText.visible, isFalse);
+
+        await polylineText.show();
+        expect(polylineText.visible, isTrue);
+
+        await polylineText.hide();
+        expect(polylineText.visible, isFalse);
+
+        final changedStyle = PolylineTextStyle(
+          24,
+          Colors.blue,
+          strokeSize: 3,
+          strokeColor: Colors.white,
+        );
+        await polylineText.changeTextAndStyles(
+          'changed lifecycle text',
+          changedStyle,
+        );
+        expect(polylineText.text, 'changed lifecycle text');
+        expect(polylineText.style, same(changedStyle));
+
+        await polylineText.remove();
+        expect(
+          controller.labelLayer.getPolylineText(polylineText.id),
+          isNull,
+        );
+      } catch (e) {
+        if (e.toString().contains('headless environment') ||
+            e.toString().contains('CI (GitHub Actions)') ||
+            e.toString().contains('not ready in time')) {
+          debugPrint('Skipping test in headless environment: $e');
+          return;
+        }
+        rethrow;
+      }
+    });
+
     testWidgets(
         'mixed relative holes should be accepted by native shape converters',
         (WidgetTester tester) async {

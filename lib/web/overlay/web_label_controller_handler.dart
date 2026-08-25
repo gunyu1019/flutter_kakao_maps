@@ -137,7 +137,7 @@ mixin WebLabelControllerHandler {
       case "changePolylineTextStyle":
         final rawStyle = arguments["styles"];
         await changePolylineTextStyle(
-          arguments["poiId"] as String,
+          arguments["labelId"] as String,
           style: rawStyle != null
               ? PolylineTextStyle.fromMessageable(
                   Map<String, dynamic>.from(rawStyle as Map))
