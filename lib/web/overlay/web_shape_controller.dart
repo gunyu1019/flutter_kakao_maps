@@ -48,7 +48,7 @@ class WebShapeController with WebShapeControllerHandler {
     for (final shape in _webPolygon.keys.toList()) {
       await removePolygonShape(shape);
     }
-    for (var shape in _webPolyline.keys) {
+    for (final shape in _webPolyline.keys.toList()) {
       await removePolylineShape(shape);
     }
   }

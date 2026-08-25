@@ -18,7 +18,7 @@ class WebRouteController with WebRouteControllerHandler {
 
   @override
   Future<void> removeRouteLayer() async {
-    for (final route in _webRoute.keys) {
+    for (final route in _webRoute.keys.toList()) {
       await removeRoute(route);
     }
     removeEventListener(

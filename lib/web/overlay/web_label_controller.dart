@@ -22,7 +22,7 @@ class WebLabelController with WebLabelControllerHandler {
 
   @override
   Future<void> removeLabelLayer() async {
-    for (final poi in _webPoi.keys) {
+    for (final poi in _webPoi.keys.toList()) {
       await removePoi(poi);
     }
     for (final textId in _webPolylineText.keys.toList()) {
