@@ -244,15 +244,17 @@ class WebLabelController with WebLabelControllerHandler {
       zIndex: 10001,
     );
 
-    _webPolylineText[textId] = WebPolylineText(textId, points, text, style)
-      ..anchor = geometry.anchor
-      ..rootElement = svgElement
-      ..pathElement = pathElement
-      ..textElement = textElement
-      ..overlay = WebCustomOverlay(options)
-      ..setMap(controller)
-      ..setVisibility(visible);
+    final polylineText =
+        _webPolylineText[textId] = WebPolylineText(textId, points, text, style)
+          ..anchor = geometry.anchor
+          ..rootElement = svgElement
+          ..pathElement = pathElement
+          ..textElement = textElement
+          ..overlay = WebCustomOverlay(options)
+          ..setMap(controller)
+          ..setVisibility(visible);
     _syncPolylineTextZoomLevel(textId);
+    manager._dimScreenLayer._syncPolylineTextElement(polylineText);
     return textId;
   }
 

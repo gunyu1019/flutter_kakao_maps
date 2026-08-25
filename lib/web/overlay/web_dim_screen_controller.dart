@@ -333,6 +333,18 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     poi.setDimScreenFilter(filtered ? 'url(#$_labelFilterId)' : null);
   }
 
+  void _syncPolylineTextElement(WebPolylineText polylineText) {
+    final coversLabels =
+        _cover == DimScreenCover.mapAndLabel || _cover == DimScreenCover.all;
+    final highlighted = _highlightPolygon.values.any(
+      (shape) => shape.visible && shape.point.contains(polylineText.anchor),
+    );
+    final filtered = _visible && coversLabels && !highlighted;
+    polylineText.setDimScreenFilter(
+      filtered ? 'url(#$_labelFilterId)' : null,
+    );
+  }
+
   void _syncAllLabelElements() {
     final layers = [
       ...manager._labelLayer.values,
@@ -341,6 +353,9 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     for (final layer in layers) {
       for (final poi in layer._webPoi.values) {
         _syncLabelElement(poi);
+      }
+      for (final polylineText in layer._webPolylineText.values) {
+        _syncPolylineTextElement(polylineText);
       }
     }
   }

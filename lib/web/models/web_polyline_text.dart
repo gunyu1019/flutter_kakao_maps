@@ -33,7 +33,12 @@ class WebPolylineText {
       textElement.setAttribute("visibility", "visible");
       return;
     }
-    textElement.setAttribute("visibility", pathLength < textLength ? "hidden" : "visible");
+    textElement.setAttribute(
+        "visibility", pathLength < textLength ? "hidden" : "visible");
+  }
+
+  void setDimScreenFilter(String? filter) {
+    rootElement.style.filter = filter ?? 'none';
   }
 
   void _updateGeometry(WebSvgPathRouteGeometry geometry) {
