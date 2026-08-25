@@ -154,6 +154,27 @@ void main() {
       }
     });
 
+    testWidgets('DimScreenCover raw values should be accepted by native SDKs',
+        (WidgetTester tester) async {
+      try {
+        await _launchExampleApp(tester);
+        final KakaoMapController controller = await _waitForController(tester);
+
+        for (final cover in DimScreenCover.values) {
+          await controller.dimScreen.setCover(cover);
+          expect(controller.dimScreen.cover, cover);
+        }
+      } catch (e) {
+        if (e.toString().contains('headless environment') ||
+            e.toString().contains('CI (GitHub Actions)') ||
+            e.toString().contains('not ready in time')) {
+          debugPrint('Skipping test in headless environment: $e');
+          return;
+        }
+        rethrow;
+      }
+    });
+
     testWidgets('moveCamera should change map center in native map',
         (WidgetTester tester) async {
       try {

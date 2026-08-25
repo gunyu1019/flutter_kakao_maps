@@ -37,15 +37,9 @@ interface DimScreenControllerHandler {
       "setVisible" -> setDimVisible(arguments["visible"]!!.asBoolean(), result::success)
       "setDimCover" ->
         setDimCorver(
-          arguments["cover"]!!.asInt().let { value: Int ->
-            // Dart의 DimScreenCover 순서(all=0, map=1, mapAndLabel=2)는
-            // 네이티브 SDK의 순서(Map=0, MapAndLabel=1, All=2)와 다르므로 값으로 직접 매핑합니다.
-            when (value) {
-              0 -> DimScreenCover.All
-              1 -> DimScreenCover.Map
-              2 -> DimScreenCover.MapAndLabel
-              else -> throw IllegalArgumentException("Unknown DimScreenCover value: $value")
-            }
+          arguments["cover"]!!.asInt().let { rawValue ->
+            DimScreenCover.values().getOrNull(rawValue)
+              ?: throw IllegalArgumentException("Unknown DimScreenCover raw value: $rawValue")
           },
           result::success,
         )

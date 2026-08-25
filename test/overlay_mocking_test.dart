@@ -102,6 +102,10 @@ void main() {
             'mock-dim-polygon-id',
           );
 
+        case 'setDimCover':
+          lastDimScreenCall = call;
+          return null;
+
         default:
           return null;
       }
@@ -424,6 +428,24 @@ void main() {
   });
 
   group('DimScreen Mocking Tests', () {
+    test('setCover sends native DimScreenCover raw values', () async {
+      const expectedRawValues = {
+        DimScreenCover.map: 0,
+        DimScreenCover.mapAndLabel: 1,
+        DimScreenCover.all: 2,
+      };
+
+      for (final entry in expectedRawValues.entries) {
+        await controller.dimScreen.setCover(entry.key);
+
+        final arguments = Map<String, dynamic>.from(
+          lastDimScreenCall!.arguments as Map,
+        );
+        expect(arguments['cover'], entry.value);
+        expect(controller.dimScreen.cover, entry.key);
+      }
+    });
+
     test('addHighlightPolygonShape returns Polygon with channel id', () async {
       final style = PolygonStyle(
         const Color(0x66999999),
