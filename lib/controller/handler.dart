@@ -33,14 +33,14 @@ mixin KakaoMapControllerHandler {
         }
         break;
       case "onCameraMoveStart":
-        final gesture = defaultTargetPlatform == TargetPlatform.iOS
+        final gesture = !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS
             ? GestureType._fromMoveByValue(arguments['gesture'] as int)
             : GestureType.fromValue(arguments['gesture'] as int);
         onCameraMoveStart(gesture);
         break;
       case "onCameraMoveEnd":
         final position = CameraPosition.fromMessageable(arguments['position']);
-        final gesture = defaultTargetPlatform == TargetPlatform.iOS
+        final gesture = !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS
             ? GestureType._fromMoveByValue(arguments['gesture'] as int)
             : GestureType.fromValue(arguments['gesture'] as int);
         onCameraMoveEnd(position, gesture);
