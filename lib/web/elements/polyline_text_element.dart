@@ -31,9 +31,9 @@ web.SVGTextElement polylineTextElement(
   String text,
   PolylineTextStyle style,
 ) {
-  final textElement =
-      (web.document.createElementNS(_svgNs, "text") as web.SVGTextElement)
-        ..style.display = "inline";
+  final textElement = (web.document.createElementNS(_svgNs, "text")
+      as web.SVGTextElement)
+    ..style.display = "inline";
   applyPolylineTextStyle(textElement, style);
   return textElement
     ..append(

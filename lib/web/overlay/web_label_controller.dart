@@ -13,7 +13,6 @@ class WebLabelController with WebLabelControllerHandler {
   @override
   final Map<String, WebPoi> _webPoi = {};
 
-  @override
   final Map<String, WebPolylineText> _webPolylineText = {};
 
   @override

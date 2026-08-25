@@ -130,6 +130,9 @@ void main() {
         await _launchExampleApp(tester);
         final KakaoMapController controller = await _waitForController(tester);
         final BuildContext mapContext = tester.element(find.byType(KakaoMap));
+        if (!mapContext.mounted) {
+          throw TestFailure('KakaoMap was unmounted before getBounds');
+        }
 
         final LatLngBounds? bounds = await controller.getBounds(mapContext);
 

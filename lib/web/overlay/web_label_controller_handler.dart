@@ -4,7 +4,6 @@ mixin WebLabelControllerHandler {
   WebOverlayController get manager;
 
   Map<String, WebPoi> get _webPoi;
-  Map<String, WebPolylineText> get _webPolylineText;
 
   Future<dynamic> labelHandle(MethodCall method) async {
     final arguments = method.arguments;
@@ -123,8 +122,8 @@ mixin WebLabelControllerHandler {
         final pts = (label["position"] as List)
             .map((e) => LatLng.fromMessageable(e))
             .toList();
-        final style =
-            PolylineTextStyle.fromMessageable(Map<String, dynamic>.from(label["style"] as Map));
+        final style = PolylineTextStyle.fromMessageable(
+            Map<String, dynamic>.from(label["style"] as Map));
         return await addPolylineText(
           pts,
           label["text"] as String,
