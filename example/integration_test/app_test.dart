@@ -427,5 +427,63 @@ void main() {
         rethrow;
       }
     });
+
+    testWidgets(
+        'mixed relative holes should be accepted by native shape converters',
+        (WidgetTester tester) async {
+      try {
+        await _launchExampleApp(tester);
+        final KakaoMapController controller = await _waitForController(tester);
+
+        final RectanglePoint point = RectanglePoint(
+          500,
+          400,
+          const LatLng(37.394776, 127.11116),
+        )
+          ..addHole(
+            CirclePoint(
+              80,
+              const LatLng(0, 0),
+              clockwise: false,
+            ),
+          )
+          ..addHole(
+            RectanglePoint(
+              120,
+              60,
+              const LatLng(0, 0),
+              clockwise: false,
+            ),
+          );
+        final Polygon<BasePoint> polygon =
+            await controller.shapeLayer.addPolygonShape(
+          point,
+          PolygonStyle(
+            Colors.blue.withValues(alpha: 0.35),
+            strokeColor: Colors.blue,
+            strokeWidth: 2,
+          ),
+          id: 'mixed-relative-hole-regression',
+        );
+
+        expect(polygon.id, 'mixed-relative-hole-regression');
+        expect(point.holeCount, 2);
+        expect(
+          controller.shapeLayer.getPolygonShape(polygon.id),
+          same(polygon),
+        );
+
+        await polygon.remove();
+        expect(controller.shapeLayer.getPolygonShape(polygon.id), isNull);
+      } catch (e) {
+        if (e.toString().contains('headless environment') ||
+            e.toString().contains('CI (GitHub Actions)') ||
+            e.toString().contains('not ready in time')) {
+          debugPrint('Skipping test in headless environment: $e');
+          return;
+        }
+        rethrow;
+      }
+    });
   });
 }

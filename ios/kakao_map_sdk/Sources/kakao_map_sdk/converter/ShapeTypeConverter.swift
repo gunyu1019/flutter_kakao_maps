@@ -108,12 +108,12 @@ func asDotPoints(payload: [String: Any]) -> [CGPoint]? {
     switch asInt(payload["dotType"]!) {
     case 0:
         let radius = asDouble(payload["radius"]!)
-        let clockwise = castSafty(payload["closewise"], caster: asBool) ?? true
+        let clockwise = castSafty(payload["clockwise"], caster: asBool) ?? true
         return Primitives.getCirclePoints(radius: radius, numPoints: 720, cw: clockwise)
     case 1:
         let width = asDouble(payload["width"]!)
         let height = asDouble(payload["height"]!)
-        let clockwise = castSafty(payload["closewise"], caster: asBool) ?? true
+        let clockwise = castSafty(payload["clockwise"], caster: asBool) ?? true
         return Primitives.getRectanglePoints(width: width, height: height, cw: clockwise)
     default:
         return nil

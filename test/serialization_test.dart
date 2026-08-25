@@ -193,6 +193,46 @@ void main() {
     });
   });
 
+  group('Relative Shape Serialization', () {
+    test('preserves each mixed hole type and winding direction', () {
+      final point = RectanglePoint(
+        400,
+        300,
+        const LatLng(37.394776, 127.11116),
+        clockwise: false,
+      )
+        ..addHole(
+          CirclePoint(
+            80,
+            const LatLng(0, 0),
+            clockwise: false,
+          ),
+        )
+        ..addHole(
+          RectanglePoint(
+            120,
+            60,
+            const LatLng(0, 0),
+            clockwise: false,
+          ),
+        );
+
+      final payload = point.toMessageable();
+      final holes = (payload['holes'] as List).cast<Map<String, dynamic>>();
+
+      expect(payload['dotType'], PointShapeType.rectangle.value);
+      expect(payload['clockwise'], isFalse);
+      expect(holes, hasLength(2));
+      expect(holes[0]['dotType'], PointShapeType.circle.value);
+      expect(holes[0]['radius'], 80);
+      expect(holes[0]['clockwise'], isFalse);
+      expect(holes[1]['dotType'], PointShapeType.rectangle.value);
+      expect(holes[1]['width'], 120);
+      expect(holes[1]['height'], 60);
+      expect(holes[1]['clockwise'], isFalse);
+    });
+  });
+
   group('PoiTextStyle Serialization', () {
     test('round-trip preserves all style fields', () {
       const original = PoiTextStyle(

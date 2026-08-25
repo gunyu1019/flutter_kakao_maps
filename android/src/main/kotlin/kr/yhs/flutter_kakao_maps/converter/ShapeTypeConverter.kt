@@ -112,7 +112,7 @@ object ShapeTypeConverter {
           ?.asList<Any>()
           ?.map { element ->
             val elementPayload = element.asMap<Any?>()
-            when (rawPayload["dotType"]!!.asInt()) {
+            when (elementPayload["dotType"]!!.asInt()) {
               0 ->
                 PointVertex.fromCircle(
                   elementPayload["radius"]!!.asFloat(),
