@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
@@ -28,14 +29,29 @@ void main() {
   const dummyBuildingHeightScalePayload = 1.75;
 
   late KakaoMapController controller;
+  LatLng Function(int x, int y, int callIndex)? fromScreenPointHandler;
+  var fromScreenPointCallCount = 0;
 
   setUp(() {
+    fromScreenPointHandler = null;
+    fromScreenPointCallCount = 0;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(viewChannel, (call) async {
       switch (call.method) {
         case 'getCameraPosition':
           return dummyCameraPayload;
         case 'fromScreenPoint':
+          final handler = fromScreenPointHandler;
+          if (handler != null) {
+            final arguments = Map<String, dynamic>.from(call.arguments as Map);
+            final result = handler(
+              arguments['x'] as int,
+              arguments['y'] as int,
+              fromScreenPointCallCount,
+            );
+            fromScreenPointCallCount++;
+            return result.toMessageable();
+          }
           return dummyFromScreenPointPayload;
         case 'toScreenPoint':
           return dummyToScreenPointPayload;
@@ -96,6 +112,66 @@ void main() {
     expect(result, isA<KPoint>());
     expect(result!.x, dummyToScreenPointPayload['x']);
     expect(result.y, dummyToScreenPointPayload['y']);
+  });
+
+  testWidgets(
+    'getBounds calculates extrema from all four rotated viewport corners',
+    (tester) async {
+      final mapKey = GlobalKey();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Center(
+            child: SizedBox(key: mapKey, width: 200, height: 100),
+          ),
+        ),
+      );
+      fromScreenPointHandler = (x, y, _) => switch ((x, y)) {
+            (0, 0) => const LatLng(10, 20),
+            (200, 0) => const LatLng(11, 30),
+            (0, 100) => const LatLng(0, 19),
+            (200, 100) => const LatLng(1, 31),
+            _ => throw StateError('Unexpected screen point: ($x, $y)'),
+          };
+
+      final bounds = await controller.getBounds(mapKey.currentContext!);
+
+      expect(bounds, isNotNull);
+      expect(bounds!.ne, const LatLng(11, 31));
+      expect(bounds.sw, const LatLng(0, 19));
+      expect(fromScreenPointCallCount, 4);
+    },
+  );
+
+  testWidgets('getBounds retries an initially degenerate native result', (
+    tester,
+  ) async {
+    final mapKey = GlobalKey();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Center(
+          child: SizedBox(key: mapKey, width: 200, height: 100),
+        ),
+      ),
+    );
+    fromScreenPointHandler = (x, y, callIndex) {
+      if (callIndex < 4) return const LatLng(0, 0);
+      return switch ((x, y)) {
+        (0, 0) => const LatLng(10, 20),
+        (200, 0) => const LatLng(11, 30),
+        (0, 100) => const LatLng(0, 19),
+        (200, 100) => const LatLng(1, 31),
+        _ => throw StateError('Unexpected screen point: ($x, $y)'),
+      };
+    };
+
+    final bounds = await tester.runAsync(
+      () => controller.getBounds(mapKey.currentContext!),
+    );
+
+    expect(bounds, isNotNull);
+    expect(bounds!.ne, const LatLng(11, 31));
+    expect(bounds.sw, const LatLng(0, 19));
+    expect(fromScreenPointCallCount, 8);
   });
 
   test('canShowPosition returns boolean from channel response', () async {

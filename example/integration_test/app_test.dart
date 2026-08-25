@@ -124,6 +124,33 @@ void main() {
       }
     });
 
+    testWidgets('getBounds should return an ordered native viewport',
+        (WidgetTester tester) async {
+      try {
+        await _launchExampleApp(tester);
+        final KakaoMapController controller = await _waitForController(tester);
+        final BuildContext mapContext = tester.element(find.byType(KakaoMap));
+
+        final LatLngBounds? bounds = await controller.getBounds(mapContext);
+
+        expect(bounds, isNotNull);
+        expect(bounds!.ne.latitude.isFinite, isTrue);
+        expect(bounds.ne.longitude.isFinite, isTrue);
+        expect(bounds.sw.latitude.isFinite, isTrue);
+        expect(bounds.sw.longitude.isFinite, isTrue);
+        expect(bounds.ne.latitude, greaterThan(bounds.sw.latitude));
+        expect(bounds.ne.longitude, greaterThan(bounds.sw.longitude));
+      } catch (e) {
+        if (e.toString().contains('headless environment') ||
+            e.toString().contains('CI (GitHub Actions)') ||
+            e.toString().contains('not ready in time')) {
+          debugPrint('Skipping test in headless environment: $e');
+          return;
+        }
+        rethrow;
+      }
+    });
+
     testWidgets('moveCamera should change map center in native map',
         (WidgetTester tester) async {
       try {
