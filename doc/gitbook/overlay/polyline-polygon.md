@@ -53,8 +53,8 @@ Future<void> addPolygonStyleExample(KakaoMapController controller) async {
 
 ```dart
 final style = PolylineStyle(Colors.grey, 4.0, zoomLevel: 0);
-style.addStyle(14, Colors.blue, 8.0);  // 줌 레벨 14 이상에서 적용
-style.addStyle(17, Colors.blue, 12.0); // 줌 레벨 17 이상에서 적용
+style.addStyle(14, color: Colors.blue, lineWidth: 8.0);  // 줌 레벨 14 이상에서 적용
+style.addStyle(17, color: Colors.blue, lineWidth: 12.0); // 줌 레벨 17 이상에서 적용
 await controller.addPolylineShapeStyle(style, PolylineCap.round);
 ```
 

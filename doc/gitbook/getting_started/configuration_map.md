@@ -66,7 +66,7 @@ Future<void> changeMapType(KakaoMapController controller) async {
 | ------------------ | -------------------------- | --------------------------- |
 | 자전거도로              | `MapOverlay.bicycleRoad`   | 자전거 도로를 지도 위에 표시합니다.        |
 | 로드뷰 라인             | `MapOverlay.roadviewLine`  | 로드뷰 촬영 경로를 지도 위에 표시합니다.     |
-| 힐쉐이딩               | `MapOverlay.hillshading`   | 지형 음영을 지도 위에 표시합니다.         |
+| 힐쉐이딩               | `MapOverlay.hillsading`    | 지형 음영을 지도 위에 표시합니다.         |
 | 하이브리드 (스카이뷰 레이블)   | `MapOverlay.hybrid`        | 스카이뷰 위에 도로명·지명 레이블을 표시합니다.  |
 
 > 교통정보(traffic\_info) 오버레이는 별도 협의가 필요하며 기본 제공되지 않습니다.
@@ -84,4 +84,3 @@ Future<void> toggleOverlay(KakaoMapController controller) async {
   await controller.hideOverlay(MapOverlay.bicycleRoad);
 }
 ```
-

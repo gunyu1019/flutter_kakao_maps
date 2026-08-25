@@ -95,11 +95,11 @@ Future<void> addRouteExample(KakaoMapController controller) async {
 final route = await controller.routeLayer.addRoute(
   points,
   style,
-  curveType: CurveType.leftCurve, // 좌곡선 적용
+  curveType: CurveType.left, // 좌곡선 적용
 );
 ```
 
-<table><thead><tr><th width="200">Value</th><th>Description</th></tr></thead><tbody><tr><td>CurveType.none</td><td>직선으로 경로를 그립니다. (기본값)</td></tr><tr><td>CurveType.leftCurve</td><td>좌측으로 휘어지는 곡선으로 경로를 그립니다.</td></tr><tr><td>CurveType.rightCurve</td><td>우측으로 휘어지는 곡선으로 경로를 그립니다.</td></tr></tbody></table>
+<table><thead><tr><th width="200">Value</th><th>Description</th></tr></thead><tbody><tr><td>CurveType.none</td><td>직선으로 경로를 그립니다. (기본값)</td></tr><tr><td>CurveType.left</td><td>좌측으로 휘어지는 곡선으로 경로를 그립니다.</td></tr><tr><td>CurveType.right</td><td>우측으로 휘어지는 곡선으로 경로를 그립니다.</td></tr></tbody></table>
 
 ### 2-2. Route 조작
 
@@ -113,7 +113,7 @@ await route.changeStyle(newStyle);
 await route.changePoint([/* 새로운 좌표 목록 */]);
 
 // 곡선 유형 변경
-await route.changeCurveType(CurveType.rightCurve);
+await route.changeCurveType(CurveType.right);
 
 // Z-Order 변경
 await route.setZOrder(10002);
@@ -177,7 +177,7 @@ Future<void> addMultipleRouteExample(KakaoMapController controller) async {
   option.addRouteWithIndex(
     [const LatLng(37.480, 127.030), const LatLng(37.56664, 126.97822)],
     2, // 정체 구간
-    CurveType.leftCurve, // 곡선 적용
+    CurveType.left, // 곡선 적용
   );
 
   final multipleRoute = await controller.routeLayer.addMultipleRoute(option);
