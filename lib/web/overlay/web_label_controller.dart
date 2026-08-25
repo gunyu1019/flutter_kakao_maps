@@ -252,6 +252,7 @@ class WebLabelController with WebLabelControllerHandler {
       ..overlay = WebCustomOverlay(options)
       ..setMap(controller)
       ..setVisibility(visible);
+    _syncPolylineTextZoomLevel(textId);
     return textId;
   }
 
@@ -272,9 +273,9 @@ class WebLabelController with WebLabelControllerHandler {
     if (style != null) {
       webPolylineText
         ..style = style
-        ..applyStyle(style);
+        ..currentLevel = -1;
     }
-    webPolylineText.setVisibility(webPolylineText.visible);
+    _syncPolylineTextZoomLevel(textId);
   }
 
   @override
