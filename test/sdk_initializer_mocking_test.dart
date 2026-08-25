@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kakao_map_sdk/kakao_map_sdk.dart';
@@ -40,6 +38,7 @@ void main() {
   tearDown(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(sdkChannel, null);
+    debugDefaultTargetPlatformOverride = null;
   });
 
   group('SDK Initializer Mocking Tests', () {
@@ -57,14 +56,10 @@ void main() {
     test(
       'hashKey returns null safely on unsupported platform and does not invoke channel',
       () async {
+        debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+
         final result = await sdk.hashKey();
 
-        expect(
-          Platform.isAndroid,
-          isFalse,
-          reason:
-              'This test validates the non-Android defensive branch in hashKey().',
-        );
         expect(result, isNull);
         expect(hashKeyCallCount, 0);
       },
@@ -73,9 +68,7 @@ void main() {
     test(
       'hashKey returns String from channel response on Android runtime',
       () async {
-        if (!Platform.isAndroid) {
-          return;
-        }
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
         final result = await sdk.hashKey();
 
@@ -88,9 +81,7 @@ void main() {
     test(
       'hashKey returns null when Android native side responds result.success(null)',
       () async {
-        if (!Platform.isAndroid) {
-          return;
-        }
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(sdkChannel, (call) async {
