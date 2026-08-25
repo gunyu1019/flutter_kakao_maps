@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Route;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -232,10 +232,17 @@ void main() {
         final PolylineStyle polylineStyle =
             PolylineStyle(Colors.deepOrange, 8, strokeWidth: 2);
 
+        final Polyline<BasePoint> polyline =
+            await controller.shapeLayer.addPolylineShape(
+          polylinePoint,
+          polylineStyle,
+          PolylineCap.round,
+        );
+
+        expect(polyline.id, isNotEmpty);
         expect(
-          () => controller.shapeLayer.addPolylineShape(
-              polylinePoint, polylineStyle, PolylineCap.round),
-          returnsNormally,
+          controller.shapeLayer.getPolylineShape(polyline.id),
+          same(polyline),
         );
       } catch (e) {
         if (e.toString().contains('headless environment') ||
@@ -267,10 +274,16 @@ void main() {
           strokeWidth: 2,
         );
 
+        final Polygon<BasePoint> polygon =
+            await controller.shapeLayer.addPolygonShape(
+          polygonPoint,
+          polygonStyle,
+        );
+
+        expect(polygon.id, isNotEmpty);
         expect(
-          () =>
-              controller.shapeLayer.addPolygonShape(polygonPoint, polygonStyle),
-          returnsNormally,
+          controller.shapeLayer.getPolygonShape(polygon.id),
+          same(polygon),
         );
       } catch (e) {
         if (e.toString().contains('headless environment') ||
@@ -302,9 +315,15 @@ void main() {
           strokeWidth: 2,
         );
 
+        final Route route = await controller.routeLayer.addRoute(
+          routePoints,
+          routeStyle,
+        );
+
+        expect(route.id, isNotEmpty);
         expect(
-          () => controller.routeLayer.addRoute(routePoints, routeStyle),
-          returnsNormally,
+          controller.routeLayer.getRoute<Route>(route.id),
+          same(route),
         );
       } catch (e) {
         if (e.toString().contains('headless environment') ||
@@ -356,9 +375,14 @@ void main() {
         option.addRouteWithIndex(routeGroups[0], 0);
         option.addRouteWithIndex(routeGroups[1], 1);
 
+        final MultipleRoute route =
+            await controller.routeLayer.addMultipleRoute(option);
+
+        expect(route.id, isNotEmpty);
+        expect(route.segments, hasLength(2));
         expect(
-          () => controller.routeLayer.addMultipleRoute(option),
-          returnsNormally,
+          controller.routeLayer.getRoute<MultipleRoute>(route.id),
+          same(route),
         );
       } catch (e) {
         if (e.toString().contains('headless environment') ||
@@ -392,23 +416,29 @@ void main() {
           },
         ];
 
-        expect(() async {
-          for (final data in lodData) {
-            final PoiStyle style = PoiStyle(
-              icon: KImage.fromAsset(
-                'assets/image/location.png',
-                data['iconWidth'] as int,
-                data['iconHeight'] as int,
-              ),
-            );
+        final pois = <LodPoi>[];
+        for (final data in lodData) {
+          final PoiStyle style = PoiStyle(
+            icon: KImage.fromAsset(
+              'assets/image/location.png',
+              data['iconWidth'] as int,
+              data['iconHeight'] as int,
+            ),
+          );
 
+          pois.add(
             await controller.lodLabelLayer.addLodPoi(
               data['position'] as LatLng,
               style: style,
               text: data['text'] as String,
-            );
-          }
-        }, returnsNormally);
+            ),
+          );
+        }
+
+        expect(pois, hasLength(lodData.length));
+        for (final poi in pois) {
+          expect(controller.lodLabelLayer.getLodPoi(poi.id), same(poi));
+        }
       } catch (e) {
         if (e.toString().contains('headless environment') ||
             e.toString().contains('CI (GitHub Actions)') ||
@@ -439,13 +469,17 @@ void main() {
           strokeColor: Colors.white,
         );
 
+        final PolylineText polylineText =
+            await controller.labelLayer.addPolylineText(
+          'Seoul City Hall route',
+          textPath,
+          style: textStyle,
+        );
+
+        expect(polylineText.id, isNotEmpty);
         expect(
-          () => controller.labelLayer.addPolylineText(
-            'Seoul City Hall route',
-            textPath,
-            style: textStyle,
-          ),
-          returnsNormally,
+          controller.labelLayer.getPolylineText(polylineText.id),
+          same(polylineText),
         );
       } catch (e) {
         if (e.toString().contains('headless environment') ||
