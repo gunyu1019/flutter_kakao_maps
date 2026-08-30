@@ -7,9 +7,12 @@ WebSvgPathRouteGeometry svgPathRoute(
   WebMapController controller, {
   LatLng? anchor,
 }) {
-  if (points.isEmpty) {
+  if (points.length < 2) {
     throw ArgumentError.value(
-        points, 'points', 'PolylineText points must not be empty');
+      points,
+      'points',
+      'PolylineText points must contain at least 2 points',
+    );
   }
 
   final projection = controller.getProjection();
