@@ -9,8 +9,7 @@ MultipleRoute는 하나의 경로를 구간(Segment)별로 나눠 각각 다른 
 
 ## 1. 경로 스타일 등록하기
 
-경로를 지도에 추가하기 전 [RouteStyle](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/RouteStyle-class.html) 객체를 생성하고 등록해야 합니다.\
-[KakaoMapController.addRouteStyle()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/addRouteStyle.html) 함수로 스타일을 등록합니다.
+경로를 추가할 때 등록되지 않은 [RouteStyle](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/RouteStyle-class.html)은 자동으로 등록됩니다. 여러 경로에 같은 스타일을 공유하거나 등록 오류를 먼저 처리하려면 [KakaoMapController.addRouteStyle()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/addRouteStyle.html)로 명시적으로 등록합니다.
 
 ```dart
 Future<void> addRouteStyleExample(KakaoMapController controller) async {
@@ -44,6 +43,8 @@ final style = RouteStyle.withPattern(pattern);
 await controller.addRouteStyle(style);
 ```
 
+> Web에서는 native RoutePattern 이미지를 그대로 반복하지 못하므로 점선 표현으로 대체됩니다.
+
 <table><thead><tr><th width="150">Property</th><th>Description</th></tr></thead><tbody><tr><td>patternImage</td><td>경로선 위에 반복 표시할 이미지입니다.</td></tr><tr><td>distance</td><td>패턴 이미지 사이의 간격입니다. 픽셀 단위로 입력합니다.</td></tr><tr><td>symbolImage</td><td>패턴 이미지 사이에 표시할 보조 이미지입니다. (선택 사항)</td></tr><tr><td>pinStart</td><td>경로 시작점에 패턴 이미지를 고정 표시할지 여부입니다.</td></tr><tr><td>pinEnd</td><td>경로 끝점에 패턴 이미지를 고정 표시할지 여부입니다.</td></tr></tbody></table>
 
 ### 1-2. 줌 레벨별 스타일 설정
@@ -60,8 +61,6 @@ await controller.addRouteStyle(style);
 > 줌 레벨 값은 낮은 값부터 순서대로 입력해야 정상적으로 동작합니다.
 
 ## 2. Route 추가하기
-
-[스크린샷]
 
 [RouteController.addRoute()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/RouteController/addRoute.html) 함수를 이용하여 지도에 경로를 추가할 수 있습니다.\
 [KakaoMapController.routeLayer](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/routeLayer.html)를 통해 기본 RouteLayer에 접근합니다.
@@ -130,8 +129,6 @@ await controller.routeLayer.hideAllRoute();
 
 ## 3. MultipleRoute 추가하기
 
-[스크린샷]
-
 MultipleRoute는 경로를 여러 구간(Segment)으로 나눠 각 구간마다 다른 스타일을 적용할 수 있습니다.
 
 ### 3-1. 다중 스타일 등록
@@ -163,13 +160,12 @@ Future<void> addMultipleRouteExample(KakaoMapController controller) async {
 
   final option = MultipleRouteOption(styles);
 
-  // 스타일 객체를 직접 지정하여 구간 추가
-  option.addRouteWithStyle(
+  // styles 목록의 인덱스로 구간을 연결합니다.
+  option.addRouteWithIndex(
     [const LatLng(37.394776, 127.11116), const LatLng(37.420, 127.080)],
-    styles[0], // 원활 구간
+    0, // 원활 구간
   );
 
-  // 스타일 인덱스로 구간 추가
   option.addRouteWithIndex(
     [const LatLng(37.420, 127.080), const LatLng(37.480, 127.030)],
     1, // 서행 구간
@@ -213,6 +209,13 @@ Future<void> customRouteLayerExample(KakaoMapController controller) async {
   final sameLayer = controller.getRouteLayer('my_route_layer');
 
   // 레이어 삭제
-  await controller.removeRouteLayer(myLayer);
+await controller.removeRouteLayer(myLayer);
 }
 ```
+
+## 5. 플랫폼별 주의사항
+
+* Web은 Route 이미지 패턴을 점선으로 대체합니다.
+* Route 좌표를 변경할 때는 `changePoint()`를 `await`해야 스타일과 geometry 갱신 순서가 보장됩니다.
+* `getRouteStyle()`과 `getMultipleRouteStyle()`을 사용하세요. 철자가 잘못된 `getRotueStyle()`, `getMultipleRotueStyle()`은 하위 호환을 위해 남아 있지만 deprecated 상태입니다.
+* Route와 MultipleRoute는 같은 RouteLayer의 ID 저장소를 공유하므로 서로 다른 유형이라도 ID가 중복되면 안 됩니다.

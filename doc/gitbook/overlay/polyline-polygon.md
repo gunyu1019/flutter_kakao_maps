@@ -5,7 +5,7 @@ Polyline과 Polygon은 지도 위에 선과 면을 그릴 수 있는 도형 요�
 
 ## 1. 도형 스타일 등록하기
 
-도형을 지도에 추가하기 전 스타일을 먼저 등록해야 합니다.
+도형을 추가할 때 등록되지 않은 스타일은 자동으로 등록됩니다. 여러 도형에 같은 스타일을 공유하거나 등록 오류를 먼저 처리하려면 명시적으로 등록할 수 있습니다.
 
 ### 1-1. Polyline 스타일
 
@@ -36,7 +36,7 @@ Future<void> addPolylineStyleExample(KakaoMapController controller) async {
 ```dart
 Future<void> addPolygonStyleExample(KakaoMapController controller) async {
   final style = PolygonStyle(
-    Colors.blue.withOpacity(0.3), // 면 채우기 색상
+    Colors.blue.withAlpha(77), // 약 30% 불투명도
     strokeWidth: 2.0,
     strokeColor: Colors.blue,
   );
@@ -125,8 +125,6 @@ position.addRetangleHole(80.0, 40.0); // 80x40픽셀의 사각형 구멍
 
 ## 3. Polyline 추가하기
 
-[스크린샷]
-
 [ShapeController.addPolylineShape()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/ShapeController/addPolylineShape.html) 함수를 이용하여 지도에 선을 추가할 수 있습니다.\
 [KakaoMapController.shapeLayer](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/shapeLayer.html)를 통해 기본 ShapeLayer에 접근합니다.
 
@@ -170,14 +168,12 @@ await controller.shapeLayer.hideAllPolyline();
 
 ## 4. Polygon 추가하기
 
-[스크린샷]
-
 [ShapeController.addPolygonShape()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/ShapeController/addPolygonShape.html) 함수를 이용하여 지도에 면을 추가할 수 있습니다.
 
 ```dart
 Future<void> addPolygonExample(KakaoMapController controller) async {
   final style = PolygonStyle(
-    Colors.blue.withOpacity(0.3),
+    Colors.blue.withAlpha(77),
     strokeWidth: 2.0,
     strokeColor: Colors.blue,
   );
@@ -220,7 +216,20 @@ final rectPolygon = await controller.shapeLayer.addPolygonShape(
 
 ### 4-2. 구멍이 있는 Polygon
 
-[스크린샷]
+원형 Polygon과 원형 hole의 상대 도형 geometry는 동일한 테스트 시나리오로 세 플랫폼에서 검증되었습니다. 아래 화면은 Shape와 같은 `CirclePoint`·`PolygonStyle` 모델을 사용하는 DimScreen highlight 테스트 결과입니다. Web은 `127.0.0.1:8080` Profile 실행 결과입니다.
+
+<table>
+  <thead>
+    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="../.gitbook/assets/dimscreen-circle-hole-android.png" alt="Android CirclePoint hole 결과" /></td>
+      <td><img src="../.gitbook/assets/dimscreen-circle-hole-ios.png" alt="iOS CirclePoint hole 결과" /></td>
+      <td><img src="../.gitbook/assets/dimscreen-circle-hole-web-profile-8080.jpg" alt="Web Profile 8080 CirclePoint hole 결과" /></td>
+    </tr>
+  </tbody>
+</table>
 
 내부에 구멍(Hole)을 추가하면 도넛 형태의 Polygon을 그릴 수 있습니다.
 
@@ -243,11 +252,13 @@ position.addHole([
 final polygon = await controller.shapeLayer.addPolygonShape(position, style);
 ```
 
+> `MapPoint` 경로를 닫으려면 마지막 좌표를 첫 좌표와 같게 입력합니다. 열린 MapPoint의 fill은 면으로 보일 수 있지만 stroke 경로는 호출자가 전달한 열린 상태를 유지합니다.
+
 ### 4-3. Polygon 조작
 
 ```dart
 // 스타일 변경
-final newStyle = PolygonStyle(Colors.red.withOpacity(0.3));
+final newStyle = PolygonStyle(Colors.red.withAlpha(77));
 await controller.addPolygonShapeStyle(newStyle);
 await polygon.changeStyle(newStyle);
 
@@ -285,6 +296,13 @@ Future<void> customShapeLayerExample(KakaoMapController controller) async {
   final sameLayer = controller.getShapeLayer('my_shape_layer');
 
   // 레이어 삭제
-  await controller.removeShapeLayer(myLayer);
+await controller.removeShapeLayer(myLayer);
 }
 ```
+
+## 6. 플랫폼별 주의사항
+
+* `MapPoint`는 실제 위·경도 경계를 표현할 때 사용합니다.
+* `CirclePoint`와 `RectanglePoint`는 기준 좌표에 대한 화면 상대 크기로 렌더링되어 줌을 바꿔도 시각 크기를 유지하는 용도에 적합합니다.
+* `CirclePoint.vertexCount`에 따른 세부 tessellation은 네이티브 SDK와 Web 구현에서 차이가 날 수 있으므로 플랫폼 간 픽셀 단위 동일성을 전제로 하지 마세요.
+* 겹친 도형의 순서는 레이어 `zOrder`와 개별 도형의 `zOrder`를 함께 확인하세요.

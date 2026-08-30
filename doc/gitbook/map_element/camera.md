@@ -1,49 +1,123 @@
 # 카메라 조작하기
 
-평면 지도를(입체 지도)를 내려다 보는 카메라에 의해 애플리케이션에 지도 정보를 제공합니다. \
-[CameraPosition](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/CameraPosition-class.html) 객체를 통해 사용자에게 보여주는 카메라의 위치 알거나, 조작할 수 있습니다.
+지도에 보이는 영역은 `KakaoMapController`의 카메라 API로 조회하고 변경합니다. 카메라 이동 명령은 `CameraUpdate`, 애니메이션은 `CameraAnimation`으로 구성합니다.
 
-## 1. 카메라 위치 읽어오기
-
-카메라 위치는 [KakaoMapController.getCameraPosition()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/getCameraPosition.html) 함수를 이용하려 불러올 수 있습니다.
+## 1. 현재 카메라 조회
 
 ```dart
-Future<CameraPosition> getCameraPosition(KakaoMapController controller) async {
-  return await controller.getCameraPosition();
-}
+final position = await controller.getCameraPosition();
+
+debugPrint('중심: ${position.position}');
+debugPrint('줌: ${position.zoomLevel}');
+debugPrint('회전: ${position.rotationAngle}');
+debugPrint('기울기: ${position.tiltAngle}');
+debugPrint('높이: ${position.height}');
 ```
 
-위 함수를 사용하게 되면, [CameraPosition](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/CameraPosition-class.html) 객체를 반환받습니다.
+| Property | 설명 |
+| --- | --- |
+| `position` | 카메라 중심의 WGS84 위·경도 |
+| `zoomLevel` | 지도 확대·축소 단계 |
+| `rotationAngle` | 북쪽 기준 회전 각도 |
+| `tiltAngle` | 카메라 기울기 |
+| `height` | 카메라 높이 |
 
-`CameraPosition` 객체에는 아래의 표와 같은 정보를 담고 있습니다.
+> Web의 기반 JavaScript SDK는 회전과 기울기를 지원하지 않습니다. Web에서 두 값으로 카메라를 조작하려 하지 말고 중심과 줌을 기준으로 UI를 구성하세요.
 
-<table><thead><tr><th width="125">Property</th><th>Description </th></tr></thead><tbody><tr><td>position</td><td>지도를 비추고 있는 카메라의 중심 위치를 WGS84 형식(<a href="https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/LatLng-class.html">LatLng</a>)으로 표현합니다.</td></tr><tr><td>zoomLevel</td><td>6단계부터 21단계로 구성된 정수로 값에 따라 카메라의 축소/확대 비율을 조정합니다.</td></tr><tr><td>rotateAngle</td><td>카메라의 회전 각도를 의미합니다. 북쪽을 기준으로 값에 따라 시계 방향으로 회전합니다.<br><sub>(웹 플랫폼에서 카메라의 회전 기능은 지원하지 않습니다.)</sub></td></tr><tr><td>tiltAngle</td><td>카메라의 기울기 각도를 의미합니다. 틸트를 조정하면 평면 지도가 입체 지도로 표현됩니다.<br><sub>(웹 플랫폼에서 카메라의 기울기의 기능은 지원하지 않습니다.)</sub></td></tr><tr><td>height</td><td> 카메라의 높이 값을 가져옵니다.</td></tr></tbody></table>
+## 2. CameraUpdate 종류
 
-## 2. 카메라 이동하기
-
-카메라 위치는 [KakaoMapController.moveCamera()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/moveCamera.html) 함수와 [CameraUpdate ](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/CameraUpdate-class.html)객체 이용하여 이동할 수 있습니다.
+| Factory | 용도 |
+| --- | --- |
+| `newCenterPosition(position, zoomLevel:)` | 중심 좌표와 선택적 줌 이동 |
+| `newCameraPos(cameraPosition)` | 전체 CameraPosition 적용 |
+| `zoomTo(zoomLevel)` | 특정 줌 레벨로 이동 |
+| `zoomIn()` / `zoomOut()` | 한 단계 확대 / 축소 |
+| `rotate(angle)` | 회전 |
+| `tilt(angle)` | 기울기 |
+| `fitMapPoints(points, padding:, zoomLevel:)` | 모든 좌표가 화면에 들어오도록 맞춤 |
 
 ```dart
-Future<CameraPosition> moveCamera(KakaoMapController controller) async {
-  final newPosition = CameraUpdate.newCameraPosition(...);
-  return await controller.moveCamera(newPosition);
-}
+await controller.moveCamera(
+  CameraUpdate.newCenterPosition(
+    const LatLng(37.566649, 126.978221),
+    zoomLevel: 16,
+  ),
+);
 ```
-
-[CameraUpdate](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/CameraUpdate-class.html) 객체는 다양한 형태의 생성자를 이용하여 카메라 위치를 이동할 수 있습니다.
-
-<table><thead><tr><th width="180">Constructor</th><th>Description </th></tr></thead><tbody><tr><td>newCeneterPosition</td><td>WGS84(<a href="https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/LatLng-class.html">LatLng</a>) 위치로 카메라를 위치합니다.</td></tr><tr><td>newCameraPosition</td><td><a href="https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/CameraPosition-class.html">CameraPosition</a> 객체 정보를 기반으로 카메라를 이동합니다.</td></tr><tr><td>rotate</td><td>주어진 인수(소수 값)만큼 카메라를 회전합니다.<br><sub>(웹 플랫폼에서 카메라의 회전 기능은 지원하지 않습니다.)</sub></td></tr><tr><td>tilt</td><td>주어진 인수(소수 값)만큼 카메라를 기울게 합니다.<br><sub>(웹 플랫폼에서 카메라의 회전 기능은 지원하지 않습니다.)</sub></td></tr><tr><td>zoomTo</td><td>주어진 인수에 따라 6단계~21단계 형태의 축소/확대 비율을 조정합니다.</td></tr><tr><td>zoomIn</td><td>카메라를한 단계 확대합니다.</td></tr><tr><td>zoomOut</td><td>카메라를 한 단계 축소합니다.</td></tr><tr><td>fitMapPoints</td><td>주어진 좌표를 화면의 가장자리에 맞춰 보여지도록 카메라 위치를 조정합니다.</td></tr></tbody></table>
-
-## 3. 카메라에 애니메이션 효과를 적용하며 이동하기
-
-[KakaoMapController.moveCamera()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/moveCamera.html) 함수에 animation 인수를 제공하면 애니메이션 효과를 적용하며, 특정 시간 동안 카메라를 이동시킬 수 있습니다.
 
 ```dart
-Future<CameraPosition> moveAnimatedCamera(KakaoMapController controller) async {
-  final newPosition = CameraUpdate.newCameraPosition(...);
-  final animation = const CameraAnimation(5000);
-  return await controller.moveCamera(newPosition, animation: animation);
-}
+await controller.moveCamera(
+  CameraUpdate.fitMapPoints(
+    const [
+      LatLng(37.394776, 127.111160),
+      LatLng(37.566649, 126.978221),
+    ],
+    padding: 48,
+  ),
+);
 ```
 
-애니메이션 효과는 [CameraAnimation](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/CameraAnimation-class.html) 객체를 moveCamera 함수의 animation 인수로 제공하여 적용할 수 있습니다. 위에 나열된 예제는 5000ms(5초) 동안 `newPosition`으로 카메라를 이동하는 소스코드입니다.
+## 3. 애니메이션 이동
+
+`CameraAnimation`의 첫 번째 값은 밀리초 단위 지속 시간입니다.
+
+```dart
+await controller.moveCamera(
+  CameraUpdate.newCenterPosition(
+    const LatLng(37.394776, 127.11116),
+    zoomLevel: 17,
+  ),
+  animation: const CameraAnimation(
+    1200,
+    autoElevation: true,
+    isConsecutive: false,
+  ),
+);
+```
+
+| Property | 설명 |
+| --- | --- |
+| `duration` | 애니메이션 지속 시간(ms) |
+| `autoElevation` | 먼 거리를 이동할 때 카메라 높이를 자동 조절할지 여부 |
+| `isConsecutive` | 진행 중인 애니메이션에 연속하여 적용할지 여부 |
+
+## 4. 회전·기울기와 전체 위치
+
+```dart
+final current = await controller.getCameraPosition();
+
+await controller.moveCamera(
+  CameraUpdate.newCameraPos(
+    current.copyWith(
+      zoomLevel: 17,
+      rotationAngle: 30,
+      tiltAngle: 45,
+    ),
+  ),
+);
+```
+
+또는 현재 상태를 기준으로 회전·기울기 명령을 전달합니다.
+
+```dart
+await controller.moveCamera(CameraUpdate.rotate(30));
+await controller.moveCamera(CameraUpdate.tilt(45));
+```
+
+## 5. 이동 완료 감지
+
+카메라 상태가 필요한 검색이나 네트워크 요청은 매 프레임이 아니라 `onCameraMoveEnd`에서 처리하는 편이 안전합니다.
+
+```dart
+KakaoMap(
+  onMapReady: (controller) {},
+  onCameraMoveStart: (gestureType) {
+    debugPrint('이동 시작: $gestureType');
+  },
+  onCameraMoveEnd: (position, gestureType) {
+    debugPrint('이동 완료: ${position.position}');
+  },
+);
+```
+
+코드가 `moveCamera()`를 호출하여 이동한 경우 `GestureType.unknown`이 전달됩니다. 사용 가능한 전체 이벤트는 [지도 이벤트 수신하기](events.md)를 참고하세요.

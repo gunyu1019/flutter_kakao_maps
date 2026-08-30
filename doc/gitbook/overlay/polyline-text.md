@@ -1,94 +1,135 @@
-# 휘어지는 글씨 (Polyline Text)
+# 휘어지는 글씨 (PolylineText)
 
-PolylineText는 지정한 경로(좌표 목록)를 따라 텍스트를 곡선 형태로 표시하는 지도 요소입니다.\
-도로 이름, 지형지물의 이름 등을 경로에 맞춰 자연스럽게 표시할 때 유용하게 사용할 수 있습니다.
+PolylineText는 여러 `LatLng`으로 만든 경로를 따라 한 줄 텍스트를 표시합니다. 도로명이나 이동 경로의 이름처럼 선의 방향을 따라야 하는 레이블에 적합합니다.
 
-[스크린샷]
+`1.3.0`부터 Web에서도 지원합니다.
 
-> PolylineText는 한 줄의 텍스트만 지원합니다.
+<table>
+  <thead>
+    <tr><th>iOS Simulator</th><th>Web regression artifact</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="../.gitbook/assets/polyline-text-curved-ios.png" alt="iOS PolylineText 곡선 경로 결과" /></td>
+      <td><img src="../.gitbook/assets/polyline-text-curved-web.png" alt="Web PolylineText 곡선 경로 결과" /></td>
+    </tr>
+  </tbody>
+</table>
 
-## 1. PolylineText 스타일 설정하기
+> 위 화면은 동일한 곡선 시나리오의 회귀 테스트 artifact입니다. 주황색 텍스트가 좌표 경로의 접선 방향을 따라 배치됩니다.
 
-[PolylineTextStyle](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/PolylineTextStyle-class.html) 객체를 이용하여 텍스트의 크기, 색상, 외곽선 등을 설정합니다.
+## 1. 스타일
 
 ```dart
 final style = PolylineTextStyle(
-  20,           // 텍스트 크기 (픽셀)
-  Colors.black, // 텍스트 색상
+  20,
+  Colors.deepOrange,
   strokeSize: 3,
   strokeColor: Colors.white,
+  zoomLevel: 0,
 );
 ```
 
-<table><thead><tr><th width="150">Property</th><th>Description</th></tr></thead><tbody><tr><td>size</td><td>텍스트의 크기입니다. 픽셀 단위로 입력합니다.</td></tr><tr><td>color</td><td>텍스트의 색상입니다.</td></tr><tr><td>strokeSize</td><td>텍스트 외곽선의 두께입니다. 픽셀 단위로 입력합니다.</td></tr><tr><td>strokeColor</td><td>텍스트 외곽선의 색상입니다.</td></tr><tr><td>zoomLevel</td><td>이 스타일이 적용되기 시작하는 최소 줌 레벨입니다.</td></tr><tr><td>applyDpScale</td><td>기기 해상도(DP)를 텍스트 크기에 반영할지 여부입니다.</td></tr></tbody></table>
+| Property | 설명 |
+| --- | --- |
+| `size` | 텍스트 크기 |
+| `color` | 텍스트 색상 |
+| `strokeSize` | 외곽선 두께 |
+| `strokeColor` | 외곽선 색상 |
+| `zoomLevel` | 스타일 적용을 시작할 줌 레벨 |
+| `applyDpScale` | Android 픽셀 밀도 반영 여부 |
 
-### 1-1. 줌 레벨별 스타일 설정
-
-줌 레벨에 따라 서로 다른 텍스트 스타일을 적용할 수 있습니다.\
-[PolylineTextStyle.addStyle()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/PolylineTextStyle/addStyle.html) 함수를 사용합니다.
+### 1-1. 줌 레벨별 스타일
 
 ```dart
 final style = PolylineTextStyle(12, Colors.grey, zoomLevel: 0);
-style.addStyle(14, size: 18, color: Colors.black); // 줌 레벨 14 이상에서 적용
-style.addStyle(17, size: 22, color: Colors.black); // 줌 레벨 17 이상에서 적용
+
+style.addStyle(
+  14,
+  size: 18,
+  color: Colors.black,
+  strokeSize: 2,
+  strokeColor: Colors.white,
+);
+
+style.addStyle(
+  17,
+  size: 22,
+  color: Colors.black,
+);
 ```
 
-> 줌 레벨 값은 낮은 값부터 순서대로 입력해야 정상적으로 동작합니다.\
-> 좌표 경로가 화면에서 텍스트를 표시하기에 너무 짧으면 텍스트가 자동으로 숨겨집니다.
+`getStyle()`, `removeStyle()`, `otherStyleLevel`로 추가 스타일을 관리할 수 있습니다.
 
-## 2. PolylineText 추가하기
-
-[LabelController.addPolylineText()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/LabelController/addPolylineText.html) 함수를 이용하여 지도에 PolylineText를 추가할 수 있습니다.\
-[KakaoMapController.labelLayer](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/labelLayer.html)를 통해 기본 LabelLayer에 접근합니다.
+## 2. 추가
 
 ```dart
-Future<void> addPolylineTextExample(KakaoMapController controller) async {
-  final style = PolylineTextStyle(
-    18,
-    Colors.black,
-    strokeSize: 2,
-    strokeColor: Colors.white,
-  );
-
-  final polylineText = await controller.labelLayer.addPolylineText(
-    '카카오 본사 → 서울시청',
-    [
-      const LatLng(37.394776, 127.11116),
-      const LatLng(37.450, 127.050),
-      const LatLng(37.500, 127.000),
-      const LatLng(37.540, 126.990),
-      const LatLng(37.56664, 126.97822),
-    ],
-    style: style,
-  );
-}
+final polylineText = await controller.labelLayer.addPolylineText(
+  '카카오 판교캠퍼스 경로 테스트',
+  const [
+    LatLng(37.395600, 127.107900),
+    LatLng(37.395100, 127.109200),
+    LatLng(37.394700, 127.111100),
+    LatLng(37.394100, 127.113000),
+  ],
+  id: 'pangyo-path-label',
+  style: style,
+  visible: true,
+);
 ```
 
-[addPolylineText()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/LabelController/addPolylineText.html) 함수에 입력 가능한 인수는 다음과 같습니다.
+| Parameter | 설명 |
+| --- | --- |
+| `text` | 경로를 따라 표시할 한 줄 문자열 |
+| `position` | 두 개 이상의 경로 좌표 목록 |
+| `style` | `PolylineTextStyle` |
+| `id` | 선택적 고유 ID |
+| `visible` | 초기 표시 여부 |
 
-<table><thead><tr><th width="150">Parameter</th><th>Description</th></tr></thead><tbody><tr><td>text</td><td>경로를 따라 표시할 텍스트입니다.</td></tr><tr><td>position</td><td>텍스트가 따라갈 경로의 위경도 좌표 목록입니다. <a href="https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/LatLng-class.html">LatLng</a> 배열로 입력합니다.</td></tr><tr><td>style</td><td>텍스트에 적용할 스타일입니다. <a href="https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/PolylineTextStyle-class.html">PolylineTextStyle</a> 객체로 입력합니다.</td></tr><tr><td>id</td><td>PolylineText의 고유 ID입니다. 입력하지 않으면 임의의 고유 ID가 자동으로 생성됩니다.</td></tr><tr><td>visible</td><td>PolylineText의 초기 표시 여부입니다. 기본값은 <code>true</code>입니다.</td></tr></tbody></table>
+경로의 화면상 길이가 텍스트를 표시하기에 부족하면 레이블이 보이지 않을 수 있습니다. 확대·축소 범위 전체에서 필요한 길이를 확보하고, 긴 문구는 더 많은 경로 구간을 제공하세요.
 
-## 3. PolylineText 조작하기
-
-[PolylineText](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/PolylineText-class.html) 객체를 통해 추가된 PolylineText를 조작할 수 있습니다.
+## 3. 변경과 삭제
 
 ```dart
-// 텍스트 변경
-await polylineText.changeText('새로운 텍스트');
+await polylineText.changeText('새로운 경로 이름');
 
-// 스타일 변경
-final newStyle = PolylineTextStyle(24, Colors.blue);
-await polylineText.changeStyles(newStyle);
+final selectedStyle = style.copyWith(
+  size: 24,
+  color: Colors.blue,
+);
+await polylineText.changeStyles(selectedStyle);
 
-// 텍스트와 스타일 동시 변경
-await polylineText.changeTextAndStyles('새로운 텍스트', newStyle);
+await polylineText.changeTextAndStyles(
+  '선택한 경로',
+  selectedStyle,
+);
 
-// 표시/숨기기 및 삭제
-await polylineText.show();
 await polylineText.hide();
+await polylineText.show();
 await polylineText.remove();
-
-// 레이어 내 모든 PolylineText 일괄 제어
-await controller.labelLayer.showAllPolylineText();
-await controller.labelLayer.hideAllPolylineText();
 ```
+
+경로 좌표를 직접 변경하는 API는 제공하지 않습니다. 경로가 바뀌면 기존 PolylineText를 삭제하고 같은 ID 또는 새 ID로 다시 추가하세요.
+
+레이어 단위 제어:
+
+```dart
+final same = controller.labelLayer.getPolylineText('pangyo-path-label');
+
+await controller.labelLayer.hideAllPolylineText();
+await controller.labelLayer.showAllPolylineText();
+await controller.labelLayer.removePolylineText(polylineText);
+```
+
+## 4. Web 렌더링 특성
+
+Web 구현은 좌표를 화면에 투영하여 SVG path와 `textPath`를 구성합니다. 줌이 바뀌면 경로의 화면 geometry를 다시 계산하고, 경로가 화면과 교차하는 동안 SVG 영역을 유지합니다.
+
+* 텍스트는 경로 중앙에 배치됩니다.
+* 경로 순서가 텍스트 읽기 방향을 결정합니다.
+* 지도 확대·축소 시 경로는 재투영되며 텍스트의 화면상 크기는 스타일을 따릅니다.
+* DimScreen의 `mapAndLabel` 범위를 사용하면 PolylineText도 dim 대상에 포함됩니다.
+
+## 5. 플랫폼별 확인
+
+Android와 iOS는 네이티브 LabelLayer 구현을 사용하고, Web은 JavaScript 지도 위의 SVG overlay를 사용합니다. 동일한 픽셀 결과보다 경로 방향, 표시 여부, 텍스트 중앙 정렬과 줌 레벨별 스타일이 의도대로 유지되는지를 기준으로 검증하세요.
