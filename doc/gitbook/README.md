@@ -2,10 +2,6 @@
 
 Kakao Map SDK for Flutter는 Android, iOS, Web 애플리케이션에서 카카오 지도를 사용할 수 있도록 구성한 Flutter 플러그인입니다. 하나의 Dart API로 지도 카메라, 이벤트, Poi, 도형, 경로, DimScreen을 제어할 수 있습니다.
 
-현재 문서는 패키지 `1.3.0`과 저장소의 `develop` 브랜치 구현을 기준으로 작성되어 있습니다.
-
-> 이 패키지는 Kakao가 공식 배포하는 Flutter SDK가 아닌 커뮤니티 플러그인입니다. 플랫폼별 기반 SDK 정책과 사용량·앱 등록 조건은 Kakao Developers의 안내도 함께 확인하세요.
-
 ## 제공 기능
 
 | 분류 | 주요 기능 |

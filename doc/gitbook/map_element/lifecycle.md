@@ -47,7 +47,7 @@ await controller.finish();
 
 ## 3. Android 기본 복구
 
-`1.3.0`의 기본값은 Activity가 resume될 때 Kakao `GLSurfaceView`의 GL 스레드를 비파괴적으로 복구합니다.
+기본 설정에서는 Activity가 resume될 때 Kakao `GLSurfaceView`의 GL 스레드를 비파괴적으로 복구합니다.
 
 ```dart
 KakaoMap(

@@ -1,6 +1,6 @@
 # 플랫폼 지원 범위
 
-Kakao Map SDK for Flutter `1.3.0`은 Android, iOS, Web을 지원합니다. Dart API는 가능한 범위에서 동일하게 제공되지만, 기반 Kakao Maps SDK의 기능 차이 때문에 일부 동작은 플랫폼마다 다릅니다.
+Kakao Map SDK for Flutter는 Android, iOS, Web을 지원합니다. Dart API는 가능한 범위에서 동일하게 제공되지만, 기반 Kakao Maps SDK의 기능 차이 때문에 일부 동작은 플랫폼마다 다릅니다.
 
 ## 1. 최소 요구사항
 
@@ -22,11 +22,11 @@ Kakao Map SDK for Flutter `1.3.0`은 Android, iOS, Web을 지원합니다. Dart 
 | 카메라 회전·기울기 | 지원 | 지원 | 미지원 |
 | Poi | 지원 | 지원 | 지원 |
 | LodPoi의 LOD 최적화 | 지원 | 지원 | 일반 Poi처럼 동작 |
-| PolylineText | 지원 | 지원 | `1.3.0`부터 지원 |
+| PolylineText | 지원 | 지원 | 지원 |
 | Polyline·Polygon | 지원 | 지원 | 지원 |
 | Route·MultipleRoute | 지원 | 지원 | 지원 |
 | Route 이미지 패턴 | 지원 | 지원 | 점선 표현으로 대체 |
-| DimScreen | 지원 | 지원 | `1.3.0`부터 지원 |
+| DimScreen | 지원 | 지원 | 지원 |
 | 네이티브 pause·resume | 지원 | 지원 | 대상 아님 |
 | 건물 높이 배율 | 지원 | 지원 | 값 `0.0`, 변경 불가 |
 
@@ -41,7 +41,7 @@ Web 구현은 Kakao Maps JavaScript SDK가 제공하는 기능 안에서 네이�
 * Poi와 Shape 사이의 transform 공유는 지원하지 않습니다.
 * 브라우저 확장 프로그램이나 보안 정책이 `dapi.kakao.com` 요청을 차단하면 JavaScript SDK가 로드되지 않습니다.
 
-## 4. 1.3.0에서 확인된 플랫폼 결과
+## 4. 플랫폼별 확인 결과
 
 DimScreen의 MapPoint highlight는 동일한 테스트 시나리오로 Android, iOS, Web에서 검증되었습니다. Web 이미지는 `127.0.0.1:8080`에서 Profile 모드로 실행한 최종 통과 artifact입니다.
 

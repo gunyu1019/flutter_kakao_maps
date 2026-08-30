@@ -51,7 +51,7 @@ await controller.dimScreen.setCover(DimScreenCover.all);
 | `DimScreenCover.map` | 지도 배경만 dim. Label은 원래 색상 유지 |
 | `DimScreenCover.mapAndLabel` | 지도 배경과 Poi·custom label·PolylineText를 함께 dim |
 
-Web `1.3.0`은 `mapAndLabel`에서 CustomOverlay label의 색상을 cover alpha와 합성하여 native 동작에 맞춥니다.
+Web은 `mapAndLabel`에서 CustomOverlay label의 색상을 cover alpha와 합성하여 native 동작에 맞춥니다.
 
 ## 4. MapPoint highlight
 

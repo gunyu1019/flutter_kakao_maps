@@ -1,6 +1,6 @@
 # 패키지 설치하기
 
-플랫폼 요구사항을 확인한 다음 Flutter 프로젝트에 `kakao_map_sdk`를 추가합니다. 현재 문서는 `1.3.0`을 기준으로 합니다.
+플랫폼 요구사항을 확인한 다음 Flutter 프로젝트에 `kakao_map_sdk`를 추가합니다.
 
 ## 1. 패키지 추가
 
@@ -8,16 +8,7 @@
 flutter pub add kakao_map_sdk
 ```
 
-또는 `pubspec.yaml`에 직접 추가합니다.
-
-```yaml
-dependencies:
-  kakao_map_sdk: ^1.3.0
-```
-
-```bash
-flutter pub get
-```
+명령을 실행하면 pub.dev에 배포된 안정 버전이 `pubspec.yaml`에 추가되고 의존성을 내려받습니다.
 
 개발 브랜치를 직접 사용하려면 Git dependency를 지정할 수 있습니다.
 

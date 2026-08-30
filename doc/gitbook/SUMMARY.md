@@ -30,4 +30,3 @@
 
 * [오류와 예외 처리](etc/errors.md)
 * [자주 묻는 질문](etc/faq.md)
-* [1.3.0 주요 변경사항](etc/version-1.3.0.md)
