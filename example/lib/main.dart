@@ -42,6 +42,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
   late bool poiVisible;
   late bool shapeVisible;
   late bool routeVisible;
+  late bool dimScreenVisible;
 
   final location = <LocationInfo>[
     LocationInfo(
@@ -101,6 +102,13 @@ class _KakaoMapViewState extends State<KakaoMapView> {
                   : controller.routeLayer.hideAllRoute();
               setState(() => routeVisible = value);
             }),
+        SwitchComponent(
+            title: "DimScreen",
+            textStyle: controllerTextStyle,
+            onChanged: (value) {
+              controller.dimScreen.setVisible(value);
+              setState(() => dimScreenVisible = value);
+            }),
       ],
     );
   }
@@ -133,6 +141,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
     poiVisible = false;
     shapeVisible = false;
     routeVisible = false;
+    dimScreenVisible = true;
     super.initState();
   }
 
@@ -184,6 +193,24 @@ class _KakaoMapViewState extends State<KakaoMapView> {
     await controller.routeLayer
         .addRoute(routes.map((e) => LatLng(e[0], e[1])).toList(), routeStyle);
 
+    // 카카오 판교캠퍼스 주변을 사각형으로 강조하는 DimScreen을 구성합니다.
+    await controller.dimScreen.setColor(Colors.black.withValues(alpha: 0.6));
+    // Highlight 영역에는 지도도 보이면서 스타일도 함께 표시됩니다.
+    final highlightStyle = PolygonStyle(
+      Colors.lightBlueAccent.withValues(alpha: 0.25),
+      strokeColor: Colors.yellowAccent,
+      strokeWidth: 6,
+    );
+    await controller.addPolygonShapeStyle(highlightStyle);
+    await controller.dimScreen.addPolygonShape(
+      MapPoint([
+        const LatLng(37.393, 127.109),
+        const LatLng(37.393, 127.113),
+        const LatLng(37.397, 127.113),
+        const LatLng(37.397, 127.109),
+      ]),
+      highlightStyle,
+    );
     poiVisible
         ? await controller.labelLayer.showAllPoi()
         : await controller.labelLayer.hideAllPoi();
@@ -193,6 +220,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
     routeVisible
         ? await controller.routeLayer.showAllRoute()
         : await controller.routeLayer.hideAllRoute();
+    await controller.dimScreen.setVisible(dimScreenVisible);
   }
 
   /* Event Handler */

@@ -1,62 +1,81 @@
 # 패키지 설치하기
 
-Kakao Map SDK는 안드로이드, iOS, 웹 환경을 지원합니다!
+플랫폼 요구사항을 확인한 다음 Flutter 프로젝트에 `kakao_map_sdk`를 추가합니다.
 
-패키지를 사용하기 전 플랫폼 별 요구사항을 확인해주세요!
-
-* Android
-  * API 23 (Android 6.0) 이상
-  * `armeabi-v7a`, `arm64-v8a` 아키텍쳐 지원 <sub>(</sub><sub>`x86`</sub><sub>,</sub> <sub></sub><sub>`x64`</sub> <sub></sub><sub>아키텍쳐는 지원하지 않습니다.)</sub>
-  * [OpenGL ES 2.0](https://developer.android.com/develop/ui/views/graphics/opengl/about-opengl?hl=ko) 이상
-* iOS
-  * iOS 13 이상
-* Web
-  * [Flutter Web과 동일한 환경](https://docs.flutter.dev/reference/supported-platforms)
-
-## 1. 패키지 다운로드
-
-아래의 명령어를 이용하여 패키지를 설치하실 수 있습니다.
+## 1. 패키지 추가
 
 ```bash
- $ flutter pub add kakao_map_sdk
+flutter pub add kakao_map_sdk
 ```
 
-또는, `pubspec.yml` 에 종속성을 설정하여 패키지를 다운로드 할 수 있습니다.
+명령을 실행하면 pub.dev에 배포된 안정 버전이 `pubspec.yaml`에 추가되고 의존성을 내려받습니다.
 
-```yaml
-dependencies:
-  kakao_map_sdk: ^1.2.0
-```
-
-`pubspec.yml`를 수정하시고, `flutter pub get` 명령어를 이용하여 종속성을 갱신해주세요.
-
-
-
-만약 정식으로 출시되지 않은 개발 버전을 설치하시고 싶다면 `pubspec.yml`를 다음과 같이 수정해주세요.
+개발 브랜치를 직접 사용하려면 Git dependency를 지정할 수 있습니다.
 
 ```yaml
 dependencies:
   kakao_map_sdk:
-    git: https://github.com/gunyu1019/flutter_kakao_maps.git
+    git:
+      url: https://github.com/gunyu1019/flutter_kakao_maps.git
+      ref: develop
 ```
 
-## 2. 안드로이드 환경 설정
+> 개발 브랜치는 배포 버전과 API 또는 동작이 다를 수 있습니다. 운영 앱은 pub.dev의 안정 버전을 고정하여 사용하는 것을 권장합니다.
 
-iOS와 Web 플랫폼에서 지도를 사용하기 위해서 필요한 추가 설정은 없습니다.\
-다만 안드로이드 환경에서 일부 설정이 필요합니다.
+## 2. Android 설정
 
-*   `AndroidManifest.xml`에 다음의 코드를 추가하여 인터넷과 위치 정보를 불러올 수 있도록 합니다.<br>
+### 2-1. 권한
 
-    ```xml
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    ```
-*   프로가드(Proguard) 이용하여 코드 최적화, 난독화하여 배포를 하는 경우, 패키지 내용도 코드 최적화 및 압축이 적용되어 예상치 못한 오류를 초래할 수 있습니다.\
-    \
-    따라서 `android/app/proguard-rules.pro`에 아래의 내용을 추가해주세요.<br>
+`android/app/src/main/AndroidManifest.xml`의 `<manifest>` 아래에 인터넷 권한을 추가합니다. 현재 위치를 사용하는 앱이라면 위치 권한도 함께 선언합니다.
 
-    ```properties
-    -keep class com.kakao.vectormap.** { *; }
-    -keep interface com.kakao.vectormap.**
-    ```
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+```
+
+지도 타일을 표시하는 데 필수인 것은 인터넷 권한입니다. 위치 권한 선언만으로 런타임 권한이 허용되지는 않으므로, 현재 위치 기능을 구현한다면 앱에서 별도로 권한을 요청해야 합니다.
+
+### 2-2. 난독화·최적화
+
+Release 빌드에서 R8 또는 Proguard를 사용한다면 `android/app/proguard-rules.pro`에 다음 규칙을 추가합니다.
+
+```properties
+-keep class com.kakao.vectormap.** { *; }
+-keep interface com.kakao.vectormap.**
+```
+
+### 2-3. 빌드 환경
+
+패키지는 Android `minSdk 23`, `compileSdk 34`를 기준으로 하며 Kakao Maps Android SDK `2.13.5`를 사용합니다. 앱의 `minSdk`가 23보다 낮다면 23 이상으로 올려야 합니다.
+
+## 3. iOS 설정
+
+iOS deployment target을 13 이상으로 설정합니다.
+
+```ruby
+platform :ios, '13.0'
+```
+
+패키지는 CocoaPods와 Swift Package Manager 구성을 모두 제공합니다. Flutter 프로젝트가 선택한 iOS dependency manager에 따라 네이티브 Kakao Maps SDK가 연결됩니다.
+
+설정 변경 후 의존성 문제가 발생하면 프로젝트 루트에서 다음 순서로 다시 받아보세요.
+
+```bash
+flutter clean
+flutter pub get
+```
+
+## 4. Web 설정
+
+Web에서는 패키지 설치 외에 Kakao Maps JavaScript SDK 스크립트가 필요합니다. 자세한 키 설정과 도메인 등록은 [애플리케이션 인증하기](authentication.md#3-web-javascript-키-등록)를 참고하세요.
+
+## 5. 설치 확인
+
+다음 import가 분석 오류 없이 인식되는지 확인합니다.
+
+```dart
+import 'package:kakao_map_sdk/kakao_map_sdk.dart';
+```
+
+그다음 [애플리케이션 인증하기](authentication.md)와 [지도 그리기](configuration_map.md)를 순서대로 진행하세요.

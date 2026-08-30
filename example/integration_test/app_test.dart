@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Route;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -124,6 +124,57 @@ void main() {
       }
     });
 
+    testWidgets('getBounds should return an ordered native viewport',
+        (WidgetTester tester) async {
+      try {
+        await _launchExampleApp(tester);
+        final KakaoMapController controller = await _waitForController(tester);
+        final BuildContext mapContext = tester.element(find.byType(KakaoMap));
+        if (!mapContext.mounted) {
+          throw TestFailure('KakaoMap was unmounted before getBounds');
+        }
+
+        final LatLngBounds? bounds = await controller.getBounds(mapContext);
+
+        expect(bounds, isNotNull);
+        expect(bounds!.ne.latitude.isFinite, isTrue);
+        expect(bounds.ne.longitude.isFinite, isTrue);
+        expect(bounds.sw.latitude.isFinite, isTrue);
+        expect(bounds.sw.longitude.isFinite, isTrue);
+        expect(bounds.ne.latitude, greaterThan(bounds.sw.latitude));
+        expect(bounds.ne.longitude, greaterThan(bounds.sw.longitude));
+      } catch (e) {
+        if (e.toString().contains('headless environment') ||
+            e.toString().contains('CI (GitHub Actions)') ||
+            e.toString().contains('not ready in time')) {
+          debugPrint('Skipping test in headless environment: $e');
+          return;
+        }
+        rethrow;
+      }
+    });
+
+    testWidgets('DimScreenCover raw values should be accepted by native SDKs',
+        (WidgetTester tester) async {
+      try {
+        await _launchExampleApp(tester);
+        final KakaoMapController controller = await _waitForController(tester);
+
+        for (final cover in DimScreenCover.values) {
+          await controller.dimScreen.setCover(cover);
+          expect(controller.dimScreen.cover, cover);
+        }
+      } catch (e) {
+        if (e.toString().contains('headless environment') ||
+            e.toString().contains('CI (GitHub Actions)') ||
+            e.toString().contains('not ready in time')) {
+          debugPrint('Skipping test in headless environment: $e');
+          return;
+        }
+        rethrow;
+      }
+    });
+
     testWidgets('moveCamera should change map center in native map',
         (WidgetTester tester) async {
       try {
@@ -202,10 +253,17 @@ void main() {
         final PolylineStyle polylineStyle =
             PolylineStyle(Colors.deepOrange, 8, strokeWidth: 2);
 
+        final Polyline<BasePoint> polyline =
+            await controller.shapeLayer.addPolylineShape(
+          polylinePoint,
+          polylineStyle,
+          PolylineCap.round,
+        );
+
+        expect(polyline.id, isNotEmpty);
         expect(
-          () => controller.shapeLayer.addPolylineShape(
-              polylinePoint, polylineStyle, PolylineCap.round),
-          returnsNormally,
+          controller.shapeLayer.getPolylineShape(polyline.id),
+          same(polyline),
         );
       } catch (e) {
         if (e.toString().contains('headless environment') ||
@@ -237,10 +295,16 @@ void main() {
           strokeWidth: 2,
         );
 
+        final Polygon<BasePoint> polygon =
+            await controller.shapeLayer.addPolygonShape(
+          polygonPoint,
+          polygonStyle,
+        );
+
+        expect(polygon.id, isNotEmpty);
         expect(
-          () =>
-              controller.shapeLayer.addPolygonShape(polygonPoint, polygonStyle),
-          returnsNormally,
+          controller.shapeLayer.getPolygonShape(polygon.id),
+          same(polygon),
         );
       } catch (e) {
         if (e.toString().contains('headless environment') ||
@@ -272,9 +336,15 @@ void main() {
           strokeWidth: 2,
         );
 
+        final Route route = await controller.routeLayer.addRoute(
+          routePoints,
+          routeStyle,
+        );
+
+        expect(route.id, isNotEmpty);
         expect(
-          () => controller.routeLayer.addRoute(routePoints, routeStyle),
-          returnsNormally,
+          controller.routeLayer.getRoute<Route>(route.id),
+          same(route),
         );
       } catch (e) {
         if (e.toString().contains('headless environment') ||
@@ -326,9 +396,14 @@ void main() {
         option.addRouteWithIndex(routeGroups[0], 0);
         option.addRouteWithIndex(routeGroups[1], 1);
 
+        final MultipleRoute route =
+            await controller.routeLayer.addMultipleRoute(option);
+
+        expect(route.id, isNotEmpty);
+        expect(route.segments, hasLength(2));
         expect(
-          () => controller.routeLayer.addMultipleRoute(option),
-          returnsNormally,
+          controller.routeLayer.getRoute<MultipleRoute>(route.id),
+          same(route),
         );
       } catch (e) {
         if (e.toString().contains('headless environment') ||
@@ -362,23 +437,29 @@ void main() {
           },
         ];
 
-        expect(() async {
-          for (final data in lodData) {
-            final PoiStyle style = PoiStyle(
-              icon: KImage.fromAsset(
-                'assets/image/location.png',
-                data['iconWidth'] as int,
-                data['iconHeight'] as int,
-              ),
-            );
+        final pois = <LodPoi>[];
+        for (final data in lodData) {
+          final PoiStyle style = PoiStyle(
+            icon: KImage.fromAsset(
+              'assets/image/location.png',
+              data['iconWidth'] as int,
+              data['iconHeight'] as int,
+            ),
+          );
 
+          pois.add(
             await controller.lodLabelLayer.addLodPoi(
               data['position'] as LatLng,
               style: style,
               text: data['text'] as String,
-            );
-          }
-        }, returnsNormally);
+            ),
+          );
+        }
+
+        expect(pois, hasLength(lodData.length));
+        for (final poi in pois) {
+          expect(controller.lodLabelLayer.getLodPoi(poi.id), same(poi));
+        }
       } catch (e) {
         if (e.toString().contains('headless environment') ||
             e.toString().contains('CI (GitHub Actions)') ||
@@ -409,14 +490,135 @@ void main() {
           strokeColor: Colors.white,
         );
 
-        expect(
-          () => controller.labelLayer.addPolylineText(
-            'Seoul City Hall route',
-            textPath,
-            style: textStyle,
-          ),
-          returnsNormally,
+        final PolylineText polylineText =
+            await controller.labelLayer.addPolylineText(
+          'Seoul City Hall route',
+          textPath,
+          style: textStyle,
         );
+
+        expect(polylineText.id, isNotEmpty);
+        expect(
+          controller.labelLayer.getPolylineText(polylineText.id),
+          same(polylineText),
+        );
+      } catch (e) {
+        if (e.toString().contains('headless environment') ||
+            e.toString().contains('CI (GitHub Actions)') ||
+            e.toString().contains('not ready in time')) {
+          debugPrint('Skipping test in headless environment: $e');
+          return;
+        }
+        rethrow;
+      }
+    });
+
+    testWidgets('PolylineText lifecycle should stay in sync with native SDKs',
+        (WidgetTester tester) async {
+      try {
+        await _launchExampleApp(tester);
+        final KakaoMapController controller = await _waitForController(tester);
+        final initialStyle = PolylineTextStyle(
+          20,
+          Colors.deepOrange,
+          strokeSize: 2,
+          strokeColor: Colors.white,
+        );
+        final polylineText = await controller.labelLayer.addPolylineText(
+          'initial lifecycle text',
+          const [
+            LatLng(37.394776, 127.11116),
+            LatLng(37.395776, 127.11216),
+          ],
+          style: initialStyle,
+          id: 'polyline-text-lifecycle',
+          visible: false,
+        );
+
+        expect(polylineText.visible, isFalse);
+
+        await polylineText.show();
+        expect(polylineText.visible, isTrue);
+
+        await polylineText.hide();
+        expect(polylineText.visible, isFalse);
+
+        final changedStyle = PolylineTextStyle(
+          24,
+          Colors.blue,
+          strokeSize: 3,
+          strokeColor: Colors.white,
+        );
+        await polylineText.changeTextAndStyles(
+          'changed lifecycle text',
+          changedStyle,
+        );
+        expect(polylineText.text, 'changed lifecycle text');
+        expect(polylineText.style, same(changedStyle));
+
+        await polylineText.remove();
+        expect(
+          controller.labelLayer.getPolylineText(polylineText.id),
+          isNull,
+        );
+      } catch (e) {
+        if (e.toString().contains('headless environment') ||
+            e.toString().contains('CI (GitHub Actions)') ||
+            e.toString().contains('not ready in time')) {
+          debugPrint('Skipping test in headless environment: $e');
+          return;
+        }
+        rethrow;
+      }
+    });
+
+    testWidgets(
+        'mixed relative holes should be accepted by native shape converters',
+        (WidgetTester tester) async {
+      try {
+        await _launchExampleApp(tester);
+        final KakaoMapController controller = await _waitForController(tester);
+
+        final RectanglePoint point = RectanglePoint(
+          500,
+          400,
+          const LatLng(37.394776, 127.11116),
+        )
+          ..addHole(
+            CirclePoint(
+              80,
+              const LatLng(0, 0),
+              clockwise: false,
+            ),
+          )
+          ..addHole(
+            RectanglePoint(
+              120,
+              60,
+              const LatLng(0, 0),
+              clockwise: false,
+            ),
+          );
+        final Polygon<BasePoint> polygon =
+            await controller.shapeLayer.addPolygonShape(
+          point,
+          PolygonStyle(
+            Colors.blue.withValues(alpha: 0.35),
+            strokeColor: Colors.blue,
+            strokeWidth: 2,
+          ),
+          id: 'mixed-relative-hole-regression',
+        );
+
+        expect(polygon.id, 'mixed-relative-hole-regression');
+        expect(point.holeCount, 2);
+        expect(
+          controller.shapeLayer.getPolygonShape(polygon.id),
+          same(polygon),
+        );
+
+        await polygon.remove();
+        expect(controller.shapeLayer.getPolygonShape(polygon.id), isNull);
       } catch (e) {
         if (e.toString().contains('headless environment') ||
             e.toString().contains('CI (GitHub Actions)') ||

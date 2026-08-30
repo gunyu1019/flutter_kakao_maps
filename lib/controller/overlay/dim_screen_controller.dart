@@ -35,7 +35,7 @@ class DimScreenController extends BaseShapeController {
   /// 지도를 덮을 범위를 설정합니다.
   Future<void> setCover(DimScreenCover cover) async {
     _cover = cover;
-    await _invokeMethod("setCover", {"cover": cover.value});
+    await _invokeMethod("setDimCover", {"cover": cover.value});
   }
 
   /// DimScreen의 색상을 설정합니다.
@@ -56,10 +56,12 @@ class DimScreenController extends BaseShapeController {
   /// 지도를 덮고 있는 DimScreen에 [Polygon]을 추가하여 일부분을 지도에 보일 수 있도록 합니다.
   /// [Polygon]을 그리기 위해서는 도형을 그릴 위치([position])과 스타일([style])이 필수로 입력되어야 합니다.
   /// [position]은 절대 위치([MapPoint])가 입력될 수 있고, 상대위치([CirclePoint], [RectanglePoint])가 입력될 수 있습니다.
+  /// [zOrder]가 큰 Highlight Polygon이 겹치는 영역의 위에 그려집니다.
   Future<Polygon> addPolygonShape<T extends BasePoint>(
     T position,
     PolygonStyle style, {
     String? id,
+    int zOrder = 10001,
   }) async {
     if (id != null && _polygonShape.containsKey(id)) {
       throw DuplicatedOverlayException(id);
@@ -70,6 +72,7 @@ class DimScreenController extends BaseShapeController {
         "id": id,
         "position": position.toMessageable(),
         "styleId": styleId,
+        "zOrder": zOrder,
       },
     };
     String shapeId = await _invokeMethod("addHighlightPolygonShape", payload);

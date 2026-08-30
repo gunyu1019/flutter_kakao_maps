@@ -10,12 +10,16 @@ void main() {
   final overlayChannel = ChannelType.overlay.channelWithId(viewId);
 
   late KakaoMapController controller;
+  MethodCall? lastDimScreenCall;
+  MethodCall? lastPolylineTextCall;
 
   String orFallback(String? requested, String fallback) {
     return (requested != null && requested.isNotEmpty) ? requested : fallback;
   }
 
   setUp(() {
+    lastDimScreenCall = null;
+    lastPolylineTextCall = null;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(viewChannel, (call) async => null);
 
@@ -44,11 +48,18 @@ void main() {
           return orFallback(poi['id'] as String?, 'mock-lod-poi-id');
 
         case 'addPolylineText':
+          lastPolylineTextCall = call;
           final label = Map<String, dynamic>.from(args['label'] as Map);
           return orFallback(
             label['id'] as String?,
             'mock-polyline-text-id',
           );
+
+        case 'changePolylineTextStyle':
+        case 'changePolylineTextVisible':
+        case 'removePolylineText':
+          lastPolylineTextCall = call;
+          return null;
 
         case 'addPoiBadge':
           final badge = Map<String, dynamic>.from(args['badge'] as Map);
@@ -93,11 +104,16 @@ void main() {
           return orFallback(route['id'] as String?, fallback);
 
         case 'addHighlightPolygonShape':
+          lastDimScreenCall = call;
           final polygon = Map<String, dynamic>.from(args['polygon'] as Map);
           return orFallback(
             polygon['id'] as String?,
             'mock-dim-polygon-id',
           );
+
+        case 'setDimCover':
+          lastDimScreenCall = call;
+          return null;
 
         default:
           return null;
@@ -201,6 +217,49 @@ void main() {
       expect(text.points.length, 2);
       expect(text.points.first.latitude, 37.1);
       expect(text.points.last.longitude, 127.2);
+    });
+
+    test('uses the labelId contract throughout the lifecycle', () async {
+      final initialStyle = PolylineTextStyle(16, const Color(0xFF111111));
+      final text = await controller.labelLayer.addPolylineText(
+        'initial',
+        const [LatLng(37.1, 127.1), LatLng(37.2, 127.2)],
+        style: initialStyle,
+        id: 'polyline-text-lifecycle',
+        visible: false,
+      );
+
+      var arguments = Map<String, dynamic>.from(
+        lastPolylineTextCall!.arguments as Map,
+      );
+      final label = Map<String, dynamic>.from(arguments['label'] as Map);
+      expect(label['visible'], isFalse);
+      expect(text.visible, isFalse);
+
+      final changedStyle = PolylineTextStyle(20, const Color(0xFF222222));
+      await text.changeTextAndStyles('changed', changedStyle);
+      arguments = Map<String, dynamic>.from(
+        lastPolylineTextCall!.arguments as Map,
+      );
+      expect(lastPolylineTextCall!.method, 'changePolylineTextStyle');
+      expect(arguments['labelId'], text.id);
+      expect(arguments.containsKey('poiId'), isFalse);
+
+      await text.show();
+      arguments = Map<String, dynamic>.from(
+        lastPolylineTextCall!.arguments as Map,
+      );
+      expect(lastPolylineTextCall!.method, 'changePolylineTextVisible');
+      expect(arguments['labelId'], text.id);
+      expect(text.visible, isTrue);
+
+      await text.remove();
+      arguments = Map<String, dynamic>.from(
+        lastPolylineTextCall!.arguments as Map,
+      );
+      expect(lastPolylineTextCall!.method, 'removePolylineText');
+      expect(arguments['labelId'], text.id);
+      expect(controller.labelLayer.getPolylineText(text.id), isNull);
     });
   });
 
@@ -356,6 +415,21 @@ void main() {
       expect(style.id, 'route-style-explicit-id');
     });
 
+    test('supports corrected and deprecated RouteStyle getters', () async {
+      const styleId = 'route-style-getter-id';
+      final style = RouteStyle(
+        const Color(0xFF123456),
+        5,
+        id: styleId,
+      );
+
+      await controller.addRouteStyle(style);
+
+      expect(controller.getRouteStyle(styleId), same(style));
+      // ignore: deprecated_member_use_from_same_package
+      expect(controller.getRotueStyle(styleId), same(style));
+    });
+
     test('addRoute returns Route with id from channel response', () async {
       final style = RouteStyle(
         const Color(0xFF446688),
@@ -406,6 +480,24 @@ void main() {
   });
 
   group('DimScreen Mocking Tests', () {
+    test('setCover sends native DimScreenCover raw values', () async {
+      const expectedRawValues = {
+        DimScreenCover.map: 0,
+        DimScreenCover.mapAndLabel: 1,
+        DimScreenCover.all: 2,
+      };
+
+      for (final entry in expectedRawValues.entries) {
+        await controller.dimScreen.setCover(entry.key);
+
+        final arguments = Map<String, dynamic>.from(
+          lastDimScreenCall!.arguments as Map,
+        );
+        expect(arguments['cover'], entry.value);
+        expect(controller.dimScreen.cover, entry.key);
+      }
+    });
+
     test('addHighlightPolygonShape returns Polygon with channel id', () async {
       final style = PolygonStyle(
         const Color(0x66999999),
@@ -421,12 +513,18 @@ void main() {
         ]),
         style,
         id: 'dim-polygon-explicit-id',
+        zOrder: 42,
       );
       final polygonPoint = polygon.position as MapPoint;
 
       expect(polygon.id, 'dim-polygon-explicit-id');
       expect(polygonPoint.points.length, 3);
       expect(polygon.style.id, 'dim-polygon-style');
+      final arguments = Map<String, dynamic>.from(
+        lastDimScreenCall!.arguments as Map,
+      );
+      final payload = Map<String, dynamic>.from(arguments['polygon'] as Map);
+      expect(payload['zOrder'], 42);
     });
   });
 }

@@ -121,6 +121,24 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
         onSuccess(nil)
     }
 
+    func changePolylineTextAndStyle(label: WaveText, styleId: String, text: String?, onSuccess: (Any?) -> Void) {
+        if let text {
+            label.changeTextAndStyle(text: text, styleID: styleId)
+        } else {
+            label.changeStyle(styleID: styleId)
+        }
+        onSuccess(nil)
+    }
+
+    func changePolylineTextVisible(label: WaveText, visible: Bool, onSuccess: (Any?) -> Void) {
+        if visible {
+            label.show()
+        } else {
+            label.hide()
+        }
+        onSuccess(nil)
+    }
+
     func changePoiPixelOffset(poi: Poi, offset: CGPoint, onSuccess: (Any?) -> Void) {
         poi.pixelOffset = offset
         onSuccess(nil)

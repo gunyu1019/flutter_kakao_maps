@@ -13,9 +13,9 @@ class MapGravity {
         verticalAlign = VerticalAlign.center;
 
   int get value {
-    if (kIsWeb || Platform.isIOS) {
+    if (kIsWeb || defaultTargetPlatform == TargetPlatform.iOS) {
       return horizontalAlign.iosValue * 3 + verticalAlign.iosValue;
-    } else if (Platform.isAndroid) {
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
       if (horizontalAlign == HorizontalAlign.center &&
           verticalAlign == VerticalAlign.center) {
         return 16;

@@ -7,9 +7,14 @@ class KakaoMapWebController
   late WebOverlayController overlay;
   final MethodChannel channel;
   final MethodChannel overlayChannel;
+  web.ResizeObserver? _resizeObserver;
+  web.MutationObserver? _detachObserver;
+  JSFunction? _resizedEventRef;
+  bool _disposed = false;
 
   KakaoMapWebController({
     WebMapController? controller,
+    web.Element? mapElement,
     required this.channel,
     required this.overlayChannel,
   }) {
@@ -31,12 +36,55 @@ class KakaoMapWebController
     // ignore: prefer_initializing_formals
     this.controller = controller;
 
-    web.window.addEventListener('resize', _resizedEvent.toJS);
+    if (mapElement != null) {
+      _resizeObserver = web.ResizeObserver(
+        ((JSArray<web.ResizeObserverEntry> _, web.ResizeObserver __) {
+          _relayoutPreservingCenter();
+        }).toJS,
+      );
+      _resizeObserver!.observe(mapElement);
+
+      final parent = mapElement.parentNode;
+      if (parent != null) {
+        _detachObserver = web.MutationObserver(
+          ((JSArray<web.MutationRecord> _, web.MutationObserver __) {
+            if (!mapElement.isConnected) {
+              dispose();
+            }
+          }).toJS,
+        );
+        _detachObserver!.observe(
+          parent,
+          web.MutationObserverInit(childList: true),
+        );
+      }
+    }
+    _resizedEventRef = _resizedEvent.toJS;
+    web.window.addEventListener('resize', _resizedEventRef!);
     channel.setMethodCallHandler(webHandle);
     onMapReady();
   }
 
-  void _resizedEvent() => controller.relayout();
+  void _resizedEvent() => _relayoutPreservingCenter();
+
+  void _relayoutPreservingCenter() {
+    if (_disposed) return;
+    final center = controller.getCenter();
+    controller.relayout();
+    controller.setCenter(center);
+  }
+
+  void dispose() {
+    if (_disposed) return;
+    _disposed = true;
+    _detachObserver?.disconnect();
+    _resizeObserver?.disconnect();
+    if (_resizedEventRef != null) {
+      web.window.removeEventListener('resize', _resizedEventRef!);
+      _resizedEventRef = null;
+    }
+    overlay.dispose();
+  }
 
   @override
   Future<void> setEventTrigger(int event) async {

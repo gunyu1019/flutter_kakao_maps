@@ -33,10 +33,16 @@ sealed class _BaseDotPoint extends BasePoint {
 
   @override
   Map<String, dynamic> toMessageable([bool isHole = false]) {
-    final payload = <String, dynamic>{};
+    final payload = <String, dynamic>{"dotType": dotType.value};
     if (!isHole) {
+      payload["type"] = type;
       payload["basePoint"] = basePoint.toMessageable();
-      payload["holes"] = _holes.map((e) => e.toMessageable(true)).toList();
+      payload["holes"] = _holes
+          .map(
+            (e) => e.toMessageable(true)
+              ..["basePoint"] = basePoint.toMessageable(),
+          )
+          .toList();
     }
     return payload;
   }

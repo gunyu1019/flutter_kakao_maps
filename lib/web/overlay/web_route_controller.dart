@@ -9,23 +9,29 @@ class WebRouteController with WebRouteControllerHandler {
   @override
   final WebOverlayController manager;
 
+  JSFunction? _zoomChangedCallbackRef;
+
   WebRouteController._(this.id, this.controller, this.manager);
 
   @override
   Future<void> createRouteLayer() async {
-    addEventListener(controller, "zoom_changed", _zoomChangedEventHandler.toJS);
+    _zoomChangedCallbackRef = _zoomChangedEventHandler.toJS;
+    addEventListener(controller, "zoom_changed", _zoomChangedCallbackRef!);
   }
 
   @override
   Future<void> removeRouteLayer() async {
-    for (final route in _webRoute.keys) {
+    if (_zoomChangedCallbackRef != null) {
+      removeEventListener(
+        controller,
+        "zoom_changed",
+        _zoomChangedCallbackRef!,
+      );
+      _zoomChangedCallbackRef = null;
+    }
+    for (final route in _webRoute.keys.toList()) {
       await removeRoute(route);
     }
-    removeEventListener(
-      controller,
-      "zoom_changed",
-      _zoomChangedEventHandler.toJS,
-    );
   }
 
   void _zoomChangedEventHandler() {

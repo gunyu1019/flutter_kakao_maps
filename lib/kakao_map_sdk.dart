@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -8,6 +7,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+
+import 'models/base/platform_file.dart';
 
 /* chnnael */
 part 'channel/channel_type.dart';
@@ -37,7 +38,7 @@ part 'exception/kakao_map_error.dart';
 
 /* initalizer */
 part 'initializer/sdk_initalizer.dart';
-part 'initializer/sdk_initiializer_implement.dart';
+part 'initializer/sdk_initializer_implement.dart';
 
 /* models */
 part 'models/map_option.dart';
@@ -49,6 +50,7 @@ part 'models/base/messageable.dart';
 part 'models/camera/camera_animation.dart';
 part 'models/camera/camera_position.dart';
 part 'models/camera/camera_update.dart';
+part 'models/camera/lat_lng_bounds.dart';
 part 'models/geolocation/latlng.dart';
 
 part 'models/label/badge.dart';

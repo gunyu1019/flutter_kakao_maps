@@ -47,7 +47,7 @@ class LodLabelController extends BaseLabelController {
       "orderingType": orderingType.value,
       "radius": radius,
       "zOrder": zOrder,
-      "visable": visible,
+      "visible": visible,
       "clickable": _clickable,
     });
   }

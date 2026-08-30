@@ -37,8 +37,9 @@ interface DimScreenControllerHandler {
       "setVisible" -> setDimVisible(arguments["visible"]!!.asBoolean(), result::success)
       "setDimCover" ->
         setDimCorver(
-          arguments["cover"]!!.asString().let { value: String ->
-            DimScreenCover.entries.first { it.name == value }
+          arguments["cover"]!!.asInt().let { rawValue ->
+            DimScreenCover.values().getOrNull(rawValue)
+              ?: throw IllegalArgumentException("Unknown DimScreenCover raw value: $rawValue")
           },
           result::success,
         )

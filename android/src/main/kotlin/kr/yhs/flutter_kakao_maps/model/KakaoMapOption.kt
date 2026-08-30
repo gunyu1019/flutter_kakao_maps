@@ -5,6 +5,7 @@ import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapType
 import com.kakao.vectormap.MapViewInfo
+import com.kakao.vectormap.camera.CameraPosition
 import kr.yhs.flutter_kakao_maps.converter.CameraTypeConverter.asLatLng
 
 data class KakaoMapOption(
@@ -39,6 +40,9 @@ data class KakaoMapOption(
   fun setOnReady(method: (KakaoMap) -> Unit) {
     onReady = method
   }
+
+  fun copyWithCameraPosition(cameraPosition: CameraPosition): KakaoMapOption =
+    copy(initialPosition = cameraPosition.position, zoomLevel = cameraPosition.zoomLevel)
 
   companion object {
     fun fromMessageable(onReady: ((KakaoMap) -> Unit), rawArgs: Map<String, Any?>): KakaoMapOption {

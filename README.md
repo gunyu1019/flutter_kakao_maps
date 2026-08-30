@@ -1,10 +1,13 @@
 # kakao_map_sdk
+
 ![Pub Version](https://img.shields.io/pub/v/kakao_map_sdk)
 ![Pub Monthly Downloads](https://img.shields.io/pub/dm/kakao_map_sdk)
 ![Pub Points](https://img.shields.io/pub/points/kakao_map_sdk)
 ![Pub Popularity](https://img.shields.io/pub/popularity/kakao_map_sdk)
 
 Kakao Map SDK는 Flutter 환경에서 [카카오 지도](https://map.kakao.com/)을 사용할 수 있도록 하는 패키지입니다!
+
+[시작하기](https://gunyu1019.gitbook.io/kakao-map-sdk/getting-started/installation) · [플랫폼 지원 범위](https://gunyu1019.gitbook.io/kakao-map-sdk/getting-started/platform-support) · [API Reference](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/) · [변경 이력](CHANGELOG.md)
 
 | Android                | iOS             | Web(Experimental)      |
 |------------------------|-----------------| ---------------------- |
@@ -16,6 +19,12 @@ Kakao Map SDK는 Flutter 환경에서 [카카오 지도](https://map.kakao.com/)
 ## 1. Getting Started
 Flutter에서 카카오 지도를 이용하기 위해 [카카오 개발자 사이트](https://developers.kakao.com/)에서 앱 등록을 해야합니다.<br/>
 앱 등록을 마치면 카카오 지도를 사용할 수 있는 **네이티브 앱 키(App Key)** 를 발급받을 수 있습니다.
+
+먼저 프로젝트에 패키지를 추가합니다.
+
+```bash
+flutter pub add kakao_map_sdk
+```
 
 앱 키는 아래와 같이 `KakaoMapSdk.instance.initialize` 함수를 호출하여 클라이언트를 인증하실 수 있습니다.
 ```dart
@@ -94,7 +103,7 @@ Kakao Map SDK는 컨트롤러([KakaoMapController](https://pub.dev/documentation
 
 ```dart
 Future<void> getCameraPosition(KakaoMapController controller) async {
-  final cameraPosition = await kakaoMap.getCameraPosition();
+  final cameraPosition = await controller.getCameraPosition();
   print(cameraPosition.zoomLevel); // 카메라의 축적비입니다. 값이 높을 수록 지도에 보여지는 건물은 줄어들지만, 건물을 상세히 확인하실 수 있습니다.  
   print(cameraPosition.position); // 카메라의 위치입니다. WGS84(위도, 경도) 형식으로 불러옵니다. 
   print(cameraPosition.rotationAngle); // 카메라의 회전 각도를 불러옵니다.
@@ -257,13 +266,14 @@ await controller.dimScreen.setVisible(true);
 
 // 특정 좌표에 있는 도형은 파란 색상의 테두리를 강조하고, 도형 안 색상을 걷어냅니다.
 final polygonStyle = PolygonStyle(
-  Colors.white.withAlpha(0), 
-  strokeWidth = 3.0,
-  strokeColor = Colors.blue
+  Colors.transparent,
+  strokeWidth: 3.0,
+  strokeColor: Colors.blue,
 );
 await controller.dimScreen.addPolygonShape(
-  MapPoint(...), polygonStyle
-)
+  MapPoint(...),
+  polygonStyle,
+);
 ```
 
 ### 4-5. Tracking 
@@ -301,19 +311,18 @@ KakaoMap(
 ## 6. Sample Project
 아래의 [샘플 프로젝트](https://github.com/gunyu1019/flutter_kakao_maps_sample)을 확인하여 카카오맵을 Flutter에 구현한 애플리케이션을 확인해보세요!
 
-## 7. (Expermential) Web
+## 7. Web 지원 범위
 <img src="https://github.com/user-attachments/assets/4f20ddb0-e678-4cbe-b6ca-39be0f9e6b18" width="70%" /><br/>
-Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
-본 플러그인은 네이티브를 중심으로 개발되었기 때문에 웹 SDK도 네이티브 환경에 알맞게 포팅 작업을 진행하였습니다.
+Kakao Map SDK는 Web 플랫폼을 지원합니다. v1.3.0부터 `PolylineText`와 `DimScreen`도 동일한 Dart API로 사용할 수 있습니다.<br/>
+Web 구현은 Kakao Maps JavaScript SDK가 제공하는 기능 안에서 네이티브 API의 구조를 맞춥니다.
 
 네이티브에 있는 기능과 달리 아래에 서술한 기능은 웹 환경에서 다르게 작동하거나 지원하지 않습니다.
+
 * **카메라 회전, 틸트**: Kakao Map Web SDK는 카메라 회전 또는 틸트 기능을 제공하지 않습니다.<br/>
   따라서 카메라 회전 각도, 틸트 각도를 주어져도 무시됩니다.
 * **LOD(Level Of Detail) 기능**: 웹 환경에서 LOD 기능은 적용되지 않은 상태로 작동합니다. <br/>
   예를 들어 웹 환경에서 `LOD Poi`는 LOD가 적용되지 않은 `Poi`와 동일하게 작동합니다. 
-* 각 **컨트롤러(Layer) 기능**: 웹 환경에서 Layer에 적용한 설정은 적용되지 않습니다.
-* **Dim Screen**: 웹 환경에서 지도 전체를 특정 색상으로 덮는 Dim Screen 기능은 제공하지 않습니다.
-* **Polyline Text**: 웹 환경에서 휘어진 텍스트 오버레이는 지원하지 않습니다.
+* **레이어와 LOD 설정**: 일부 레이어 경쟁·정렬 설정은 네이티브와 동일하게 적용되지 않으며, LodPoi는 일반 Poi처럼 동작합니다.
 * **Route Pattern**: 웹 환경에서 경로에 패턴을 찍는 기능은 지원하지 않습니다.<br/>
   `RouteStyle` 객체에 `pattern`가 입력되면 카카오맵 웹 환경과 동일한 점선으로 대체됩니다.
   <details>
@@ -327,13 +336,25 @@ Kakao Map SDK는 Web 플랫폼을 지원합니다.<br/>
 * 웹 환경에서 `buildingHeightScale` 개체는 항상 `0.0`이며 수정할 수 없습니다.
 * 웹 환경에서 Poi와 다른 도형 간 위치를 공유하는 `Poi.addShareTransfromWithShape`, `Poi.removeShareTransfromWithShape`는 지원하지 않습니다.
 
-기재한 기능 외에도 일부 기능은 지원하지 않을 수도 있습니다.<br/>
-네이티브 환경을 중점으로 개발된 플러그인이므로 양해부탁드립니다.
+플랫폼별 세부 차이와 검증 결과는 [플랫폼 지원 범위](https://gunyu1019.gitbook.io/kakao-map-sdk/getting-started/platform-support)에서 확인하세요.
 
-웹 환경 내 사용 방법은 첫 번째 섹션(Getting Started) 부분을 확인해주세요.
+## 8. Documentation
 
-## 8. Collaboration / Report Issue 
-Kakao Map SDK 패키지의 기여는 항상 환영합니다. <br/>
-기능 개선, 버그 해결 등의 작업하신 내용은 `Pull Reuqest(PR)` 해주시면, 최대한 빠른 시간 내에 검증을 진행하고 병합 해드리겠습니다.
+* [GitBook 사용 문서](https://gunyu1019.gitbook.io/kakao-map-sdk/)
+* [API Reference](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/)
+* [변경 이력](CHANGELOG.md)
+* [샘플 프로젝트](https://github.com/gunyu1019/flutter_kakao_maps_sample)
 
-질문, 버그 제보도 언제든지 환영합니다.<br/> 이용 중에 문제를 겪으셨다면 `Issue`를 열어주세요. 내용을 확인하는 대로 도움드리도록 하겠습니다
+## 9. Collaboration / Report Issue
+
+기능 개선이나 버그 수정은 Pull Request로 제안할 수 있습니다. 변경 사항에는 적용 대상 플랫폼과 검증 방법을 함께 작성하고, 가능하면 관련 테스트를 포함해 주세요.
+
+패키지 사용 중 문제가 발생했다면 [Issue tracker](https://github.com/gunyu1019/flutter_kakao_maps/issues)에 다음 정보를 포함하여 등록해 주세요.
+
+* `kakao_map_sdk`, Flutter, Dart 버전
+* 문제가 발생한 플랫폼과 OS 버전
+* 재현 가능한 최소 코드 또는 샘플 프로젝트
+* 오류 로그와 실제·기대 동작
+* 화면 표시 문제인 경우 스크린샷 또는 녹화 화면
+
+보안상 민감한 정보는 공개 Issue와 로그에 포함하지 말고 [gunyu1019@yhs.kr](mailto:gunyu1019@yhs.kr)로 보내주세요. 앱 키처럼 재발급 가능한 비밀값은 이메일에서도 원문을 보내기보다 필요한 부분만 마스킹하여 전달해 주세요.

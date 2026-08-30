@@ -42,7 +42,7 @@ class LabelController extends BaseLabelController {
       "competitionUnit": competitionUnit.value,
       "orderingType": orderingType.value,
       "zOrder": zOrder,
-      "visable": visible,
+      "visible": visible,
       "clickable": _clickable,
     });
   }
@@ -219,12 +219,12 @@ class LabelController extends BaseLabelController {
   }
 
   Future<void> _changePolylineTextStyle(
-    String poiId,
+    String labelId,
     PolylineTextStyle style, [
     String? text,
   ]) async {
     await _invokeMethod("changePolylineTextStyle", {
-      "poiId": poiId,
+      "labelId": labelId,
       "styles": style.toMessageable(),
       "text": text,
     });
@@ -340,6 +340,7 @@ class LabelController extends BaseLabelController {
       style: style,
       text: text,
       points: position,
+      visible: visible,
     );
     _polylineText[labelId] = label;
     return label;

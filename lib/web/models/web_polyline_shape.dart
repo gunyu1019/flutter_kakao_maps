@@ -6,6 +6,7 @@ class WebPolylineShape {
   final WebPolyline element;
   WebPolyline? strokeElement;
 
+  WebShapePoint point;
   WebPolylineOption option;
   WebPolylineOption? strokeOption;
 
@@ -17,6 +18,7 @@ class WebPolylineShape {
     this.id,
     this.element,
     this.strokeElement, {
+    required this.point,
     required this.option,
     required this.strokeOption,
     required this.style,

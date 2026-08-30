@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:js_interop';
+import 'dart:math' as math;
 import 'dart:ui_web' as ui_web;
 
 import 'package:collection/collection.dart';
@@ -16,9 +17,11 @@ part 'controller/web_controller_handler.dart';
 
 part 'elements/image_element.dart';
 part 'elements/poi_element.dart';
+part 'elements/polyline_text_element.dart';
 part 'elements/text_element.dart';
 
 part 'models/web_custom_overlay_option.dart';
+part 'models/web_dim_highlight_shape.dart';
 part 'models/web_map_option.dart';
 part 'models/web_mouse_event.dart';
 part 'models/web_poi.dart';
@@ -27,15 +30,19 @@ part 'models/web_polygon_shape.dart';
 part 'models/web_polygon_option.dart';
 part 'models/web_polyline_shape.dart';
 part 'models/web_polyline_option.dart';
+part 'models/web_polyline_text.dart';
 part 'models/web_route.dart';
 part 'models/web_route_element.dart';
 part 'models/web_shape_point.dart';
+part 'models/web_svg_path_route_geometry.dart';
 
+part 'overlay/web_dim_screen_controller.dart';
 part 'overlay/web_label_controller.dart';
 part 'overlay/web_route_controller.dart';
 part 'overlay/web_shape_controller.dart';
 part 'overlay/web_tracking_controller.dart';
 
+part 'overlay/web_dim_screen_controller_handler.dart';
 part 'overlay/web_label_controller_handler.dart';
 part 'overlay/web_route_controller_handler.dart';
 part 'overlay/web_shape_controller_handler.dart';
@@ -55,6 +62,8 @@ part 'interoperability/web_polyline.dart';
 part 'utils/web_calculate_level.dart';
 part 'utils/web_image_source.dart';
 part 'utils/web_color.dart';
+part 'utils/web_svg_path_route.dart';
+part 'utils/web_polyline_text_style.dart';
 
 class KakaoMapWebPlugin {
   // ignore: constant_identifier_names
@@ -84,6 +93,7 @@ class KakaoMapWebPlugin {
     getController(viewId, webMapOption).then((webController) {
       KakaoMapWebController(
         controller: webController,
+        mapElement: web.document.getElementById(mapElementId(viewId)),
         channel: channel,
         overlayChannel: overlayChannel,
       );

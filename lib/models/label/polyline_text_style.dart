@@ -93,11 +93,44 @@ class PolylineTextStyle {
       "strokeSize": strokeSize,
       // ignore: deprecated_member_use
       "strokeColor": strokeColor?.value,
+      "zoomLevel": zoomLevel,
     };
     if (!_isSecondaryStyle) {
       payload['otherStyle'] = _styles.map((e) => e.toMessageable()).toList();
     }
     return payload;
+  }
+
+  static PolylineTextStyle fromMessageable(Map<String, dynamic> payload) {
+    final style = PolylineTextStyle(
+      payload["size"] as int,
+      Color(payload["color"] as int),
+      strokeSize: payload["strokeSize"] as int?,
+      strokeColor: payload["strokeColor"] != null
+          ? Color(payload["strokeColor"] as int)
+          : null,
+      applyDpScale: payload["applyDpScale"] as bool? ?? true,
+      zoomLevel: payload["zoomLevel"] as int? ?? 0,
+    );
+    final otherStyles = payload["otherStyle"] as List?;
+    if (otherStyles != null) {
+      for (final other in otherStyles) {
+        final otherMap = Map<String, dynamic>.from(other as Map);
+        style.addStyle(
+          otherMap["zoomLevel"] as int? ?? 0,
+          size: otherMap["size"] as int?,
+          color: otherMap["color"] != null
+              ? Color(otherMap["color"] as int)
+              : null,
+          strokeSize: otherMap["strokeSize"] as int?,
+          strokeColor: otherMap["strokeColor"] != null
+              ? Color(otherMap["strokeColor"] as int)
+              : null,
+          applyDpScale: otherMap["applyDpScale"] as bool?,
+        );
+      }
+    }
+    return style;
   }
 
   PolylineTextStyle copyWith({

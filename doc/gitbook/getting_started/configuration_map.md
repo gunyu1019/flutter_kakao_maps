@@ -1,59 +1,126 @@
 # 지도 그리기
 
-## 1. 지도 위젯 그리기
+`KakaoMap` 위젯을 화면에 배치하면 플랫폼에 맞는 지도 View가 생성됩니다. 지도를 조작하는 코드는 `onMapReady`에서 전달되는 `KakaoMapController`를 기준으로 시작합니다.
 
-[KakaoMap](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMap-class.html) 위젯 함수를 호출하여 지도를 애플리케이션에 그릴 수 있습니다.
-
-```dart
-Widget mapWidget(BuildContext context) => KakaoMap(
-  onMapReady: (KakaoMapController controller) {
-    print("카카오맵이 불러와졌습니다.")
-  },
-  option: const KakaoMapOption(position: LatLng(37.394776, 127.11116)),
-);
-```
-
-위 소스 코드와 같이 `KakaoMap` 객체를 호출하면 [StatefulWidget](https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html)이 반환됩니다. \
-`KakaoMap` 객체를 호출하기 위해서는 두 인수가 필요하며 인수의 용도는 다음과 같습니다.
-
-* onMapReady: 지도를 불러오는데 성공하면 호출되는 함수이며, 지도를 조작할 수 있는 [KakaoMapController](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController-class.html) 객체와 함께 호출됩니다.
-* option: [KakaoMapOption](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapOption-class.html) 객체가 입력되며, 지도의 기본 정보를 정의할 수 있습니다.
-
-## 2. 지도 기본 정보 설정하기
-
-사용자에게 노출되는 첫 지도 화면은 [KakaoMapOption](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapOption-class.html) 객체를 `option` 인수에 전달하여 설정할 수 있습니다.\
-[KakaoMapOption](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapOption-class.html) 객체로 지도를 사용자에게 제공하는 카메라의 위치, 지도 유형 등을 설정할 수 있습니다.
-
-### 2-1. 카메라의 위치 설정
-
-사용자에게 처음 보여주는 지도의 카메라 위치는 [KakaoMapOption](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapOption-class.html) 객체를 통해 설정하실 수 있습니다. 아래의 항목에 있는 두 인수를 객체에 제공하여 카메라의 위치를 설정할 수 있습니다.
-
-* position: WGS84(위도/경도)로 구성된 [LatLng](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/LatLng-class.html) 객체가 입력되며 카메라의 위치를 설정합니다.
-* zoomLevel: 6단계부터 21단계까지 정수로 구성되며 값에 따라 카메라의 확대, 축소 비율을 조정합니다. 값이 작을 수록 더 넓은 지역을 카메라에 담을 수 있으며, 반대로 값이 클수록 더 상세한 화면을 확인할 수 있습니다.
+## 1. 기본 지도 위젯
 
 ```dart
-final option = const KakaoMapOption(
-  position: LatLng(37.394776, 127.11116),
-  zoomLevel: 16
-);
-```
+class MapPage extends StatefulWidget {
+  const MapPage({super.key});
 
-### 2-2. 지도 유형 설정
+  @override
+  State<MapPage> createState() => _MapPageState();
+}
 
-지도의 유형은 [MapType](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/MapType.html) 객체를 통해 설정할 수 있으며, [KakaoMapOption](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapOption-class.html) 객체에 `mapType` 인수를 제공하거나,   [KakaoMapController.changeMapType()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/changeMapType.html) 함수로 설정할 수 있습니다.
+class _MapPageState extends State<MapPage> {
+  KakaoMapController? _controller;
 
-| 일반 지도 (Normal)                                                                                                             | 위성 지도 (Skyview)                                                                                                                   |
-| -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| <div><figure><img src="../../doc/gitbook/.gitbook/assets/imageservice.png" alt=""><figcaption></figcaption></figure></div> | <div><figure><img src="../../doc/gitbook/.gitbook/assets/skyviewimageservice.jpg" alt=""><figcaption></figcaption></figure></div> |
-
-```dart
-Future<void> changeMapType(KakaoMapController controller) async {
-  // 지도 유형을 일반 지도로 전환합니다.
-  await controller.changeMapType(MapType.normal);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: KakaoMap(
+        option: const KakaoMapOption(
+          position: LatLng(37.394776, 127.11116),
+          zoomLevel: 16,
+          mapType: MapType.normal,
+        ),
+        onMapReady: (controller) {
+          setState(() => _controller = controller);
+        },
+        onMapError: (error) {
+          debugPrint('지도 오류: $error');
+        },
+      ),
+    );
+  }
 }
 ```
 
-## 3. 지도 오버레이 그리기
+> `onMapReady`가 호출되기 전에는 컨트롤러와 오버레이를 사용하지 마세요. Android의 비상 재생성 옵션을 켠 경우에는 복귀 과정에서 `onMapReady`가 다시 호출될 수 있습니다.
 
+## 2. KakaoMapOption
 
+`KakaoMapOption`은 최초 지도를 생성할 때 적용되는 값입니다.
 
+| Property | 기본값 | 설명 |
+| --- | --- | --- |
+| `position` | 카카오 판교캠퍼스 | 최초 카메라 중심 좌표 |
+| `zoomLevel` | `15` | 최초 줌 레벨 |
+| `mapType` | `MapType.normal` | 일반 지도 또는 스카이뷰 |
+| `viewName` | 자동 생성 | iOS native view 식별자. 여러 지도에서 중복 금지 |
+| `visible` | `true` | 지도 초기 표시 여부 |
+| `tag` | `null` | 지도 View에 전달하는 선택적 태그 |
+
+```dart
+const option = KakaoMapOption(
+  position: LatLng(37.566649, 126.978221),
+  zoomLevel: 15,
+  mapType: MapType.skyview,
+  viewName: 'main-map',
+  tag: 'home',
+);
+```
+
+## 3. 지도 유형 변경
+
+최초 유형은 `KakaoMapOption.mapType`으로 지정하고, 생성 후에는 `changeMapType()`으로 변경합니다.
+
+| 값 | 설명 |
+| --- | --- |
+| `MapType.normal` | 일반 지도 |
+| `MapType.skyview` | 위성 지도 |
+
+| 일반 지도 | 스카이뷰 |
+| --- | --- |
+| ![일반 지도](../.gitbook/assets/imageservice.png) | ![스카이뷰](../.gitbook/assets/skyviewimageservice.jpg) |
+
+```dart
+await controller.changeMapType(MapType.skyview);
+```
+
+## 4. 지도 기본 오버레이
+
+Kakao 지도 자체에서 제공하는 정보를 `showOverlay()`와 `hideOverlay()`로 제어합니다.
+
+| 값 | 설명 |
+| --- | --- |
+| `MapOverlay.bicycleRoad` | 자전거 도로 |
+| `MapOverlay.roadviewLine` | 로드뷰 촬영 경로 |
+| `MapOverlay.hillsading` | 지형 음영 |
+| `MapOverlay.hybrid` | 스카이뷰 위 도로·지명 레이블 |
+
+```dart
+await controller.showOverlay(MapOverlay.bicycleRoad);
+await controller.hideOverlay(MapOverlay.bicycleRoad);
+```
+
+> 교통정보 오버레이는 기본 제공 범위가 아니며 별도 협의가 필요할 수 있습니다.
+
+## 5. 여러 지도를 배치할 때
+
+각 `KakaoMap`은 서로 다른 컨트롤러와 레이어 저장소를 가집니다. 특히 iOS에서는 `viewName`을 고유하게 지정하세요.
+
+```dart
+Row(
+  children: [
+    Expanded(
+      child: KakaoMap(
+        option: const KakaoMapOption(viewName: 'left-map'),
+        onMapReady: (controller) {},
+      ),
+    ),
+    Expanded(
+      child: KakaoMap(
+        option: const KakaoMapOption(viewName: 'right-map'),
+        onMapReady: (controller) {},
+      ),
+    ),
+  ],
+);
+```
+
+## 6. 다음 단계
+
+* 지도를 움직이려면 [카메라 조작하기](../map_element/camera.md)를 참고합니다.
+* 탭과 카메라 이벤트를 받으려면 [지도 이벤트 수신하기](../map_element/events.md)를 참고합니다.
+* Poi나 경로를 추가하려면 [오버레이와 레이어 이해하기](../overlay/architecture.md)를 먼저 읽어보세요.

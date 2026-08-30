@@ -4,6 +4,7 @@ class WebPolygonShape {
   final String id;
   final WebPolygon element;
 
+  WebShapePoint point;
   WebPolygonOption option;
 
   String styleId;
@@ -13,6 +14,7 @@ class WebPolygonShape {
   WebPolygonShape(
     this.id,
     this.element, {
+    required this.point,
     required this.option,
     required this.style,
   })  : styleId = style.id!,

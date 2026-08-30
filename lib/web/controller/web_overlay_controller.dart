@@ -7,6 +7,7 @@ class WebOverlayController {
 
   final Map<String, PoiStyle> _poiStyles = {};
   final Map<String, List<PolygonStyle>> _polygonStyles = {};
+  final Map<String, List<PolygonStyle>> _dimPolygonStyles = {};
   final Map<String, List<PolylineStyle>> _polylineStyles = {};
   final Map<String, List<RouteStyle>> _routeStyles = {};
 
@@ -15,6 +16,7 @@ class WebOverlayController {
   final Map<String, WebShapeController> _shapeLayer = {};
   final Map<String, WebRouteController> _routeLayer = {};
   late final WebTrackingController _trackingLayer;
+  late final WebDimScreenController _dimScreenLayer;
 
   final void Function(String layerId, String poiId)? onPoiClick;
   final void Function(String layerId, String poiId)? onLodPoiClick;
@@ -53,11 +55,13 @@ class WebOverlayController {
       this,
     );
     _trackingLayer = WebTrackingController._(controller, this);
+    _dimScreenLayer = WebDimScreenController._(controller, this);
 
     _labelLayer[LabelController.defaultId]!.createLabelLayer();
     _lodLabelLayer[LodLabelController.defaultId]!.createLabelLayer();
     _shapeLayer[ShapeController.defaultId]!.createShapeLayer();
     _routeLayer[RouteController.defaultId]!.createRouteLayer();
+    _dimScreenLayer.createDimScreenLayer();
   }
 
   void _onPoiClick(String layerId, String poiId, bool isLod) {
@@ -65,6 +69,23 @@ class WebOverlayController {
       onLodPoiClick?.call(layerId, poiId);
     } else {
       onPoiClick?.call(layerId, poiId);
+    }
+  }
+
+  void dispose() {
+    _dimScreenLayer.removeDimScreenLayer();
+
+    for (final layer in _shapeLayer.values) {
+      layer.removeShapeLayer();
+    }
+    for (final layer in _routeLayer.values) {
+      layer.removeRouteLayer();
+    }
+    for (final layer in _labelLayer.values) {
+      layer.removeLabelLayer();
+    }
+    for (final layer in _lodLabelLayer.values) {
+      layer.removeLabelLayer();
     }
   }
 
@@ -160,7 +181,14 @@ class WebOverlayController {
         return polylineStyleId;
       case "addPolygonShapeStyle":
         final polygonStyleId = argument["styleId"] ?? _uuid.v4();
-        _polygonStyles[polygonStyleId] = argument["styles"]
+        final rawStyles = argument["styles"] as Iterable;
+        _polygonStyles[polygonStyleId] = rawStyles
+            .map<PolygonStyle>(
+              (payload) =>
+                  PolygonStyle.fromMessageable(payload, polygonStyleId),
+            )
+            .toList();
+        _dimPolygonStyles[polygonStyleId] = rawStyles
             .map<PolygonStyle>(
               (payload) =>
                   PolygonStyle.fromMessageable(payload, polygonStyleId),
@@ -179,7 +207,7 @@ class WebOverlayController {
       case OverlayType.route:
         return await _routeLayer[layerId!]?.routeHandle(method);
       case OverlayType.dimScreen:
-        return null;
+        return await _dimScreenLayer.dimScreenHandle(method);
       case OverlayType.tracking:
         return await _trackingLayer.trackingHandle(method);
     }

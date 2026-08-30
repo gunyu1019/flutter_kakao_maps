@@ -43,7 +43,17 @@ extension DimScreenControllerHandler {
             let color = UIColor(value: asUInt(arguments!["color"]!))
             setDimColor(color: color, onSuccess: result)
         case "setVisible": setDimVisible(visible: asBool(arguments!["visible"]!), onSuccess: result)
-        case "setDimCover": setDimCover(cover: DimScreenCover(rawValue: asInt(arguments!["cover"]!))!, onSuccess: result)
+        case "setDimCover":
+            let coverValue = asInt(arguments!["cover"]!)
+            guard let cover = DimScreenCover(rawValue: coverValue) else {
+                result(FlutterError(
+                    code: "INVALID_DIM_SCREEN_COVER",
+                    message: "Unknown DimScreenCover raw value: \(coverValue)",
+                    details: nil
+                ))
+                return
+            }
+            setDimCover(cover: cover, onSuccess: result)
         case "addHighlightPolygonShape":
             let polygon = asDict(arguments!["polygon"]!)
             let position = asDict(polygon["position"]!)
@@ -59,10 +69,14 @@ extension DimScreenControllerHandler {
                 result(FlutterMethodNotImplemented)
             }
         case "removeHighlightPolygonShape":
-            if polygonShape == nil {
-                removeDimHighlightPolygonShape(shapeId: polygonId!, onSuccess: result)
+            guard let id = polygonId else {
+                result(FlutterMethodNotImplemented)
+                return
+            }
+            if mapPolygonShape != nil {
+                removeDimHighlightMapPolygonShape(shapeId: id, onSuccess: result)
             } else {
-                removeDimHighlightMapPolygonShape(shapeId: polygonId!, onSuccess: result)
+                removeDimHighlightPolygonShape(shapeId: id, onSuccess: result)
             }
         case "changePolygonVisible":
             let visible = asBool(arguments!["visible"]!)

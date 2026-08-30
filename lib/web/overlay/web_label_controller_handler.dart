@@ -117,10 +117,48 @@ mixin WebLabelControllerHandler {
         final targetPoiId = arguments["targetPoiId"];
         removeShareTransformPoi(poiId, targetLayerId, targetPoiId);
         break;
-      case "changePolylineTextStyle" ||
-            "changePolylineTextVisible" ||
-            "changeVisibleAllPolylineText" ||
-            "setLayerClickable" ||
+      case "addPolylineText":
+        final label = arguments["label"] as Map;
+        final pts = (label["position"] as List)
+            .map((e) => LatLng.fromMessageable(e))
+            .toList();
+        final style = PolylineTextStyle.fromMessageable(
+            Map<String, dynamic>.from(label["style"] as Map));
+        return await addPolylineText(
+          pts,
+          label["text"] as String,
+          style,
+          id: label["id"] as String?,
+          visible: label["visible"] as bool? ?? true,
+        );
+      case "removePolylineText":
+        await removePolylineText(arguments["labelId"] as String);
+        break;
+      case "changePolylineTextStyle":
+        final rawStyle = arguments["styles"];
+        await changePolylineTextStyle(
+          arguments["labelId"] as String,
+          style: rawStyle != null
+              ? PolylineTextStyle.fromMessageable(
+                  Map<String, dynamic>.from(rawStyle as Map))
+              : null,
+          text: arguments["text"] as String?,
+        );
+        break;
+      case "changePolylineTextVisible":
+        await changePolylineTextVisible(
+          arguments["labelId"] as String,
+          arguments["visible"] as bool,
+        );
+        break;
+      case "changeVisibleAllPolylineText":
+        if (arguments["visible"] as bool) {
+          await showAllPolylineText();
+        } else {
+          await hideAllPolylineText();
+        }
+        break;
+      case "setLayerClickable" ||
             "setLayerZOrder" ||
             "scalePoi" ||
             "addShareTransformShape" ||
@@ -223,4 +261,26 @@ mixin WebLabelControllerHandler {
   //     String poiId, String targetLayerId, String targetShapeId);
 
   // Future<void> movePathPoi(String poiId, List<LatLng> path, int duration, double cornerRadius, double jumpThreshold);
+
+  Future<String> addPolylineText(
+    List<LatLng> points,
+    String text,
+    PolylineTextStyle style, {
+    String? id,
+    bool visible = true,
+  });
+
+  Future<void> removePolylineText(String textId);
+
+  Future<void> changePolylineTextStyle(
+    String textId, {
+    PolylineTextStyle? style,
+    String? text,
+  });
+
+  Future<void> changePolylineTextVisible(String textId, bool visible);
+
+  Future<void> showAllPolylineText();
+
+  Future<void> hideAllPolylineText();
 }

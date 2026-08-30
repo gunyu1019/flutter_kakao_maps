@@ -19,6 +19,10 @@ protocol LabelControllerHandler {
 
     func removePolylineText(layer: LabelLayer, labelId: String, onSuccess: (Any?) -> Void)
 
+    func changePolylineTextAndStyle(label: WaveText, styleId: String, text: String?, onSuccess: (Any?) -> Void)
+
+    func changePolylineTextVisible(label: WaveText, visible: Bool, onSuccess: (Any?) -> Void)
+
     func changePoiPixelOffset(poi: Poi, offset: CGPoint, onSuccess: (Any?) -> Void)
 
     func changePoiVisible(poi: Poi, visible: Bool, autoMove: Bool, onSuccess: (Any?) -> Void)
@@ -104,9 +108,9 @@ extension LabelControllerHandler {
             let waveTextStyle = WaveTextStyle(payload: asDict(waveTextArgument["style"]!))
             labelManager.addWaveTextStyle(waveTextStyle)
             let waveTextOption = WaveTextOptions(payload: waveTextArgument, styleId: waveTextStyle.styleID)
-            let visible = asBool(arguments!["visible"] ?? true)
+            let visible = asBool(waveTextArgument["visible"] ?? true)
             addPolylineText(layer: layer!, label: waveTextOption, visible: visible, onSuccess: result)
-        case "removePolylineText": removePolylineText(layer: layer!, labelId: poiId!, onSuccess: result)
+        case "removePolylineText": removePolylineText(layer: layer!, labelId: polylineTextId!, onSuccess: result)
         // poi Handler
         case "changePoiPixelOffset":
             let rawPayload: [String: Double] = ["x": asDouble(arguments!["x"]!), "y": asDouble(arguments!["y"]!)]
@@ -141,6 +145,23 @@ extension LabelControllerHandler {
         case "rankPoi":
             let rank = asInt(arguments!["rank"]!)
             rankPoi(poi: poi!, rank: rank, onSuccess: result)
+        // polyline text Handler
+        case "changePolylineTextStyle":
+            let waveTextStyle = WaveTextStyle(payload: asDict(arguments!["styles"]!))
+            labelManager.addWaveTextStyle(waveTextStyle)
+            let text = castSafty(arguments?["text"], caster: asString)
+            changePolylineTextAndStyle(
+                label: polylineText!,
+                styleId: waveTextStyle.styleID,
+                text: text,
+                onSuccess: result
+            )
+        case "changePolylineTextVisible":
+            changePolylineTextVisible(
+                label: polylineText!,
+                visible: asBool(arguments!["visible"]!),
+                onSuccess: result
+            )
         case "setLayerClickable":
             changeLabelLayerClickable(layer: layer!, clickable: asBool(arguments!["clickable"]!), onSuccess: result)
         case "setLayerZOrder":
