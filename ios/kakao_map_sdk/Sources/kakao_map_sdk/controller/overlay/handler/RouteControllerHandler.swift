@@ -50,7 +50,7 @@ extension RouteControllerHandler {
             let curveType = asArray(arguments!["curveType"]!, caster: asInt)
             let points = asArray(arguments!["points"]!, caster: { asArray($0, caster: asDict) })
             let segments = points.enumerated().map { index, payload -> RouteSegment in
-                return RouteSegment(payload: [
+                RouteSegment(payload: [
                     "curveType": curveType[index],
                     "points": payload,
                 ])
