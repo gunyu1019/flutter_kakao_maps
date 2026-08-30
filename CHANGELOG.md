@@ -72,13 +72,13 @@
 * [Fix] (Android / iOS) Invalid conversion of mixed `CirclePoint` and `RectanglePoint` holes.
 * [Fix] (iOS) Runtime error caused by `NSNull` values in optional PoiIconStyle and PoiBadge images. ([#63](https://github.com/gunyu1019/flutter_kakao_maps/pull/63))
 * [Fix] (iOS) Invalid removal of DimScreen highlight polygon.
+* [Fix] (iOS) Invalid PolylineText visibility, style update and removal behavior.
 * [Fix] (Web Environment) Map center changes when resizing the map container.
 * [Fix] (Web Environment) Invalid gesture type in an iOS browser.
-* [Fix] (Web Environment) Invalid polygon, relative shape, hole and open-path rendering.
+* [Fix] (Web Environment) Invalid polygon and relative shape rendering.
 * [Fix] (Web Environment) Overlay collections and event listeners are not disposed when the map element is removed.
-* [Fix] Correct `getRouteStyle` and `getMultipleRouteStyle` method names. Preserve `getRotueStyle` and `getMultipleRotueStyle` as deprecated aliases.
+* [Fix] Correct method names from `getRotueStyle()` and `getMultipleRotueStyle()` to `getRouteStyle()` and `getMultipleRouteStyle()`.
 * [Fix] Invalid raw values of `DimScreenCover` on Android and iOS Platforms.
-* [Fix] Inconsistent PolylineText visibility, style update and removal behavior between platforms.
 
 ## 1.2.6
 * [Fix] Missing `zoomLevel` field in `CameraUpdate.newCenterPoint` factory function.
