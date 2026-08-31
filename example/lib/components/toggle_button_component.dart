@@ -30,20 +30,21 @@ class _ToggleButtonComponentState extends State<ToggleButtonComponent> {
 
   @override
   Widget build(BuildContext context) => ToggleButtons(
-      direction: Axis.vertical,
-      isSelected: _selectedButton,
-      borderRadius: const BorderRadius.all(Radius.circular(12)),
-      selectedBorderColor: const Color.fromARGB(255, 19, 137, 253),
-      selectedColor: Colors.white,
-      fillColor: const Color.fromARGB(255, 19, 137, 253),
-      color: Colors.black,
-      onPressed: (index) {
-        widget.onChanged(index);
-        setState(() {
-          for (int i = 0; i < _selectedButton.length; i++) {
-            _selectedButton[i] = i == index;
-          }
-        });
-      },
-      children: widget.options.map((e) => Text(e)).toList());
+    direction: Axis.vertical,
+    isSelected: _selectedButton,
+    borderRadius: const BorderRadius.all(Radius.circular(12)),
+    selectedBorderColor: const Color.fromARGB(255, 19, 137, 253),
+    selectedColor: Colors.white,
+    fillColor: const Color.fromARGB(255, 19, 137, 253),
+    color: Colors.black,
+    onPressed: (index) {
+      widget.onChanged(index);
+      setState(() {
+        for (int i = 0; i < _selectedButton.length; i++) {
+          _selectedButton[i] = i == index;
+        }
+      });
+    },
+    children: widget.options.map((e) => Text(e)).toList(),
+  );
 }

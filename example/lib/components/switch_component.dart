@@ -6,12 +6,13 @@ class SwitchComponent extends StatefulWidget {
   final bool initialValue;
   final TextStyle? textStyle;
 
-  const SwitchComponent(
-      {super.key,
-      required this.title,
-      required this.onChanged,
-      this.initialValue = false,
-      this.textStyle});
+  const SwitchComponent({
+    super.key,
+    required this.title,
+    required this.onChanged,
+    this.initialValue = false,
+    this.textStyle,
+  });
 
   @override
   State<SwitchComponent> createState() => _SwitchComponentState();
@@ -27,16 +28,19 @@ class _SwitchComponentState extends State<SwitchComponent> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(widget.title, style: widget.textStyle),
-        Switch(
-            value: value,
-            onChanged: (value) {
-              setState(() {
-                this.value = value;
-              });
-              widget.onChanged(value);
-            })
-      ]);
+  Widget build(BuildContext context) => Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(widget.title, style: widget.textStyle),
+      Switch(
+        value: value,
+        onChanged: (value) {
+          setState(() {
+            this.value = value;
+          });
+          widget.onChanged(value);
+        },
+      ),
+    ],
+  );
 }

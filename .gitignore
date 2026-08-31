@@ -24,6 +24,8 @@ migrate_working_dir/
 # Flutter/Dart/Pub related
 # Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
 pubspec.lock
+# The example is an application, so keep its dependency graph reproducible.
+!example/pubspec.lock
 **/doc/api/
 .dart_tool/
 build/
@@ -35,6 +37,7 @@ build/
 .swiftpm/
 
 # Debugging Resources
-artifacts/
+artifact*
 engine_patches/
 example/android/engine_patch_repo/
+ktfmt.jar

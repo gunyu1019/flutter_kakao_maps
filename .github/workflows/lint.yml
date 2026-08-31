@@ -18,12 +18,12 @@ jobs:
       - name: Install and setup Dart SDK
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: 3.7.2
+          sdk: 3.13.2
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v4
         with:
           channel: stable
-          version: 3.29.2
+          version: 3.47.2
       - name: Install dependencies
         run: flutter pub get
       - name: Verify dart code for lint.
@@ -54,11 +54,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Java 18 (Amazon Corretto)
+      - name: Setup Java 17 (Amazon Corretto)
         uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
-          java-version: '18'
+          java-version: '17'
       - name: Install ktkmt
         run: |
           wget https://repo1.maven.org/maven2/com/facebook/ktfmt/$KTFMT_VERSION/ktfmt-$KTFMT_VERSION-jar-with-dependencies.jar
@@ -71,4 +71,3 @@ jobs:
         env:
           KTFMT_VERSION: ${{ env.ktkmt-version }}
           CODE_STYLE: ${{ env.code-style }}
-
