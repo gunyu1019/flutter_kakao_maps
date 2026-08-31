@@ -2,6 +2,21 @@
 
 Poi(Point of Interest)는 지도 좌표에 아이콘과 텍스트를 표시합니다. `LabelController`는 일반 Poi를, `LodLabelController`는 대량 표시를 위한 LodPoi를 관리합니다.
 
+아래 화면은 일반 Poi의 아이콘·텍스트·Badge와 여러 LodPoi를 같은 Pangyo 좌표 영역에 표시한 실제 실행 결과입니다. Web은 `127.0.0.1:8080` Profile 모드로 촬영했습니다.
+
+<table>
+  <thead>
+    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="../.gitbook/assets/overlay-poi-lod-badge-android.png" alt="Android Poi, LodPoi, Badge 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-poi-lod-badge-ios.png" alt="iOS Poi, LodPoi, Badge 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-poi-lod-badge-web-profile-8080.png" alt="Web Profile 8080 Poi, LodPoi, Badge 결과" /></td>
+    </tr>
+  </tbody>
+</table>
+
 ## 1. PoiStyle 만들기
 
 ```dart

@@ -6,7 +6,7 @@ DimScreen은 지도 위에 반투명 색상을 덮고 Polygon 영역을 highligh
 
 ## 1. 플랫폼 결과
 
-아래는 닫힌 MapPoint, 반투명 cover, fill과 stroke를 같은 조건으로 적용한 테스트 결과입니다. Web 이미지는 `127.0.0.1:8080` Profile 모드의 최종 통과 artifact입니다.
+아래 화면은 `mapAndLabel` cover 위에 MapPoint highlight와 circle hole을 함께 표시한 실제 실행 결과입니다. Web은 `127.0.0.1:8080`에서 Profile 모드로 촬영했습니다.
 
 <table>
   <thead>
@@ -14,14 +14,14 @@ DimScreen은 지도 위에 반투명 색상을 덮고 Polygon 영역을 highligh
   </thead>
   <tbody>
     <tr>
-      <td><img src="../.gitbook/assets/dimscreen-map-point-android.png" alt="Android DimScreen 결과" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-map-point-ios.png" alt="iOS DimScreen 결과" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-map-point-web-profile-8080.jpg" alt="Web Profile 8080 DimScreen 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-dimscreen-android.png" alt="Android DimScreen: mapAndLabel cover, MapPoint highlight, circle hole" /></td>
+      <td><img src="../.gitbook/assets/overlay-dimscreen-ios.png" alt="iOS DimScreen: mapAndLabel cover, MapPoint highlight, circle hole" /></td>
+      <td><img src="../.gitbook/assets/overlay-dimscreen-web-profile-8080.png" alt="Web Profile 8080 DimScreen: mapAndLabel cover, MapPoint highlight, circle hole" /></td>
     </tr>
   </tbody>
 </table>
 
-> 상단 시나리오 카드와 하단 이동 버튼은 21개 계약 시나리오를 비교한 테스트 harness입니다. 실제 앱에는 나타나지 않습니다.
+> 상단 카드와 하단 선택기는 문서 촬영용 gallery UI입니다. 지도 위의 dim·highlight·hole은 SDK가 실제로 렌더링한 결과입니다.
 
 ## 2. 색상과 표시 상태
 
@@ -130,18 +130,7 @@ final highlightWithHole =
 );
 ```
 
-<table>
-  <thead>
-    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><img src="../.gitbook/assets/dimscreen-circle-hole-android.png" alt="Android DimScreen circle hole" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-circle-hole-ios.png" alt="iOS DimScreen circle hole" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-circle-hole-web-profile-8080.jpg" alt="Web Profile 8080 DimScreen circle hole" /></td>
-    </tr>
-  </tbody>
-</table>
+위 플랫폼별 화면의 흰색 원형 경계가 `CirclePoint` highlight와 그 안의 hole을 함께 보여줍니다.
 
 `MapPoint.addHole()`, `CirclePoint.addCircleHole()`, `RectanglePoint.addRetangleHole()`을 사용할 수 있습니다.
 

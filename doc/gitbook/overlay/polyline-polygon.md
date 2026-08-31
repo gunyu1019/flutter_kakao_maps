@@ -3,6 +3,21 @@
 Polyline과 Polygon은 지도 위에 선과 면을 그릴 수 있는 도형 요소입니다.\
 [ShapeController](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/ShapeController-class.html)를 통해 도형을 생성하고 관리할 수 있습니다.
 
+아래 화면은 닫힌 MapPoint Polyline, MapPoint Polygon hole, CirclePoint hole, RectanglePoint를 함께 표시한 실제 실행 결과입니다. Web은 `127.0.0.1:8080` Profile 모드로 촬영했습니다.
+
+<table>
+  <thead>
+    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="../.gitbook/assets/overlay-polyline-polygon-android.png" alt="Android Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-polygon-ios.png" alt="iOS Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-polygon-web-profile-8080.png" alt="Web Profile 8080 Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" /></td>
+    </tr>
+  </tbody>
+</table>
+
 ## 1. 도형 스타일 등록하기
 
 도형을 추가할 때 등록되지 않은 스타일은 자동으로 등록됩니다. 여러 도형에 같은 스타일을 공유하거나 등록 오류를 먼저 처리하려면 명시적으로 등록할 수 있습니다.
@@ -215,21 +230,6 @@ final rectPolygon = await controller.shapeLayer.addPolygonShape(
 ```
 
 ### 4-2. 구멍이 있는 Polygon
-
-원형 Polygon과 원형 hole의 상대 도형 geometry는 동일한 테스트 시나리오로 세 플랫폼에서 검증되었습니다. 아래 화면은 Shape와 같은 `CirclePoint`·`PolygonStyle` 모델을 사용하는 DimScreen highlight 테스트 결과입니다. Web은 `127.0.0.1:8080` Profile 실행 결과입니다.
-
-<table>
-  <thead>
-    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><img src="../.gitbook/assets/dimscreen-circle-hole-android.png" alt="Android CirclePoint hole 결과" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-circle-hole-ios.png" alt="iOS CirclePoint hole 결과" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-circle-hole-web-profile-8080.jpg" alt="Web Profile 8080 CirclePoint hole 결과" /></td>
-    </tr>
-  </tbody>
-</table>
 
 내부에 구멍(Hole)을 추가하면 도넛 형태의 Polygon을 그릴 수 있습니다.
 

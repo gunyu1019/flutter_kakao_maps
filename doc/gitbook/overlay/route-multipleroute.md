@@ -7,6 +7,21 @@ Route는 위경도 좌표 목록을 따라 경로선을 지도에 표시하는 �
 MultipleRoute는 하나의 경로를 구간(Segment)별로 나눠 각각 다른 스타일을 적용할 수 있는 요소입니다.\
 교통 혼잡도나 도로 유형에 따라 구간별로 색상을 달리하여 표시하는 데 활용할 수 있습니다.
 
+아래 화면은 단일 Route의 곡선, 초록·주황·빨강 MultipleRoute 구간, 반복 Pattern 경로를 함께 표시한 실제 실행 결과입니다. Web은 `127.0.0.1:8080` Profile 모드로 촬영했으며 Pattern 이미지는 점선으로 대체됩니다.
+
+<table>
+  <thead>
+    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="../.gitbook/assets/overlay-route-multiple-route-android.png" alt="Android Route, MultipleRoute, Pattern 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-route-multiple-route-ios.png" alt="iOS Route, MultipleRoute, Pattern 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-route-multiple-route-web-profile-8080.png" alt="Web Profile 8080 Route, MultipleRoute, Pattern 결과" /></td>
+    </tr>
+  </tbody>
+</table>
+
 ## 1. 경로 스타일 등록하기
 
 경로를 추가할 때 등록되지 않은 [RouteStyle](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/RouteStyle-class.html)은 자동으로 등록됩니다. 여러 경로에 같은 스타일을 공유하거나 등록 오류를 먼저 처리하려면 [KakaoMapController.addRouteStyle()](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/KakaoMapController/addRouteStyle.html)로 명시적으로 등록합니다.

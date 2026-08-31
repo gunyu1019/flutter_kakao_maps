@@ -2,21 +2,22 @@
 
 PolylineText는 여러 `LatLng`으로 만든 경로를 따라 한 줄 텍스트를 표시합니다. 도로명이나 이동 경로의 이름처럼 선의 방향을 따라야 하는 레이블에 적합합니다.
 
-Web에서도 동일한 Dart API로 사용할 수 있습니다.
+Web에서도 동일한 Dart API로 사용할 수 있습니다. 아래는 곡선 좌표를 따라 `PolylineText`를 표시한 실제 실행 결과이며, Web은 `127.0.0.1:8080` Profile 모드로 촬영했습니다. iOS와 Web 장면에는 시작·종료 Poi도 함께 표시했습니다.
 
 <table>
   <thead>
-    <tr><th>iOS Simulator</th><th>Web regression artifact</th></tr>
+    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
   </thead>
   <tbody>
     <tr>
-      <td><img src="../.gitbook/assets/polyline-text-curved-ios.png" alt="iOS PolylineText 곡선 경로 결과" /></td>
-      <td><img src="../.gitbook/assets/polyline-text-curved-web.png" alt="Web PolylineText 곡선 경로 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-text-android.png" alt="Android PolylineText 곡선 경로 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-text-ios.png" alt="iOS PolylineText 곡선 경로 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-text-web-profile-8080.png" alt="Web Profile 8080 PolylineText 곡선 경로 결과" /></td>
     </tr>
   </tbody>
 </table>
 
-> 위 화면은 동일한 곡선 시나리오의 회귀 테스트 artifact입니다. 주황색 텍스트가 좌표 경로의 접선 방향을 따라 배치됩니다.
+> 주황색 텍스트가 좌표 경로의 접선 방향을 따라 배치됩니다.
 
 ## 1. 스타일
 
