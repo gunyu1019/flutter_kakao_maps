@@ -15,8 +15,8 @@ var targetDependencies: [Target.Dependency] = [
     .product(name: "KakaoMapsSDK-SPM", package: "KakaoMapsSDK-SPM"),
 ]
 
-// Flutter 3.47+ exposes the framework as a neighboring generated package.
-// Older supported Flutter versions inject Flutter without that package.
+/// Flutter 3.47+ exposes the framework as a neighboring generated package.
+/// Older supported Flutter versions inject Flutter without that package.
 let flutterFrameworkPath = URL(fileURLWithPath: Context.packageDirectory)
     .deletingLastPathComponent()
     .appendingPathComponent("FlutterFramework")
