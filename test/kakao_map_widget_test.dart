@@ -119,9 +119,8 @@ void main() {
 
       // Android always injects recoverAndroidGLSurfaceViewOnResume; strip it before comparing
       // to the platform-agnostic expectedParams derived from KakaoMapOption.toMessageable().
-      final androidParamsWithoutRecovery =
-          Map<String, dynamic>.from(decodedAndroidParams)
-            ..remove('recoverAndroidGLSurfaceViewOnResume');
+      final androidParamsWithoutRecovery = Map<String, dynamic>.from(decodedAndroidParams)
+        ..remove('recoverAndroidGLSurfaceViewOnResume');
       expect(androidParamsWithoutRecovery, equals(expectedParams));
 
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;

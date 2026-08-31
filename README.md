@@ -59,6 +59,17 @@ void main() async {
     await KakaoMapSdk.instance.hashKey();
     ```
     안드로이드 플랫폼 외 다른 플랫폼에서 함수를 호출하면 `null`을 반환합니다.
+4. 일부 Android 환경에서 앱이 백그라운드에서 복귀한 뒤 지도 영역이 검은 화면으로 멈춘다면, 아래 옵션으로 native `MapView`를 재생성하는 복구 경로를 사용할 수 있습니다.<br/>
+   이 옵션은 복귀할 때 기존 native 지도 인스턴스를 종료하고 새로 시작하므로 `onMapReady`가 다시 호출됩니다. 앱에서 추가한 오버레이는 `onMapReady` 안에서 다시 구성할 수 있도록 작성해야 합니다.
+    ```dart
+    KakaoMap(
+      recreateAndroidMapViewOnResume: true,
+      androidMapViewRecreationDelay: const Duration(milliseconds: 300),
+      onMapReady: (controller) {
+        // 스타일, 레이어, 오버레이를 idempotent하게 다시 구성합니다.
+      },
+    )
+    ```
 
 ### Web Environment
 웹 환경에서 카카오맵을 이용하기 위해서는 아래에 서술된 추가 설정이 필요합니다.<br/>
