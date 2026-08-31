@@ -7,7 +7,7 @@
 
 Kakao Map SDK는 Flutter 환경에서 [카카오 지도](https://map.kakao.com/)을 사용할 수 있도록 하는 패키지입니다!
 
-[시작하기](https://gunyu1019.gitbook.io/kakao-map-sdk/getting-started/installation) · [플랫폼 지원 범위](https://gunyu1019.gitbook.io/kakao-map-sdk/getting-started/platform-support) · [API Reference](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/) · [변경 이력](CHANGELOG.md)
+[시작하기](https://gunyu1019.gitbook.io/kakao-map-sdk/getting_started/installation) · [플랫폼 지원 범위](https://gunyu1019.gitbook.io/kakao-map-sdk/getting_started/platform-support) · [API Reference](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/) · [변경 이력](CHANGELOG.md)
 
 | Android                | iOS             | Web(Experimental)      |
 |------------------------|-----------------| ---------------------- |
@@ -336,7 +336,7 @@ Web 구현은 Kakao Maps JavaScript SDK가 제공하는 기능 안에서 네이�
 * 웹 환경에서 `buildingHeightScale` 개체는 항상 `0.0`이며 수정할 수 없습니다.
 * 웹 환경에서 Poi와 다른 도형 간 위치를 공유하는 `Poi.addShareTransfromWithShape`, `Poi.removeShareTransfromWithShape`는 지원하지 않습니다.
 
-플랫폼별 세부 차이와 검증 결과는 [플랫폼 지원 범위](https://gunyu1019.gitbook.io/kakao-map-sdk/getting-started/platform-support)에서 확인하세요.
+플랫폼별 세부 차이와 검증 결과는 [플랫폼 지원 범위](https://gunyu1019.gitbook.io/kakao-map-sdk/getting_started/platform-support)에서 확인하세요.
 
 ## 8. Documentation
 
@@ -349,12 +349,7 @@ Web 구현은 Kakao Maps JavaScript SDK가 제공하는 기능 안에서 네이�
 
 기능 개선이나 버그 수정은 Pull Request로 제안할 수 있습니다. 변경 사항에는 적용 대상 플랫폼과 검증 방법을 함께 작성하고, 가능하면 관련 테스트를 포함해 주세요.
 
-패키지 사용 중 문제가 발생했다면 [Issue tracker](https://github.com/gunyu1019/flutter_kakao_maps/issues)에 다음 정보를 포함하여 등록해 주세요.
+패키지 사용 중 문제가 발생했다면 [Issue tracker](https://github.com/gunyu1019/flutter_kakao_maps/issues)에 양식을 준수하여 등록해주십시요.
 
-* `kakao_map_sdk`, Flutter, Dart 버전
-* 문제가 발생한 플랫폼과 OS 버전
-* 재현 가능한 최소 코드 또는 샘플 프로젝트
-* 오류 로그와 실제·기대 동작
-* 화면 표시 문제인 경우 스크린샷 또는 녹화 화면
-
-보안상 민감한 정보는 공개 Issue와 로그에 포함하지 말고 [gunyu1019@yhs.kr](mailto:gunyu1019@yhs.kr)로 보내주세요. 앱 키처럼 재발급 가능한 비밀값은 이메일에서도 원문을 보내기보다 필요한 부분만 마스킹하여 전달해 주세요.
+보안상 민감한 정보는 공개 이슈와 로그에 포함하지 말고 [gunyu1019@yhs.kr](mailto:gunyu1019@yhs.kr)로 보내주세요. 
+앱 키처럼 재발급 가능한 비밀값은 이메일에서도 원문을 보내기보다 필요한 부분만 마스킹하여 전달해 주세요.

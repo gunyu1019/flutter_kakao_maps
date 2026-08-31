@@ -9,12 +9,13 @@ class DrawerComponent extends StatefulWidget {
   final int maxHeight;
   final int minHeight;
 
-  const DrawerComponent(
-      {super.key,
-      required this.body,
-      required this.drawer,
-      required this.maxHeight,
-      required this.minHeight});
+  const DrawerComponent({
+    super.key,
+    required this.body,
+    required this.drawer,
+    required this.maxHeight,
+    required this.minHeight,
+  });
 
   @override
   State<DrawerComponent> createState() => _DrawerComponentState();
@@ -34,9 +35,12 @@ class _DrawerComponentState extends State<DrawerComponent> {
   void onVerticalDragUpdate(DragUpdateDetails details) {
     var deltaX = details.delta.dy.toInt();
     setState(() {
-      _drawerHeight =
-          min(max(_drawerHeight - deltaX, widget.minHeight), widget.maxHeight);
-      isOpened = (_drawerHeight >=
+      _drawerHeight = min(
+        max(_drawerHeight - deltaX, widget.minHeight),
+        widget.maxHeight,
+      );
+      isOpened =
+          (_drawerHeight >=
           (widget.maxHeight - widget.minHeight) / 2 + widget.minHeight);
     });
   }
@@ -61,29 +65,35 @@ class _DrawerComponentState extends State<DrawerComponent> {
 
     children.addAll([
       AnimatedPositioned(
-          duration: const Duration(milliseconds: 150),
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: _drawerHeight.toDouble() + bottomPadding,
-          child: widget.body),
+        duration: const Duration(milliseconds: 150),
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: _drawerHeight.toDouble() + bottomPadding,
+        child: widget.body,
+      ),
       Positioned(
-          left: 0,
-          right: 0,
-          bottom: bottomPadding,
-          child: GestureDetector(
-              onTap: () {},
-              onVerticalDragUpdate: onVerticalDragUpdate,
-              onVerticalDragEnd: onVerticalDragEnd,
-              child: AnimatedContainer(
-                  height: _drawerHeight.toDouble(),
-                  width: mediaQuery.size.width,
-                  padding: const EdgeInsets.all(8),
-                  curve: Curves.ease,
-                  duration: const Duration(milliseconds: 150),
-                  child: widget.drawer))),
+        left: 0,
+        right: 0,
+        bottom: bottomPadding,
+        child: GestureDetector(
+          onTap: () {},
+          onVerticalDragUpdate: onVerticalDragUpdate,
+          onVerticalDragEnd: onVerticalDragEnd,
+          child: AnimatedContainer(
+            height: _drawerHeight.toDouble(),
+            width: mediaQuery.size.width,
+            padding: const EdgeInsets.all(8),
+            curve: Curves.ease,
+            duration: const Duration(milliseconds: 150),
+            child: widget.drawer,
+          ),
+        ),
+      ),
     ]);
     return Stack(
-        alignment: AlignmentDirectional.centerStart, children: children);
+      alignment: AlignmentDirectional.centerStart,
+      children: children,
+    );
   }
 }
