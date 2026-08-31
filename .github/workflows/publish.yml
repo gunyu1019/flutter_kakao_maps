@@ -105,6 +105,11 @@ jobs:
           flutter-version: '3.47.2'
       - name: Install dependencies
         run: flutter pub get
+      - name: Restore files rewritten by Flutter project migrators
+        # Flutter 3.47's `pub get` auto-rewrites tracked files (e.g. adds an
+        # `analyzer: exclude:` block to analysis_options.yaml). `dart pub publish`
+        # then fails/warns on the dirty tree, so publish exactly the tagged state.
+        run: git checkout -- .
       - name: Publish - dry run
         run: dart pub publish --dry-run
       - name: Publish to pub.dev
