@@ -10,33 +10,20 @@ class WebShapeController with WebShapeControllerHandler {
   @override
   final WebOverlayController manager;
 
-  JSFunction? _boundsChangedCallbackRef;
   JSFunction? _zoomChangedCallbackRef;
 
   WebShapeController._(this.id, this.controller, this.manager);
 
   @override
   Future<void> createShapeLayer() async {
-    _boundsChangedCallbackRef = _boundsChangedEventHandler.toJS;
+    // Kakao's geographic overlays follow camera movement automatically.
+    // Only zoom-dependent styles need an explicit synchronization event.
     _zoomChangedCallbackRef = _zoomChangedEventHandler.toJS;
-    addEventListener(
-      controller,
-      "bounds_changed",
-      _boundsChangedCallbackRef!,
-    );
     addEventListener(controller, "zoom_changed", _zoomChangedCallbackRef!);
   }
 
   @override
   Future<void> removeShapeLayer() async {
-    if (_boundsChangedCallbackRef != null) {
-      removeEventListener(
-        controller,
-        "bounds_changed",
-        _boundsChangedCallbackRef!,
-      );
-      _boundsChangedCallbackRef = null;
-    }
     if (_zoomChangedCallbackRef != null) {
       removeEventListener(
         controller,
@@ -50,22 +37,6 @@ class WebShapeController with WebShapeControllerHandler {
     }
     for (final shape in _webPolyline.keys.toList()) {
       await removePolylineShape(shape);
-    }
-  }
-
-  void _boundsChangedEventHandler() {
-    for (final shape in _webPolygon.values) {
-      shape.option.path = shape.point.toPolygonPath();
-      shape.element.setOptions(shape.option);
-    }
-    for (final shape in _webPolyline.values) {
-      final path = shape.point.toPolylinePath();
-      shape.option.path = path;
-      shape.strokeOption?.path = path;
-      shape.element.setOptions(shape.option);
-      if (shape.strokeOption != null) {
-        shape.strokeElement?.setOptions(shape.strokeOption!);
-      }
     }
   }
 
