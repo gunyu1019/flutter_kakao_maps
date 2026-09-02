@@ -306,7 +306,7 @@ class KakaoMapControllerImplement extends KakaoMapController {
   RouteStyle? getRouteStyle(String id) => _routeStyle[id]?[0];
 
   @override
-  List<RouteStyle>? getMultipleRotueStyle(String id) => _routeStyle[id];
+  List<RouteStyle>? getMultipleRouteStyle(String id) => _routeStyle[id];
 
   @override
   Future<LabelController> addLabelLayer(
@@ -497,5 +497,56 @@ class KakaoMapControllerImplement extends KakaoMapController {
     _routeStyle.clear();
     buildingHeightScale = null;
     _initalizeOverlayController();
+  }
+
+  @override
+  Future<LatLngBounds?> getBounds(BuildContext context) async {
+    final renderBox = context.findRenderObject();
+    if (renderBox is! RenderBox || !renderBox.attached || !renderBox.hasSize) {
+      return null;
+    }
+
+    final size = renderBox.size;
+    if (!size.width.isFinite ||
+        !size.height.isFinite ||
+        size.width <= 0 ||
+        size.height <= 0) {
+      return null;
+    }
+
+    final width = size.width.toInt();
+    final height = size.height.toInt();
+    for (var attempt = 0; attempt < 5; attempt++) {
+      final corners = await Future.wait([
+        fromScreenPoint(0, 0),
+        fromScreenPoint(width, 0),
+        fromScreenPoint(0, height),
+        fromScreenPoint(width, height),
+      ]);
+      final bounds = _boundsFromCorners(corners);
+      if (bounds != null) return bounds;
+      if (attempt < 4) {
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+      }
+    }
+    return null;
+  }
+
+  LatLngBounds? _boundsFromCorners(List<LatLng?> corners) {
+    if (corners.any((corner) => corner == null)) return null;
+    final points = corners.cast<LatLng>();
+    if (points.any(
+      (point) => !point.latitude.isFinite || !point.longitude.isFinite,
+    )) {
+      return null;
+    }
+
+    final north = points.map((point) => point.latitude).reduce(math.max);
+    final south = points.map((point) => point.latitude).reduce(math.min);
+    final east = points.map((point) => point.longitude).reduce(math.max);
+    final west = points.map((point) => point.longitude).reduce(math.min);
+    if (north == south && east == west) return null;
+
+    return LatLngBounds._(LatLng(north, east), LatLng(south, west));
   }
 }
