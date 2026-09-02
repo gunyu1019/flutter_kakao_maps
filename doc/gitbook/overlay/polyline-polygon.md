@@ -108,7 +108,7 @@ position.addHole([
 
 ```dart
 final position = CirclePoint(
-  100.0,                              // 반경 (픽셀)
+  100.0,                              // 반경 (미터)
   const LatLng(37.394776, 127.11116), // 중심 좌표
   clockwise: true,
 );
@@ -117,17 +117,17 @@ final position = CirclePoint(
 원형 내부에 구멍을 추가할 수도 있습니다.
 
 ```dart
-position.addCircleHole(40.0); // 반경 40픽셀의 원형 구멍
+position.addCircleHole(40.0); // 반경 40미터의 원형 구멍
 ```
 
 ### 2-3. RectanglePoint (사각형 상대 위치)
 
-특정 기준 좌표를 중심으로 너비와 높이(픽셀)를 지정하여 사각형 도형을 그립니다.
+특정 기준 좌표를 중심으로 너비와 높이를 지정하여 사각형 도형을 그립니다. iOS에서는 미터 기반 근사값으로 해석하며, Web도 네이티브와 같은 크기로 보정합니다.
 
 ```dart
 final position = RectanglePoint(
-  200.0,                              // 너비 (픽셀)
-  100.0,                              // 높이 (픽셀)
+  200.0,                              // 너비 (미터)
+  100.0,                              // 높이 (미터)
   const LatLng(37.394776, 127.11116), // 기준 좌표 (중심)
 );
 ```
@@ -135,7 +135,7 @@ final position = RectanglePoint(
 사각형 내부에 구멍을 추가할 수도 있습니다.
 
 ```dart
-position.addRetangleHole(80.0, 40.0); // 80x40픽셀의 사각형 구멍
+position.addRetangleHole(80.0, 40.0); // 80x40미터의 사각형 구멍
 ```
 
 ## 3. Polyline 추가하기
@@ -303,6 +303,6 @@ await controller.removeShapeLayer(myLayer);
 ## 6. 플랫폼별 주의사항
 
 * `MapPoint`는 실제 위·경도 경계를 표현할 때 사용합니다.
-* `CirclePoint`와 `RectanglePoint`는 기준 좌표에 대한 화면 상대 크기로 렌더링되어 줌을 바꿔도 시각 크기를 유지하는 용도에 적합합니다.
-* `CirclePoint.vertexCount`에 따른 세부 tessellation은 네이티브 SDK와 Web 구현에서 차이가 날 수 있으므로 플랫폼 간 픽셀 단위 동일성을 전제로 하지 마세요.
+*  `CirclePoint`와 `RectanglePoint`는 미터 기반 근사 거리로 구성되며, Web도 네이티브 크기에 맞춘 동일한 보정을 적용합니다. 따라서 줌을 바꾸면 화면상의 크기도 바뀝니다.
+* `CirclePoint.vertexCount`에 따른 세부 tessellation은 네이티브 SDK와 Web 구현에서 차이가 날 수 있습니다.
 * 겹친 도형의 순서는 레이어 `zOrder`와 개별 도형의 `zOrder`를 함께 확인하세요.
