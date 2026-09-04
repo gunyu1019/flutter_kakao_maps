@@ -51,9 +51,9 @@ DimScreen의 MapPoint highlight는 동일한 테스트 시나리오로 Android, 
   </thead>
   <tbody>
     <tr>
-      <td><img src="../.gitbook/assets/dimscreen-map-point-android.png" alt="Android DimScreen MapPoint 결과" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-map-point-ios.png" alt="iOS DimScreen MapPoint 결과" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-map-point-web-profile-8080.jpg" alt="Web Profile 8080 DimScreen MapPoint 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-dimscreen-android.png" alt="Android DimScreen MapPoint 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-dimscreen-ios.png" alt="iOS DimScreen MapPoint 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-map-point-web-profile-8080.jpg" alt="Web Profile 8080 DimScreen MapPoint 결과" /></td>
     </tr>
   </tbody>
 </table>
