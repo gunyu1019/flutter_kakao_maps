@@ -12,7 +12,7 @@ web.HTMLElement textElement(
       ..style.fontStretch = "${style.aspectRatio * 100}%"
       ..style.letterSpacing = "${style.characterSpace}px"
       ..style.color =
-          "rgb(${style.color.r}, ${style.color.g} ,${style.color.b})"
+          "rgb(${style.color.r * 255}, ${style.color.g * 255} ,${style.color.b * 255})"
       ..style.fontFamily = style.font
       ..style.lineHeight = "${style.lineSpace}"
       ..style.fontSize = "${style.size}px"
