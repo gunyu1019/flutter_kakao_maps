@@ -317,14 +317,14 @@ class WebShapeController with WebShapeControllerHandler {
 
   @override
   Future<void> showAllPolygon() async {
-    for (var shape in _webPolyline.keys) {
+    for (var shape in _webPolygon.keys) {
       await changePolygonVisible(shape, true);
     }
   }
 
   @override
   Future<void> hideAllPolygon() async {
-    for (var shape in _webPolyline.keys) {
+    for (var shape in _webPolygon.keys) {
       await changePolygonVisible(shape, false);
     }
   }
