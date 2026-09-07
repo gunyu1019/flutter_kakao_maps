@@ -48,6 +48,7 @@ import kr.yhs.flutter_kakao_maps.controller.overlay.handler.TrackingControllerHa
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelTextBuilder
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
 import kr.yhs.flutter_kakao_maps.model.OverlayType
+import android.util.Log
 
 class OverlayController(private val channel: MethodChannel, private val kakaoMap: KakaoMap) :
   LabelControllerHandler,
@@ -487,9 +488,9 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess: (Any?) -> Unit,
   ) {
     if (visible) {
-      layer.showAllPolylineLabels()
+      layer.getAllPolylineLabels().forEach { it.show() }
     } else {
-      layer.hideAllPolylineLabels()
+      layer.getAllPolylineLabels().forEach { it.hide() }
     }
     onSuccess.invoke(null)
   }
