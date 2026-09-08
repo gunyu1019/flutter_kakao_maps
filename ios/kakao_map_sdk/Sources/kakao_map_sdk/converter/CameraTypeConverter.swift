@@ -59,7 +59,7 @@ extension CameraAnimationOptions {
     init(payload: [String: Any]) {
         self.init(
             autoElevation: ObjCBool(asBool(payload["autoElevation"] ?? false)),
-            consecutive: ObjCBool(asBool(payload["autoElevation"] ?? false)),
+            consecutive: ObjCBool(asBool(payload["isConsecutive"] ?? false)),
             durationInMillis: UInt(asInt(payload["duration"]!))
         )
     }
