@@ -123,7 +123,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
             setState(() => dimScreenVisible = value);
           },
         ),
-        /* SwitchComponent(
+        SwitchComponent(
           title: "PolylineText",
           textStyle: controllerTextStyle,
           onChanged: (value) {
@@ -132,7 +132,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
                 : controller.labelLayer.hideAllPolylineText();
             setState(() => polylineTextVisible = value);
           },
-        ), */
+        ),
         SwitchComponent(
           title: "Event",
           textStyle: controllerTextStyle,
@@ -271,7 +271,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
       routeStyle,
     );
 
-    /* final polylineTextStyle = PolylineTextStyle(
+    final polylineTextStyle = PolylineTextStyle(
         64, Colors.blue,
         strokeColor: Colors.white,
         strokeSize: 3
@@ -281,7 +281,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
       "Polyline Text (휘어진 글씨)",
       polylineTextPoints,
       style: polylineTextStyle,
-    ); */
+    );
 
     // 카카오 판교캠퍼스 주변을 사각형으로 강조하는 DimScreen을 구성합니다.
     await controller.dimScreen.setColor(Colors.black.withValues(alpha: 0.6));
@@ -332,9 +332,9 @@ class _KakaoMapViewState extends State<KakaoMapView> {
     routeVisible
         ? await controller.routeLayer.showAllRoute()
         : await controller.routeLayer.hideAllRoute();
-    /* polylineTextVisible
+    polylineTextVisible
         ? controller.labelLayer.showAllPolylineText()
-        : controller.labelLayer.hideAllPolylineText(); */
+        : controller.labelLayer.hideAllPolylineText();
     await controller.dimScreen.setVisible(dimScreenVisible);
   }
 
