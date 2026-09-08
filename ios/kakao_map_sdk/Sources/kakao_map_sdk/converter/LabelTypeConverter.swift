@@ -12,7 +12,7 @@ func asPoiTransition(payload: [String: Any]?) -> PoiTransition {
 
 extension PoiTextStyle {
     convenience init(payload: [String: Any]) {
-        let transition = asPoiTransition(payload: castSafty(payload["iconTransition"], caster: asDict))
+        let transition = asPoiTransition(payload: castSafty(payload["textTransition"], caster: asDict))
         let textStyle = castSafty(payload["textStyle"], caster: {
             asArray($0, caster: {
                 PoiTextLineStyle(textStyle: TextStyle(payload: asDict($0)))
@@ -66,7 +66,7 @@ extension PerLevelPoiStyle {
         self.init(
             iconStyle: PoiIconStyle(payload: payload),
             textStyle: PoiTextStyle(payload: payload),
-            padding: castSafty(payload["paddding"], caster: asFloat) ?? 0.0,
+            padding: castSafty(payload["padding"], caster: asFloat) ?? 0.0,
             level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
         )
     }
