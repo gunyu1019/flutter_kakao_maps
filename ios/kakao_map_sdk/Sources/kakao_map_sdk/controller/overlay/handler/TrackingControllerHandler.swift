@@ -23,7 +23,7 @@ extension TrackingControllerHandler {
             let poi = labelLayer!.getPoi(poiID: asString(arguments!["poiId"]!))
             startTracking(label: poi!, onSuccess: result)
         case "stopTracking": stopTracking(onSuccess: result)
-        case "setTrackingRotation":
+        case "setTrackingPosition":
             let rotation = asBool(arguments!["rotation"]!)
             setTrackingRotation(rotation: rotation, onSuccess: result)
         default: result(FlutterMethodNotImplemented)
