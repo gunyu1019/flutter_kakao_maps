@@ -28,16 +28,24 @@ extension PoiTextStyle {
         if payload["textGravity"] != nil {
             let gravity = asInt(payload["textGravity"]!)
             switch gravity {
+            case 0:
+                textLayouts = [.left, .top]
             case 1:
-                textLayouts = [PoiTextLayout.left]
+                textLayouts = [.left]
             case 2:
-                textLayouts = [PoiTextLayout.right]
+                textLayouts = [.left, .bottom]
+            case 3:
+                textLayouts = [.top]
             case 4:
-                textLayouts = [PoiTextLayout.top]
+                textLayouts = [.center]
+            case 5:
+                textLayouts = [.bottom]
+            case 6:
+                textLayouts = [.right, .top]
+            case 7:
+                textLayouts = [.right]
             case 8:
-                textLayouts = [PoiTextLayout.bottom]
-            case 16:
-                textLayouts = [PoiTextLayout.center]
+                textLayouts = [.right, .bottom]
             default:
                 break
             }
