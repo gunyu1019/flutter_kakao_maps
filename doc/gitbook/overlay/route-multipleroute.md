@@ -15,9 +15,9 @@ MultipleRoute는 하나의 경로를 구간(Segment)별로 나눠 각각 다른 
   </thead>
   <tbody>
     <tr>
-      <td><img src="../.gitbook/assets/overlay-route-multiple-route-android.png" alt="Android Route, MultipleRoute, Pattern 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-route-multiple-route-ios.png" alt="iOS Route, MultipleRoute, Pattern 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-route-multiple-route-web-profile-8080.png" alt="Web Profile 8080 Route, MultipleRoute, Pattern 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-route-multiple-route-android.png" alt="Android Route, MultipleRoute, Pattern 결과" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-route-multiple-route-ios.png" alt="iOS Route, MultipleRoute, Pattern 결과" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-route-multiple-route-web-profile-8080.png" alt="Web Profile 8080 Route, MultipleRoute, Pattern 결과" height="600px" /></td>
     </tr>
   </tbody>
 </table>

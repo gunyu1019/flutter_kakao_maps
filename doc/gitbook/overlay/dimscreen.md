@@ -14,9 +14,9 @@ DimScreen은 지도 위에 반투명 색상을 덮고 Polygon 영역을 highligh
   </thead>
   <tbody>
     <tr>
-      <td><img src="../.gitbook/assets/overlay-dimscreen-android.png" alt="Android DimScreen: mapAndLabel cover, MapPoint highlight, circle hole" /></td>
-      <td><img src="../.gitbook/assets/overlay-dimscreen-ios.png" alt="iOS DimScreen: mapAndLabel cover, MapPoint highlight, circle hole" /></td>
-      <td><img src="../.gitbook/assets/overlay-dimscreen-web-profile-8080.png" alt="Web Profile 8080 DimScreen: mapAndLabel cover, MapPoint highlight, circle hole" /></td>
+      <td><img src="../.gitbook/assets/overlay-dimscreen-android.png" alt="Android DimScreen: mapAndLabel cover, MapPoint highlight, circle hole" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-dimscreen-ios.png" alt="iOS DimScreen: mapAndLabel cover, MapPoint highlight, circle hole" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-dimscreen-web-profile-8080.png" alt="Web Profile 8080 DimScreen: mapAndLabel cover, MapPoint highlight, circle hole" height="600px" /></td>
     </tr>
   </tbody>
 </table>

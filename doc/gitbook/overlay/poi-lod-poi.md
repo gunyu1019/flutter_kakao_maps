@@ -10,9 +10,9 @@ Poi(Point of Interest)는 지도 좌표에 아이콘과 텍스트를 표시합�
   </thead>
   <tbody>
     <tr>
-      <td><img src="../.gitbook/assets/overlay-poi-lod-badge-android.png" alt="Android Poi, LodPoi, Badge 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-poi-lod-badge-ios.png" alt="iOS Poi, LodPoi, Badge 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-poi-lod-badge-web-profile-8080.png" alt="Web Profile 8080 Poi, LodPoi, Badge 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-poi-lod-badge-android.png" alt="Android Poi, LodPoi, Badge 결과" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-poi-lod-badge-ios.png" alt="iOS Poi, LodPoi, Badge 결과" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-poi-lod-badge-web-profile-8080.png" alt="Web Profile 8080 Poi, LodPoi, Badge 결과" height="600px" /></td>
     </tr>
   </tbody>
 </table>

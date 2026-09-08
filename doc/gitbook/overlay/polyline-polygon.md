@@ -11,9 +11,9 @@ Polyline과 Polygon은 지도 위에 선과 면을 그릴 수 있는 도형 요�
   </thead>
   <tbody>
     <tr>
-      <td><img src="../.gitbook/assets/overlay-polyline-polygon-android.png" alt="Android Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-polyline-polygon-ios.png" alt="iOS Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-polyline-polygon-web-profile-8080.png" alt="Web Profile 8080 Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-polygon-android.png" alt="Android Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-polygon-ios.png" alt="iOS Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-polygon-web-profile-8080.png" alt="Web Profile 8080 Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" height="600px" /></td>
     </tr>
   </tbody>
 </table>

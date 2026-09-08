@@ -10,9 +10,9 @@ Web에서도 동일한 Dart API로 사용할 수 있습니다. 아래는 곡선 
   </thead>
   <tbody>
     <tr>
-      <td><img src="../.gitbook/assets/overlay-polyline-text-android.png" alt="Android PolylineText 곡선 경로 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-polyline-text-ios.png" alt="iOS PolylineText 곡선 경로 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-polyline-text-web-profile-8080.png" alt="Web Profile 8080 PolylineText 곡선 경로 결과" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-text-android.png" alt="Android PolylineText 곡선 경로 결과"  height="600px"/></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-text-ios.png" alt="iOS PolylineText 곡선 경로 결과" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-text-web-profile-8080.png" alt="Web Profile 8080 PolylineText 곡선 경로 결과" height="600px" /></td>
     </tr>
   </tbody>
 </table>
