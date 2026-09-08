@@ -28,7 +28,7 @@ class MultipleRouteOption with BaseMultipleRoute, KMessageable {
     CurveType curveType = CurveType.none,
   ]) {
     styles.add(style);
-    segments.add(RouteSegment._(point, styles.length, curveType, this));
+    segments.add(RouteSegment._(point, styles.length - 1, curveType, this));
   }
 
   /// [MultipleRoute]에 구현할 선형을 추가합니다.

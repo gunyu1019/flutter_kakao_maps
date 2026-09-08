@@ -702,6 +702,32 @@ void main() {
   });
 
   group('MultipleRouteOption Serialization', () {
+    test('addRouteWithStyle references the newly appended style', () {
+      final existingStyle = RouteStyle(
+        const Color(0xFF001122),
+        3.0,
+        id: 'existing-style',
+      );
+      final appendedStyle = RouteStyle(
+        const Color(0xFF334455),
+        5.0,
+        id: 'appended-style',
+      );
+      final option = MultipleRouteOption([existingStyle]);
+
+      option.addRouteWithStyle(
+        const [LatLng(36.1, 127.1), LatLng(36.2, 127.2)],
+        appendedStyle,
+      );
+
+      expect(option.segments.single.styleIndex, 1);
+      final payload = option.toMessageable();
+      final route = Map<String, dynamic>.from(
+        (payload['routes'] as List).single as Map,
+      );
+      expect(route['styleId'], 'appended-style');
+    });
+
     test('round-trip preserves id, zOrder, routes and styles mapping', () {
       final styleA = RouteStyle(const Color(0xFF001122), 3.0, id: 'style-a');
       final styleB = RouteStyle(const Color(0xFF334455), 5.0, id: 'style-b');
