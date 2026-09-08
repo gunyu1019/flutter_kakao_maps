@@ -45,6 +45,7 @@ import kr.yhs.flutter_kakao_maps.controller.overlay.handler.LodLabelControllerHa
 import kr.yhs.flutter_kakao_maps.controller.overlay.handler.RouteControllerHandler
 import kr.yhs.flutter_kakao_maps.controller.overlay.handler.ShapeControllerHandler
 import kr.yhs.flutter_kakao_maps.controller.overlay.handler.TrackingControllerHandler
+import kr.yhs.flutter_kakao_maps.controller.runSafely
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelTextBuilder
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
 import kr.yhs.flutter_kakao_maps.model.OverlayType
@@ -78,7 +79,9 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     mutableMapOf()
 
   init {
-    channel.setMethodCallHandler(::handle)
+    channel.setMethodCallHandler { call, result ->
+      result.runSafely(call.method) { handle(call, result) }
+    }
   }
 
   fun handle(call: MethodCall, result: MethodChannel.Result) =

@@ -38,7 +38,9 @@ class KakaoMapController(
   private val mapClickListener = MapClickListener(channel)
 
   init {
-    channel.setMethodCallHandler(::handle)
+    channel.setMethodCallHandler { call, result ->
+      result.runSafely(call.method) { handle(call, result) }
+    }
   }
 
   /* Handler */
