@@ -134,8 +134,9 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         onSuccess(visible)
     }
 
-    func changeMapType(mapType: String, onSuccess _: (Any?) -> Void) {
+    func changeMapType(mapType: String, onSuccess: (Any?) -> Void) {
         kakaoMap.changeViewInfo(appName: "openmap", viewInfoName: mapType)
+        onSuccess(nil)
     }
 
     func overlayVisible(overlayType: String, visible: Bool, onSuccess: (Any?) -> Void) {
