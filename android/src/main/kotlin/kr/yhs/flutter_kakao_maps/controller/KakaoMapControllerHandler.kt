@@ -43,7 +43,7 @@ interface KakaoMapControllerHandler {
       "toScreenPoint" -> toScreenPoint(call.arguments!!.asLatLng(), result::success)
       "clearCache" -> clearCache(result::success)
       "clearDiskCache" -> clearDiskCache(result::success)
-      "canPositionVisible" -> {
+      "canShowPosition" -> {
         val arguments = call.arguments!!.asMap<Any?>()
         canPositionVisible(
           arguments["zoomLevel"]!!.asInt(),

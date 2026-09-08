@@ -74,7 +74,7 @@ extension KakaoMapControllerHandler {
         case "toScreenPoint": toScreenPoint(position: MapPoint(payload: arguments!), onSuccess: result)
         case "clearCache": clearCache(onSuccess: result)
         case "clearDiskCache": clearDiskCache(onSuccess: result)
-        case "canPositionVisible":
+        case "canShowPosition":
             let zoomLevel = asInt(arguments!["zoomLevel"]!)
             let position = asArray(arguments!["position"]!, caster: { MapPoint(payload: asDict($0)) })
             canPositionVisible(zoomLevel: zoomLevel, position: position, onSuccess: result)
