@@ -107,15 +107,15 @@ extension ShapeControllerHandler {
             }
         case "removePolylineShape":
             if polylineShape == nil {
-                removePolylineShape(layer: layer!, shapeId: polylineId!, onSuccess: result)
-            } else {
                 removeMapPolylineShape(layer: layer!, shapeId: polylineId!, onSuccess: result)
+            } else {
+                removePolylineShape(layer: layer!, shapeId: polylineId!, onSuccess: result)
             }
         case "removePolygonShape":
             if polygonShape == nil {
-                removePolygonShape(layer: layer!, shapeId: polygonId!, onSuccess: result)
-            } else {
                 removeMapPolygonShape(layer: layer!, shapeId: polygonId!, onSuccess: result)
+            } else {
+                removePolygonShape(layer: layer!, shapeId: polygonId!, onSuccess: result)
             }
         case "changePolylineVisible":
             let visible = asBool(arguments!["visible"]!)
