@@ -112,7 +112,7 @@ extension LabelControllerHandler {
             addPolylineText(layer: layer!, label: waveTextOption, visible: visible, onSuccess: result)
         case "removePolylineText": removePolylineText(layer: layer!, labelId: polylineTextId!, onSuccess: result)
         // poi Handler
-        case "changePoiPixelOffset":
+        case "changePoiOffsetPosition":
             let rawPayload: [String: Double] = ["x": asDouble(arguments!["x"]!), "y": asDouble(arguments!["y"]!)]
             let offset = CGPoint(payload: rawPayload)
             changePoiPixelOffset(poi: poi!, offset: offset, onSuccess: result)
