@@ -151,6 +151,7 @@ class KakaoMapController(
 
   override fun setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Unit) {
     kakaoMap.buildingHeightScale = scale
+    onSuccess.invoke(null)
   }
 
   override fun defaultGUIvisible(
