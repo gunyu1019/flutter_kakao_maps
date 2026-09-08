@@ -222,13 +222,27 @@ void main() {
           4,
           -3,
           badgeId: 'badge-explicit-id',
+          zOrder: 7,
+          visible: false,
         );
 
-        expect(badge.id, 'poi-badge-target-badge-id');
+        expect(badge.id, 'badge-explicit-id');
         expect(badge.offsetX, 4);
         expect(badge.offsetY, -3);
         expect(badge.image.width, 10);
         expect(badge.image.height, 10);
+        expect(badge.zOrder, 7);
+        expect(badge.visible, isFalse);
+
+        final arguments = Map<String, dynamic>.from(
+          lastLabelCall!.arguments as Map,
+        );
+        final badgePayload = Map<String, dynamic>.from(
+          arguments['badge'] as Map,
+        );
+        expect(badgePayload['id'], 'badge-explicit-id');
+        expect(badgePayload['zOrder'], 7);
+        expect(badgePayload['visible'], isFalse);
       },
     );
   });
@@ -337,7 +351,7 @@ void main() {
         badgeId: 'lod-badge-explicit-id',
       );
 
-      expect(badge.id, 'lod-badge-target-badge-id');
+      expect(badge.id, 'lod-badge-explicit-id');
       expect(badge.offsetX, 1);
       expect(badge.offsetY, 2);
     });

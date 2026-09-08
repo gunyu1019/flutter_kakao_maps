@@ -22,17 +22,21 @@ mixin BadgeablePoi {
     double y, {
     String? badgeId,
     int? zOrder,
+    bool visible = true,
   }) async {
     String? badgeIdResult = await _controller._addPoiBadge(
       id,
+      badgeId: badgeId,
       image: image,
       offsetX: x,
       offsetY: y,
+      visible: visible,
+      zOrder: zOrder,
     );
     if (badgeIdResult == null) {
       throw OverlayRegistrationFailedError(badgeId, _controller.type);
     }
-    return Badge._(this, badgeIdResult, x, y, image, zOrder);
+    return Badge._(this, badgeIdResult, x, y, image, zOrder, visible);
   }
 
   /// [Poi] 또는 [LodPoi]에 등록된 [Badge]를 삭제합니다.
