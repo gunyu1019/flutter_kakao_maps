@@ -98,9 +98,9 @@ extension KakaoMapControllerHandler {
             let autohide = asBool(arguments!["autohide"]!)
             scaleAutohide(autohide: autohide, onSuccess: result)
         case "scaleAnimationTime":
-            let fadeIn = arguments!["fadeIn"]! as! UInt32
-            let fadeOut = arguments!["fadeIn"]! as! UInt32
-            let retention = arguments!["fadeIn"]! as! UInt32
+            let fadeIn = UInt32(clamping: asInt(arguments!["fadeIn"]!))
+            let fadeOut = UInt32(clamping: asInt(arguments!["fadeOut"]!))
+            let retention = UInt32(clamping: asInt(arguments!["retention"]!))
             scaleAnimationTime(fadeIn: fadeIn, fadeOut: fadeOut, retention: retention, onSuccess: result)
         case "pause":
             pause(onSuccess: result)
