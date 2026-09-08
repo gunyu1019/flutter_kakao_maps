@@ -229,16 +229,17 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     }
 
     func onMapError(error: Error) {
-        if error is BaseError {
+        if let baseError = error as? BaseError {
             channel.invokeMethod("onMapError", arguments: [
-                "className": "\(error.self)",
-                "message": (error as! BaseError).errorCode,
-                "errorCode": (error as! BaseError).message,
+                "className": error is AuthenticatedFailed ? "MapAuthException" : String(describing: type(of: error)),
+                "message": baseError.message,
+                "errorCode": baseError.errorCode,
             ])
             return
         }
         channel.invokeMethod("onMapError", arguments: [
-            "className": "\(error.self)",
+            "className": String(describing: type(of: error)),
+            "message": String(describing: error),
         ])
     }
 }

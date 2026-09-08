@@ -20,6 +20,7 @@ mixin KakaoMapControllerHandler {
         final String className = method.arguments['className'];
         switch (className) {
           case 'MapAuthException':
+          case 'AuthenticatedFailed':
             onMapError(KakaoAuthError.fromMessageable(method.arguments));
             break;
           default:
