@@ -11,6 +11,7 @@ void main() {
 
   late KakaoMapController controller;
   MethodCall? lastDimScreenCall;
+  MethodCall? lastLabelCall;
   MethodCall? lastPolylineTextCall;
 
   String orFallback(String? requested, String fallback) {
@@ -19,12 +20,14 @@ void main() {
 
   setUp(() {
     lastDimScreenCall = null;
+    lastLabelCall = null;
     lastPolylineTextCall = null;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(viewChannel, (call) async => null);
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(overlayChannel, (call) async {
+      lastLabelCall = call;
       final args = Map<String, dynamic>.from(call.arguments as Map);
       final type = args['type'] as int?;
 
@@ -169,6 +172,35 @@ void main() {
       expect(poi.position.longitude, 126.98);
       expect(poi.text, 'marker-title');
       expect(poi.rank, 9);
+    });
+
+    test('removeShareTransformPoi sends the target POI contract', () async {
+      final style = PoiStyle(
+        id: 'poi-style-share-transform',
+        icon: KImage.fromData(Uint8List.fromList([1]), 12, 12),
+      );
+      await controller.addPoiStyle(style);
+      final source = await controller.labelLayer.addPoi(
+        const LatLng(37.4, 127.1),
+        style: style,
+        id: 'source-poi',
+      );
+      final target = await controller.labelLayer.addPoi(
+        const LatLng(37.5, 127.2),
+        style: style,
+        id: 'target-poi',
+      );
+
+      await source.removeShareTransformPoi(target);
+
+      expect(lastLabelCall!.method, 'removeShareTransformPoi');
+      final arguments = Map<String, dynamic>.from(
+        lastLabelCall!.arguments as Map,
+      );
+      expect(arguments['poiId'], 'source-poi');
+      expect(arguments['targetLabelLayerId'], controller.labelLayer.id);
+      expect(arguments['targetPoiId'], 'target-poi');
+      expect(arguments.containsKey('targetShapeId'), isFalse);
     });
 
     test(
