@@ -4,31 +4,31 @@ Kakao Map SDK for Flutter는 Android, iOS, Web을 지원합니다. Dart API는 �
 
 ## 1. 최소 요구사항
 
-| 플랫폼 | 요구사항 |
-| --- | --- |
-| Android | API 23(Android 6.0) 이상, OpenGL ES 2.0 이상 |
-| Android ABI | `armeabi-v7a`, `arm64-v8a` 지원. `x86`, `x86_64`는 지원하지 않음 |
-| iOS | iOS 13 이상 |
-| Web | Flutter Web 지원 브라우저, Kakao Maps JavaScript SDK를 불러올 수 있는 네트워크 환경 |
-| Dart / Flutter | Dart `^3.5.3`, Flutter `>=3.3.0` |
+| 플랫폼            | 요구사항                                                             |
+| -------------- | ---------------------------------------------------------------- |
+| Android        | API 23(Android 6.0) 이상, OpenGL ES 2.0 이상                         |
+| Android ABI    | `armeabi-v7a`, `arm64-v8a` 지원. `x86`, `x86_64`는 지원하지 않음          |
+| iOS            | iOS 13 이상                                                        |
+| Web            | Flutter Web 지원 브라우저, Kakao Maps JavaScript SDK를 불러올 수 있는 네트워크 환경 |
+| Dart / Flutter | Dart `^3.5.3`, Flutter `>=3.3.0`                                 |
 
 > Android 에뮬레이터를 사용할 때는 ARM 이미지를 선택하세요. x86 계열 시스템 이미지는 네이티브 Kakao Maps SDK ABI와 호환되지 않습니다.
 
 ## 2. 기능 비교
 
-| 기능 | Android | iOS | Web |
-| --- | :---: | :---: | :---: |
-| 지도·카메라·좌표 변환 | 지원 | 지원 | 지원 |
-| 카메라 회전·기울기 | 지원 | 지원 | 미지원 |
-| Poi | 지원 | 지원 | 지원 |
-| LodPoi의 LOD 최적화 | 지원 | 지원 | 일반 Poi처럼 동작 |
-| PolylineText | 지원 | 지원 | 지원 |
-| Polyline·Polygon | 지원 | 지원 | 지원 |
-| Route·MultipleRoute | 지원 | 지원 | 지원 |
-| Route 이미지 패턴 | 지원 | 지원 | 점선 표현으로 대체 |
-| DimScreen | 지원 | 지원 | 지원 |
-| 네이티브 pause·resume | 지원 | 지원 | 대상 아님 |
-| 건물 높이 배율 | 지원 | 지원 | 값 `0.0`, 변경 불가 |
+| 기능                  | Android | iOS |       Web      |
+| ------------------- | :-----: | :-: | :------------: |
+| 지도·카메라·좌표 변환        |    지원   |  지원 |       지원       |
+| 카메라 회전·기울기          |    지원   |  지원 |       미지원      |
+| Poi                 |    지원   |  지원 |       지원       |
+| LodPoi의 LOD 최적화     |    지원   |  지원 |   일반 Poi처럼 동작  |
+| PolylineText        |    지원   |  지원 |       지원       |
+| Polyline·Polygon    |    지원   |  지원 |       지원       |
+| Route·MultipleRoute |    지원   |  지원 |       지원       |
+| Route 이미지 패턴        |    지원   |  지원 |   점선 표현으로 대체   |
+| DimScreen           |    지원   |  지원 |       지원       |
+| 네이티브 pause·resume   |    지원   |  지원 |      대상 아님     |
+| 건물 높이 배율            |    지원   |  지원 | 값 `0.0`, 변경 불가 |
 
 ## 3. Web에서 알아둘 차이
 
@@ -45,17 +45,8 @@ Web 구현은 Kakao Maps JavaScript SDK가 제공하는 기능 안에서 네이�
 
 DimScreen의 MapPoint highlight는 동일한 테스트 시나리오로 Android, iOS, Web에서 검증되었습니다. Web 이미지는 `127.0.0.1:8080`에서 Profile 모드로 실행한 최종 통과 artifact입니다.
 
-<table>
-  <thead>
-    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><img src="../.gitbook/assets/overlay-dimscreen-android.png" alt="Android DimScreen MapPoint 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-dimscreen-ios.png" alt="iOS DimScreen MapPoint 결과" /></td>
-      <td><img src="../.gitbook/assets/overlay-map-point-web-profile-8080.jpg" alt="Web Profile 8080 DimScreen MapPoint 결과" /></td>
-    </tr>
-  </tbody>
-</table>
+| Android | iOS                                                                        | Web · Profile · 8080 |
+| ------- | -------------------------------------------------------------------------- | -------------------- |
+|         | ![iOS DimScreen MapPoint 결과](../.gitbook/assets/overlay-dimscreen-ios.png) |                      |
 
 > 테스트 화면의 `S01` 카드와 하단 버튼은 플랫폼 비교용 harness UI입니다. 실제 앱에서는 DimScreen과 highlight만 표시됩니다.
