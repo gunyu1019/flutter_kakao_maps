@@ -172,7 +172,7 @@ extension LabelControllerHandler {
         case "addPoiBadge":
             let badgeArgument = asDict(arguments!["badge"]!)
             let badgeOption = PoiBadge(payload: badgeArgument)
-            let visible = asBool(arguments!["visible"] ?? true)
+            let visible = asBool(badgeArgument["visible"] ?? true)
             addPoiBadge(poi: poi!, badge: badgeOption, visible: visible, onSuccess: result)
         case "removePoiBadge": removePoiBadge(poi: poi!, badgeId: asString(arguments!["badgeId"]!), onSuccess: result)
         case "changePoiBadgeVisible":
