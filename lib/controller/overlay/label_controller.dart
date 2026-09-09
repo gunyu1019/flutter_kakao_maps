@@ -162,7 +162,7 @@ class LabelController extends BaseLabelController {
     await _invokeMethod("invalidatePoi", {
       "poiId": poiId,
       "styleId": styleId,
-      "text": text,
+      "text": text ?? "",
       "transition": transition,
     });
   }

@@ -219,6 +219,26 @@ void main() {
       expect(poiPayload.containsKey('transform'), isFalse);
     });
 
+    test('invalidatePoi normalizes absent text for native handlers', () async {
+      final style = PoiStyle(
+        id: 'poi-style-invalidate',
+        icon: KImage.fromData(Uint8List.fromList([3, 2, 1]), 16, 16),
+      );
+      await controller.addPoiStyle(style);
+      final poi = await controller.labelLayer.addPoi(
+        const LatLng(37.55, 126.98),
+        style: style,
+      );
+
+      await poi.invalidate();
+
+      expect(lastLabelCall!.method, 'invalidatePoi');
+      final arguments = Map<String, dynamic>.from(
+        lastLabelCall!.arguments as Map,
+      );
+      expect(arguments['text'], '');
+    });
+
     test('removeShareTransformPoi sends the target POI contract', () async {
       final style = PoiStyle(
         id: 'poi-style-share-transform',
