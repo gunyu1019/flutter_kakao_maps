@@ -27,7 +27,11 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
         setupInitLayer()
         channel.setMethodCallHandler { [weak self] call, result in
-            self?.handle(call: call, result: result)
+            guard let self else {
+                result(invalidNativeCall(method: call.method, reason: "The overlay controller is no longer available."))
+                return
+            }
+            self.handle(call: call, result: result)
         }
     }
 
@@ -66,8 +70,18 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     }
 
     func handle(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let arguments = asDict(call.arguments!)
-        let overlayType = OverlayType(rawValue: asInt(arguments["type"]!))
+        guard kakaoMap != nil else {
+            result(invalidNativeCall(method: call.method, reason: "The map has already been destroyed."))
+            return
+        }
+        guard
+            let arguments = call.arguments as? [String: Any],
+            let rawType = arguments["type"] as? Int,
+            let overlayType = OverlayType(rawValue: rawType)
+        else {
+            result(invalidNativeCall(method: call.method, reason: "Arguments must contain a valid overlay type."))
+            return
+        }
         switch overlayType {
         case .label: labelHandle(call: call, result: result)
         case .lodLabel: lodLabelHandle(call: call, result: result)
@@ -587,16 +601,22 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     }
 
     func addShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void) {
-        let shapeLayer = shapeManager.getShapeLayer(layerID: targetShapeLayerId)
+        guard let shapeLayer = shapeManager.getShapeLayer(layerID: targetShapeLayerId) else {
+            onSuccess(missingNativeResource(method: "addShareTransformShape", resource: "target shape layer", id: targetShapeLayerId))
+            return
+        }
 
-        let mapPolylineShape: MapPolylineShape? = shapeLayer!.getMapPolylineShape(shapeID: targetShapeId)
-        let polylineShape: PolylineShape? = shapeLayer!.getPolylineShape(shapeID: targetShapeId)
+        let mapPolylineShape: MapPolylineShape? = shapeLayer.getMapPolylineShape(shapeID: targetShapeId)
+        let polylineShape: PolylineShape? = shapeLayer.getPolylineShape(shapeID: targetShapeId)
 
-        let mapPolygonShape: MapPolygonShape? = shapeLayer!.getMapPolygonShape(shapeID: targetShapeId)
-        let polygonShape: PolygonShape? = shapeLayer!.getPolygonShape(shapeID: targetShapeId)
+        let mapPolygonShape: MapPolygonShape? = shapeLayer.getMapPolygonShape(shapeID: targetShapeId)
+        let polygonShape: PolygonShape? = shapeLayer.getPolygonShape(shapeID: targetShapeId)
         let shape: Shape? = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
-
-        poi.shareTransformWithShape(shape!)
+        guard let shape else {
+            onSuccess(missingNativeResource(method: "addShareTransformShape", resource: "target shape", id: targetShapeId))
+            return
+        }
+        poi.shareTransformWithShape(shape)
         onSuccess(nil)
     }
 
@@ -606,16 +626,22 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
     }
 
     func removeShareTransformShape(poi: Poi, targetShapeLayerId: String, targetShapeId: String, onSuccess: (Any?) -> Void) {
-        let shapeLayer = shapeManager.getShapeLayer(layerID: targetShapeLayerId)
+        guard let shapeLayer = shapeManager.getShapeLayer(layerID: targetShapeLayerId) else {
+            onSuccess(missingNativeResource(method: "removeShareTransformShape", resource: "target shape layer", id: targetShapeLayerId))
+            return
+        }
 
-        let mapPolylineShape: MapPolylineShape? = shapeLayer!.getMapPolylineShape(shapeID: targetShapeId)
-        let polylineShape: PolylineShape? = shapeLayer!.getPolylineShape(shapeID: targetShapeId)
+        let mapPolylineShape: MapPolylineShape? = shapeLayer.getMapPolylineShape(shapeID: targetShapeId)
+        let polylineShape: PolylineShape? = shapeLayer.getPolylineShape(shapeID: targetShapeId)
 
-        let mapPolygonShape: MapPolygonShape? = shapeLayer!.getMapPolygonShape(shapeID: targetShapeId)
-        let polygonShape: PolygonShape? = shapeLayer!.getPolygonShape(shapeID: targetShapeId)
+        let mapPolygonShape: MapPolygonShape? = shapeLayer.getMapPolygonShape(shapeID: targetShapeId)
+        let polygonShape: PolygonShape? = shapeLayer.getPolygonShape(shapeID: targetShapeId)
         let shape: Shape? = mapPolylineShape ?? mapPolygonShape ?? polylineShape ?? polygonShape
-
-        poi.removeShareTransformWithShape(shape!)
+        guard let shape else {
+            onSuccess(missingNativeResource(method: "removeShareTransformShape", resource: "target shape", id: targetShapeId))
+            return
+        }
+        poi.removeShareTransformWithShape(shape)
         onSuccess(nil)
     }
 

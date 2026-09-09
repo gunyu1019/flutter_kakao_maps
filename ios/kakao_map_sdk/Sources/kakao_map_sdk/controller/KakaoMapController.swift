@@ -38,7 +38,28 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         poiClickListener = PoiClickListener(channel: self.channel)
 
         channel.setMethodCallHandler { [weak self] call, result in
-            self?.handle(call: call, result: result)
+            guard let self else {
+                result(invalidNativeCall(method: call.method, reason: "The map controller is no longer available."))
+                return
+            }
+            self.receive(call: call, result: result)
+        }
+    }
+
+    private func receive(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if requiresMap(call.method), lateinitKakaoMap == nil {
+            result(invalidNativeCall(method: call.method, reason: "The map is not ready or has already been destroyed."))
+            return
+        }
+        handle(call: call, result: result)
+    }
+
+    private func requiresMap(_ method: String) -> Bool {
+        switch method {
+        case "finish", "pause", "resume":
+            return false
+        default:
+            return true
         }
     }
 

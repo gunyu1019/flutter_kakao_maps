@@ -19,9 +19,16 @@ extension TrackingControllerHandler {
         switch call.method {
         case "startTracking":
             let labelLayerId = asString(arguments!["layerId"]!)
-            let labelLayer = labelManager.getLabelLayer(layerID: labelLayerId)
-            let poi = labelLayer!.getPoi(poiID: asString(arguments!["poiId"]!))
-            startTracking(label: poi!, onSuccess: result)
+            guard let labelLayer = labelManager.getLabelLayer(layerID: labelLayerId) else {
+                result(missingNativeResource(method: call.method, resource: "tracking label layer", id: labelLayerId))
+                return
+            }
+            let poiId = asString(arguments!["poiId"]!)
+            guard let poi = labelLayer.getPoi(poiID: poiId) else {
+                result(missingNativeResource(method: call.method, resource: "tracking POI", id: poiId))
+                return
+            }
+            startTracking(label: poi, onSuccess: result)
         case "stopTracking": stopTracking(onSuccess: result)
         case "setTrackingPosition":
             let rotation = asBool(arguments!["rotation"]!)
