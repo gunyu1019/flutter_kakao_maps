@@ -123,7 +123,7 @@ class LodLabelController extends BaseLabelController {
         "clickable": true,
         "rank": rank,
         "styleId": style.id,
-        "transform": transform?.value,
+        "transformMethod": transform?.value,
         "visible": visible,
       },
     };

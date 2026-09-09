@@ -262,7 +262,7 @@ class LabelController extends BaseLabelController {
         "text": text,
         "rank": rank,
         "styleId": style.id,
-        "transform": transform?.value,
+        "transformMethod": transform?.value,
         "visible": visible,
       },
     };

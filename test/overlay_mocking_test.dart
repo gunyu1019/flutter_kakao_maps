@@ -174,6 +174,51 @@ void main() {
       expect(poi.rank, 9);
     });
 
+    test('addPoi sends the native transform method key', () async {
+      final style = PoiStyle(
+        id: 'poi-style-transform',
+        icon: KImage.fromData(Uint8List.fromList([3, 2, 1]), 16, 16),
+      );
+      await controller.addPoiStyle(style);
+
+      await controller.labelLayer.addPoi(
+        const LatLng(37.55, 126.98),
+        style: style,
+        transform: TransformMethod.decal,
+      );
+
+      final arguments = Map<String, dynamic>.from(
+        lastLabelCall!.arguments as Map,
+      );
+      final poiPayload = Map<String, dynamic>.from(arguments['poi'] as Map);
+      expect(poiPayload['transformMethod'], TransformMethod.decal.value);
+      expect(poiPayload.containsKey('transform'), isFalse);
+    });
+
+    test('addLodPoi sends the native transform method key', () async {
+      final style = PoiStyle(
+        id: 'lod-poi-style-transform',
+        icon: KImage.fromData(Uint8List.fromList([3, 2, 1]), 16, 16),
+      );
+      await controller.addPoiStyle(style);
+
+      await controller.lodLabelLayer.addLodPoi(
+        const LatLng(37.55, 126.98),
+        style: style,
+        transform: TransformMethod.absoluteRotationDecal,
+      );
+
+      final arguments = Map<String, dynamic>.from(
+        lastLabelCall!.arguments as Map,
+      );
+      final poiPayload = Map<String, dynamic>.from(arguments['poi'] as Map);
+      expect(
+        poiPayload['transformMethod'],
+        TransformMethod.absoluteRotationDecal.value,
+      );
+      expect(poiPayload.containsKey('transform'), isFalse);
+    });
+
     test('removeShareTransformPoi sends the target POI contract', () async {
       final style = PoiStyle(
         id: 'poi-style-share-transform',
