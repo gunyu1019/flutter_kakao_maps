@@ -59,7 +59,9 @@ extension KakaoMapControllerHandler {
             let rawCameraAnimation = castSafty(arguments!["cameraAnimation"], caster: asDict)
             let cameraAnimation = rawCameraAnimation != nil ? CameraAnimationOptions(payload: rawCameraAnimation!) : nil
             moveCamera(cameraUpdate: cameraUpdate, cameraAnimation: cameraAnimation, onSuccess: result)
-        case "setEventHandler": setEventHandler(event: (call.arguments! as! UInt8))
+        case "setEventHandler":
+            setEventHandler(event: UInt8(clamping: asInt(call.arguments!)))
+            result(nil)
         case "setGestureEnable":
             setGestureEnable(
                 gestureType: GestureType(rawValue: asInt(arguments!["gestureType"]!))!,

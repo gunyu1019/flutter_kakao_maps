@@ -35,7 +35,10 @@ interface KakaoMapControllerHandler {
         val enable = arguments["enable"]!!.asBoolean()
         setGestureEnable(gestureType, enable, result::success)
       }
-      "setEventHandler" -> setEventHandler(call.arguments!!.asInt())
+      "setEventHandler" -> {
+        setEventHandler(call.arguments!!.asInt())
+        result.success(null)
+      }
       "fromScreenPoint" -> {
         val arguments = call.arguments!!.asMap<Any?>()
         fromScreenPoint(arguments["x"]!!.asInt(), arguments["y"]!!.asInt(), result::success)
