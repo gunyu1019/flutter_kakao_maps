@@ -18,6 +18,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     }
 
     private var overlayController: OverlayController?
+    private var didSendMapDestroy = false
 
     private let cameraListener: CameraListener
     private let mapClickListener: MapClickListener
@@ -205,16 +206,20 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
 
     func finish(onSuccess: (Any?) -> Void) {
         mapController.resetEngine()
+        onMapDestroy()
         onSuccess(nil)
     }
 
     func onMapReady(kakaoMap: KakaoMap) {
+        didSendMapDestroy = false
         self.kakaoMap = kakaoMap
         overlayController = OverlayController(channel: overlayChannel, kakaoMap: kakaoMap, labelListener: poiClickListener)
         channel.invokeMethod("onMapReady", arguments: nil)
     }
 
     func onMapDestroy() {
+        guard !didSendMapDestroy else { return }
+        didSendMapDestroy = true
         lateinitKakaoMap = nil
         overlayController = nil
         channel.invokeMethod("onMapDestroy", arguments: nil)

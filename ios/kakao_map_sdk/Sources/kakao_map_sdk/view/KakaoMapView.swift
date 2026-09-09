@@ -72,9 +72,13 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
-        controller.finish { _ in }
         kakaoMap.delegate = nil
-        self.kakaoMap.pauseEngine()
-        self.kakaoMap.resetEngine()
+        if kakaoMap.isEngineActive {
+            kakaoMap.pauseEngine()
+        }
+        if kakaoMap.isEnginePrepared {
+            kakaoMap.resetEngine()
+        }
+        controller.onMapDestroy()
     }
 }
