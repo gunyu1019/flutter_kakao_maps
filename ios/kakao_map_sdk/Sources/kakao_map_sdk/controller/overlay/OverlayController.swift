@@ -379,6 +379,7 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func addRoute(layer: RouteLayer, route: RouteOptions, onSuccess: (String?) -> Void) {
         let routeInstance = layer.addRoute(option: route)
+        routeInstance?.show()
         onSuccess(routeInstance?.routeID)
     }
 
