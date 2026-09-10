@@ -45,6 +45,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 }
 
 dependencies {
-  "implementation"("com.kakao.maps.open:android:2.13.5")
+  "implementation"("com.kakao.maps.open:android:2.15.2")
   // "implementation"(files("libs/flutter.jar"))
 }
