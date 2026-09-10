@@ -7,7 +7,7 @@ import PackageDescription
 var packageDependencies: [Package.Dependency] = [
     .package(
         url: "https://github.com/kakao-mapsSDK/KakaoMapsSDK-SPM.git",
-        from: "2.12.5"
+        from: "2.12.19"
     ),
 ]
 
