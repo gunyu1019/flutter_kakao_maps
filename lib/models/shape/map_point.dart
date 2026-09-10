@@ -6,10 +6,18 @@ class MapPoint extends BasePoint {
   final List<LatLng> points;
   final List<List<LatLng>> _holes = [];
 
-  MapPoint(this.points);
+  MapPoint(this.points, {super.mergeOverlappingHoles});
 
-  MapPoint copyWith({List<LatLng>? points, List<List<LatLng>>? holes}) {
-    final point = MapPoint(points ?? this.points);
+  MapPoint copyWith({
+    List<LatLng>? points,
+    List<List<LatLng>>? holes,
+    bool? mergeOverlappingHoles,
+  }) {
+    final point = MapPoint(
+      points ?? this.points,
+      mergeOverlappingHoles:
+          mergeOverlappingHoles ?? this.mergeOverlappingHoles,
+    );
     point._holes.addAll(holes ?? _holes);
     return point;
   }
@@ -28,11 +36,13 @@ class MapPoint extends BasePoint {
 
     return other is MapPoint &&
         listEquals(other.points, points) &&
+        other.mergeOverlappingHoles == mergeOverlappingHoles &&
         _holesEquals(other._holes);
   }
 
   @override
-  int get hashCode => points.hashCode ^ _holes.hashCode;
+  int get hashCode =>
+      points.hashCode ^ mergeOverlappingHoles.hashCode ^ _holes.hashCode;
 
   /// 도형에 구멍을 추가합니다.
   void addHole(List<LatLng> hole) => _holes.add(hole);
@@ -51,6 +61,7 @@ class MapPoint extends BasePoint {
     return <String, dynamic>{
       "type": type, // point type
       "points": points.map((e) => e.toMessageable()).toList(),
+      "mergeOverlappingHoles": mergeOverlappingHoles,
       "holes": _holes
           .map((e1) => e1.map((e2) => e2.toMessageable()).toList())
           .toList(),

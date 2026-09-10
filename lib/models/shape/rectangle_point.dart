@@ -21,6 +21,7 @@ class RectanglePoint extends _BaseDotPoint {
     this.height,
     super.basePoint, {
     this.clockwise = true,
+    super.mergeOverlappingHoles,
   });
 
   RectanglePoint copyWith({
@@ -28,12 +29,15 @@ class RectanglePoint extends _BaseDotPoint {
     double? height,
     LatLng? basePoint,
     bool? clockwise,
+    bool? mergeOverlappingHoles,
   }) {
     final point = RectanglePoint(
       width ?? this.width,
       height ?? this.height,
       basePoint ?? this.basePoint,
       clockwise: clockwise ?? this.clockwise,
+      mergeOverlappingHoles:
+          mergeOverlappingHoles ?? this.mergeOverlappingHoles,
     );
     point._holes.addAll(_holes);
     return point;
@@ -48,6 +52,7 @@ class RectanglePoint extends _BaseDotPoint {
         other.height == height &&
         other.basePoint == basePoint &&
         other.clockwise == clockwise &&
+        other.mergeOverlappingHoles == mergeOverlappingHoles &&
         listEquals(other._holes, _holes);
   }
 
@@ -57,6 +62,7 @@ class RectanglePoint extends _BaseDotPoint {
       height.hashCode ^
       basePoint.hashCode ^
       clockwise.hashCode ^
+      mergeOverlappingHoles.hashCode ^
       _holes.hashCode;
 
   @override

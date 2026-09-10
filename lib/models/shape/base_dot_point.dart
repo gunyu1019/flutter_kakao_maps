@@ -8,7 +8,7 @@ sealed class _BaseDotPoint extends BasePoint {
   final LatLng basePoint;
   final List<_BaseDotPoint> _holes = [];
 
-  _BaseDotPoint(this.basePoint);
+  _BaseDotPoint(this.basePoint, {super.mergeOverlappingHoles});
 
   /// 도형에 구멍을 추가합니다.
   /// [hole.basePoint] 개체는 무시되며, [basePoint]을 기준으로 구멍을 생성합니다.
@@ -37,6 +37,7 @@ sealed class _BaseDotPoint extends BasePoint {
     if (!isHole) {
       payload["type"] = type;
       payload["basePoint"] = basePoint.toMessageable();
+      payload["mergeOverlappingHoles"] = mergeOverlappingHoles;
       payload["holes"] = _holes
           .map(
             (e) => e.toMessageable(true)
