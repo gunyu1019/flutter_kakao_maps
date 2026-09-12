@@ -491,9 +491,9 @@ class OverlayController(private val channel: MethodChannel, private val kakaoMap
     onSuccess: (Any?) -> Unit,
   ) {
     if (visible) {
-      layer.getAllPolylineLabels().forEach { it.show() }
+      layer.showAllPolylineLabels()
     } else {
-      layer.getAllPolylineLabels().forEach { it.hide() }
+      layer.hideAllPolylineLabels()
     }
     onSuccess.invoke(null)
   }

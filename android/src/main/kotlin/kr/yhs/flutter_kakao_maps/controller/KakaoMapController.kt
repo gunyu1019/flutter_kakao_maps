@@ -12,6 +12,7 @@ import com.kakao.vectormap.MapView
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraPosition
 import com.kakao.vectormap.camera.CameraUpdate
+import com.kakao.vectormap.MapLogger
 import io.flutter.plugin.common.MethodChannel
 import kr.yhs.flutter_kakao_maps.controller.overlay.OverlayController
 import kr.yhs.flutter_kakao_maps.converter.CameraTypeConverter.toMessageable
@@ -222,6 +223,10 @@ class KakaoMapController(
   override fun onMapReady(kakaoMap: KakaoMap) {
     this.kakaoMap = kakaoMap
     this.overlayController = OverlayController(overlayChannel, kakaoMap)
+
+    // Temp Code: Null Pointer Exception caused by all polyline visible feature.
+    MapLogger.setLabelLogEnable(false)
+
     channel.invokeMethod("onMapReady", null)
   }
 
