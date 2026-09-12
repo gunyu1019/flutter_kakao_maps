@@ -1,5 +1,17 @@
 ## 1.3.1
-* Support merging overlapping Polygon holes on Android and iOS through `BasePoint.setMergeOverlappingHoles()`.
+* **Support merging overlapping Polygon holes on Android and iOS.**
+  ```dart
+  final position = MapPoint(
+    polygonPoints,
+    mergeOverlappingHoles: true,
+  );
+  ```
+  * Add the `mergeOverlappingHoles` option to `MapPoint`, `CirclePoint` and `RectanglePoint`.
+  * Add `BasePoint.setMergeOverlappingHoles()` to change the option after creating a point.
+  * Merge holes that overlap or share vertices or edges when creating a Polygon or changing its position.
+  * Preserve the option when serializing or copying shape points.
+* Update version of base Android SDK from v2.13.5 to v2.15.2.
+* Update version of base iOS SDK to v2.12.19 for CocoaPods and Swift Package Manager.
 * **Improve invalid native-call handling on Android and iOS.**
   * Return `INVALID_NATIVE_CALL` as a `FlutterError` instead of allowing Android handler exceptions to terminate the application.
   * Reject iOS map-dependent calls made before map readiness or after map destruction.
@@ -33,7 +45,7 @@
 * [Fix] (iOS) Emit the map-destroy callback only once and avoid duplicate engine cleanup during view deinitialization.
 * [Fix] (Web Environment) Use the correct polygon collection when changing polygon visibility.
 * [Fix] (Web Environment) Correct RGB channel scaling for PolylineText rendering.
-12
+
 ## 1.3.0
 * **Support `PolylineText` overlay on Web Platform.** ([#60](https://github.com/gunyu1019/flutter_kakao_maps/pull/60))
 
