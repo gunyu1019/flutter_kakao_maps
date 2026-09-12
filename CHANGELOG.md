@@ -31,7 +31,9 @@
 * [Fix] Forward badge ID, z-order and initial visibility to native platforms and retain the visibility in the Dart `Badge` instance.
 * [Fix] (Android) Complete `setBuildingHeightScale` calls with a success result.
 * [Fix] (Android) Read the LabelLayer z-order from the `zOrder` argument instead of the visibility argument.
-* [Fix] (Android) Prevent a null-pointer exception when changing the visibility of all PolylineText overlays in a layer.
+* [Fix] **(Android / iOS) Add temporary platform-specific workarounds for `showAllPolylineText()` and `hideAllPolylineText()`, whose native implementations do not work correctly.**
+  * On Android, use the LabelLayer bulk visibility methods and disable label logging to avoid the SDK null-pointer exception caused by iterating over PolylineText overlays.
+  * On iOS, show or hide each WaveText individually because the SDK bulk visibility methods do not take effect.
 * [Fix] (iOS) Align the tracking rotation and POI pixel-offset method names with the Dart channel contract.
 * [Fix] (iOS) Complete map-type and shared-transform method-channel calls with a success result.
 * [Fix] (iOS) Remove map-coordinate and relative-coordinate polyline or polygon shapes through the matching SDK API.
