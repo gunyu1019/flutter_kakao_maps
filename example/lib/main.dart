@@ -49,7 +49,7 @@ class _KakaoMapViewState extends State<KakaoMapView> {
   final polylineTextPoints = [
     const LatLng(37.39622327123534, 127.10969230372446),
     const LatLng(37.395410161239674, 127.11202881608124),
-    const LatLng(37.39380557163993, 127.1128395227644)
+    const LatLng(37.39380557163993, 127.1128395227644),
   ];
 
   final location = <LocationInfo>[
@@ -203,19 +203,21 @@ class _KakaoMapViewState extends State<KakaoMapView> {
   // 예제에 구현할 오버레이를 지도에 등록합니다.
   Future<void> initializeOverlay() async {
     var poiStyle = PoiStyle(
-      textStyle: [const PoiTextStyle(
-        color: Colors.red,
-        stroke: 16,
-        strokeColor: Colors.white,
-        size: 48,
-      )],
+      textStyle: [
+        const PoiTextStyle(
+          color: Colors.red,
+          stroke: 16,
+          strokeColor: Colors.white,
+          size: 48,
+        ),
+      ],
       icon: KImage.fromAsset("assets/image/location.png", 40, 60),
     );
     for (var loc in location) {
       await controller.labelLayer.addPoi(
-          loc.position,
-          style: poiStyle,
-          text: loc.name
+        loc.position,
+        style: poiStyle,
+        text: loc.name,
       );
     }
 
@@ -246,11 +248,15 @@ class _KakaoMapViewState extends State<KakaoMapView> {
       );
     }
     await controller.shapeLayer.addPolygonShape(
-      CirclePoint(400, const LatLng(37.39922517606363,127.10805907837934)),
+      CirclePoint(400, const LatLng(37.39922517606363, 127.10805907837934)),
       polylineStyle2,
     );
     await controller.shapeLayer.addPolygonShape(
-      RectanglePoint(340, 400, const LatLng(37.39990534855002, 127.11298419463544)),
+      RectanglePoint(
+        340,
+        400,
+        const LatLng(37.39990534855002, 127.11298419463544),
+      ),
       polylineStyle3,
     );
 
@@ -272,9 +278,10 @@ class _KakaoMapViewState extends State<KakaoMapView> {
     );
 
     final polylineTextStyle = PolylineTextStyle(
-        64, Colors.blue,
-        strokeColor: Colors.white,
-        strokeSize: 3
+      64,
+      Colors.blue,
+      strokeColor: Colors.white,
+      strokeSize: 3,
     );
 
     await controller.labelLayer.addPolylineText(
@@ -312,11 +319,15 @@ class _KakaoMapViewState extends State<KakaoMapView> {
       highlightStyle1,
     );
     await controller.dimScreen.addPolygonShape(
-      CirclePoint(400, const LatLng(37.39922517606363,127.10805907837934)),
+      CirclePoint(400, const LatLng(37.39922517606363, 127.10805907837934)),
       highlightStyle2,
     );
     await controller.dimScreen.addPolygonShape(
-      RectanglePoint(340, 400, const LatLng(37.39990534855002, 127.11298419463544)),
+      RectanglePoint(
+        340,
+        400,
+        const LatLng(37.39990534855002, 127.11298419463544),
+      ),
       highlightStyle3,
     );
 
@@ -349,12 +360,10 @@ class _KakaoMapViewState extends State<KakaoMapView> {
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("${latLng.latitude}, ${latLng.longitude}"),
-      )
+      SnackBar(content: Text("${latLng.latitude}, ${latLng.longitude}")),
     );
     Clipboard.setData(
-        ClipboardData(text: "${latLng.latitude}, ${latLng.longitude}")
+      ClipboardData(text: "${latLng.latitude}, ${latLng.longitude}"),
     );
   }
 }
