@@ -6,13 +6,13 @@ import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapAuthException
 import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.MapLogger
 import com.kakao.vectormap.MapOverlay
 import com.kakao.vectormap.MapType
 import com.kakao.vectormap.MapView
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraPosition
 import com.kakao.vectormap.camera.CameraUpdate
-import com.kakao.vectormap.MapLogger
 import io.flutter.plugin.common.MethodChannel
 import kr.yhs.flutter_kakao_maps.controller.overlay.OverlayController
 import kr.yhs.flutter_kakao_maps.converter.CameraTypeConverter.toMessageable

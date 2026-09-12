@@ -49,7 +49,6 @@ import kr.yhs.flutter_kakao_maps.controller.runSafely
 import kr.yhs.flutter_kakao_maps.converter.LabelTypeConverter.asLabelTextBuilder
 import kr.yhs.flutter_kakao_maps.converter.PrimitiveTypeConverter.asMap
 import kr.yhs.flutter_kakao_maps.model.OverlayType
-import android.util.Log
 
 class OverlayController(private val channel: MethodChannel, private val kakaoMap: KakaoMap) :
   LabelControllerHandler,
