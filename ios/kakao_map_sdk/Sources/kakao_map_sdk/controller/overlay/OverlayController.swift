@@ -432,9 +432,17 @@ class OverlayController: LabelControllerHandler, LodLabelControllerHandler, Shap
 
     func changePolylineTextAllVisible(layer: LabelLayer, visible: Bool, onSuccess: (Any?) -> Void) {
         if visible {
-            layer.showAllWaveTexts()
+            // Temp Code : Not Worked.
+            // layer.showAllWaveTexts()
+            layer.getAllWaveTexts()?.forEach {
+                waveText in waveText.show()
+            }
         } else {
-            layer.hideAllWaveTexts()
+            // Temp Code : Not Worked.
+            // layer.hideAllWaveTexts()
+            layer.getAllWaveTexts()?.forEach {
+                waveText in waveText.hide()
+            }
         }
         onSuccess(nil)
     }
