@@ -15,7 +15,7 @@ An unoffical kakao maps plugin.
   s.source           = { :path => '.' }
   s.source_files = 'kakao_map_sdk/Sources/kakao_map_sdk/**/*.swift'
   s.dependency 'Flutter'
-  s.dependency 'KakaoMapsSDK', '2.12.10'
+  s.dependency 'KakaoMapsSDK', '2.12.19'
   s.platform = :ios, '13.0'
   s.ios.deployment_target = '13.0'
 
