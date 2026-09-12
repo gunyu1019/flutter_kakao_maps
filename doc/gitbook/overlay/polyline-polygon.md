@@ -252,6 +252,12 @@ position.addHole([
 final polygon = await controller.shapeLayer.addPolygonShape(position, style);
 ```
 
+서로 겹치거나 꼭지점/변을 공유하는 여러 hole을 하나로 합치려면 다음 옵션을 활성화합니다. 기본값은 `false`이며 `MapPoint`, `CirclePoint`, `RectanglePoint`에서 동일하게 사용할 수 있습니다.
+
+```dart
+position.setMergeOverlappingHoles(true);
+```
+
 > `MapPoint` 경로를 닫으려면 마지막 좌표를 첫 좌표와 같게 입력합니다. 열린 MapPoint의 fill은 면으로 보일 수 있지만 stroke 경로는 호출자가 전달한 열린 상태를 유지합니다.
 
 ### 4-3. Polygon 조작
