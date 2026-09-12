@@ -1,3 +1,39 @@
+## 1.3.1
+* Support merging overlapping Polygon holes on Android and iOS through `BasePoint.setMergeOverlappingHoles()`.
+* **Improve invalid native-call handling on Android and iOS.**
+  * Return `INVALID_NATIVE_CALL` as a `FlutterError` instead of allowing Android handler exceptions to terminate the application.
+  * Reject iOS map-dependent calls made before map readiness or after map destruction.
+  * Guard missing iOS LabelLayer, LodLabelLayer, POI, WaveText, Shape, Route and tracking resources before SDK access.
+  * Guard missing target POIs and Shapes used by iOS shared-position and shared-transform operations.
+* Change Web `CirclePoint` and `RectanglePoint` dimensions to real-world distances for parity with iOS. ([#69](https://github.com/gunyu1019/flutter_kakao_maps/pull/69))
+  * Apply the iOS-compatible primitive scale when converting relative points to geographic coordinates.
+  * Increase the default Web circle resolution from 360 to 720 vertices.
+  * Document that Android continues to interpret `RectanglePoint` dimensions in pixels.
+* Simplify Web shape and DimScreen event handling by removing redundant `bounds_changed` listeners.
+* [Fix] (Android / iOS) Align the `canShowPosition` method name with the Dart channel contract.
+* [Fix] (Android / iOS) Send `removeShareTransformPoi` with `targetPoiId` and the matching native method name.
+* [Fix] (Android / iOS) Complete `setEventHandler` method-channel calls after registering listeners.
+* [Fix] (Android / iOS) Send POI creation transforms using the `transformMethod` key expected by both native converters.
+* [Fix] (Android / iOS) Normalize an absent POI text value before `Poi.invalidate()` reaches native string conversion.
+* [Fix] Use the newly appended style index when serializing secondary `MultipleRoute` styles.
+* [Fix] Forward badge ID, z-order and initial visibility to native platforms and retain the visibility in the Dart `Badge` instance.
+* [Fix] (Android) Complete `setBuildingHeightScale` calls with a success result.
+* [Fix] (Android) Read the LabelLayer z-order from the `zOrder` argument instead of the visibility argument.
+* [Fix] (Android) Prevent a null-pointer exception when changing the visibility of all PolylineText overlays in a layer.
+* [Fix] (iOS) Align the tracking rotation and POI pixel-offset method names with the Dart channel contract.
+* [Fix] (iOS) Complete map-type and shared-transform method-channel calls with a success result.
+* [Fix] (iOS) Remove map-coordinate and relative-coordinate polyline or polygon shapes through the matching SDK API.
+* [Fix] (iOS) Apply the requested initial visibility when adding a POI badge.
+* [Fix] (iOS) Read POI text transition, padding, LabelLayer ordering and combined text-gravity values from the correct fields.
+* [Fix] (iOS) Read `isConsecutive` from camera animation options.
+* [Fix] (iOS) Preserve route patterns for primary and secondary per-level styles, including `pinStart`.
+* [Fix] (iOS) Read scale-bar fade-in, fade-out and retention times from their individual fields.
+* [Fix] (iOS) Preserve native error type, message and error code in map error callbacks and map authentication failures consistently.
+* [Fix] (iOS) Show newly added routes immediately.
+* [Fix] (iOS) Emit the map-destroy callback only once and avoid duplicate engine cleanup during view deinitialization.
+* [Fix] (Web Environment) Use the correct polygon collection when changing polygon visibility.
+* [Fix] (Web Environment) Correct RGB channel scaling for PolylineText rendering.
+12
 ## 1.3.0
 * **Support `PolylineText` overlay on Web Platform.** ([#60](https://github.com/gunyu1019/flutter_kakao_maps/pull/60))
 
