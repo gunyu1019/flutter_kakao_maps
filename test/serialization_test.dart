@@ -231,6 +231,39 @@ void main() {
       expect(holes[1]['height'], 60);
       expect(holes[1]['clockwise'], isFalse);
     });
+
+    test('preserves overlapping-hole merge setting', () {
+      final point = CirclePoint(
+        100,
+        const LatLng(37.394776, 127.11116),
+        mergeOverlappingHoles: true,
+      );
+
+      expect(point.toMessageable()['mergeOverlappingHoles'], isTrue);
+      expect(point.copyWith().mergeOverlappingHoles, isTrue);
+
+      point.setMergeOverlappingHoles(false);
+      expect(point.toMessageable()['mergeOverlappingHoles'], isFalse);
+    });
+  });
+
+  group('Absolute Shape Serialization', () {
+    test('preserves overlapping-hole merge setting', () {
+      final point = MapPoint(
+        const [
+          LatLng(37.394, 127.111),
+          LatLng(37.395, 127.112),
+          LatLng(37.396, 127.111),
+        ],
+        mergeOverlappingHoles: true,
+      );
+
+      expect(point.toMessageable()['mergeOverlappingHoles'], isTrue);
+      expect(point.copyWith().mergeOverlappingHoles, isTrue);
+
+      point.setMergeOverlappingHoles(false);
+      expect(point.toMessageable()['mergeOverlappingHoles'], isFalse);
+    });
   });
 
   group('PoiTextStyle Serialization', () {
