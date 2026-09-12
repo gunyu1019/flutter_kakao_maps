@@ -231,6 +231,39 @@ void main() {
       expect(holes[1]['height'], 60);
       expect(holes[1]['clockwise'], isFalse);
     });
+
+    test('preserves overlapping-hole merge setting', () {
+      final point = CirclePoint(
+        100,
+        const LatLng(37.394776, 127.11116),
+        mergeOverlappingHoles: true,
+      );
+
+      expect(point.toMessageable()['mergeOverlappingHoles'], isTrue);
+      expect(point.copyWith().mergeOverlappingHoles, isTrue);
+
+      point.setMergeOverlappingHoles(false);
+      expect(point.toMessageable()['mergeOverlappingHoles'], isFalse);
+    });
+  });
+
+  group('Absolute Shape Serialization', () {
+    test('preserves overlapping-hole merge setting', () {
+      final point = MapPoint(
+        const [
+          LatLng(37.394, 127.111),
+          LatLng(37.395, 127.112),
+          LatLng(37.396, 127.111),
+        ],
+        mergeOverlappingHoles: true,
+      );
+
+      expect(point.toMessageable()['mergeOverlappingHoles'], isTrue);
+      expect(point.copyWith().mergeOverlappingHoles, isTrue);
+
+      point.setMergeOverlappingHoles(false);
+      expect(point.toMessageable()['mergeOverlappingHoles'], isFalse);
+    });
   });
 
   group('PoiTextStyle Serialization', () {
@@ -702,6 +735,32 @@ void main() {
   });
 
   group('MultipleRouteOption Serialization', () {
+    test('addRouteWithStyle references the newly appended style', () {
+      final existingStyle = RouteStyle(
+        const Color(0xFF001122),
+        3.0,
+        id: 'existing-style',
+      );
+      final appendedStyle = RouteStyle(
+        const Color(0xFF334455),
+        5.0,
+        id: 'appended-style',
+      );
+      final option = MultipleRouteOption([existingStyle]);
+
+      option.addRouteWithStyle(
+        const [LatLng(36.1, 127.1), LatLng(36.2, 127.2)],
+        appendedStyle,
+      );
+
+      expect(option.segments.single.styleIndex, 1);
+      final payload = option.toMessageable();
+      final route = Map<String, dynamic>.from(
+        (payload['routes'] as List).single as Map,
+      );
+      expect(route['styleId'], 'appended-style');
+    });
+
     test('round-trip preserves id, zOrder, routes and styles mapping', () {
       final styleA = RouteStyle(const Color(0xFF001122), 3.0, id: 'style-a');
       final styleB = RouteStyle(const Color(0xFF334455), 5.0, id: 'style-b');

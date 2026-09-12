@@ -59,7 +59,9 @@ extension KakaoMapControllerHandler {
             let rawCameraAnimation = castSafty(arguments!["cameraAnimation"], caster: asDict)
             let cameraAnimation = rawCameraAnimation != nil ? CameraAnimationOptions(payload: rawCameraAnimation!) : nil
             moveCamera(cameraUpdate: cameraUpdate, cameraAnimation: cameraAnimation, onSuccess: result)
-        case "setEventHandler": setEventHandler(event: (call.arguments! as! UInt8))
+        case "setEventHandler":
+            setEventHandler(event: UInt8(clamping: asInt(call.arguments!)))
+            result(nil)
         case "setGestureEnable":
             setGestureEnable(
                 gestureType: GestureType(rawValue: asInt(arguments!["gestureType"]!))!,
@@ -74,7 +76,7 @@ extension KakaoMapControllerHandler {
         case "toScreenPoint": toScreenPoint(position: MapPoint(payload: arguments!), onSuccess: result)
         case "clearCache": clearCache(onSuccess: result)
         case "clearDiskCache": clearDiskCache(onSuccess: result)
-        case "canPositionVisible":
+        case "canShowPosition":
             let zoomLevel = asInt(arguments!["zoomLevel"]!)
             let position = asArray(arguments!["position"]!, caster: { MapPoint(payload: asDict($0)) })
             canPositionVisible(zoomLevel: zoomLevel, position: position, onSuccess: result)
@@ -98,9 +100,9 @@ extension KakaoMapControllerHandler {
             let autohide = asBool(arguments!["autohide"]!)
             scaleAutohide(autohide: autohide, onSuccess: result)
         case "scaleAnimationTime":
-            let fadeIn = arguments!["fadeIn"]! as! UInt32
-            let fadeOut = arguments!["fadeIn"]! as! UInt32
-            let retention = arguments!["fadeIn"]! as! UInt32
+            let fadeIn = UInt32(clamping: asInt(arguments!["fadeIn"]!))
+            let fadeOut = UInt32(clamping: asInt(arguments!["fadeOut"]!))
+            let retention = UInt32(clamping: asInt(arguments!["retention"]!))
             scaleAnimationTime(fadeIn: fadeIn, fadeOut: fadeOut, retention: retention, onSuccess: result)
         case "pause":
             pause(onSuccess: result)

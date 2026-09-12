@@ -8,7 +8,7 @@ extension RoutePattern {
             symbol: castSafty(payload["symbolImage"], caster: {
                 asImage(payload: asDict($0))!
             }),
-            pinStart: castSafty(payload["pinEnd"], caster: asBool) ?? false,
+            pinStart: castSafty(payload["pinStart"], caster: asBool) ?? false,
             pinEnd: castSafty(payload["pinEnd"], caster: asBool) ?? false
         )
     }
@@ -55,9 +55,9 @@ extension RouteStyleSet {
                 styles.append(
                     contentsOf: asArray(rawStyles["otherStyle"] ?? [], caster: asDict).map { styleElement -> PerLevelRouteStyle in
                         patternIndex = -1
-                        if rawStyles["pattern"] != nil, rawStyles["pattern"] is NSNull {
+                        if styleElement["pattern"] != nil, !(styleElement["pattern"] is NSNull) {
                             patterns.append(
-                                RoutePattern(payload: asDict(rawStyles["pattern"]!))
+                                RoutePattern(payload: asDict(styleElement["pattern"]!))
                             )
                             patternIndex = patterns.count - 1
                         }

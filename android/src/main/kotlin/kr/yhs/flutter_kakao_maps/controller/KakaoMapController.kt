@@ -6,6 +6,7 @@ import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapAuthException
 import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.MapLogger
 import com.kakao.vectormap.MapOverlay
 import com.kakao.vectormap.MapType
 import com.kakao.vectormap.MapView
@@ -38,7 +39,9 @@ class KakaoMapController(
   private val mapClickListener = MapClickListener(channel)
 
   init {
-    channel.setMethodCallHandler(::handle)
+    channel.setMethodCallHandler { call, result ->
+      result.runSafely(call.method) { handle(call, result) }
+    }
   }
 
   /* Handler */
@@ -151,6 +154,7 @@ class KakaoMapController(
 
   override fun setBuildingHeightScale(scale: Float, onSuccess: (Any?) -> Unit) {
     kakaoMap.buildingHeightScale = scale
+    onSuccess.invoke(null)
   }
 
   override fun defaultGUIvisible(
@@ -219,6 +223,10 @@ class KakaoMapController(
   override fun onMapReady(kakaoMap: KakaoMap) {
     this.kakaoMap = kakaoMap
     this.overlayController = OverlayController(overlayChannel, kakaoMap)
+
+    // Temp Code: Null Pointer Exception caused by all polyline visible feature.
+    MapLogger.setLabelLogEnable(false)
+
     channel.invokeMethod("onMapReady", null)
   }
 

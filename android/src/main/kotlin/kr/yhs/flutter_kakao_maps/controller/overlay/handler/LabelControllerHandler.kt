@@ -138,7 +138,7 @@ interface LabelControllerHandler {
         changeLabelLayerClickable(layer!!, clickable, result::success)
       }
       "setLayerZOrder" -> {
-        val zOrder = arguments["visible"]?.asInt()!!
+        val zOrder = arguments["zOrder"]?.asInt()!!
         changeLabelLayerZOrder(layer!!, zOrder, result::success)
       }
       "addPoiBadge" -> {

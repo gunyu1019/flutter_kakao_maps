@@ -128,6 +128,7 @@ object ShapeTypeConverter {
             }
           }
           ?.let { setHolePoints(*it.toTypedArray()) }
+        rawPayload["mergeOverlappingHoles"]?.asBoolean()?.let(::setMergeOverlappingHoles)
       }
     }
 
@@ -139,6 +140,7 @@ object ShapeTypeConverter {
             ?.asList<Any>()
             ?.map { element -> LatLngVertex.from(element.asList<Any>().map { it.asLatLng() }) }
             ?.let { setHolePoints(*it.toTypedArray()) }
+          rawPayload["mergeOverlappingHoles"]?.asBoolean()?.let(::setMergeOverlappingHoles)
         }
     }
 

@@ -17,6 +17,7 @@ class CirclePoint extends _BaseDotPoint {
     super.basePoint, {
     this.clockwise = true,
     this.vertexCount,
+    super.mergeOverlappingHoles,
   });
 
   CirclePoint copyWith({
@@ -24,12 +25,15 @@ class CirclePoint extends _BaseDotPoint {
     LatLng? basePoint,
     bool? clockwise,
     int? vertexCount,
+    bool? mergeOverlappingHoles,
   }) {
     final point = CirclePoint(
       radius ?? this.radius,
       basePoint ?? this.basePoint,
       clockwise: clockwise ?? this.clockwise,
       vertexCount: vertexCount ?? this.vertexCount,
+      mergeOverlappingHoles:
+          mergeOverlappingHoles ?? this.mergeOverlappingHoles,
     );
     point._holes.addAll(_holes);
     return point;
@@ -44,6 +48,7 @@ class CirclePoint extends _BaseDotPoint {
         other.basePoint == basePoint &&
         other.clockwise == clockwise &&
         other.vertexCount == vertexCount &&
+        other.mergeOverlappingHoles == mergeOverlappingHoles &&
         listEquals(other._holes, _holes);
   }
 
@@ -53,6 +58,7 @@ class CirclePoint extends _BaseDotPoint {
       basePoint.hashCode ^
       clockwise.hashCode ^
       vertexCount.hashCode ^
+      mergeOverlappingHoles.hashCode ^
       _holes.hashCode;
 
   @override

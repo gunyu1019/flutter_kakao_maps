@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'kakao_map_sdk'
-  s.version          = '1.3.0'
+  s.version          = '1.3.1'
   s.summary          = 'A Flutter plugin that provides a native platform-based Kakao Map(Korean Map Service).'
   s.description      = <<-DESC
 An unoffical kakao maps plugin.
@@ -15,7 +15,7 @@ An unoffical kakao maps plugin.
   s.source           = { :path => '.' }
   s.source_files = 'kakao_map_sdk/Sources/kakao_map_sdk/**/*.swift'
   s.dependency 'Flutter'
-  s.dependency 'KakaoMapsSDK', '2.12.10'
+  s.dependency 'KakaoMapsSDK', '2.12.19'
   s.platform = :ios, '13.0'
   s.ios.deployment_target = '13.0'
 

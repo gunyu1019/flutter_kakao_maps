@@ -3,9 +3,12 @@ part of '../../kakao_map_sdk.dart';
 /// [Polyline] 또는 [Polygon]의 도형을 사각형으로 구성할 때 사용하는 객체입니다.
 class RectanglePoint extends _BaseDotPoint {
   /// 사각형의 가로 길이입니다.
+  ///
+  /// iOS에서는 미터 기반 근사값으로 해석하며, Web도 동일한 크기로 보정합니다.
+  /// Android 네이티브 SDK는 이 값을 픽셀 단위로 해석합니다.
   final double width;
 
-  /// 사각형의 세로 길이입니다.
+  /// 사각형의 세로 길이입니다. 단위 해석은 [width]와 같습니다.
   final double height;
 
   /// 도형을 구성할 때, 시계 방향으로 설정할 지 정의합니다.
@@ -18,6 +21,7 @@ class RectanglePoint extends _BaseDotPoint {
     this.height,
     super.basePoint, {
     this.clockwise = true,
+    super.mergeOverlappingHoles,
   });
 
   RectanglePoint copyWith({
@@ -25,12 +29,15 @@ class RectanglePoint extends _BaseDotPoint {
     double? height,
     LatLng? basePoint,
     bool? clockwise,
+    bool? mergeOverlappingHoles,
   }) {
     final point = RectanglePoint(
       width ?? this.width,
       height ?? this.height,
       basePoint ?? this.basePoint,
       clockwise: clockwise ?? this.clockwise,
+      mergeOverlappingHoles:
+          mergeOverlappingHoles ?? this.mergeOverlappingHoles,
     );
     point._holes.addAll(_holes);
     return point;
@@ -45,6 +52,7 @@ class RectanglePoint extends _BaseDotPoint {
         other.height == height &&
         other.basePoint == basePoint &&
         other.clockwise == clockwise &&
+        other.mergeOverlappingHoles == mergeOverlappingHoles &&
         listEquals(other._holes, _holes);
   }
 
@@ -54,6 +62,7 @@ class RectanglePoint extends _BaseDotPoint {
       height.hashCode ^
       basePoint.hashCode ^
       clockwise.hashCode ^
+      mergeOverlappingHoles.hashCode ^
       _holes.hashCode;
 
   @override

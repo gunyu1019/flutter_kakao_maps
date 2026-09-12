@@ -23,7 +23,7 @@ class WebDimScreenController with WebDimScreenControllerHandler {
   final Map<String, WebDimHighlightShape> _highlightPolygon = {};
   int _nextHighlightOrder = 0;
 
-  JSFunction? _boundsChangedCallbackRef;
+  JSFunction? _idleCallbackRef;
   JSFunction? _zoomChangedCallbackRef;
   web.Element? _labelFilterRoot;
   web.Element? _labelColorMatrix;
@@ -42,21 +42,21 @@ class WebDimScreenController with WebDimScreenControllerHandler {
   @override
   Future<void> createDimScreenLayer() async {
     _createLabelColorFilter();
-    _boundsChangedCallbackRef = _boundsChangedEventHandler.toJS;
+    _idleCallbackRef = _idleEventHandler.toJS;
     _zoomChangedCallbackRef = _zoomChangedEventHandler.toJS;
-    addEventListener(controller, "bounds_changed", _boundsChangedCallbackRef!);
+    addEventListener(controller, "idle", _idleCallbackRef!);
     addEventListener(controller, "zoom_changed", _zoomChangedCallbackRef!);
   }
 
   @override
   Future<void> removeDimScreenLayer() async {
-    if (_boundsChangedCallbackRef != null) {
+    if (_idleCallbackRef != null) {
       removeEventListener(
         controller,
-        "bounds_changed",
-        _boundsChangedCallbackRef!,
+        "idle",
+        _idleCallbackRef!,
       );
-      _boundsChangedCallbackRef = null;
+      _idleCallbackRef = null;
     }
     if (_zoomChangedCallbackRef != null) {
       removeEventListener(
@@ -126,17 +126,15 @@ class WebDimScreenController with WebDimScreenControllerHandler {
     );
   }
 
-  void _boundsChangedEventHandler() {
+  void _idleEventHandler() {
     if (_element == null) return;
+    // Highlight paths follow the map as native geographic overlays. Only the
+    // viewport-dependent outer mask needs rebuilding after movement settles.
     _redraw();
-    _syncAllHighlightElements();
-    _syncAllLabelElements();
   }
 
   void _zoomChangedEventHandler() {
-    _redraw();
     _syncAllHighlightElements();
-    _syncAllLabelElements();
   }
 
   JSArray<WebLatLng> _outerRing() {

@@ -31,8 +31,9 @@ class Badge {
     this.offsetY,
     this.image,
     this.zOrder,
+    bool visible,
   )   : _parent = parent,
-        _visible = true;
+        _visible = visible;
 
   /// [Badge]를 지도에서 삭제합니다.
   Future<void> remove() async {

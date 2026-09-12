@@ -12,7 +12,7 @@ func asPoiTransition(payload: [String: Any]?) -> PoiTransition {
 
 extension PoiTextStyle {
     convenience init(payload: [String: Any]) {
-        let transition = asPoiTransition(payload: castSafty(payload["iconTransition"], caster: asDict))
+        let transition = asPoiTransition(payload: castSafty(payload["textTransition"], caster: asDict))
         let textStyle = castSafty(payload["textStyle"], caster: {
             asArray($0, caster: {
                 PoiTextLineStyle(textStyle: TextStyle(payload: asDict($0)))
@@ -28,16 +28,24 @@ extension PoiTextStyle {
         if payload["textGravity"] != nil {
             let gravity = asInt(payload["textGravity"]!)
             switch gravity {
+            case 0:
+                textLayouts = [.left, .top]
             case 1:
-                textLayouts = [PoiTextLayout.left]
+                textLayouts = [.left]
             case 2:
-                textLayouts = [PoiTextLayout.right]
+                textLayouts = [.left, .bottom]
+            case 3:
+                textLayouts = [.top]
             case 4:
-                textLayouts = [PoiTextLayout.top]
+                textLayouts = [.center]
+            case 5:
+                textLayouts = [.bottom]
+            case 6:
+                textLayouts = [.right, .top]
+            case 7:
+                textLayouts = [.right]
             case 8:
-                textLayouts = [PoiTextLayout.bottom]
-            case 16:
-                textLayouts = [PoiTextLayout.center]
+                textLayouts = [.right, .bottom]
             default:
                 break
             }
@@ -66,7 +74,7 @@ extension PerLevelPoiStyle {
         self.init(
             iconStyle: PoiIconStyle(payload: payload),
             textStyle: PoiTextStyle(payload: payload),
-            padding: castSafty(payload["paddding"], caster: asFloat) ?? 0.0,
+            padding: castSafty(payload["padding"], caster: asFloat) ?? 0.0,
             level: castSafty(payload["zoomLevel"], caster: asInt) ?? 0
         )
     }
@@ -124,7 +132,7 @@ extension LabelLayerOptions {
             layerID: asString(payload["layerId"]!),
             competitionType: castSafty(payload["competitionType"], caster: { CompetitionType(rawValue: asInt($0))! }) ?? CompetitionType.none,
             competitionUnit: castSafty(payload["competitionUnit"], caster: { CompetitionUnit(rawValue: asInt($0))! }) ?? CompetitionUnit.poi,
-            orderType: castSafty(payload["orderType"], caster: { OrderingType(rawValue: asInt($0))! }) ?? OrderingType.rank,
+            orderType: castSafty(payload["orderingType"], caster: { OrderingType(rawValue: asInt($0))! }) ?? OrderingType.rank,
             zOrder: castSafty(payload["zOrder"], caster: asInt) ?? 10001
         )
     }
@@ -136,7 +144,7 @@ extension LodLabelLayerOptions {
             layerID: asString(payload["layerId"]!),
             competitionType: castSafty(payload["competitionType"], caster: { CompetitionType(rawValue: asInt($0))! }) ?? CompetitionType.none,
             competitionUnit: castSafty(payload["competitionUnit"], caster: { CompetitionUnit(rawValue: asInt($0))! }) ?? CompetitionUnit.poi,
-            orderType: castSafty(payload["orderType"], caster: { OrderingType(rawValue: asInt($0))! }) ?? OrderingType.rank,
+            orderType: castSafty(payload["orderingType"], caster: { OrderingType(rawValue: asInt($0))! }) ?? OrderingType.rank,
             zOrder: castSafty(payload["zOrder"], caster: asInt) ?? 10001,
             radius: castSafty(payload["radius"], caster: asFloat) ?? 20.0
         )

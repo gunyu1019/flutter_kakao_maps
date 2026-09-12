@@ -3,6 +3,21 @@
 Polyline과 Polygon은 지도 위에 선과 면을 그릴 수 있는 도형 요소입니다.\
 [ShapeController](https://pub.dev/documentation/kakao_map_sdk/latest/kakao_map_sdk/ShapeController-class.html)를 통해 도형을 생성하고 관리할 수 있습니다.
 
+아래 화면은 닫힌 MapPoint Polyline, MapPoint Polygon hole, CirclePoint hole, RectanglePoint를 함께 표시한 실제 실행 결과입니다. Web은 `127.0.0.1:8080` Profile 모드로 촬영했습니다.
+
+<table>
+  <thead>
+    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="../.gitbook/assets/overlay-polyline-polygon-android.png" alt="Android Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-polygon-ios.png" alt="iOS Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" height="600px" /></td>
+      <td><img src="../.gitbook/assets/overlay-polyline-polygon-web-profile-8080.png" alt="Web Profile 8080 Polyline, Polygon, MapPoint, CirclePoint, RectanglePoint 결과" height="600px" /></td>
+    </tr>
+  </tbody>
+</table>
+
 ## 1. 도형 스타일 등록하기
 
 도형을 추가할 때 등록되지 않은 스타일은 자동으로 등록됩니다. 여러 도형에 같은 스타일을 공유하거나 등록 오류를 먼저 처리하려면 명시적으로 등록할 수 있습니다.
@@ -93,7 +108,7 @@ position.addHole([
 
 ```dart
 final position = CirclePoint(
-  100.0,                              // 반경 (픽셀)
+  100.0,                              // 반경 (미터)
   const LatLng(37.394776, 127.11116), // 중심 좌표
   clockwise: true,
 );
@@ -102,17 +117,17 @@ final position = CirclePoint(
 원형 내부에 구멍을 추가할 수도 있습니다.
 
 ```dart
-position.addCircleHole(40.0); // 반경 40픽셀의 원형 구멍
+position.addCircleHole(40.0); // 반경 40미터의 원형 구멍
 ```
 
 ### 2-3. RectanglePoint (사각형 상대 위치)
 
-특정 기준 좌표를 중심으로 너비와 높이(픽셀)를 지정하여 사각형 도형을 그립니다.
+특정 기준 좌표를 중심으로 너비와 높이를 지정하여 사각형 도형을 그립니다. iOS에서는 미터 기반 근사값으로 해석하며, Web도 네이티브와 같은 크기로 보정합니다.
 
 ```dart
 final position = RectanglePoint(
-  200.0,                              // 너비 (픽셀)
-  100.0,                              // 높이 (픽셀)
+  200.0,                              // 너비 (미터)
+  100.0,                              // 높이 (미터)
   const LatLng(37.394776, 127.11116), // 기준 좌표 (중심)
 );
 ```
@@ -120,7 +135,7 @@ final position = RectanglePoint(
 사각형 내부에 구멍을 추가할 수도 있습니다.
 
 ```dart
-position.addRetangleHole(80.0, 40.0); // 80x40픽셀의 사각형 구멍
+position.addRetangleHole(80.0, 40.0); // 80x40미터의 사각형 구멍
 ```
 
 ## 3. Polyline 추가하기
@@ -216,21 +231,6 @@ final rectPolygon = await controller.shapeLayer.addPolygonShape(
 
 ### 4-2. 구멍이 있는 Polygon
 
-원형 Polygon과 원형 hole의 상대 도형 geometry는 동일한 테스트 시나리오로 세 플랫폼에서 검증되었습니다. 아래 화면은 Shape와 같은 `CirclePoint`·`PolygonStyle` 모델을 사용하는 DimScreen highlight 테스트 결과입니다. Web은 `127.0.0.1:8080` Profile 실행 결과입니다.
-
-<table>
-  <thead>
-    <tr><th>Android</th><th>iOS</th><th>Web · Profile · 8080</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><img src="../.gitbook/assets/dimscreen-circle-hole-android.png" alt="Android CirclePoint hole 결과" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-circle-hole-ios.png" alt="iOS CirclePoint hole 결과" /></td>
-      <td><img src="../.gitbook/assets/dimscreen-circle-hole-web-profile-8080.jpg" alt="Web Profile 8080 CirclePoint hole 결과" /></td>
-    </tr>
-  </tbody>
-</table>
-
 내부에 구멍(Hole)을 추가하면 도넛 형태의 Polygon을 그릴 수 있습니다.
 
 ```dart
@@ -250,6 +250,12 @@ position.addHole([
 ]);
 
 final polygon = await controller.shapeLayer.addPolygonShape(position, style);
+```
+
+서로 겹치거나 꼭지점/변을 공유하는 여러 hole을 하나로 합치려면 다음 옵션을 활성화합니다. 기본값은 `false`이며 `MapPoint`, `CirclePoint`, `RectanglePoint`에서 동일하게 사용할 수 있습니다.
+
+```dart
+position.setMergeOverlappingHoles(true);
 ```
 
 > `MapPoint` 경로를 닫으려면 마지막 좌표를 첫 좌표와 같게 입력합니다. 열린 MapPoint의 fill은 면으로 보일 수 있지만 stroke 경로는 호출자가 전달한 열린 상태를 유지합니다.
@@ -303,6 +309,6 @@ await controller.removeShapeLayer(myLayer);
 ## 6. 플랫폼별 주의사항
 
 * `MapPoint`는 실제 위·경도 경계를 표현할 때 사용합니다.
-* `CirclePoint`와 `RectanglePoint`는 기준 좌표에 대한 화면 상대 크기로 렌더링되어 줌을 바꿔도 시각 크기를 유지하는 용도에 적합합니다.
-* `CirclePoint.vertexCount`에 따른 세부 tessellation은 네이티브 SDK와 Web 구현에서 차이가 날 수 있으므로 플랫폼 간 픽셀 단위 동일성을 전제로 하지 마세요.
+*  `CirclePoint`와 `RectanglePoint`는 미터 기반 근사 거리로 구성되며, Web도 네이티브 크기에 맞춘 동일한 보정을 적용합니다. 따라서 줌을 바꾸면 화면상의 크기도 바뀝니다.
+* `CirclePoint.vertexCount`에 따른 세부 tessellation은 네이티브 SDK와 Web 구현에서 차이가 날 수 있습니다.
 * 겹친 도형의 순서는 레이어 `zOrder`와 개별 도형의 `zOrder`를 함께 확인하세요.

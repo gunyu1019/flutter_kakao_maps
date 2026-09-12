@@ -249,13 +249,13 @@ class KakaoMapWebController
         final zoomLevel = camera.zoomLevel == -1
             ? level
             : _calculateZoomLevel(camera.zoomLevel);
-        controller.setLevel(zoomLevel, {"options": animationOption}.jsify());
+        controller.setLevel(zoomLevel, animationOption);
         break;
       case CameraUpdateType.zoomIn:
-        controller.setLevel(level - 1, {"options": animationOption}.jsify());
+        controller.setLevel(level - 1, animationOption);
         break;
       case CameraUpdateType.zoomOut:
-        controller.setLevel(level + 1, {"options": animationOption}.jsify());
+        controller.setLevel(level + 1, animationOption);
         break;
       case CameraUpdateType.newCameraAngle:
       case CameraUpdateType.rotate:

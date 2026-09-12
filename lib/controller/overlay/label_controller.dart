@@ -84,10 +84,10 @@ class LabelController extends BaseLabelController {
   }
 
   Future<void> _removeShareTransformPoi(String poiId, Poi poi) async {
-    await _invokeMethod("removeShareTransformShape", {
+    await _invokeMethod("removeShareTransformPoi", {
       "poiId": poiId,
       "targetLabelLayerId": poi._controller.id,
-      "targetShapeId": poi.id,
+      "targetPoiId": poi.id,
     });
   }
 
@@ -162,7 +162,7 @@ class LabelController extends BaseLabelController {
     await _invokeMethod("invalidatePoi", {
       "poiId": poiId,
       "styleId": styleId,
-      "text": text,
+      "text": text ?? "",
       "transition": transition,
     });
   }
@@ -262,7 +262,7 @@ class LabelController extends BaseLabelController {
         "text": text,
         "rank": rank,
         "styleId": style.id,
-        "transform": transform?.value,
+        "transformMethod": transform?.value,
         "visible": visible,
       },
     };

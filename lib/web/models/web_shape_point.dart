@@ -1,33 +1,26 @@
 part of '../kakao_map_sdk_web.dart';
 
 class WebShapePoint {
-  final List<LatLng>? _absolutePath;
-  final List<List<LatLng>> _absoluteHoles = [];
-  final dynamic _relativePayload;
-  final WebMapProjection? _projection;
+  /// Matches the effective size produced by Kakao Maps SDK for iOS primitives.
+  ///
+  /// Although the native API accepts meter values, its spherical-coordinate
+  /// helper renders CirclePoint and RectanglePoint at approximately 80% of the
+  /// requested distance. Apply the same scale on Web for platform parity.
+  static const double nativePrimitiveScale = 0.8;
+
+  final List<LatLng> _path;
+  final List<List<LatLng>> _holes = [];
+  final bool _isRelative;
 
   WebShapePoint([List<LatLng>? path])
-      : _absolutePath = path ?? [],
-        _relativePayload = null,
-        _projection = null;
+      : _path = path ?? [],
+        _isRelative = false;
 
-  WebShapePoint._relative(this._relativePayload, this._projection)
-      : _absolutePath = null;
+  WebShapePoint._relative(this._path) : _isRelative = true;
 
-  List<LatLng> get path => _relativePayload == null
-      ? _absolutePath!
-      : _getRelativePoint(_relativePayload, _projection!);
+  List<LatLng> get path => _path;
 
-  List<List<LatLng>> get holes {
-    if (_relativePayload == null) return _absoluteHoles;
-    final rawHoles = _relativePayload["holes"] as Iterable?;
-    if (rawHoles == null) return [];
-    return rawHoles
-        .map<List<LatLng>>(
-          (hole) => _getRelativePoint(hole, _projection!),
-        )
-        .toList();
-  }
+  List<List<LatLng>> get holes => _holes;
 
   Iterable<List<LatLng>> get rings sync* {
     yield path;
@@ -61,11 +54,11 @@ class WebShapePoint {
   }
 
   /// MapPoint stroke paths preserve the caller's open/closed input, matching
-  /// the native SDKs. Relative CirclePoint and RectanglePoint paths represent
-  /// closed shapes, so close their generated Web Polyline rings explicitly.
+  /// the native SDKs. CirclePoint and RectanglePoint paths represent closed
+  /// shapes, so close their generated Web Polyline rings explicitly.
   Iterable<List<LatLng>> get strokeRings {
     final usableRings = rings.where((ring) => ring.length >= 2);
-    if (_relativePayload == null) return usableRings;
+    if (!_isRelative) return usableRings;
     return usableRings.map(
       (ring) => ring.first == ring.last ? ring : [...ring, ring.first],
     );
@@ -104,7 +97,7 @@ class WebShapePoint {
         for (final rawPoint in rawHole as Iterable) {
           hole.add(LatLng.fromMessageable(rawPoint));
         }
-        point._absoluteHoles.add(hole);
+        point._holes.add(hole);
       }
     }
     return point;
@@ -120,7 +113,7 @@ class WebShapePoint {
     switch (dotType) {
       case PointShapeType.circle:
         final radius = (payload["radius"] as num).toDouble();
-        final vertexCount = (payload["vertexCount"] as num?)?.toInt() ?? 360;
+        final vertexCount = (payload["vertexCount"] as num?)?.toInt() ?? 720;
         if (vertexCount < 3) {
           throw ArgumentError.value(
             vertexCount,
@@ -152,20 +145,22 @@ class WebShapePoint {
     return clockwise ? offsets : offsets.reversed.toList();
   }
 
-  static List<LatLng> _getRelativePoint(
+  /// Converts native relative model coordinates into geographic coordinates.
+  ///
+  /// Kakao Maps SDK for iOS builds these primitives on a spherical coordinate
+  /// system. Their radius, width, and height therefore describe real-world
+  /// distances rather than browser screen pixels. The resulting distances are
+  /// scaled to match the effective native primitive size.
+  static List<LatLng> geographicPoints(
     dynamic payload,
-    WebMapProjection projection,
   ) {
     final basePoint = LatLng.fromMessageable(payload["basePoint"]);
-    final baseContainerPoint = projection.containerPointFromCoords(
-      WebLatLng.fromLatLng(basePoint),
-    );
     return relativeOffsets(payload).map((offset) {
-      final containerPoint = WebPoint(
-        baseContainerPoint.x + offset.x.toDouble(),
-        baseContainerPoint.y + offset.y.toDouble(),
+      final distance = math.sqrt(
+        offset.x * offset.x + offset.y * offset.y,
       );
-      return projection.coordsFromContainerPoint(containerPoint).toLatLng();
+      final bearing = math.atan2(offset.x, -offset.y) * 180 / math.pi;
+      return basePoint.offset(distance * nativePrimitiveScale, bearing);
     }).toList();
   }
 
@@ -173,9 +168,13 @@ class WebShapePoint {
     dynamic payload, [
     WebMapProjection? projection,
   ]) {
-    if (projection == null) {
-      throw ArgumentError.notNull("projection");
+    final point = WebShapePoint._relative(geographicPoints(payload));
+    final rawHoles = payload["holes"] as Iterable?;
+    if (rawHoles != null) {
+      for (final rawHole in rawHoles) {
+        point._holes.add(geographicPoints(rawHole));
+      }
     }
-    return WebShapePoint._relative(payload, projection);
+    return point;
   }
 }

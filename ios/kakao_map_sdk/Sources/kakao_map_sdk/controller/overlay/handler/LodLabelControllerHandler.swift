@@ -43,49 +43,83 @@ extension LodLabelControllerHandler {
 
         let poiId = castSafty(arguments?["poiId"], caster: asString)
         let poi: LodPoi? = poiId.flatMap { key in
-            layer!.getLodPoi(poiID: key)
+            layer?.getLodPoi(poiID: key)
+        }
+
+        func requireLayer() -> LodLabelLayer? {
+            guard let layer else {
+                result(missingNativeResource(method: call.method, resource: "LOD label layer", id: layerId))
+                return nil
+            }
+            return layer
+        }
+
+        func requirePoi() -> LodPoi? {
+            guard requireLayer() != nil else { return nil }
+            guard let poi else {
+                result(missingNativeResource(method: call.method, resource: "LOD POI", id: poiId))
+                return nil
+            }
+            return poi
         }
 
         switch call.method {
         case "createLodLabelLayer": createLodLabelLayer(option: LodLabelLayerOptions(payload: arguments!), onSuccess: result)
-        case "removeLodLabelLayer": removeLodLabelLayer(layerId: layerId!, onSuccess: result)
+        case "removeLodLabelLayer":
+            guard requireLayer() != nil, let layerId else { return }
+            removeLodLabelLayer(layerId: layerId, onSuccess: result)
         case "addLodPoi":
+            guard let layer = requireLayer() else { return }
             let poiArgument = asDict(arguments!["poi"]!)
             let poiOption = PoiOptions(payload: poiArgument)
             let position = MapPoint(payload: poiArgument)
             let visible = asBool(arguments!["visible"] ?? true)
-            addLodPoi(layer: layer!, poi: PoiOptions(payload: poiArgument), position: position, visible: visible, onSuccess: result)
-        case "removeLodPoi": removeLodPoi(layer: layer!, poiId: poiId!, onSuccess: result)
+            addLodPoi(layer: layer, poi: poiOption, position: position, visible: visible, onSuccess: result)
+        case "removeLodPoi":
+            guard let layer = requireLayer(), requirePoi() != nil, let poiId else { return }
+            removeLodPoi(layer: layer, poiId: poiId, onSuccess: result)
         case "changePoiVisible":
+            guard let poi = requirePoi() else { return }
             let visible = asBool(arguments!["visible"]!)
             let autoMove = castSafty(arguments!["autoMove"], caster: asBool) ?? false
-            changeLodPoiVisible(poi: poi!, visible: visible, autoMove: autoMove, onSuccess: result)
+            changeLodPoiVisible(poi: poi, visible: visible, autoMove: autoMove, onSuccess: result)
         case "changePoiStyle":
+            guard let poi = requirePoi() else { return }
             let styleId = asString(arguments!["styleId"]!)
             let transition = asBool(arguments!["transition"] ?? false)
-            changeLodPoiStyle(poi: poi!, styleId: styleId, transition: transition, onSuccess: result)
+            changeLodPoiStyle(poi: poi, styleId: styleId, transition: transition, onSuccess: result)
         case "changePoiText":
+            guard let poi = requirePoi() else { return }
             let text = asString(arguments!["text"]!)
             let transition = asBool(arguments!["transition"] ?? false)
             let styleId = asString(arguments!["styleId"]!)
-            changeLodPoiText(poi: poi!, styleId: styleId, text: text, transition: transition, onSuccess: result)
+            changeLodPoiText(poi: poi, styleId: styleId, text: text, transition: transition, onSuccess: result)
         case "rankPoi":
+            guard let poi = requirePoi() else { return }
             let rank = asInt(arguments!["rank"]!)
-            rankLodPoi(poi: poi!, rank: rank, onSuccess: result)
+            rankLodPoi(poi: poi, rank: rank, onSuccess: result)
         case "setLayerClickable":
-            changeLodLabelLayerClickable(layer: layer!, clickable: asBool(arguments!["clickable"]!), onSuccess: result)
+            guard let layer = requireLayer() else { return }
+            changeLodLabelLayerClickable(layer: layer, clickable: asBool(arguments!["clickable"]!), onSuccess: result)
         case "setLayerZOrder":
-            changeLodLabelLayerZOrder(layer: layer!, zOrder: asInt(arguments!["zOrder"]!), onSuccess: result)
-        case "changeVisibleAllLodPoi": changeLodPoiAllVisible(layer: layer!, visible: asBool(arguments!["visible"]!), onSuccess: result)
+            guard let layer = requireLayer() else { return }
+            changeLodLabelLayerZOrder(layer: layer, zOrder: asInt(arguments!["zOrder"]!), onSuccess: result)
+        case "changeVisibleAllLodPoi":
+            guard let layer = requireLayer() else { return }
+            changeLodPoiAllVisible(layer: layer, visible: asBool(arguments!["visible"]!), onSuccess: result)
         case "addPoiBadge":
+            guard let poi = requirePoi() else { return }
             let badgeArgument = asDict(arguments!["badge"]!)
             let badgeOption = PoiBadge(payload: badgeArgument)
-            let visible = asBool(arguments!["visible"] ?? true)
-            addLodPoiBadge(poi: poi!, badge: badgeOption, visible: visible, onSuccess: result)
-        case "removePoiBadge": removeLodPoiBadge(poi: poi!, badgeId: asString(arguments!["badgeId"]!), onSuccess: result)
+            let visible = asBool(badgeArgument["visible"] ?? true)
+            addLodPoiBadge(poi: poi, badge: badgeOption, visible: visible, onSuccess: result)
+        case "removePoiBadge":
+            guard let poi = requirePoi() else { return }
+            removeLodPoiBadge(poi: poi, badgeId: asString(arguments!["badgeId"]!), onSuccess: result)
         case "changePoiBadgeVisible":
+            guard let poi = requirePoi() else { return }
             changeLodPoiBadgeVisible(
-                poi: poi!,
+                poi: poi,
                 badgeId: asString(arguments!["badgeId"]!),
                 visible: asBool(arguments!["visible"]!),
                 onSuccess: result

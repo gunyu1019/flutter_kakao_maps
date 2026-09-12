@@ -18,6 +18,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     }
 
     private var overlayController: OverlayController?
+    private var didSendMapDestroy = false
 
     private let cameraListener: CameraListener
     private let mapClickListener: MapClickListener
@@ -37,7 +38,28 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         poiClickListener = PoiClickListener(channel: self.channel)
 
         channel.setMethodCallHandler { [weak self] call, result in
-            self?.handle(call: call, result: result)
+            guard let self else {
+                result(invalidNativeCall(method: call.method, reason: "The map controller is no longer available."))
+                return
+            }
+            self.receive(call: call, result: result)
+        }
+    }
+
+    private func receive(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if requiresMap(call.method), lateinitKakaoMap == nil {
+            result(invalidNativeCall(method: call.method, reason: "The map is not ready or has already been destroyed."))
+            return
+        }
+        handle(call: call, result: result)
+    }
+
+    private func requiresMap(_ method: String) -> Bool {
+        switch method {
+        case "finish", "pause", "resume":
+            return false
+        default:
+            return true
         }
     }
 
@@ -134,8 +156,9 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         onSuccess(visible)
     }
 
-    func changeMapType(mapType: String, onSuccess _: (Any?) -> Void) {
+    func changeMapType(mapType: String, onSuccess: (Any?) -> Void) {
         kakaoMap.changeViewInfo(appName: "openmap", viewInfoName: mapType)
+        onSuccess(nil)
     }
 
     func overlayVisible(overlayType: String, visible: Bool, onSuccess: (Any?) -> Void) {
@@ -204,16 +227,20 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
 
     func finish(onSuccess: (Any?) -> Void) {
         mapController.resetEngine()
+        onMapDestroy()
         onSuccess(nil)
     }
 
     func onMapReady(kakaoMap: KakaoMap) {
+        didSendMapDestroy = false
         self.kakaoMap = kakaoMap
         overlayController = OverlayController(channel: overlayChannel, kakaoMap: kakaoMap, labelListener: poiClickListener)
         channel.invokeMethod("onMapReady", arguments: nil)
     }
 
     func onMapDestroy() {
+        guard !didSendMapDestroy else { return }
+        didSendMapDestroy = true
         lateinitKakaoMap = nil
         overlayController = nil
         channel.invokeMethod("onMapDestroy", arguments: nil)
@@ -228,16 +255,17 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     }
 
     func onMapError(error: Error) {
-        if error is BaseError {
+        if let baseError = error as? BaseError {
             channel.invokeMethod("onMapError", arguments: [
-                "className": "\(error.self)",
-                "message": (error as! BaseError).errorCode,
-                "errorCode": (error as! BaseError).message,
+                "className": error is AuthenticatedFailed ? "MapAuthException" : String(describing: type(of: error)),
+                "message": baseError.message,
+                "errorCode": baseError.errorCode,
             ])
             return
         }
         channel.invokeMethod("onMapError", arguments: [
-            "className": "\(error.self)",
+            "className": String(describing: type(of: error)),
+            "message": String(describing: error),
         ])
     }
 }

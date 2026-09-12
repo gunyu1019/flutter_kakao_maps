@@ -2,7 +2,7 @@
 
 오버레이 API는 스타일, 오버레이 객체, 레이어의 세 단계로 구성됩니다. 이 구조를 이해하면 Poi, Shape, Route를 같은 방식으로 관리할 수 있습니다.
 
-```text
+```
 KakaoMapController
   ├─ Style registry
   │   ├─ PoiStyle
@@ -19,14 +19,14 @@ KakaoMapController
 
 `onMapReady`에서 받은 컨트롤러에는 다음 기본 레이어가 이미 준비되어 있습니다.
 
-| Property | 관리 대상 |
-| --- | --- |
-| `labelLayer` | Poi, PolylineText |
-| `lodLabelLayer` | LodPoi |
-| `shapeLayer` | Polyline, Polygon |
-| `routeLayer` | Route, MultipleRoute |
-| `dimScreen` | dim 색상과 highlight Polygon |
-| `tracking` | Poi 카메라 추적 |
+| Property        | 관리 대상                     |
+| --------------- | ------------------------- |
+| `labelLayer`    | Poi, PolylineText         |
+| `lodLabelLayer` | LodPoi                    |
+| `shapeLayer`    | Polyline, Polygon         |
+| `routeLayer`    | Route, MultipleRoute      |
+| `dimScreen`     | dim 색상과 highlight Polygon |
+| `tracking`      | Poi 카메라 추적                |
 
 ## 2. 스타일 등록
 
@@ -47,13 +47,13 @@ await controller.labelLayer.addPoi(
 );
 ```
 
-| 스타일 | 등록 API |
-| --- | --- |
-| `PoiStyle` | `addPoiStyle()` |
+| 스타일             | 등록 API                    |
+| --------------- | ------------------------- |
+| `PoiStyle`      | `addPoiStyle()`           |
 | `PolylineStyle` | `addPolylineShapeStyle()` |
-| `PolygonStyle` | `addPolygonShapeStyle()` |
-| `RouteStyle` | `addRouteStyle()` |
-| 스타일 목록 | `addMultiple...Style()` |
+| `PolygonStyle`  | `addPolygonShapeStyle()`  |
+| `RouteStyle`    | `addRouteStyle()`         |
+| 스타일 목록          | `addMultiple...Style()`   |
 
 > 등록된 스타일 인스턴스는 해당 `KakaoMapController`에 속합니다. 여러 지도 View를 동시에 사용한다면 같은 mutable 스타일 인스턴스를 공유하지 말고 `copyWith()`로 지도별 인스턴스를 만드세요.
 
@@ -140,4 +140,4 @@ try {
 }
 ```
 
-오류 유형과 대응 방법은 [오류와 예외 처리](../etc/errors.md)를 참고하세요.
+오류 유형과 대응 방법은 [오류와 예외 처리](../troubleshooting/errors.md)를 참고하세요.

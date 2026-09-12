@@ -28,5 +28,5 @@
 
 ## 문제 해결 <a href="#troubleshooting" id="troubleshooting"></a>
 
-* [오류와 예외 처리](etc/errors.md)
-* [자주 묻는 질문](etc/faq.md)
+* [오류와 예외 처리](troubleshooting/errors.md)
+* [자주 묻는 질문](troubleshooting/faq.md)

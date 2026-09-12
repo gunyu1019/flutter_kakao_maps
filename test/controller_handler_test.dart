@@ -31,14 +31,55 @@ void main() {
 
     expect(handler.lastGesture, GestureType.pan);
   });
+
+  test('maps Android and iOS authentication failures consistently', () async {
+    for (final className in ['MapAuthException', 'AuthenticatedFailed']) {
+      final handler = _TestControllerHandler();
+
+      await handler.handle(
+        MethodCall('onMapError', {
+          'className': className,
+          'errorCode': 401,
+          'message': 'Authentication failed',
+        }),
+      );
+
+      expect(handler.lastError, isA<KakaoAuthError>());
+      final error = handler.lastError! as KakaoAuthError;
+      expect(error.code, 401);
+      expect(error.message, 'Authentication failed');
+    }
+  });
+
+  test('maps native non-authentication failures to KakaoMapError', () async {
+    final handler = _TestControllerHandler();
+
+    await handler.handle(
+      const MethodCall('onMapError', {
+        'className': 'MapViewLoadFailed',
+        'message': 'Map initialization failed',
+      }),
+    );
+
+    expect(handler.lastError, isA<KakaoMapError>());
+    final error = handler.lastError! as KakaoMapError;
+    expect(error.className, 'MapViewLoadFailed');
+    expect(error.message, 'Map initialization failed');
+  });
 }
 
 class _TestControllerHandler with KakaoMapControllerHandler {
   GestureType? lastGesture;
+  Error? lastError;
 
   @override
   void onCameraMoveStart(GestureType gestureType) {
     lastGesture = gestureType;
+  }
+
+  @override
+  void onMapError(Error error) {
+    lastError = error;
   }
 
   @override

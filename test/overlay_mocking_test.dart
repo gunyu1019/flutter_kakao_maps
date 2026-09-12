@@ -11,6 +11,7 @@ void main() {
 
   late KakaoMapController controller;
   MethodCall? lastDimScreenCall;
+  MethodCall? lastLabelCall;
   MethodCall? lastPolylineTextCall;
 
   String orFallback(String? requested, String fallback) {
@@ -19,12 +20,14 @@ void main() {
 
   setUp(() {
     lastDimScreenCall = null;
+    lastLabelCall = null;
     lastPolylineTextCall = null;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(viewChannel, (call) async => null);
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(overlayChannel, (call) async {
+      lastLabelCall = call;
       final args = Map<String, dynamic>.from(call.arguments as Map);
       final type = args['type'] as int?;
 
@@ -171,6 +174,100 @@ void main() {
       expect(poi.rank, 9);
     });
 
+    test('addPoi sends the native transform method key', () async {
+      final style = PoiStyle(
+        id: 'poi-style-transform',
+        icon: KImage.fromData(Uint8List.fromList([3, 2, 1]), 16, 16),
+      );
+      await controller.addPoiStyle(style);
+
+      await controller.labelLayer.addPoi(
+        const LatLng(37.55, 126.98),
+        style: style,
+        transform: TransformMethod.decal,
+      );
+
+      final arguments = Map<String, dynamic>.from(
+        lastLabelCall!.arguments as Map,
+      );
+      final poiPayload = Map<String, dynamic>.from(arguments['poi'] as Map);
+      expect(poiPayload['transformMethod'], TransformMethod.decal.value);
+      expect(poiPayload.containsKey('transform'), isFalse);
+    });
+
+    test('addLodPoi sends the native transform method key', () async {
+      final style = PoiStyle(
+        id: 'lod-poi-style-transform',
+        icon: KImage.fromData(Uint8List.fromList([3, 2, 1]), 16, 16),
+      );
+      await controller.addPoiStyle(style);
+
+      await controller.lodLabelLayer.addLodPoi(
+        const LatLng(37.55, 126.98),
+        style: style,
+        transform: TransformMethod.absoluteRotationDecal,
+      );
+
+      final arguments = Map<String, dynamic>.from(
+        lastLabelCall!.arguments as Map,
+      );
+      final poiPayload = Map<String, dynamic>.from(arguments['poi'] as Map);
+      expect(
+        poiPayload['transformMethod'],
+        TransformMethod.absoluteRotationDecal.value,
+      );
+      expect(poiPayload.containsKey('transform'), isFalse);
+    });
+
+    test('invalidatePoi normalizes absent text for native handlers', () async {
+      final style = PoiStyle(
+        id: 'poi-style-invalidate',
+        icon: KImage.fromData(Uint8List.fromList([3, 2, 1]), 16, 16),
+      );
+      await controller.addPoiStyle(style);
+      final poi = await controller.labelLayer.addPoi(
+        const LatLng(37.55, 126.98),
+        style: style,
+      );
+
+      await poi.invalidate();
+
+      expect(lastLabelCall!.method, 'invalidatePoi');
+      final arguments = Map<String, dynamic>.from(
+        lastLabelCall!.arguments as Map,
+      );
+      expect(arguments['text'], '');
+    });
+
+    test('removeShareTransformPoi sends the target POI contract', () async {
+      final style = PoiStyle(
+        id: 'poi-style-share-transform',
+        icon: KImage.fromData(Uint8List.fromList([1]), 12, 12),
+      );
+      await controller.addPoiStyle(style);
+      final source = await controller.labelLayer.addPoi(
+        const LatLng(37.4, 127.1),
+        style: style,
+        id: 'source-poi',
+      );
+      final target = await controller.labelLayer.addPoi(
+        const LatLng(37.5, 127.2),
+        style: style,
+        id: 'target-poi',
+      );
+
+      await source.removeShareTransformPoi(target);
+
+      expect(lastLabelCall!.method, 'removeShareTransformPoi');
+      final arguments = Map<String, dynamic>.from(
+        lastLabelCall!.arguments as Map,
+      );
+      expect(arguments['poiId'], 'source-poi');
+      expect(arguments['targetLabelLayerId'], controller.labelLayer.id);
+      expect(arguments['targetPoiId'], 'target-poi');
+      expect(arguments.containsKey('targetShapeId'), isFalse);
+    });
+
     test(
       'addBadge returns Badge with id from overlay channel response',
       () async {
@@ -190,13 +287,27 @@ void main() {
           4,
           -3,
           badgeId: 'badge-explicit-id',
+          zOrder: 7,
+          visible: false,
         );
 
-        expect(badge.id, 'poi-badge-target-badge-id');
+        expect(badge.id, 'badge-explicit-id');
         expect(badge.offsetX, 4);
         expect(badge.offsetY, -3);
         expect(badge.image.width, 10);
         expect(badge.image.height, 10);
+        expect(badge.zOrder, 7);
+        expect(badge.visible, isFalse);
+
+        final arguments = Map<String, dynamic>.from(
+          lastLabelCall!.arguments as Map,
+        );
+        final badgePayload = Map<String, dynamic>.from(
+          arguments['badge'] as Map,
+        );
+        expect(badgePayload['id'], 'badge-explicit-id');
+        expect(badgePayload['zOrder'], 7);
+        expect(badgePayload['visible'], isFalse);
       },
     );
   });
@@ -305,7 +416,7 @@ void main() {
         badgeId: 'lod-badge-explicit-id',
       );
 
-      expect(badge.id, 'lod-badge-target-badge-id');
+      expect(badge.id, 'lod-badge-explicit-id');
       expect(badge.offsetX, 1);
       expect(badge.offsetY, 2);
     });
