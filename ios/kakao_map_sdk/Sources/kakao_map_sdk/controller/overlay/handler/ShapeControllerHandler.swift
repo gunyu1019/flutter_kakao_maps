@@ -191,28 +191,14 @@ extension ShapeControllerHandler {
                     result(missingNativeResource(method: call.method, resource: "map polygon", id: polygonId))
                     return
                 }
-                let points = asArray(rawPosition["points"]!, caster: { MapPoint(payload: asDict($0)) })
-                let holes = castSafty(rawPosition["holes"], caster: {
-                    asArray($0, caster: {
-                        asArray($0, caster: asDict).map {
-                            MapPoint(payload: $0)
-                        }
-                    })
-                })
-                let position = MapPolygon(exteriorRing: points, holes: holes, styleIndex: 0)
+                let position = MapPolygon(payload: rawPosition)
                 changeMapPolygonShape(shape: mapPolygonShape, styleId: styleId, position: [position], onSuccess: result)
             } else if positionType == 1 {
                 guard let polygonShape else {
                     result(missingNativeResource(method: call.method, resource: "relative polygon", id: polygonId))
                     return
                 }
-                let points = asDotPoints(payload: rawPosition)
-                let holes = castSafty(rawPosition["holes"], caster: {
-                    asArray($0, caster: {
-                        asDotPoints(payload: asDict($0))!
-                    })
-                })
-                let position = Polygon(exteriorRing: points!, holes: holes, styleIndex: 0)
+                let position = Polygon(payload: rawPosition)
                 changePolygonShape(shape: polygonShape, styleId: styleId, position: [position], onSuccess: result)
             } else {
                 result(FlutterMethodNotImplemented)
