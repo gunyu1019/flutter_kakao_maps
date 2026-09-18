@@ -58,7 +58,7 @@ void main() async {
     ```dart
     await KakaoMapSdk.instance.hashKey();
     ```
-    안드로이드 플랫폼 외 다른 플랫폼에서 함수를 호출하면 `null`을 반환합니다.
+    안드로이드 플랫폼 외 다른 플랫폼에서 함수를 호출하면 `null`을 반환하며, 안드로이드에서도 패키지 서명 정보를 가져오지 못하면 `null`을 반환할 수 있습니다.
 
 ### Web Environment
 웹 환경에서 카카오맵을 이용하기 위해서는 아래에 서술된 추가 설정이 필요합니다.<br/>
