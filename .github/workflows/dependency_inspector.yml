@@ -1,0 +1,95 @@
+name: Dependency Inspector
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check_latest_version_android:
+    name: Check latest version of Android
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.android.outputs.version }}
+    steps:
+      - name: Install xmllint
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+      - name: Get latest version of KakaoMapsSDK from maven central
+        run: |
+          META_URL="https://devrepo.kakao.com/nexus/repository/kakaomap-releases/com/kakao/maps/open/android/maven-metadata.xml"
+          METADATA=$(curl -s "$META_URL")
+          LATEST_VERSION=$($METADATA | xmllint --xpath "string(//release)" - 2>/dev/null)
+          if [ -z "LATEST_VERSION" ]; then
+            LATEST_VERSION=$($METADATA | xmllint --xpath "string(//latest)" -)
+          fi
+      - name: Export detected version
+        id: android
+        run: |
+          echo "The latest version of Kakao Map SDK is $LATEST_VERSION"
+          echo "version=LATEST_VERSION" >> "$GITHUB_OUTPUT"
+
+  check_latest_version_ios:
+    name: Check latest version of iOS
+    outputs:
+      version: ${{ steps.ios.outputs.version }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest version of KakaoMapsSDK-SPM
+        run: |
+          LATEST_VERSION=$(git ls-remote --tags --refs https://github.com/kakao-mapsSDK/KakaoMapsSDK-SPM.git \
+          | awk -F/ '{print $NF}' \
+          | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
+          | sed 's/^v//' \
+          | sort -V -r \
+          | head -n1)
+      - name: Export detected version
+        id: ios
+        run: |
+          echo "The latest version of Kakao Map SDK is $LATEST_VERSION"
+          echo "version=LATEST_VERSION" >> "$GITHUB_OUTPUT"
+
+  update_dependency:
+    name: Update dependency
+    runs-on: ubuntu-latest
+    needs: [check_latest_version_android, check_latest_version_ios]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Create branch
+        id: create_branch
+        run: |
+          BRANCH_NAME="auto-update/${{ github.run_id }}"
+          git checkout -b "$BRANCH_NAME"
+          echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+      - name: Compare latest version with iOS current version
+        run: |
+          CURRENT_IOS_VERSION=$(cat ios/kakao_map_sdk.podspec \
+            | grep -E "KakaoMapsSDK', '?[0-9]+\.[0-9]+\.[0-9]+'$" \
+            | awk -F' ' '{print $3}' \
+            | sed "s/\'//g")
+          echo "Current iOS version is $CURRENT_IOS_VERSION"
+      - name: Compare latest version with Android current version
+        run: |
+          CURRENT_ANDROID_VERSION=$(cat android/build.gradle.kts \
+            | grep -E '"implementation"\(\"com.kakao.maps.open:android:[0-9]+\.[0-9]+\.[0-9]+\"\)' \
+            | awk -F'"' '{print $4}' \
+            | awk -F':' '{print $3}'
+          echo "Current Android version is $CURRENT_ANDROID_VERSION"
+      - name: Update dependency version of android
+        run: |
+          if [ "${{ needs.check_latest_version_android.outputs.version }}" != "$CURRENT_ANDROID_VERSION" ]; then
+            sed -i '' -E \ 
+            "s/com\.kakao\.maps\.open:android:[0-9]+\.[0-9]+\.[0-9]+/com\.kakao\.maps\.open:android:$LATEST_VERSION/g" \ 
+            android/build.gradle.kts
+            git commit -am "[Feat] Bump Android Kakao Map SDK version to ${{ needs.check_latest_version_android.outputs.version }}"
+          fi
+      - name: Update dependency version of iOS
+        run: |
+          if [ "${{ needs.check_latest_version_ios.outputs.version }}" != "$CURRENT_IOS_VERSION" ]; then
+            sed -i '' -E \
+            "s/\'KakaoMapsSDK\', \'[0-9]+\.[0-9]+\.[0-9]+\'/\'KakaoMapsSDK\', \'$LATEST_VERSION\'/g" \
+            ios/kakao_map_sdk.podspec
+            git commit -am "[Feat] Bump iOS Kakao Map SDK version to ${{ needs.check_latest_version_ios.outputs.version }}"
+          fi
+      - name: Commit changes
+        run: |
+          git diff --quiet --exit-code 
+          
