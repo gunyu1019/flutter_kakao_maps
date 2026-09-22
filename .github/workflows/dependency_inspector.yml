@@ -1,8 +1,6 @@
 name: Dependency Inspector
 
 on:
-  push:
-    branches: [develop]  # Temporary branch for testing
   workflow_dispatch:
 
 permissions:
