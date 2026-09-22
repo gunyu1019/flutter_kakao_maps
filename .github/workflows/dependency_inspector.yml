@@ -134,6 +134,6 @@ jobs:
           
           gh pr create \
             --title "[Auto] Bump Kakao Map SDK version" \
-            --body-file pr_body.md \
+            --body-file PULL_REQUST_BODY.md \
             --base develop \
             --head "${{ steps.create_branch.outputs.branch_name }}"
