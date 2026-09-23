@@ -9,6 +9,10 @@ permissions:
   contents: write
   pull-requests: write
 
+env:
+  BASE_BRANCH: develop
+  REVIEWER: gunyu1019
+
 jobs:
   check_latest_version_android:
     name: Check latest version of Android
@@ -56,9 +60,17 @@ jobs:
     name: Update dependency
     runs-on: ubuntu-latest
     needs: [check_latest_version_android, check_latest_version_ios]
+    outputs:
+      current_android_version: ${{ steps.update_dependency_version_of_android.outputs.version }}
+      current_ios_version: ${{ steps.update_dependency_version_of_ios.outputs.version }}
+      changed: ${{ steps.push_changes.outputs.changed }}
+      branch: ${{ steps.create_branch.outputs.branch_name }}
     steps:
+      # develop을 기준으로 분기해야 main과의 차이가 섞여 들어가지 않습니다.
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          ref: ${{ env.BASE_BRANCH }}
 
       - name: Setup git
         run: |
@@ -75,6 +87,7 @@ jobs:
           echo "base_sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
 
       - name: Update dependency version of Android
+        id: update_dependency_version_of_android
         env:
           LATEST_ANDROID_VERSION: ${{ needs.check_latest_version_android.outputs.version }}
         run: |
@@ -83,6 +96,7 @@ jobs:
             | awk -F':' '{print $3}')
           echo "Current Android version is $CURRENT_ANDROID_VERSION"
           echo "Latest Android version is $LATEST_ANDROID_VERSION"
+          echo "version=$CURRENT_ANDROID_VERSION" >> "$GITHUB_OUTPUT"
 
           if [ -n "$LATEST_ANDROID_VERSION" ] && [ "$LATEST_ANDROID_VERSION" != "$CURRENT_ANDROID_VERSION" ]; then
             sed -i -E "s/com\.kakao\.maps\.open:android:[0-9]+\.[0-9]+\.[0-9]+/com.kakao.maps.open:android:$LATEST_ANDROID_VERSION/g" android/build.gradle.kts
@@ -90,6 +104,7 @@ jobs:
           fi
 
       - name: Update dependency version of iOS
+        id: update_dependency_version_of_ios
         env:
           LATEST_IOS_VERSION: ${{ needs.check_latest_version_ios.outputs.version }}
         run: |
@@ -98,6 +113,7 @@ jobs:
             | sed "s/'//g")
           echo "Current iOS version is $CURRENT_IOS_VERSION"
           echo "Latest iOS version is $LATEST_IOS_VERSION"
+          echo "version=$CURRENT_IOS_VERSION" >> "$GITHUB_OUTPUT"
 
           if [ -n "$LATEST_IOS_VERSION" ] && [ "$LATEST_IOS_VERSION" != "$CURRENT_IOS_VERSION" ]; then
             sed -i -E "s/'KakaoMapsSDK', '[0-9]+\.[0-9]+\.[0-9]+'/'KakaoMapsSDK', '$LATEST_IOS_VERSION'/g" ios/kakao_map_sdk.podspec
@@ -113,16 +129,26 @@ jobs:
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
+
+  create_pull_request:
+    name: Create Pull Request
+    needs: [update_dependency, check_latest_version_android, check_latest_version_ios]
+    if: needs.update_dependency.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
       - name: Create Pull Request
-        if: steps.push_changes.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LATEST_ANDROID_VERSION: ${{ needs.check_latest_version_android.outputs.version }}
+          LATEST_IOS_VERSION: ${{ needs.check_latest_version_ios.outputs.version }}
+          CURRENT_ANDROID_VERSION: ${{ needs.update_dependency.outputs.current_android_version }}
+          CURRENT_IOS_VERSION: ${{ needs.update_dependency.outputs.current_ios_version }}
         run: |
-          cat > PULL_REQUST_BODY.md << 'EOF'
+          cat > PULL_REQUEST_BODY.md << EOF
           ## Change Log
           Auto bumped Kakao Map SDK version.
-          - Android: ${{ needs.check_latest_version_android.outputs.version }}
-          - iOS: ${{ needs.check_latest_version_ios.outputs.version }}
+          - Android: $CURRENT_ANDROID_VERSION to $LATEST_ANDROID_VERSION
+          - iOS: $CURRENT_IOS_VERSION to $LATEST_IOS_VERSION
 
           ## Checklist
           - [ ] If code changes were made then they have been tested.
@@ -131,9 +157,11 @@ jobs:
           - [x] This PR adds something new (e.g. new method or parameters).
           - [ ] This PR is a breaking change (e.g. methods or parameters removed/renamed)
           EOF
-          
+
           gh pr create \
+            --repo "${{ github.repository }}" \
             --title "[Auto] Bump Kakao Map SDK version" \
-            --body-file PULL_REQUST_BODY.md \
-            --base develop \
-            --head "${{ steps.create_branch.outputs.branch_name }}"
+            --body-file PULL_REQUEST_BODY.md \
+            --base "${{ env.BASE_BRANCH }}" \
+            --head "${{ needs.update_dependency.outputs.branch }}" \
+            --reviewer "${{ env.REVIEWER }}"
