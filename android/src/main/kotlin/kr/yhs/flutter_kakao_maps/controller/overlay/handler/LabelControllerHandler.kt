@@ -75,7 +75,7 @@ interface LabelControllerHandler {
       "changePoiVisible" -> {
         val visible = arguments["visible"]?.asBoolean()!!
         val autoMove = arguments["autoMove"]?.asBoolean()
-        val duration = arguments["millis"]?.asInt()
+        val duration = (arguments["millis"] as Number?)?.toInt()
         changePoiVisible(poi!!, visible, autoMove, duration, result::success)
       }
       "changePoiStyle" -> {
@@ -96,18 +96,18 @@ interface LabelControllerHandler {
       }
       "movePoi" -> {
         val position = arguments.asLatLng()
-        val millis = arguments["millis"]?.asInt()
+        val millis = (arguments["millis"] as Number?)?.toInt()
         movePoi(poi!!, position, millis, result::success)
       }
       "rotatePoi" -> {
         val angle = arguments["angle"]?.asFloat()!!
-        val millis = arguments["millis"]?.asInt()
+        val millis = (arguments["millis"] as Number?)?.toInt()
         rotatePoi(poi!!, angle, millis, result::success)
       }
       "scalePoi" -> {
         val x = arguments["x"]?.asFloat()!!
         val y = arguments["y"]?.asFloat()!!
-        val millis = arguments["millis"]?.asInt()
+        val millis = (arguments["millis"] as Number?)?.toInt()
         scalePoi(poi!!, x, y, millis, result::success)
       }
       "rankPoi" -> {
