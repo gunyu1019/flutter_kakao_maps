@@ -1,3 +1,6 @@
+## Unreleased
+* [Fix] (iOS) Avoid sending `onMapDestroy` after the Flutter engine has stopped, while preserving the callback for normal map removal and explicit `finish()` calls.
+
 ## 1.3.1
 * **Support merging overlapping Polygon holes on Android and iOS.**
   ```dart

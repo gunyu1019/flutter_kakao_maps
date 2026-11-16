@@ -12,14 +12,16 @@ class KakaoMapView: NSObject, FlutterPlatformView { // UIApplicationDelegate
         frame _: CGRect,
         channel: FlutterMethodChannel,
         overlayChannel: FlutterMethodChannel,
-        option: MapviewInfo
+        option: MapviewInfo,
+        flutterEngine: FlutterEngine?
     ) {
         KMView = KMViewContainer()
         kakaoMap = KMController(viewContainer: KMView)
         controller = KakaoMapController(
             channel: channel,
             overlayChannel: overlayChannel,
-            mapController: kakaoMap
+            mapController: kakaoMap,
+            flutterEngine: flutterEngine
         )
         super.init()
 

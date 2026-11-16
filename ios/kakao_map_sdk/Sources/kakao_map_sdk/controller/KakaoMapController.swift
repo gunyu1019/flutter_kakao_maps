@@ -5,6 +5,7 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     private let channel: FlutterMethodChannel
     private let overlayChannel: FlutterMethodChannel
     private let mapController: KMController
+    private weak var flutterEngine: FlutterEngine?
 
     private weak var lateinitKakaoMap: KakaoMap?
 
@@ -27,11 +28,13 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
     init(
         channel: FlutterMethodChannel,
         overlayChannel: FlutterMethodChannel,
-        mapController: KMController
+        mapController: KMController,
+        flutterEngine: FlutterEngine?
     ) {
         self.channel = channel
         self.overlayChannel = overlayChannel
         self.mapController = mapController
+        self.flutterEngine = flutterEngine
 
         cameraListener = CameraListener(channel: self.channel)
         mapClickListener = MapClickListener(channel: self.channel)
@@ -243,6 +246,10 @@ class KakaoMapController: KakaoMapControllerSender, KakaoMapControllerHandler {
         didSendMapDestroy = true
         lateinitKakaoMap = nil
         overlayController = nil
+        // destroyContext clears isolateId before releasing platform views. The engine object
+        // may still exist, but sending a message through its channel would assert.
+        // A running engine must still receive this event when only the map view is removed.
+        guard flutterEngine?.isolateId != nil else { return }
         channel.invokeMethod("onMapDestroy", arguments: nil)
     }
 

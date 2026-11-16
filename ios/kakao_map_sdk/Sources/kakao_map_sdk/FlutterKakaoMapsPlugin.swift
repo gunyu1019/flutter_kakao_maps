@@ -8,7 +8,7 @@ public class FlutterKakaoMapsPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         self.registrar = registrar
 
-        let kakaoMapFactory = KakaoMapViewFactory(messenger: registrar.messenger())
+        let kakaoMapFactory = KakaoMapViewFactory(registrar: registrar)
         registrar.register(kakaoMapFactory, withId: MAP_VIEW_TYPE_ID)
 
         let sdkChannel = FlutterMethodChannel(name: SDK_CHANNEL_NAME, binaryMessenger: registrar.messenger())
