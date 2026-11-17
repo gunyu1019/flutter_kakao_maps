@@ -2,10 +2,12 @@ import Flutter
 import KakaoMapsSDK
 
 class KakaoMapViewFactory: NSObject, FlutterPlatformViewFactory {
+    private let registrar: FlutterPluginRegistrar
     private let messenger: FlutterBinaryMessenger
 
-    init(messenger: FlutterBinaryMessenger) {
-        self.messenger = messenger
+    init(registrar: FlutterPluginRegistrar) {
+        self.registrar = registrar
+        messenger = registrar.messenger()
         super.init()
 
         URLSession.shared.configuration.httpMaximumConnectionsPerHost = 8
@@ -28,7 +30,10 @@ class KakaoMapViewFactory: NSObject, FlutterPlatformViewFactory {
         let arguments = asDict(args!)
         let option = MapviewInfo(payload: arguments, viewId: viewId)
 
-        return KakaoMapView(frame: frame, channel: channel, overlayChannel: overlayChannel, option: option)
+        // Resolve the engine when creating the view: plugin registration may happen before
+        // a prewarmed engine is attached to its FlutterViewController.
+        let engine = (registrar.viewController as? FlutterViewController)?.engine
+        return KakaoMapView(frame: frame, channel: channel, overlayChannel: overlayChannel, option: option, flutterEngine: engine)
     }
 
     func createArgsCodec() -> any FlutterMessageCodec & NSObjectProtocol {
